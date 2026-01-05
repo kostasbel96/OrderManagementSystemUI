@@ -3,7 +3,7 @@ import logo from "../assets/logo_ed.png"
 const NavbarComponent = () => {
     return (
         <>
-            <nav className="flex justify-center flex-row  bg-[#1E40AF] text-white navbar shadow-lg shadow-black/10 h-16">
+            <nav className="flex justify-center flex-row  bg-[#F0F0F0] text-gray-900 navbar shadow-lg shadow-black/10 h-16">
                 <div className="flex items-center p-5">
                     <img src={logo} alt="logo" className="w-48"/>
                 </div>
