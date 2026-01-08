@@ -9,7 +9,7 @@ const MyCollapse = ({isOpen, value}: OpenProps) => {
     return (
         <>
             <Collapse isOpened={isOpen}>
-                <div className="bg-black text-center text-white">{value}</div>
+                <div className="bg-black text-white p-5">{value}</div>
             </Collapse>
         </>
     )
