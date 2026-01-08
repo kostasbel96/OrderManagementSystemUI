@@ -1,12 +1,15 @@
 import './App.css'
 import Layout from "./components/Layout.tsx";
+import Banner from "./components/Banner.tsx";
+import Main from "./components/Main.tsx";
 
 function App() {
 
   return (
     <>
       <Layout>
-         <h1>test</h1>
+          <Banner title="Order Management System"/>
+          <Main/>
       </Layout>
     </>
   )

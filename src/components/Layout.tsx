@@ -9,9 +9,7 @@ const Layout = ({children}: LayoutProps) => {
     return (
         <>
             <Header/>
-                <div className="container mx-auto min-h-[85vh] pt-24">
-                    {children}
-                </div>
+                {children}
             <Footer/>
         </>
     )
