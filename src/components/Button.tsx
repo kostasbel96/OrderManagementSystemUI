@@ -8,9 +8,10 @@ interface ButtonProps {
     activeValue: string | null;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setActiveValue: React.Dispatch<React.SetStateAction<string | null>>;
+    open: boolean;
 }
 
-const Button = ({ value, activeValue, setOpen, setActiveValue }: ButtonProps) => {
+const Button = ({ value, activeValue, setOpen, setActiveValue, open }: ButtonProps) => {
     const { buttonClick } = useButtonClicked({ value, activeValue, setOpen, setActiveValue });
 
     return (
@@ -18,6 +19,7 @@ const Button = ({ value, activeValue, setOpen, setActiveValue }: ButtonProps) =>
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
             type="button"
             onClick={buttonClick}
+            disabled={open && activeValue !== value}
         >
             {value}
         </button>
