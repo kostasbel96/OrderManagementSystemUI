@@ -2,7 +2,6 @@ import Button from "./Button.tsx";
 import MyCollapse from "./MyCollapse.tsx";
 import {useState} from "react";
 
-
 const Content = () => {
     const [open, setOpen] = useState(false);
     const [activeValue, setActiveValue] = useState<string | null>(null);
@@ -15,6 +14,7 @@ const Content = () => {
             <div className="flex justify-center mt-2">
                 <MyCollapse isOpen={open} value={activeValue ?? ""} />
             </div>
+
         </>
     );
 };
