@@ -12,10 +12,8 @@ export const useButtonClicked = ({ value, activeValue, setOpen, setActiveValue }
         console.log(value + " clicked");
 
         if (activeValue === value) {
-            // ίδιο κουμπί → toggle collapse
             setOpen(prev => !prev);
         } else {
-            // άλλο κουμπί → ανοίγει και αλλάζει content
             setActiveValue(value);
             setOpen(true);
         }
