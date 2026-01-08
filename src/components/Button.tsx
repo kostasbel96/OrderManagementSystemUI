@@ -13,10 +13,11 @@ interface ButtonProps {
 
 const Button = ({ value, activeValue, setOpen, setActiveValue, open }: ButtonProps) => {
     const { buttonClick } = useButtonClicked({ value, activeValue, setOpen, setActiveValue });
-
+    let addClass;
+    if (open && activeValue === value) addClass = "bg-red-500 hover:bg-red-700"
     return (
         <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            className={"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full hover:cursor-pointer " + addClass}
             type="button"
             onClick={buttonClick}
             disabled={open && activeValue !== value}
