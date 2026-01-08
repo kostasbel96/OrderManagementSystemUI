@@ -1,9 +1,12 @@
+interface MainProps {
+    children: React.ReactNode
+}
 
-const Main = () => {
+const Main = ({children}: MainProps) => {
     return (
         <>
-            <main className="container mx-auto min-h-[75vh] pt-5 bg-gray-200 m-2 shadow-2xl shadow-gray-500/50 rounded-lg">
-                test
+            <main className="mx-auto min-h-[80vh] pt-5 bg-gray-200 text-center space-x-2">
+                {children}
             </main>
         </>
     )

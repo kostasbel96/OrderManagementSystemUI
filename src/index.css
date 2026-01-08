@@ -1,4 +1,5 @@
 @import "tailwindcss";
+/*@import 'bootstrap/dist/css/bootstrap.min.css';*/
 body {
     font-family: 'Inter', sans-serif;
 }
@@ -18,6 +19,9 @@ body {
     .nav-item{
         font-size: small;
     }
+}
+.ReactCollapse--collapse {
+    transition: height 300ms ease;
 }
 
 /*:root {*/
