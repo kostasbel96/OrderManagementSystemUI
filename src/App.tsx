@@ -1,11 +1,13 @@
 import './App.css'
-import NavbarComponent from "./components/NavbarComponent.tsx";
+import Layout from "./components/Layout.tsx";
 
 function App() {
 
   return (
     <>
-      <NavbarComponent/>
+      <Layout>
+         <h1>test</h1>
+      </Layout>
     </>
   )
 }
