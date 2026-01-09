@@ -66,13 +66,20 @@ const MySelect = ({myValue, isMultiValue} : SelectProps) => {
             <Form.Group className="mb-3 flex justify-start" controlId="productsControl">
                 <Form.Label className="p-2">{isMultiValue ? myValue : myValue.slice(0, -1)}:</Form.Label><br/>
                 <Select className="text-black"
+                        placeholder={`Select ${myValue === "Products" ? myValue : myValue.slice(0, -1)}...`}
                         isMulti={isMultiValue}
                         options={myValue === "Products" ? productOptions : customersOptions}
-                        value={(myValue === "Products") ? selectedProductsWithQty.map((p) => ({
-                            value: p.product.id,
-                            label: p.product.name,
-                        })) : (myValue === "Customers") ? { value: selectedCustomer?.id, label: selectedCustomer?.name } : null}
-
+                        value={myValue === "Products"
+                            ? selectedProductsWithQty.map(p => ({
+                                value: p.product.id,
+                                label: p.product.name,
+                            }))
+                            : myValue === "Customers" && selectedCustomer
+                                ? [{
+                                    value: selectedCustomer.id,
+                                    label: selectedCustomer.name,
+                                }]
+                                : []}
                         onChange={(selected: SingleValue<any> | MultiValue<any>) => {
                             if (myValue === "Products") {
                                 const selectedArray = selected as { value: number; label: string }[];
@@ -86,12 +93,12 @@ const MySelect = ({myValue, isMultiValue} : SelectProps) => {
                                 if (selected) {
                                     const customer = customers.find((p) => p.id === selected.value);
                                     setSelectedCustomer(customer || null);
+                                    console.log(selected.value);
                                 } else {
                                     setSelectedCustomer(null);
                                 }
                             }
                         }}
-                        placeholder={`Select ${myValue}...`}
                         styles={{ container: (base) => ({ ...base, width: 250 }) }}
                 />
             </Form.Group>
