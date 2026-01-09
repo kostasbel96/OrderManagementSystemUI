@@ -15,13 +15,18 @@ body {
     border-bottom: 1px solid #0274f8;
 }
 
+.ReactCollapse--collapse {
+    transition: height 300ms ease;
+}
+
+
 @media (max-width: 640px) {
     .nav-item{
         font-size: small;
     }
-}
-.ReactCollapse--collapse {
-    transition: height 300ms ease;
+    footer{
+        font-size: small;
+    }
 }
 
 /*:root {*/
