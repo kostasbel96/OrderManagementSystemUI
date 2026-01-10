@@ -63,7 +63,7 @@ const MySelect = ({myValue, isMultiValue} : SelectProps) => {
 
     return (
         <>
-            <Form.Group className="mb-3 flex justify-start" controlId="productsControl">
+            <Form.Group className="mb-3 flex justify-start" controlId="control">
                 <Form.Label className="p-2">{isMultiValue ? myValue : myValue.slice(0, -1)}:</Form.Label><br/>
                 <Select className="text-black"
                         placeholder={`Select ${myValue === "Products" ? myValue : myValue.slice(0, -1)}...`}
@@ -93,7 +93,6 @@ const MySelect = ({myValue, isMultiValue} : SelectProps) => {
                                 if (selected) {
                                     const customer = customers.find((p) => p.id === selected.value);
                                     setSelectedCustomer(customer || null);
-                                    console.log(selected.value);
                                 } else {
                                     setSelectedCustomer(null);
                                 }
