@@ -1,6 +1,9 @@
 import {Form} from "react-bootstrap";
 import Select, {type MultiValue, type SingleValue} from "react-select";
 import {useState} from "react";
+import type {Customer, Product} from "../../types/Types.ts";
+import {products} from "../../services/productService.ts";
+import {customers} from "../../services/customerService.ts";
 
 interface SelectProps {
     myValue: string;
@@ -11,37 +14,16 @@ interface SelectedProduct {
     product: Product;
     quantity: number;
 }
-interface Product {
-    id: number;
-    name: string;
-}
 
-interface Customer {
-    id: number;
-    name: string;
-}
+
+
 
 const MySelect = ({myValue, isMultiValue} : SelectProps) => {
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
-    const products: Product[] = [
-        { id: 1, name: "iPhone 15" },
-        { id: 2, name: "Samsung Galaxy S24" },
-        { id: 3, name: "MacBook Pro" },
-        {id: 4, name: "Laptop1" },
-        { id: 5, name: "iPhone1 15" },
-        { id: 6, name: "Samsung1 Galaxy S24" },
-        { id: 7, name: "MacBook1 Pro" },
-        {id: 8, name: "Laptop1" },
-    ];
 
-    const customers: Customer[] = [
-        { id: 1, name: "Mpamps" },
-        { id: 2, name: "Souls" },
-        { id: 3, name: "tasos" },
-        {id: 4, name: "giorgos" },
-    ];
+
 
     const productOptions = products.map((p) => ({
         value: p.id,
@@ -49,7 +31,7 @@ const MySelect = ({myValue, isMultiValue} : SelectProps) => {
     }));
     const customersOptions = customers.map((p) => ({
         value: p.id,
-        label: p.name,
+        label: `${p.name} ${p.lastName}`,
     }));
 
     const handleQuantityChange = (index: number, quantity: number) => {
@@ -77,7 +59,7 @@ const MySelect = ({myValue, isMultiValue} : SelectProps) => {
                             : myValue === "Customers" && selectedCustomer
                                 ? [{
                                     value: selectedCustomer.id,
-                                    label: selectedCustomer.name,
+                                    label: `${selectedCustomer.name} ${selectedCustomer.lastName}`,
                                 }]
                                 : []}
                         onChange={(selected: SingleValue<any> | MultiValue<any>) => {
