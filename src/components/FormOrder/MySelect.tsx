@@ -45,7 +45,7 @@ const MySelect = ({myValue, isMultiValue} : SelectProps) => {
 
     return (
         <>
-            <Form.Group className="mb-3 flex justify-start" controlId="control">
+            <Form.Group className="mb-3 flex justify-center" controlId="control">
                 <Form.Label className="p-2">{isMultiValue ? myValue : myValue.slice(0, -1)}:</Form.Label><br/>
                 <Select className="text-black"
                         placeholder={`Select ${myValue === "Products" ? myValue : myValue.slice(0, -1)}...`}
@@ -80,7 +80,7 @@ const MySelect = ({myValue, isMultiValue} : SelectProps) => {
                                 }
                             }
                         }}
-                        styles={{ container: (base) => ({ ...base, width: 250 }) }}
+                        styles={{ container: (base) => ({ ...base, width: 200 }) }}
                 />
             </Form.Group>
                 {(myValue === "Products") && selectedProductsWithQty.map((item, index) => (

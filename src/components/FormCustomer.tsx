@@ -55,7 +55,7 @@ const FormCustomer = ({value}: FormCustomerProps) => {
                     <Form.Control
                         value={customerLastName}
                         type="text"
-                        placeholder={value.split(" ")[1]}
+                        placeholder="Last Name"
                         className="p-2 bg-white text-black focus:outline-none"
                         onChange={(e) => setCustomerLastName(e.target.value)}
                     />
