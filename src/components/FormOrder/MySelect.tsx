@@ -1,39 +1,50 @@
 import {Form} from "react-bootstrap";
 import Select, {type MultiValue, type SingleValue} from "react-select";
-import {useState} from "react";
 import type {Customer, Product} from "../../types/Types.ts";
 
 interface SelectProps {
     myValue: string;
     isMultiValue: boolean;
-    products: Product[];
-    customers: Customer[];
+    products?: Product[];
+    customers?: Customer[];
+    selectedProductsWithQty?: SelectedProduct[];
+    selectedCustomer?: Customer | null;
+    setSelectedProductsWithQty?: React.Dispatch<React.SetStateAction<SelectedProduct[]>>
+    setSelectedCustomer?: React.Dispatch<React.SetStateAction<Customer | null>>
 }
-
 interface SelectedProduct {
     product: Product;
     quantity: number;
 }
 
-const MySelect = ({myValue, isMultiValue, products, customers} : SelectProps) => {
-    const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
-    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+const MySelect = ({myValue,
+                                                  isMultiValue,
+                                                  products,
+                                                  customers,
+                                                  selectedProductsWithQty,
+                                                  selectedCustomer,
+                                                  setSelectedProductsWithQty,
+                                                  setSelectedCustomer} : SelectProps) => {
 
-    const productOptions = products.map((p) => ({
+
+    const productOptions = products?.map((p) => ({
         value: p.id,
         label: p.name,
     }));
-    const customersOptions = customers.map((p) => ({
+    const customersOptions = customers?.map((p) => ({
         value: p.id,
         label: `${p.name} ${p.lastName}`,
     }));
 
     const handleQuantityChange = (index: number, quantity: number) => {
-        setSelectedProductsWithQty((prev) => {
+        if (!setSelectedProductsWithQty) return;
+        const safeQuantity = Math.max(1, quantity);
+        setSelectedProductsWithQty((prev: SelectedProduct[]) => {
             const copy = [...prev];
-            copy[index] = { ...copy[index], quantity };
+            copy[index] = { ...copy[index], quantity: safeQuantity };
             return copy;
         });
+
     };
 
 
@@ -46,7 +57,7 @@ const MySelect = ({myValue, isMultiValue, products, customers} : SelectProps) =>
                         isMulti={isMultiValue}
                         options={myValue === "Products" ? productOptions : customersOptions}
                         value={myValue === "Products"
-                            ? selectedProductsWithQty.map(p => ({
+                            ? selectedProductsWithQty?.map(p => ({
                                 value: p.product.id,
                                 label: p.product.name,
                             }))
@@ -56,28 +67,26 @@ const MySelect = ({myValue, isMultiValue, products, customers} : SelectProps) =>
                                     label: `${selectedCustomer.name} ${selectedCustomer.lastName}`,
                                 }]
                                 : []}
-                        onChange={(selected: SingleValue<any> | MultiValue<any>) => {
+                        onChange={(selected: SingleValue<{ value: number; label: string }> | MultiValue<any>) => {
                             if (myValue === "Products") {
-                                const selectedArray = selected as { value: number; label: string }[];
-                                setSelectedProductsWithQty(
+                                const selectedArray = Array.isArray(selected) ? selected : [];
+                                setSelectedProductsWithQty?.(
                                     selectedArray.map((s) => {
-                                        const existing = selectedProductsWithQty.find((p) => p.product.id === s.value);
-                                        return existing || { product: products.find((p) => p.id === s.value)!, quantity: 1 };
+                                        const existing = selectedProductsWithQty?.find((p) => p.product.id === s.value);
+                                        const product = products?.find((p) => p.id === s.value);
+                                        return existing || { product: product!, quantity: 1 };
                                     })
                                 );
                             } else {
-                                if (selected) {
-                                    const customer = customers.find((p) => p.id === selected.value);
-                                    setSelectedCustomer(customer || null);
-                                } else {
-                                    setSelectedCustomer(null);
-                                }
+                                const selectedCustomerOption = selected as SingleValue<{ value: number; label: string }>;
+                                const customer = customers?.find(c => c.id === selectedCustomerOption?.value) || null;
+                                setSelectedCustomer?.(customer);
                             }
                         }}
                         styles={{ container: (base) => ({ ...base, width: 200 }) }}
                 />
             </Form.Group>
-                {(myValue === "Products") && selectedProductsWithQty.map((item, index) => (
+                {(myValue === "Products") && selectedProductsWithQty?.map((item, index) => (
                     <Form.Group className="mb-3 flex justify-center" key={item.product.id}>
                         <Form.Label className="w-24 text-center me-3">{item.product.name}:</Form.Label>
                         <Form.Control
