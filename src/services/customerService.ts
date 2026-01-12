@@ -9,7 +9,7 @@ export let customers: Customer[] = [
 
 export const addCustomer = (newCustomer: Customer): void => {
     const customerToAdd: Customer = {
-        ...newCustomer, id: new Date().getMilliseconds()
+        ...newCustomer, id: new Date().getTime()
     }
     console.log(customerToAdd);
 

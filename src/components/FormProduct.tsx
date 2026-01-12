@@ -19,6 +19,9 @@ const FormProduct = ({value}: FormProductProps) => {
             description: productDescription,
             quantity: productQuantity
         })
+        setProductQuantity(1);
+        setProductName("");
+        setProductDescription("");
     }
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {

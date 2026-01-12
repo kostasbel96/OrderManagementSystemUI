@@ -23,6 +23,10 @@ const FormCustomer = ({value}: FormCustomerProps) => {
                 email: customerEmail
             }
         );
+        setCustomerName("");
+        setCustomerLastName("");
+        setCustomerEmail("");
+        setCustomerPhone("");
     }
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {

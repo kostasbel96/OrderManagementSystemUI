@@ -13,7 +13,7 @@ products = [
 ]
 export const addProduct = (newProduct: Product): void => {
     const productToAdd: Product = {
-        ...newProduct, id: new Date().getMilliseconds()
+        ...newProduct, id: new Date().getTime()
     }
     console.log(productToAdd);
 

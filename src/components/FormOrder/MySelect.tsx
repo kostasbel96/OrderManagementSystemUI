@@ -2,12 +2,12 @@ import {Form} from "react-bootstrap";
 import Select, {type MultiValue, type SingleValue} from "react-select";
 import {useState} from "react";
 import type {Customer, Product} from "../../types/Types.ts";
-import {products} from "../../services/productService.ts";
-import {customers} from "../../services/customerService.ts";
 
 interface SelectProps {
     myValue: string;
     isMultiValue: boolean;
+    products: Product[];
+    customers: Customer[];
 }
 
 interface SelectedProduct {
@@ -15,10 +15,7 @@ interface SelectedProduct {
     quantity: number;
 }
 
-
-
-
-const MySelect = ({myValue, isMultiValue} : SelectProps) => {
+const MySelect = ({myValue, isMultiValue, products, customers} : SelectProps) => {
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
