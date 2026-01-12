@@ -1,30 +1,53 @@
 import {Button, Form} from "react-bootstrap";
 import MySelect from "./MySelect.tsx";
-import {useEffect, useState} from "react";
+import {type FormEvent, useState} from "react";
 import type {Customer, Product} from "../../types/Types.ts";
-import {customers as customersList} from "../../services/customerService.ts"
-import {products as productsList} from "../../services/productService.ts"
+import {customers} from "../../services/customerService.ts"
+import {products} from "../../services/productService.ts"
 
 interface SelectedProduct {
     product: Product;
     quantity: number;
 }
 
+interface OrderItem {
+    products: SelectedProduct[];
+    customer: Customer;
+    adress: string;
+}
+
 const FormOrder = () => {
-    const [customers, setCustomers] = useState<Customer[]>([]);
-    const [products, setProducts] = useState<Product[]>([]);
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null >(null);
+    const [address, setAddress] = useState("");
+    const [orderItem, setOrderItem] = useState<OrderItem[]>([]);
 
-    useEffect(() => {
-        setCustomers(customersList);
-        setProducts(productsList);
-    },[]);
 
+    const handleOnSubmit = ((e:  FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setOrderItem(prevState => ({
+            ...prevState,
+            products: selectedProductsWithQty,
+            customer: selectedCustomer,
+            address: address
+        }));
+
+        console.log(orderItem);
+
+    })
+
+    const handleOnReset = (e:  FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+    }
 
     return (
         <>
-            <Form className="p-5 flex flex-col items-center">
+            <Form
+                className="p-5 flex flex-col items-center"
+                onSubmit={(e) => {handleOnSubmit(e)}}
+                onReset={(e) => {handleOnReset(e)}}
+            >
                 <MySelect
                     myValue="Products"
                     isMultiValue={true}
@@ -32,7 +55,6 @@ const FormOrder = () => {
                     selectedProductsWithQty={selectedProductsWithQty}
                     setSelectedProductsWithQty={setSelectedProductsWithQty}
                 ></MySelect>
-                <div className="border-b-2 mb-3 w-80"></div>
                 <MySelect
                     myValue="Customers"
                     isMultiValue={false}
@@ -40,11 +62,29 @@ const FormOrder = () => {
                     selectedCustomer={selectedCustomer}
                     setSelectedCustomer={setSelectedCustomer}
                 ></MySelect>
+                <div className="border-b-2 mb-3 w-80"></div>
+                <Form.Group className="mb-3 flex justify-end" controlId="exampleForm.ControlTextarea1">
+                    <Form.Label className="p-2">Address:</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={address}
+                        placeholder="Address"
+                        className="p-2 bg-white text-black focus:outline-none rounded w-50 ml-2"
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
+                </Form.Group>
+
                 <div className="space-x-2 text-center">
-                    <Button className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer">
+                    <Button
+                        className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer"
+                        type="submit"
+                    >
                         Create
                     </Button>
-                    <Button className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer">
+                    <Button
+                        className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer"
+                        type="reset"
+                    >
                         Reset
                     </Button>
                 </div>
