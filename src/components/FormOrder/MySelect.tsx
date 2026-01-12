@@ -19,9 +19,6 @@ const MySelect = ({myValue, isMultiValue, products, customers} : SelectProps) =>
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
-
-
-
     const productOptions = products.map((p) => ({
         value: p.id,
         label: p.name,
