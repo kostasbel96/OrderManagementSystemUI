@@ -25,6 +25,9 @@ const FormOrder = () => {
 
     const handleOnSubmit = ((e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (orderItem.length > 0) {
+            console.log("order item not found");
+        }
         setOrderItem(prevState => ({
             ...prevState,
             products: selectedProductsWithQty,
