@@ -1,6 +1,6 @@
 import {Button, Form} from "react-bootstrap";
 import MySelect from "./MySelect.tsx";
-import {type FormEvent, useState} from "react";
+import {type FormEvent, useEffect, useState} from "react";
 import type {Customer, Product} from "../../types/Types.ts";
 import {customers} from "../../services/customerService.ts"
 import {products} from "../../services/productService.ts"
@@ -12,8 +12,8 @@ interface SelectedProduct {
 
 interface OrderItem {
     products: SelectedProduct[];
-    customer: Customer;
-    adress: string;
+    customer: Customer | null;
+    address: string;
 }
 
 const FormOrder = () => {
@@ -25,19 +25,23 @@ const FormOrder = () => {
 
     const handleOnSubmit = ((e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (orderItem.length > 0) {
-            console.log("order item not found");
-        }
-        setOrderItem(prevState => ({
-            ...prevState,
-            products: selectedProductsWithQty,
-            customer: selectedCustomer,
-            address: address
-        }));
+        setOrderItem((prev: OrderItem[]) => {
+            return [
+                ...prev,
+                {
+                    products: [...selectedProductsWithQty],
+                    customer: selectedCustomer,
+                    address: address
+                }
+            ]
+        });
 
-        console.log(orderItem);
+
 
     })
+    useEffect(() => {
+        console.log(orderItem);
+    },[orderItem]);
 
     const handleOnReset = (e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
