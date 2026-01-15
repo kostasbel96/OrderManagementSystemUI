@@ -2,7 +2,7 @@ import type {Product} from "../types/Types.ts";
 
 export let products: Product[];
 products = [
-    { id: 1, name: "iPhone 15", description: "test", quantity: 19},
+    { id: 1, name: "iPhone 15", description: "test", quantity: 1},
     { id: 2, name: "Samsung Galaxy S24", description: "test", quantity: 19 },
     { id: 3, name: "MacBook Pro", description: "test", quantity: 19 },
     {id: 4, name: "Laptop", description: "test", quantity: 19 },

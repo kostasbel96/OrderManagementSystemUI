@@ -22,29 +22,43 @@ const FormOrder = () => {
     const [address, setAddress] = useState("");
     const [orderItem, setOrderItem] = useState<OrderItem[]>([]);
 
+    const validQuantity = (): boolean => {
+        const p = selectedProductsWithQty.
+            find(p => p.quantity <=  p.product.quantity)
+        return !!p;
+
+    }
 
     const handleOnSubmit = ((e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setOrderItem((prev: OrderItem[]) => {
-            return [
-                ...prev,
-                {
-                    products: [...selectedProductsWithQty],
-                    customer: selectedCustomer,
-                    address: address
-                }
-            ]
-        });
-
-
-
+        if (validQuantity()){
+            setOrderItem((prev: OrderItem[]) => {
+                return [
+                    ...prev,
+                    {
+                        products: [...selectedProductsWithQty],
+                        customer: selectedCustomer,
+                        address: address
+                    }
+                ]
+            });
+            setSelectedProductsWithQty([]);
+            setSelectedCustomer(null);
+            setAddress("");
+        } else {
+            console.log("Not enough quantity selected");
+        }
     })
+
     useEffect(() => {
         console.log(orderItem);
     },[orderItem]);
 
     const handleOnReset = (e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setSelectedProductsWithQty([]);
+        setSelectedCustomer(null);
+        setAddress("");
 
     }
 
