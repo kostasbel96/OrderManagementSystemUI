@@ -1,5 +1,6 @@
-import {XIcon} from "lucide-react";
-import {Alert} from "react-bootstrap";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface PopUpDeniedProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,20 +19,27 @@ const PopUpDenied = ({setSubmitted, title}: PopUpDeniedProps)=>{
     }
 
     return (
-        <>
-            <Alert
-                className="text-white bg-red-600 flex rounded"
-            >
-                <Alert.Heading className="p-2">{`${popUpTitle} can not added!`}</Alert.Heading>
-                <button>
-                    <XIcon
-                        size={24}
-                        className="mr-1 bg-gray-400 hover:bg-gray-500 rounded"
-                        onClick={()=>setSubmitted(false)}
-                    ></XIcon>
-                </button>
-            </Alert>
-        </>
+        <Alert
+            severity="error"
+            variant="filled"
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+            }}
+            action={
+                <IconButton
+                    color="inherit"
+                    size="small"
+                    onClick={() => setSubmitted(false)}
+                    sx={{ mb: 1 }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            }
+        >
+            {`${popUpTitle} cannot be added!`}
+        </Alert>
     )
 }
 

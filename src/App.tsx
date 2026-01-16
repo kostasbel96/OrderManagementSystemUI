@@ -1,20 +1,32 @@
 import './App.css'
 import Layout from "./components/Layout.tsx";
-import Banner from "./components/Banner.tsx";
-import Main from "./components/Main.tsx";
+import {BrowserRouter, Route, Routes} from "react-router";
 import Content from "./components/Content.tsx";
+import ProductsTable from "./components/products/ProductsTable.tsx";
+import Main from "./components/Main.tsx";
+import OrdersTable from "./components/orders/OrdersTable.tsx";
+import CustomersTable from "./components/customers/CustomersTable.tsx";
 
 
 function App() {
 
   return (
     <>
-      <Layout>
-          <Banner title="Order Management System"/>
-          <Main>
-            <Content/>
-          </Main>
-      </Layout>
+      <BrowserRouter>
+          <Routes>
+              <Route element={<Layout/>}>
+                  <Route element={<Main/>}>
+                      <Route path="/products" element={<ProductsTable/>}/>
+                      <Route path="/orders" element={<OrdersTable/>}/>
+                      <Route path="/customers" element={<CustomersTable/>}/>
+                      <Route path="/" element={<Content/>}/>
+                  </Route>
+
+
+              </Route>
+          </Routes>
+      </BrowserRouter>
+
     </>
   )
 }

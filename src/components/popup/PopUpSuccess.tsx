@@ -1,5 +1,7 @@
-import {Alert} from "react-bootstrap";
-import {Check} from "lucide-react";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import CheckIcon from "@mui/icons-material/Check";
+
 
 interface FormPopUpProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,17 +24,27 @@ const PopUpSuccess = ({setSubmitted, title}: FormPopUpProps) => {
     return (
         <>
             <Alert
-                className="text-white bg-gray-600 flex rounded"
+                severity="success"
+                variant="filled"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+                action={
+                    <IconButton
+                        color="inherit"
+                        size="small"
+                        onClick={() => setSubmitted(false)}
+                        sx={{ mb: 1 }}
+                    >
+                        <CheckIcon />
+                    </IconButton>
+                }
             >
-                <Alert.Heading className="p-2">{`${popUpTitle} added successfully!`}</Alert.Heading>
-                <button>
-                    <Check
-                        size={24}
-                        className="mr-1 text-blue-900 bg-gray-400 hover:bg-gray-800 rounded"
-                        onClick={()=>setSubmitted(false)}
-                    ></Check>
-                </button>
+                {`${popUpTitle} added successfully!`}
             </Alert>
+
         </>
     )
 }

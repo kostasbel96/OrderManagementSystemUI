@@ -1,4 +1,4 @@
-import {Button, Form} from "react-bootstrap";
+import { Box, TextField, Button, Stack } from "@mui/material"
 import {type FormEvent, useState} from "react";
 import {addCustomer} from "../../services/customerService.ts";
 
@@ -43,69 +43,120 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
 
     return (
         <>
-            <Form
-                className="p-5"
-                onSubmit={(e) => {handleOnSubmit(e)}}
-                onReset={(e) => {handleOnReset(e)}}
+            <Box
+                component="form"
+                onSubmit={handleOnSubmit}
+                onReset={handleOnReset}
+                sx={{
+                    p: 5,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 3,
+                    width: "100%",
+                }}
             >
-                <Form.Group className="mb-3 flex justify-end" controlId="exampleForm.ControlInput1">
-                    <Form.Label className="p-2">Name:</Form.Label><br/>
-                    <Form.Control
-                        value={customerName}
-                        type="text"
-                        placeholder={value.split(" ")[1]}
-                        className="p-2 bg-white text-black focus:outline-none"
-                        onChange={(e) => setCustomerName(e.target.value)}
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3 flex justify-end" controlId="exampleForm.ControlInput1">
-                    <Form.Label className="p-2">Last name:</Form.Label><br/>
-                    <Form.Control
-                        value={customerLastName}
-                        type="text"
-                        placeholder="Last Name"
-                        className="p-2 bg-white text-black focus:outline-none"
-                        onChange={(e) => setCustomerLastName(e.target.value)}
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3 flex justify-end" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label className="p-2">Phone:</Form.Label>
-                    <Form.Control
-                        value={customerPhone}
-                        pattern="^69[0-9]{8}$"
-                        type="tel"
-                        placeholder="phone"
-                        minLength={10}
-                        maxLength={10}
-                        className="p-2 bg-white text-black focus:outline-none"
-                        onChange={(e) => setCustomerPhone(e.target.value)}
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3 flex justify-end" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label className="p-2">Email:</Form.Label>
-                    <Form.Control
-                        value={customerEmail}
-                        type="email"
-                        placeholder="example@example.com"
-                        className="p-2 bg-white text-black focus:outline-none"
-                        onChange={(e) => setCustomerEmail(e.target.value)}
-                    />
-                </Form.Group>
-                <div className="space-x-2 text-center ml-16">
-                    <Button
-                        className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer"
-                        type="submit"
-                    >
+                {/* Name */}
+                <TextField
+                    label="Name"
+                    placeholder={value.split(" ")[1]}
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    variant="outlined"
+                    sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
+                        '& .MuiInputLabel-root': {
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px"
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'gray',
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px",
+                        }}}
+                />
+
+                {/* Last Name */}
+                <TextField
+                    label="Last Name"
+                    placeholder="Last Name"
+                    value={customerLastName}
+                    onChange={(e) => setCustomerLastName(e.target.value)}
+                    variant="outlined"
+                    sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
+                        '& .MuiInputLabel-root': {
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px"
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'gray',
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px",
+                        }}}
+                />
+
+                {/* Phone */}
+                <TextField
+                    label="Phone"
+                    type="tel"
+                    inputProps={{ pattern: "^69[0-9]{8}$", minLength: 10, maxLength: 10 }}
+                    placeholder="Phone"
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    variant="outlined"
+                    sx={{ width: 300, backgroundColor: "white", borderRadius: 2 ,
+                        '& .MuiInputLabel-root': {
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px"
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'gray',
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px",
+                        }}}
+                />
+
+                {/* Email */}
+                <TextField
+                    label="Email"
+                    type="email"
+                    placeholder="example@example.com"
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    variant="outlined"
+                    sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
+                        '& .MuiInputLabel-root': {
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px"
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'gray',
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px",
+                        }
+                }}
+                />
+                {/* Buttons πάνω */}
+                <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                    <Button type="submit"
+                            variant="contained"
+                            color="primary">
                         Create
                     </Button>
-                    <Button
-                        className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer"
-                        type="reset"
-                    >
+                    <Button type="reset"
+                            variant="contained"
+                            color="error">
                         Reset
                     </Button>
-                </div>
-            </Form>
+                </Stack>
+            </Box>
         </>
     )
 }

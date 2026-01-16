@@ -1,5 +1,4 @@
-import {Form} from "react-bootstrap";
-import Select, {type MultiValue, type SingleValue} from "react-select";
+import { Autocomplete, TextField, Box, Stack } from "@mui/material"
 import type {Customer, Product} from "../../types/Types.ts";
 
 interface SelectProps {
@@ -15,6 +14,11 @@ interface SelectProps {
 interface SelectedProduct {
     product: Product;
     quantity: number;
+}
+
+interface Option {
+    value: number;
+    label: string;
 }
 
 const MySelect = ({myValue,
@@ -50,55 +54,90 @@ const MySelect = ({myValue,
 
     return (
         <>
-            <Form.Group className="mb-3 flex justify-center" controlId="control">
-                <Form.Label className="p-2">{isMultiValue ? myValue : myValue.slice(0, -1)}:</Form.Label><br/>
-                <Select className="text-black"
-                        placeholder={`Select ${myValue === "Products" ? myValue : myValue.slice(0, -1)}...`}
-                        isMulti={isMultiValue}
-                        options={myValue === "Products" ? productOptions : customersOptions}
-                        value={myValue === "Products"
-                            ? selectedProductsWithQty?.map(p => ({
-                                value: p.product.id,
-                                label: p.product.name,
-                            }))
-                            : myValue === "Customers" && selectedCustomer
-                                ? [{
-                                    value: selectedCustomer.id,
-                                    label: `${selectedCustomer.name} ${selectedCustomer.lastName}`,
-                                }]
-                                : []}
-                        onChange={(selected: SingleValue<{ value: number; label: string }> | MultiValue<any>) => {
-                            if (myValue === "Products") {
-                                const selectedArray = Array.isArray(selected) ? selected : [];
-                                setSelectedProductsWithQty?.(
-                                    selectedArray.map((s) => {
-                                        const existing = selectedProductsWithQty?.find((p) => p.product.id === s.value);
-                                        const product = products?.find((p) => p.id === s.value);
-                                        return existing || { product: product!, quantity: 1 };
-                                    })
-                                );
-                            } else {
-                                const selectedCustomerOption = selected as SingleValue<{ value: number; label: string }>;
-                                const customer = customers?.find(c => c.id === selectedCustomerOption?.value) || null;
-                                setSelectedCustomer?.(customer);
-                            }
-                        }}
-                        styles={{ container: (base) => ({ ...base, width: 200 }) }}
-                />
-            </Form.Group>
-                {(myValue === "Products") && selectedProductsWithQty?.map((item, index) => (
-                    <Form.Group className="mb-3 flex justify-center" key={item.product.id}>
-                        <Form.Label className="w-24 text-center me-3">{item.product.name}:</Form.Label>
-                        <Form.Control
-                            className="bg-white text-black px-2"
-                            type="number"
-                            min={1}
-                            value={item.quantity}
-                            onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
-                            style={{ width: "100px" }}
+
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+                {/* Autocomplete Select */}
+                <Autocomplete<Option, typeof isMultiValue>
+                    multiple={isMultiValue}
+                    options={
+                        myValue === "Products"
+                            ? (productOptions || []).filter(
+                                (p) => !selectedProductsWithQty?.some((sel) => sel.product.id === p.value)
+                            )
+                            : customersOptions || []
+                    }
+                    getOptionLabel={(option) => option.label}
+                    value={
+                        isMultiValue
+                            ? selectedProductsWithQty?.map((p) => ({
+                            value: p.product.id,
+                            label: p.product.name,
+                        })) || []
+                            : selectedCustomer
+                                ? { value: selectedCustomer.id, label: `${selectedCustomer.name} ${selectedCustomer.lastName}` }
+                                : null
+                    }
+                    onChange={(_, selected) => {
+                        if (isMultiValue) {
+                            const selectedArray = Array.isArray(selected) ? selected : [];
+                            setSelectedProductsWithQty?.(
+                                selectedArray.map((s) => {
+                                    const existing = selectedProductsWithQty?.find((p) => p.product.id === s.value);
+                                    const product = products?.find((p) => p.id === s.value);
+                                    return existing || { product: product!, quantity: 1 };
+                                })
+                            );
+                        } else {
+                            const sel = selected as Option | null;
+                            const customer = sel ? customers?.find((c) => c.id === sel.value) || null : null;
+                            setSelectedCustomer?.(customer);
+                        }
+                    }}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label={isMultiValue ? myValue : myValue.slice(0, -1)}
+                            placeholder={`Select ${myValue === "Products" ? myValue : myValue.slice(0, -1)}...`}
+                            sx={{
+                                width: 250,
+                                backgroundColor: "white",
+                                borderRadius: 2,
+                                '& .MuiInputLabel-root': {
+                                    backgroundColor: 'white',
+                                    borderRadius: 2,
+                                    padding: "5px"
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: 'gray',
+                                    backgroundColor: 'white',
+                                    borderRadius: 2,
+                                    padding: "5px",
+                                }
+                            }}
                         />
-                    </Form.Group>
-                ))}
+                    )}
+                    sx={{ width: 250 }}
+                />
+
+                {/* Quantity inputs for Products */}
+                {myValue === "Products" &&
+                    selectedProductsWithQty?.map((item, index) => (
+                        <Stack direction="row" spacing={2} alignItems="center" key={item.product.id}>
+                            <Box sx={{ width: 120, textAlign: "center" }}>{item.product.name}:</Box>
+                            <TextField
+                                type="number"
+                                value={item.quantity}
+                                onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
+                                inputProps={{ min: 1 }}
+                                sx={{
+                                    width: 100,
+                                    backgroundColor: "white",
+                                    borderRadius: 2,
+                                }}
+                            />
+                        </Stack>
+                    ))}
+            </Box>
         </>
     )
 }

@@ -1,4 +1,10 @@
-import {Button, Form} from "react-bootstrap";
+import {
+    Box,
+    Button,
+    TextField,
+    Divider,
+    Stack,
+} from "@mui/material";
 import MySelect from "./MySelect.tsx";
 import {type FormEvent, useEffect, useState} from "react";
 import type {Customer, Product} from "../../types/Types.ts";
@@ -73,10 +79,17 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
 
     return (
         <>
-            <Form
-                className="p-5 flex flex-col items-center"
-                onSubmit={(e) => {handleOnSubmit(e)}}
-                onReset={(e) => {handleOnReset(e)}}
+            <Box
+                component="form"
+                onSubmit={handleOnSubmit}
+                onReset={handleOnReset}
+                sx={{
+                    p: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 3,
+                }}
             >
                 <MySelect
                     myValue="Products"
@@ -84,41 +97,60 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                     products={products}
                     selectedProductsWithQty={selectedProductsWithQty}
                     setSelectedProductsWithQty={setSelectedProductsWithQty}
-                ></MySelect>
+                />
+
                 <MySelect
                     myValue="Customers"
                     isMultiValue={false}
                     customers={customers}
                     selectedCustomer={selectedCustomer}
                     setSelectedCustomer={setSelectedCustomer}
-                ></MySelect>
-                <div className="border-b-2 mb-3 w-80"></div>
-                <Form.Group className="mb-3 flex justify-end" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label className="p-2">Address:</Form.Label>
-                    <Form.Control
-                        type="text"
-                        value={address}
-                        placeholder="Address"
-                        className="p-2 bg-white text-black focus:outline-none rounded w-50 ml-2"
-                        onChange={(e) => setAddress(e.target.value)}
-                    />
-                </Form.Group>
+                />
 
-                <div className="space-x-2 text-center">
+                <Divider sx={{ width: 300 }} />
+
+                <TextField className="rounded"
+                    label="Address"
+                    variant="outlined"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    sx={{ width: 250,
+                          backgroundColor: "white",
+                          color: "black",
+                        '& .MuiInputLabel-root': {
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px"
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'gray',
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px",
+                        }
+
+                    }}
+
+                />
+
+                <Stack direction="row" spacing={2}>
                     <Button
-                        className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer"
                         type="submit"
+                        variant="contained"
+                        color="primary"
                     >
                         Create
                     </Button>
+
                     <Button
-                        className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer"
                         type="reset"
+                        variant="contained"
+                        color="error"
                     >
                         Reset
                     </Button>
-                </div>
-            </Form>
+                </Stack>
+            </Box>
         </>
     );
 }

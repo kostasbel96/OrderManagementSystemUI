@@ -1,6 +1,6 @@
-import {Button, Form} from "react-bootstrap";
 import {type FormEvent, useState} from "react";
 import {addProduct} from "../../services/productService.ts";
+import { Box, TextField, Button, Stack } from "@mui/material"
 
 interface FormProductProps {
     value: string;
@@ -37,57 +37,116 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
 
     return (
         <>
-            <Form
-                className="p-5"
-                onSubmit={(e)=>handleOnSubmit(e)}
-                onReset={(e)=>handleOnReset(e)}
+            <Box
+                component="form"
+                onSubmit={handleOnSubmit}
+                onReset={handleOnReset}
+                sx={{
+                    p: 5,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 3,
+                    width: "100%",
+                }}
             >
-                <Form.Group className="mb-3 flex justify-end " controlId="exampleForm.ControlInput1">
-                    <Form.Label className="p-2">{value.split(" ")[1]}:</Form.Label><br/>
-                    <Form.Control
-                        type="text"
-                        value={productName}
-                        placeholder={value.split(" ")[1]}
-                        className="p-2 bg-white text-black focus:outline-none"
-                        onChange={(e) => setProductName(e.target.value)}
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3 flex justify-end" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label className="p-2">Description:</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Description"
-                        value={productDescription}
-                        className="p-2 bg-white text-black focus:outline-none"
-                        onChange={(e) => setProductDescription(e.target.value)}
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3 flex justify-end" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label className="p-2">Quantity:</Form.Label>
-                    <Form.Control
-                        type="number"
-                        min={1}
-                        value={productQuantity}
-                        placeholder="Quantity in stock"
-                        className="p-2 bg-white text-black focus:outline-none"
-                        onChange={(e) => setProductQuantity(Number(e.target.value))}
-                    />
-                </Form.Group>
-                <div className="space-x-2 text-center ml-16">
+                {/* Product Name */}
+                <TextField
+                    label={value.split(" ")[1]}
+                    placeholder={value.split(" ")[1]}
+                    value={productName}
+                    onChange={(e) => setProductName(e.target.value)}
+                    variant="outlined"
+                    sx={{
+                        width: 300,
+                        backgroundColor: "white",
+                        borderRadius: 2,
+                        '& .MuiInputLabel-root': {
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px"
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'gray',
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px",
+                        }
+                    }}
+                />
+
+                {/* Description */}
+                <TextField
+                    label="Description"
+                    placeholder="Description"
+                    value={productDescription}
+                    onChange={(e) => setProductDescription(e.target.value)}
+                    variant="outlined"
+                    sx={{
+                        width: 300,
+                        backgroundColor: "white",
+                        borderRadius: 2,
+                        '& .MuiInputLabel-root': {
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px"
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'gray',
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px",
+                        }
+                    }}
+                />
+
+                {/* Quantity */}
+                <TextField
+                    label="Quantity"
+                    type="number"
+                    inputProps={{ min: 1 }}
+                    placeholder="Quantity in stock"
+                    value={productQuantity}
+                    onChange={(e) => setProductQuantity(Number(e.target.value))}
+                    variant="outlined"
+                    sx={{
+                        width: 300,
+                        backgroundColor: "white",
+                        borderRadius: 2,
+                        '& .MuiInputLabel-root': {
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px"
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'gray',
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px",
+                        }
+                    }}
+                />
+
+                {/* Buttons */}
+                <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
                     <Button
-                        className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer"
                         type="submit"
+                        variant="contained"
+                        color="primary"
                     >
                         Create
                     </Button>
                     <Button
-                        className="text-black text-xs font-bold py-2 px-4 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer"
                         type="reset"
+                        variant="contained"
+                        color="error"
                     >
                         Reset
                     </Button>
-                </div>
-            </Form>
+                </Stack>
+            </Box>
+
+
         </>
 
     )

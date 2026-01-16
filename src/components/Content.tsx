@@ -1,4 +1,4 @@
-import Button from "./Button.tsx";
+import MyButton from "./MyButton.tsx";
 import MyCollapse from "./MyCollapse.tsx";
 import {useState} from "react";
 import PopUp from "./popup/PopUp.tsx";
@@ -12,10 +12,10 @@ const Content = () => {
 
     return (
         <>
-            <div className="w-full">
-                <Button value="Add Order" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
-                <Button value="Add Product" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
-                <Button value="Add Customer" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
+            <div className="w-full mt-5">
+                <MyButton value="Add Order" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
+                <MyButton value="Add Product" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
+                <MyButton value="Add Customer" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
                 <div className="flex justify-center mt-2 relative">
                     <MyCollapse isOpen={open} value={activeValue ?? ""} setSubmitted={setSubmitted} setSuccess={setSuccess}/>
                 </div>
