@@ -4,9 +4,10 @@ import {addProduct} from "../services/productService.ts";
 
 interface FormProductProps {
     value: string;
+    setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormProduct = ({value}: FormProductProps) => {
+const FormProduct = ({value, setSubmitted}: FormProductProps) => {
     const [productQuantity, setProductQuantity] = useState(1);
     const [productName, setProductName] = useState("");
     const [productDescription, setProductDescription] = useState("");
@@ -22,6 +23,7 @@ const FormProduct = ({value}: FormProductProps) => {
         setProductQuantity(1);
         setProductName("");
         setProductDescription("");
+        setSubmitted(true);
     }
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
@@ -85,6 +87,7 @@ const FormProduct = ({value}: FormProductProps) => {
                 </div>
             </Form>
         </>
+
     )
 }
 
