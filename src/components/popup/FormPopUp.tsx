@@ -6,12 +6,23 @@ interface FormPopUpProps {
     title: string;
 }
 
+
+
 const FormPopUp = ({setSubmitted, title}: FormPopUpProps) => {
+    let popUpTitle;
+
+    if (title.includes("Product")){
+        popUpTitle = "Product"
+    } else if (title.includes("Customer")){
+        popUpTitle = "Customer"
+    } else {
+        popUpTitle = "Order"
+    }
 
     return (
         <>
             <Alert>
-                <Alert.Heading>{`${title} added succesfully!`}</Alert.Heading>
+                <Alert.Heading>{`${popUpTitle} added succesfully!`}</Alert.Heading>
                 <p>test</p>
                 <button>
                     <XIcon
@@ -23,4 +34,4 @@ const FormPopUp = ({setSubmitted, title}: FormPopUpProps) => {
     )
 }
 
-export default FormPopUp;;
+export default FormPopUp;
