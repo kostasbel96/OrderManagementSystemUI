@@ -1,12 +1,13 @@
 import Button from "./Button.tsx";
 import MyCollapse from "./MyCollapse.tsx";
 import {useState} from "react";
-import FormPopUp from "./popup/FormPopUp.tsx";
+import PopUp from "./popup/PopUp.tsx";
 
 const Content = () => {
     const [open, setOpen] = useState(false);
     const [activeValue, setActiveValue] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
+    const [success, setSuccess] = useState(false);
 
 
     return (
@@ -16,7 +17,7 @@ const Content = () => {
                 <Button value="Add Product" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
                 <Button value="Add Customer" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
                 <div className="flex justify-center mt-2 relative">
-                    <MyCollapse isOpen={open} value={activeValue ?? ""} setSubmitted={setSubmitted}/>
+                    <MyCollapse isOpen={open} value={activeValue ?? ""} setSubmitted={setSubmitted} setSuccess={setSuccess}/>
                 </div>
 
                 <div
@@ -26,9 +27,10 @@ const Content = () => {
                     {
                         submitted && (
                             <div className="flex justify-center p-1 shadow-lg">
-                                <FormPopUp
-                                    setSubmitted={setSubmitted}
+                                <PopUp
                                     title={activeValue ?? ""}
+                                    setSubmitted={setSubmitted}
+                                    success={success}
                                 />
                             </div>
 

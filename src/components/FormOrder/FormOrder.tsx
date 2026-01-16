@@ -7,6 +7,7 @@ import {products} from "../../services/productService.ts"
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+    setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface SelectedProduct {
@@ -20,7 +21,7 @@ interface OrderItem {
     address: string;
 }
 
-const FormOrder = ({setSubmitted}: FormOrderProps) => {
+const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null >(null);
     const [address, setAddress] = useState("");
@@ -50,8 +51,11 @@ const FormOrder = ({setSubmitted}: FormOrderProps) => {
             setSelectedCustomer(null);
             setAddress("");
             setSubmitted(true);
+            setSuccess(true);
         } else {
             console.log("Not enough quantity selected");
+            setSubmitted(true);
+            setSuccess(false);
         }
     })
 

@@ -1,5 +1,5 @@
 import {Alert} from "react-bootstrap";
-import {XIcon} from "lucide-react";
+import {Check} from "lucide-react";
 
 interface FormPopUpProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -8,7 +8,7 @@ interface FormPopUpProps {
 
 
 
-const FormPopUp = ({setSubmitted, title}: FormPopUpProps) => {
+const PopUpSuccess = ({setSubmitted, title}: FormPopUpProps) => {
     let popUpTitle;
 
     if (title.includes("Product")){
@@ -22,19 +22,19 @@ const FormPopUp = ({setSubmitted, title}: FormPopUpProps) => {
     return (
         <>
             <Alert
-                className="text-white bg-green-600 p-2 flex rounded transform-content"
+                className="text-white bg-gray-600 flex rounded"
             >
-                <Alert.Heading>{`${popUpTitle} added successfully!`}</Alert.Heading>
+                <Alert.Heading className="p-2">{`${popUpTitle} added successfully!`}</Alert.Heading>
                 <button>
-                    <XIcon
-                        size={16}
-                        className="mb-5 ml-2 border hover:bg-red-500 rounded"
+                    <Check
+                        size={24}
+                        className="mr-1 text-blue-900 bg-gray-400 hover:bg-gray-800 rounded"
                         onClick={()=>setSubmitted(false)}
-                    ></XIcon>
+                    ></Check>
                 </button>
             </Alert>
         </>
     )
 }
 
-export default FormPopUp;
+export default PopUpSuccess;

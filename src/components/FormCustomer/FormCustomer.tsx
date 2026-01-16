@@ -1,13 +1,14 @@
 import {Button, Form} from "react-bootstrap";
 import {type FormEvent, useState} from "react";
-import {addCustomer} from "../services/customerService.ts";
+import {addCustomer} from "../../services/customerService.ts";
 
 interface FormCustomerProps {
     value: string;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+    setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormCustomer = ({value, setSubmitted}: FormCustomerProps) => {
+const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
     const [customerName, setCustomerName] = useState("");
     const [customerLastName, setCustomerLastName] = useState("");
     const [customerEmail, setCustomerEmail] = useState("");
@@ -29,6 +30,7 @@ const FormCustomer = ({value, setSubmitted}: FormCustomerProps) => {
         setCustomerEmail("");
         setCustomerPhone("");
         setSubmitted(true);
+        setSuccess(true);
     }
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {

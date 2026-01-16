@@ -1,13 +1,14 @@
 import {Button, Form} from "react-bootstrap";
 import {type FormEvent, useState} from "react";
-import {addProduct} from "../services/productService.ts";
+import {addProduct} from "../../services/productService.ts";
 
 interface FormProductProps {
     value: string;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+    setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormProduct = ({value, setSubmitted}: FormProductProps) => {
+const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
     const [productQuantity, setProductQuantity] = useState(1);
     const [productName, setProductName] = useState("");
     const [productDescription, setProductDescription] = useState("");
@@ -24,6 +25,7 @@ const FormProduct = ({value, setSubmitted}: FormProductProps) => {
         setProductName("");
         setProductDescription("");
         setSubmitted(true);
+        setSuccess(true);
     }
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
