@@ -16,8 +16,8 @@ const MyCollapse = ({isOpen, value, setSubmitted}: OpenProps) => {
             <Collapse isOpened={isOpen}>
                 <div className="bg-blue-700 shadow-lg rounded-lg text-white text-sm mb-5">
                     {value.includes("Product") && (<FormProduct value={value} setSubmitted={setSubmitted}/>)}
-                    {value.includes("Order") && (<FormOrder/>)}
-                    {value.includes("Customer") && (<FormCustomer value={value} />)}
+                    {value.includes("Order") && (<FormOrder setSubmitted={setSubmitted}/>)}
+                    {value.includes("Customer") && (<FormCustomer value={value} setSubmitted={setSubmitted} />)}
                 </div>
             </Collapse>
 

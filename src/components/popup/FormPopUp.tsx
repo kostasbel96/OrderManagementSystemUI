@@ -21,11 +21,14 @@ const FormPopUp = ({setSubmitted, title}: FormPopUpProps) => {
 
     return (
         <>
-            <Alert>
-                <Alert.Heading>{`${popUpTitle} added succesfully!`}</Alert.Heading>
-                <p>test</p>
+            <Alert
+                className="text-white bg-green-600 p-2 flex rounded transform-content"
+            >
+                <Alert.Heading>{`${popUpTitle} added successfully!`}</Alert.Heading>
                 <button>
                     <XIcon
+                        size={16}
+                        className="mb-5 ml-2 border hover:bg-red-500 rounded"
                         onClick={()=>setSubmitted(false)}
                     ></XIcon>
                 </button>

@@ -11,20 +11,33 @@ const Content = () => {
 
     return (
         <>
-            <Button value="Add Order" activeValue={activeValue} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
-            <Button value="Add Product" activeValue={activeValue} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
-            <Button value="Add Customer" activeValue={activeValue} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
-            <div className="flex justify-center mt-2">
-                <MyCollapse isOpen={open} value={activeValue ?? ""} setSubmitted={setSubmitted}/>
+            <div className="w-full">
+                <Button value="Add Order" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
+                <Button value="Add Product" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
+                <Button value="Add Customer" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
+                <div className="flex justify-center mt-2 relative">
+                    <MyCollapse isOpen={open} value={activeValue ?? ""} setSubmitted={setSubmitted}/>
+                </div>
+
+                <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out
+                                ${submitted ? "max-h-40 opacity-300 mt-3" : "max-h-0 opacity-0 mt-0"}`}
+                >
+                    {
+                        submitted && (
+                            <div className="flex justify-center p-1 shadow-lg">
+                                <FormPopUp
+                                    setSubmitted={setSubmitted}
+                                    title={activeValue ?? ""}
+                                />
+                            </div>
+
+                        )
+                    }
+                </div>
+
             </div>
-            {
-                submitted && (
-                    <FormPopUp
-                        setSubmitted={setSubmitted}
-                        title={activeValue ?? ""}
-                    />
-                )
-            }
+
 
         </>
     );

@@ -4,9 +4,10 @@ import {addCustomer} from "../services/customerService.ts";
 
 interface FormCustomerProps {
     value: string;
+    setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormCustomer = ({value}: FormCustomerProps) => {
+const FormCustomer = ({value, setSubmitted}: FormCustomerProps) => {
     const [customerName, setCustomerName] = useState("");
     const [customerLastName, setCustomerLastName] = useState("");
     const [customerEmail, setCustomerEmail] = useState("");
@@ -27,6 +28,7 @@ const FormCustomer = ({value}: FormCustomerProps) => {
         setCustomerLastName("");
         setCustomerEmail("");
         setCustomerPhone("");
+        setSubmitted(true);
     }
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {

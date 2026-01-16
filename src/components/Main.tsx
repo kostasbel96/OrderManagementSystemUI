@@ -5,7 +5,7 @@ interface MainProps {
 const Main = ({children}: MainProps) => {
     return (
         <>
-            <main className="mx-auto min-h-[80vh] pt-5 bg-gray-200 text-center space-x-2">
+            <main className="mx-auto min-h-[80vh] pt-5 bg-gray-200 text-center space-x-2 w-full">
                 {children}
             </main>
         </>
