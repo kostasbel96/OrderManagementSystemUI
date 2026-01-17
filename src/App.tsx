@@ -16,13 +16,11 @@ function App() {
           <Routes>
               <Route element={<Layout/>}>
                   <Route element={<Main/>}>
-                      <Route path="/products" element={<ProductsTable/>}/>
-                      <Route path="/orders" element={<OrdersTable/>}/>
-                      <Route path="/customers" element={<CustomersTable/>}/>
-                      <Route path="/" element={<Content/>}/>
+                      <Route path="products" element={<ProductsTable/>}/>
+                      <Route path="orders" element={<OrdersTable/>}/>
+                      <Route path="customers" element={<CustomersTable/>}/>
+                      <Route index element={<Content/>}/>
                   </Route>
-
-
               </Route>
           </Routes>
       </BrowserRouter>

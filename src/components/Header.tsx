@@ -1,7 +1,8 @@
 import logo from "../assets/logo_ed.png"
-import {Link} from "react-router";
+import {Link, NavLink} from "react-router";
 
 const Header = () => {
+
     return (
         <>
             <header className="flex justify-center flex-row  bg-[#F0F0F0] text-gray-900 navbar h-16">
@@ -12,15 +13,18 @@ const Header = () => {
                 </div>
                 <div className="p-5">
                     <ul className="flex flex-row space-x-5 items-center">
-                        <Link to="/products">
+                        <NavLink to="/products"
+                        className={({isActive}) => isActive ? `border-b border-b-[#0274f8]` : ``}>
                             <li className="nav-item">Products</li>
-                        </Link>
-                        <Link to="/orders">
+                        </NavLink>
+                        <NavLink to="/orders"
+                                 className={({isActive}) => isActive ? `border-b border-b-[#0274f8]` : ``}>
                             <li className="nav-item">Orders</li>
-                        </Link>
-                        <Link to="/customers">
+                        </NavLink>
+                        <NavLink to="/customers"
+                                 className={({isActive}) => isActive ? `border-b border-b-[#0274f8]` : ``}>
                             <li className="nav-item">Customers</li>
-                        </Link>
+                        </NavLink>
                     </ul>
                 </div>
             </header>
