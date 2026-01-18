@@ -38,7 +38,7 @@ const MySelect = ({myValue,
                                                                 label: p.name
                                                             }));
     const customersOptions = customers?.map((p) => ({
-        value: p.id,
+        value: p.id!,
         label: `${p.name} ${p.lastName}`,
     }));
 
@@ -76,7 +76,7 @@ const MySelect = ({myValue,
                             label: p.product.name,
                         })) || []
                             : selectedCustomer
-                                ? { value: selectedCustomer.id, label: `${selectedCustomer.name} ${selectedCustomer.lastName}` }
+                                ? { value: selectedCustomer.id!, label: `${selectedCustomer.name} ${selectedCustomer.lastName}` }
                                 : null
                     }
                     onChange={(_, selected) => {
