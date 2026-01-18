@@ -20,12 +20,12 @@ const MyCollapse = ({isOpen, value, setSubmitted, setSuccess}: OpenProps) => {
                     sx={{
                         p: 2,
                         borderRadius: 2,
-                        bgcolor: "primary.main", // μπλε Material
+                        bgcolor: "primary.main",
                         color: "white",
                         mb: 2,
                     }}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                         {value.includes("Product") && (
                             <FormProduct
                                 value={value}
