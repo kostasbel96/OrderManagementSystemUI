@@ -25,6 +25,10 @@ const Header = () => {
                                  className={({isActive}) => isActive ? `border-b border-b-[#0274f8]` : ``}>
                             <li className="nav-item">Customers</li>
                         </NavLink>
+                        <NavLink to="/"
+                                 className={({isActive}) => isActive ? `border-b border-b-[#0274f8]` : ``}>
+                            <li className="nav-item">Dashboard</li>
+                        </NavLink>
                     </ul>
                 </div>
             </header>
