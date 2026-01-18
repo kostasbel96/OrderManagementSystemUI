@@ -78,6 +78,10 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
             ...prev,
             [name]: name === "quantity" ? Number(value) : value
         }));
+        setErrors(prev=>({
+           ...prev,
+            [name]: ""
+        }))
     }
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
@@ -98,7 +102,7 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    gap: 3,
+                    gap: 2,
                     width: "100%",
                 }}
             >
@@ -110,6 +114,8 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                     value={values.name}
                     onChange={handleChange}
                     variant="outlined"
+                    error={Boolean(errors?.name)}
+                    helperText={errors?.name}
                     sx={{
                         width: 300,
                         backgroundColor: "white",
@@ -127,7 +133,6 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                         }
                     }}
                 />
-                {errors && (<p className="text-sm text-red-900">{errors.name}</p>)}
 
                 {/* Description */}
                 <TextField
@@ -137,6 +142,8 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                     value={values.description}
                     onChange={handleChange}
                     variant="outlined"
+                    error={Boolean(errors?.description)}
+                    helperText={errors?.description}
                     sx={{
                         width: 300,
                         backgroundColor: "white",
@@ -154,7 +161,6 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                         }
                     }}
                 />
-                {errors && (<p className="text-sm text-red-900">{errors.description}</p>)}
 
                 {/* Quantity */}
                 <TextField
@@ -166,6 +172,8 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                     value={values.quantity}
                     onChange={handleChange}
                     variant="outlined"
+                    error={Boolean(errors?.quantity)}
+                    helperText={errors?.quantity}
                     sx={{
                         width: 300,
                         backgroundColor: "white",
@@ -183,7 +191,6 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                         }
                     }}
                 />
-                {errors && (<p className="text-sm text-red-900">{errors.quantity}</p>)}
 
                 {/* Buttons */}
                 <Stack direction="row" spacing={2} sx={{ mt: 1 }}>

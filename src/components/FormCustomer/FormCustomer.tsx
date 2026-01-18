@@ -98,6 +98,10 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
             ...prev,
             [name]: value
         }));
+        setErrors(prev=>({
+            ...prev,
+            [name]: ""
+        }))
     }
 
     return (
@@ -111,7 +115,7 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    gap: 3,
+                    gap: 2,
                     width: "100%",
                 }}
             >
@@ -123,6 +127,8 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                     value={values.name}
                     onChange={handleChange}
                     variant="outlined"
+                    error={Boolean(errors?.name)}
+                    helperText={errors?.name}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',
@@ -136,8 +142,6 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                             padding: "5px",
                         }}}
                 />
-                {errors && (<p className="text-sm text-red-900">{errors.name}</p>)}
-
                 {/* Last Name */}
                 <TextField
                     label="Last Name"
@@ -146,6 +150,8 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                     value={values.lastName}
                     onChange={handleChange}
                     variant="outlined"
+                    error={Boolean(errors?.lastName)}
+                    helperText={errors?.lastName}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',
@@ -159,8 +165,6 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                             padding: "5px",
                         }}}
                 />
-                {errors && (<p className="text-sm text-red-900">{errors.lastName}</p>)}
-
                 {/* Phone */}
                 <TextField
                     label="Phone 1"
@@ -170,6 +174,8 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                     value={values.phone1}
                     onChange={handleChange}
                     variant="outlined"
+                    error={Boolean(errors?.phone1)}
+                    helperText={errors?.phone1}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2 ,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',
@@ -183,8 +189,6 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                             padding: "5px",
                         }}}
                 />
-                {errors && (<p className="text-sm text-red-900">{errors.phone1}</p>)}
-
                 <TextField
                     label="Phone 2"
                     type="tel"
@@ -193,6 +197,8 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                     value={values.phone2}
                     onChange={handleChange}
                     variant="outlined"
+                    error={Boolean(errors?.phone2)}
+                    helperText={errors?.phone2}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2 ,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',
@@ -206,17 +212,17 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                             padding: "5px",
                         }}}
                 />
-                {errors && (<p className="text-sm text-red-900">{errors.phone2}</p>)}
-
                 {/* Email */}
                 <TextField
                     label="Email"
-                    type="email"
+                    type="text"
                     name="email"
                     placeholder="example@example.com"
                     value={values.email}
                     onChange={handleChange}
                     variant="outlined"
+                    error={Boolean(errors?.email)}
+                    helperText={errors?.email}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',
@@ -231,8 +237,6 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                         }
                 }}
                 />
-                {errors && (<p className="text-sm text-red-900">{errors.email}</p>)}
-
                 {/* Buttons πάνω */}
                 <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
                     <Button type="submit"
