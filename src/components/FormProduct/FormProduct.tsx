@@ -1,6 +1,7 @@
 import {type FormEvent, useState} from "react";
 import {addProduct} from "../../services/productService.ts";
 import { Box, TextField, Button, Stack } from "@mui/material"
+import {z} from "zod";
 
 interface FormProductProps {
     value: string;
@@ -8,31 +9,82 @@ interface FormProductProps {
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const formSchema = z.object(
+    {
+        name: z.string().trim().nonempty("Product Name is required"),
+        description: z.string().trim().nonempty("Description is required"),
+        quantity: z.coerce.number().min(1, "Quantity must be at least 1")
+    }
+)
+
+type FormValues = z.infer<typeof formSchema>;
+
+type FormErrors = {
+    name?: string;
+    description?: string;
+    quantity?: string;
+}
+
+const initialValues = {
+    name: "",
+    description: "",
+    quantity: 1,
+}
+
 const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
-    const [productQuantity, setProductQuantity] = useState(1);
-    const [productName, setProductName] = useState("");
-    const [productDescription, setProductDescription] = useState("");
+    const [values, setValues] = useState<FormValues>(initialValues);
+    const [errors, setErrors] = useState<FormErrors>({});
+
+    const validateForm = () => {
+        const result = formSchema.safeParse(values);
+
+        if (!result.success) {
+            const newErrors: FormErrors = {};
+            result.error.issues.forEach(error => {
+                const fieldName = error.path[0] as keyof FormValues;
+                newErrors[fieldName] = error.message;
+            });
+            setErrors(newErrors);
+            return false;
+        }
+        setErrors({});
+        return true;
+    }
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        addProduct({
-            id: -1,
-            name: productName,
-            description: productDescription,
-            quantity: productQuantity
-        })
-        setProductQuantity(1);
-        setProductName("");
-        setProductDescription("");
-        setSubmitted(true);
-        setSuccess(true);
+        if (validateForm()) {
+            addProduct({
+                id: -1,
+                name: values.name,
+                description: values.description,
+                quantity: values.quantity
+            })
+            setValues(initialValues);
+            setSubmitted(true);
+            setSuccess(true);
+            setErrors({});
+        } else {
+            setSubmitted(true);
+            setSuccess(false);
+        }
+
+    }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        const {name, value} = e.target;
+        setValues(prev=> ({
+            ...prev,
+            [name]: name === "quantity" ? Number(value) : value
+        }));
     }
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setProductQuantity(1);
-        setProductName("");
-        setProductDescription("");
+        setErrors({});
+        setValues(initialValues);
+        setSubmitted(false);
     }
 
     return (
@@ -54,8 +106,9 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                 <TextField
                     label={value.split(" ")[1]}
                     placeholder={value.split(" ")[1]}
-                    value={productName}
-                    onChange={(e) => setProductName(e.target.value)}
+                    name="name"
+                    value={values.name}
+                    onChange={handleChange}
                     variant="outlined"
                     sx={{
                         width: 300,
@@ -74,13 +127,15 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                         }
                     }}
                 />
+                {errors && (<p className="text-sm text-red-900">{errors.name}</p>)}
 
                 {/* Description */}
                 <TextField
                     label="Description"
                     placeholder="Description"
-                    value={productDescription}
-                    onChange={(e) => setProductDescription(e.target.value)}
+                    name="description"
+                    value={values.description}
+                    onChange={handleChange}
                     variant="outlined"
                     sx={{
                         width: 300,
@@ -99,6 +154,7 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                         }
                     }}
                 />
+                {errors && (<p className="text-sm text-red-900">{errors.description}</p>)}
 
                 {/* Quantity */}
                 <TextField
@@ -106,8 +162,9 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                     type="number"
                     inputProps={{ min: 1 }}
                     placeholder="Quantity in stock"
-                    value={productQuantity}
-                    onChange={(e) => setProductQuantity(Number(e.target.value))}
+                    name="quantity"
+                    value={values.quantity}
+                    onChange={handleChange}
                     variant="outlined"
                     sx={{
                         width: 300,
@@ -126,6 +183,7 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                         }
                     }}
                 />
+                {errors && (<p className="text-sm text-red-900">{errors.quantity}</p>)}
 
                 {/* Buttons */}
                 <Stack direction="row" spacing={2} sx={{ mt: 1 }}>

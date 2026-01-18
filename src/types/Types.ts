@@ -6,10 +6,11 @@ export interface Product {
 }
 
 export interface Customer {
-    id: number;
+    id: number | undefined;
     name: string;
     lastName: string;
-    phoneNumber: string;
+    phoneNumber1: string;
+    phoneNumber2: string | undefined | null;
     email: string;
 }
 

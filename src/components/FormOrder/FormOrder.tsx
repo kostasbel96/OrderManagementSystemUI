@@ -10,11 +10,45 @@ import {type FormEvent, useEffect, useState} from "react";
 import type {Customer, Product} from "../../types/Types.ts";
 import {customers} from "../../services/customerService.ts"
 import {products} from "../../services/productService.ts"
+import {z} from "zod";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+const productSchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    quantity: z.number(),
+});
+
+const selectedProductSchema = z.object({
+    product: productSchema,
+    quantity: z
+        .number()
+        .min(1, "Quantity must be at least 1")
+});
+
+const orderSchema = z.object({
+    customer: z
+        .object({
+            id: z.number(),
+            name: z.string(),
+        })
+        .nullable()
+        .refine(val => val !== null, {
+            message: "You must select a customer",
+        }),
+
+    products: z
+        .array(selectedProductSchema)
+        .min(1, "You must select at least 1 product"),
+
+    address: z
+        .string()
+        .min(2, "Address is required"),
+})
 
 interface SelectedProduct {
     product: Product;
@@ -28,22 +62,56 @@ interface OrderItem {
     date: string;
 }
 
+type FormErrors = {
+    products?: string;
+    customer?: string;
+    address?: string;
+    quantity?: string;
+}
+
 const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null >(null);
     const [address, setAddress] = useState("");
     const [orderItem, setOrderItem] = useState<OrderItem[]>([]);
+    const [errors, setErrors] = useState<FormErrors>({})
 
     const validQuantity = (): boolean => {
-        const p = selectedProductsWithQty.
-            find(p => p.quantity <=  p.product.quantity)
-        return !!p;
+        return selectedProductsWithQty.every(
+            p => p.quantity <= p.product.quantity
+        );
+    }
 
+    const isValid = (): boolean => {
+
+        const result = orderSchema.safeParse({
+            customer: selectedCustomer,
+            products: selectedProductsWithQty,
+            address: address
+        });
+
+        if (!result.success) {
+            const newErrors: FormErrors = {};
+            result.error.issues.forEach(error => {
+                const fieldName = error.path[0] as keyof FormErrors;
+                newErrors[fieldName] = error.message;
+            })
+            setErrors(newErrors);
+            return false;
+        }
+        if (!validQuantity()) {
+            setErrors({
+                quantity: "Quantity in stock is less than you requested."
+            });
+            return false;
+        }
+        setErrors({})
+        return true;
     }
 
     const handleOnSubmit = ((e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (validQuantity()){
+        if (isValid()) {
             setOrderItem((prev: OrderItem[]) => {
                 return [
                     ...prev,
@@ -55,6 +123,7 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                     }
                 ]
             });
+            decreaseQuantityOfProduct();
             setSelectedProductsWithQty([]);
             setSelectedCustomer(null);
             setAddress("");
@@ -69,13 +138,25 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
 
     useEffect(() => {
         console.log(orderItem);
+        console.log(products);
     },[orderItem]);
+
+    const decreaseQuantityOfProduct = () => {
+        products.map(p=> {
+            const product = selectedProductsWithQty.find(pr => {
+                return pr.product.id === p.id;
+            });
+            return product ? p.quantity -= product.quantity : p;
+        });
+    }
 
     const handleOnReset = (e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSelectedProductsWithQty([]);
         setSelectedCustomer(null);
         setAddress("");
+        setErrors({});
+        setSubmitted(false);
     }
 
     return (
@@ -99,6 +180,7 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                     selectedProductsWithQty={selectedProductsWithQty}
                     setSelectedProductsWithQty={setSelectedProductsWithQty}
                 />
+                {errors && (<p className="text-sm text-red-900">{errors.products || errors.quantity}</p>)}
 
                 <MySelect
                     myValue="Customers"
@@ -107,10 +189,12 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                     selectedCustomer={selectedCustomer}
                     setSelectedCustomer={setSelectedCustomer}
                 />
+                {errors && (<p className="text-sm text-red-900">{errors.customer}</p>)}
 
                 <Divider sx={{ width: 300 }} />
 
-                <TextField className="rounded"
+                <TextField
+                    className="rounded"
                     label="Address"
                     variant="outlined"
                     value={address}
@@ -131,8 +215,8 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                         }
 
                     }}
-
                 />
+                {errors && (<p className="text-sm text-red-900">{errors.address}</p>)}
 
                 <Stack direction="row" spacing={2}>
                     <Button
