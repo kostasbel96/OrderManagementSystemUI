@@ -25,6 +25,7 @@ interface OrderItem {
     products: SelectedProduct[];
     customer: Customer | null;
     address: string;
+    date: string;
 }
 
 const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
@@ -49,7 +50,8 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                     {
                         products: [...selectedProductsWithQty],
                         customer: selectedCustomer,
-                        address: address
+                        address: address,
+                        date: new Date().toLocaleDateString()
                     }
                 ]
             });
@@ -74,7 +76,6 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
         setSelectedProductsWithQty([]);
         setSelectedCustomer(null);
         setAddress("");
-
     }
 
     return (
