@@ -66,7 +66,7 @@ const Header = () => {
                             <li className="nav-item px-2">Products</li>
                         </NavLink>
                         <NavLink to="/orders"
-                                 className={({isActive}) => isActive ? `border-b border-b-[#0274f8]` : ``}>
+                                 className={({isActive}) => (isActive ? `border-b border-b-[#0274f8]` : ``)}>
                             <li className="nav-item px-2">Orders</li>
                         </NavLink>
                         <NavLink to="/customers"

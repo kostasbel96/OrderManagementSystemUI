@@ -15,6 +15,7 @@
     "@material-tailwind/react": "^2.1.10",
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
+    "@mui/x-data-grid": "^8.25.0",
     "@tailwindcss/vite": "^4.1.18",
     "bootstrap": "^5.3.8",
     "lucide-react": "^0.562.0",
