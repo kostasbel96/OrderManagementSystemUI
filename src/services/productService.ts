@@ -19,3 +19,12 @@ export const addProduct = (newProduct: Product): void => {
 
     products = [...products, productToAdd];
 }
+
+export const search = (name: string)=>{
+    return products.filter(product => product.name.toLowerCase().includes(name.toLowerCase()));
+}
+
+export const getProducts = (limit: number = 0) => {
+    if (limit) return products.slice(0, limit);
+    return  products;
+}

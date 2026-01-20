@@ -54,7 +54,6 @@ const Header = () => {
                                     overflow-hidden
                                     md:flex
                                     ${menuOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}
-                                
                                     md:static
                                     md:opacity-100
                                     md:bg-transparent
