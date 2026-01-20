@@ -15,15 +15,16 @@ const Search = ({type, setRows}: SearchProps) => {
 
     const handleChange = (value: string) => {
         setText(value);
-
-        if (value === "") {
+        if (value === "" && type === "Products") {
             setRows(getProducts());
         }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setRows(search(text))
+        if (type === "Products") {
+            setRows(search(text));
+        }
     };
 
     return(
