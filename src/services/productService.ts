@@ -20,7 +20,7 @@ export const addProduct = (newProduct: Product): void => {
     products = [...products, productToAdd];
 }
 
-export const search = (name: string)=>{
+export const searchProduct = (name: string)=>{
     return products.filter(product => product.name.toLowerCase().includes(name.toLowerCase()));
 }
 

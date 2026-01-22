@@ -2,28 +2,35 @@ import {InputBase, Paper} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {SearchIcon} from "lucide-react";
 import {useState} from "react";
-import type {Product} from "../types/Types.ts";
-import {getProducts, search} from "../services/productService.ts";
+import type {Customer, Product} from "../types/Types.ts";
+import {getProducts, searchProduct} from "../services/productService.ts";
+import {getCustomers, searchCustomer} from "../services/customerService.ts";
 
 interface SearchProps {
-    type: string;
-    setRows: React.Dispatch<React.SetStateAction<Product[]>>;
+    typeOf: string;
+    setRows: React.Dispatch<React.SetStateAction<(Product | Customer)[]>>;
 }
 
-const Search = ({type, setRows}: SearchProps) => {
+const Search = ({typeOf, setRows}: SearchProps) => {
     const [text, setText] = useState("");
 
     const handleChange = (value: string) => {
         setText(value);
-        if (value === "" && type === "Products") {
+        if (value === "" && typeOf === "Products") {
             setRows(getProducts());
+        }
+        else if (value === "" && typeOf === "Customers"){
+            setRows(getCustomers());
         }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (type === "Products") {
-            setRows(search(text));
+        if (typeOf === "Products") {
+            setRows(searchProduct(text));
+        }
+        else if (typeOf === "Customers"){
+            setRows(searchCustomer(text));
         }
     };
 
@@ -41,7 +48,7 @@ const Search = ({type, setRows}: SearchProps) => {
             >
                 <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder={`Search ${type}`}
+                    placeholder={`Search ${typeOf}`}
                     inputProps={{ 'aria-label': 'search google maps' }}
                     onChange={(e)=>handleChange(e.target.value)}
                 />

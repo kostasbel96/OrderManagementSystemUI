@@ -15,3 +15,12 @@ export const addCustomer = (newCustomer: Customer): void => {
 
     customers = [...customers, customerToAdd];
 }
+
+export const getCustomers = (limit: number = 0) => {
+    if (limit) return customers.slice(0, limit);
+    return  customers;
+}
+
+export const searchCustomer = (name: string)=>{
+    return customers.filter(customer => (`${customer.name} ${customer.lastName}`.toLowerCase().includes(name.toLowerCase())));
+}
