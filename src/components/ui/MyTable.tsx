@@ -1,13 +1,15 @@
 import {DataGrid, type GridColDef} from "@mui/x-data-grid";
-import type {Customer, Product} from "../../types/Types.ts";
+import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import Search from "../Search.tsx";
 import {Paper} from "@mui/material";
+
+
 
 type TableProps = {
     columns: GridColDef[];
     typeOf: string;
-    setRows: React.Dispatch<React.SetStateAction<(Product | Customer)[]>>;
-    rows: (Product | Customer)[];
+    setRows: React.Dispatch<React.SetStateAction<(Product | Customer | OrderRow)[]>>;
+    rows: (Product | Customer | OrderRow)[];
 }
 
 
@@ -22,7 +24,7 @@ const MyTable = ({columns, typeOf, setRows, rows}: TableProps)=>{
                 <Paper sx={{
                     height: '80%',
                     width: '100%',
-                    maxWidth: 950,
+                    maxWidth: 1100,
                     marginBottom: 2
                 }}
                 >
@@ -32,7 +34,19 @@ const MyTable = ({columns, typeOf, setRows, rows}: TableProps)=>{
                         initialState={{ pagination: { paginationModel } }}
                         pageSizeOptions={[5, 10]}
                         checkboxSelection
-                        sx={{ border: 0 }}
+                        getRowHeight={() => "auto"}
+                        sx={{
+                            border: 0,
+                            '& .MuiDataGrid-cell': {
+                                alignItems: 'flex-start',
+                                paddingTop: '8px',
+                                paddingBottom: '8px',
+                            },
+                            "& .MuiDataGrid-cellCheckbox, & .MuiDataGrid-columnHeaderCheckbox": {
+                                justifyContent: "start",  // οριζόντια
+                                alignItems: "center",      // κάθετα
+                            }
+                        }}
                     />
                 </Paper>
             </div>

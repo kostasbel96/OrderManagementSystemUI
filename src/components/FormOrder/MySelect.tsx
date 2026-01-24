@@ -31,12 +31,11 @@ const MySelect = ({myValue,
                                                   setSelectedCustomer} : SelectProps) => {
 
 
-    const productOptions = products?.
-                                                            filter(p => p.quantity > 0).
-                                                            map(p => ({
-                                                                value: p.id,
-                                                                label: p.name
-                                                            }));
+    const productOptions = products?.filter(p => p.quantity > 0).
+                                    map(p => ({
+                                        value: p.id,
+                                        label: p.name
+                                    }));
     const customersOptions = customers?.map((p) => ({
         value: p.id!,
         label: `${p.name} ${p.lastName}`,

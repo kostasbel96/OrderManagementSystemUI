@@ -6,10 +6,11 @@ import {
     Stack,
 } from "@mui/material";
 import MySelect from "./MySelect.tsx";
-import {type FormEvent, useEffect, useState} from "react";
-import type {Customer, Product} from "../../types/Types.ts";
+import {type FormEvent, useState} from "react";
+import type {Customer, SelectedProduct} from "../../types/Types.ts";
 import {customers} from "../../services/customerService.ts"
 import {products} from "../../services/productService.ts"
+import {addOrder} from '../../services/OrderService.ts'
 import {z} from "zod";
 
 interface FormOrderProps {
@@ -50,18 +51,6 @@ const orderSchema = z.object({
         .min(2, "Address is required"),
 })
 
-interface SelectedProduct {
-    product: Product;
-    quantity: number;
-}
-
-interface OrderItem {
-    products: SelectedProduct[];
-    customer: Customer | null;
-    address: string;
-    date: string;
-}
-
 type FormErrors = {
     products?: string;
     customer?: string;
@@ -73,7 +62,6 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null >(null);
     const [address, setAddress] = useState("");
-    const [orderItem, setOrderItem] = useState<OrderItem[]>([]);
     const [errors, setErrors] = useState<FormErrors>({})
 
     const validQuantity = (): boolean => {
@@ -112,17 +100,8 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
     const handleOnSubmit = ((e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (isValid()) {
-            setOrderItem((prev: OrderItem[]) => {
-                return [
-                    ...prev,
-                    {
-                        products: [...selectedProductsWithQty],
-                        customer: selectedCustomer,
-                        address: address,
-                        date: new Date().toLocaleDateString()
-                    }
-                ]
-            });
+            console.log(selectedProductsWithQty);
+            addOrder({products:selectedProductsWithQty, customer:selectedCustomer, address:address});
             decreaseQuantityOfProduct();
             setSelectedProductsWithQty([]);
             setSelectedCustomer(null);
@@ -135,11 +114,6 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
             setSuccess(false);
         }
     })
-
-    useEffect(() => {
-        console.log(orderItem);
-        console.log(products);
-    },[orderItem]);
 
     const decreaseQuantityOfProduct = () => {
         products.map(p=> {

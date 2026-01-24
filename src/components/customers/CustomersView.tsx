@@ -1,12 +1,12 @@
 import type {GridColDef} from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
 import {useState} from "react";
-import type {Customer, Product} from "../../types/Types.ts";
+import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import {getCustomers} from "../../services/customerService.ts";
 
 const CustomersView = () => {
 
-    const [rows, setRows] = useState<(Product | Customer)[]>(getCustomers());
+    const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>(getCustomers());
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 120 },
         { field: 'name', headerName: 'Name', width: 150 },

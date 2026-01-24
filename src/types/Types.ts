@@ -14,3 +14,25 @@ export interface Customer {
     email: string;
 }
 
+export interface OrderItem {
+    id?: number;
+    products: SelectedProduct[];
+    customer: Customer | null;
+    address: string;
+    date: string;
+}
+
+export interface SelectedProduct {
+    product: Product;
+    quantity: number;
+}
+
+export interface OrderRow {
+    id?: number;
+    customer: string;
+    products: string;
+    quantity: number | string;
+    address: string;
+    date?: string;
+}
+

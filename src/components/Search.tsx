@@ -2,13 +2,14 @@ import {InputBase, Paper} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {SearchIcon} from "lucide-react";
 import {useState} from "react";
-import type {Customer, Product} from "../types/Types.ts";
+import type {Customer, OrderRow, Product} from "../types/Types.ts";
 import {getProducts, searchProduct} from "../services/productService.ts";
 import {getCustomers, searchCustomer} from "../services/customerService.ts";
+import {getOrders, searchOrderByCustomerName} from "../services/OrderService.ts";
 
 interface SearchProps {
     typeOf: string;
-    setRows: React.Dispatch<React.SetStateAction<(Product | Customer)[]>>;
+    setRows: React.Dispatch<React.SetStateAction<(Product | Customer | OrderRow)[]>>;
 }
 
 const Search = ({typeOf, setRows}: SearchProps) => {
@@ -21,6 +22,16 @@ const Search = ({typeOf, setRows}: SearchProps) => {
         }
         else if (value === "" && typeOf === "Customers"){
             setRows(getCustomers());
+        } else if (value === "" && typeOf === "Orders"){
+            const orders = getOrders().map((order) => ({
+                id: order.id,
+                customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
+                products: order.products.map(p => p.product.name).join("\n"),
+                quantity: order.products.map(p => p.quantity).join("\n"),
+                address: order.address,
+                date: order.date,
+            }));
+            setRows(orders != undefined ? orders: []);
         }
     };
 
@@ -31,6 +42,16 @@ const Search = ({typeOf, setRows}: SearchProps) => {
         }
         else if (typeOf === "Customers"){
             setRows(searchCustomer(text));
+        }
+        else if (typeOf === "Orders"){
+            setRows(searchOrderByCustomerName(text).map((order) => ({
+                id: order.id,
+                customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
+                products: order.products.map(p => p.product.name).join("\n"),
+                quantity: order.products.map(p => p.quantity).join("\n"),
+                address: order.address,
+                date: order.date,
+            })));
         }
     };
 
@@ -48,7 +69,7 @@ const Search = ({typeOf, setRows}: SearchProps) => {
             >
                 <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder={`Search ${typeOf}`}
+                    placeholder={`Search ${typeOf === "Orders" ? "by customer name" : typeOf}`}
                     inputProps={{ 'aria-label': 'search google maps' }}
                     onChange={(e)=>handleChange(e.target.value)}
                 />
