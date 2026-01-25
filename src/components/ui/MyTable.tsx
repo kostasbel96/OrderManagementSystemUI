@@ -56,13 +56,13 @@ const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, se
                                 sx={{
                                     border: 0,
                                     '& .MuiDataGrid-cell': {
-                                        alignItems: 'flex-start',
-                                        paddingTop: '8px',
+                                        alignItems: 'center',
                                         paddingBottom: '8px',
                                     },
                                     "& .MuiDataGrid-cellCheckbox, & .MuiDataGrid-columnHeaderCheckbox": {
-                                        justifyContent: "start",  // οριζόντια
-                                        alignItems: "center",      // κάθετα
+                                        justifyContent: "center",  // οριζόντια
+                                        alignItems: "center",
+                                        marginTop: '4px',
                                     }
                                 }}
                             />
