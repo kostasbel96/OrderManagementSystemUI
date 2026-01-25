@@ -1,5 +1,7 @@
-import { Autocomplete, TextField, Box, Stack } from "@mui/material"
+import {Autocomplete, Box, Stack, TextField} from "@mui/material"
 import type {Customer, Product} from "../../types/Types.ts";
+import {useEffect, useState} from "react";
+import {getProducts} from "../../services/productService.ts";
 
 interface SelectProps {
     myValue: string;
@@ -23,19 +25,15 @@ interface Option {
 
 const MySelect = ({myValue,
                                                   isMultiValue,
-                                                  products,
                                                   customers,
                                                   selectedProductsWithQty,
                                                   selectedCustomer,
                                                   setSelectedProductsWithQty,
                                                   setSelectedCustomer} : SelectProps) => {
 
+    const [productOptions, setProductOptions] = useState<Option[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
 
-    const productOptions = products?.filter(p => p.quantity > 0).
-                                    map(p => ({
-                                        value: p.id,
-                                        label: p.name
-                                    }));
     const customersOptions = customers?.map((p) => ({
         value: p.id!,
         label: `${p.name} ${p.lastName}`,
@@ -51,6 +49,22 @@ const MySelect = ({myValue,
         });
 
     };
+
+    useEffect(() => {
+        let finalOptions: Option[];
+        getProducts(0, 100)
+            .then(data=>{
+                const products = data.content.filter((p: Product)=> p.quantity > 0);
+
+                finalOptions = products.map((p: Product) => ({
+                    value: p.id,
+                    label: p.name,
+                }))
+                setProducts(products);
+                setProductOptions(finalOptions);
+            });
+    },[])
+
 
 
     return (

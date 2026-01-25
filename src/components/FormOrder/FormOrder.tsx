@@ -150,7 +150,6 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                 <MySelect
                     myValue="Products"
                     isMultiValue={true}
-                    products={products}
                     selectedProductsWithQty={selectedProductsWithQty}
                     setSelectedProductsWithQty={setSelectedProductsWithQty}
                 />

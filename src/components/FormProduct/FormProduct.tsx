@@ -55,14 +55,21 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
         e.preventDefault();
         if (validateForm()) {
             addProduct({
-                id: -1,
                 name: values.name,
                 description: values.description,
                 quantity: values.quantity
-            })
+            }).then((data) => {
+                setSuccess(true);
+                setSubmitted(true);
+                    console.log(data);
+                })
+                .catch(()=>{
+                    setSubmitted(true);
+                    setSuccess(false);
+                })
             setValues(initialValues);
-            setSubmitted(true);
-            setSuccess(true);
+
+
             setErrors({});
         } else {
             setSubmitted(true);

@@ -36,3 +36,10 @@ export interface OrderRow {
     date?: string;
 }
 
+export interface ProductResponseDto {
+    content: Product[];
+    totalElements: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
