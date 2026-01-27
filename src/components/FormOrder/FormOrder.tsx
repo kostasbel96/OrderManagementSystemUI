@@ -6,12 +6,12 @@ import {
     Stack,
 } from "@mui/material";
 import MySelect from "./MySelect.tsx";
-import {type FormEvent, useState} from "react";
-import type {Customer, SelectedProduct} from "../../types/Types.ts";
-import {customers} from "../../services/customerService.ts"
-import {products} from "../../services/productService.ts"
+import {type FormEvent, useEffect, useState} from "react";
+import type {Customer, Product, SelectedProduct} from "../../types/Types.ts";
 import {addOrder} from '../../services/OrderService.ts'
 import {z} from "zod";
+import {getCustomers} from "../../services/customerService.ts";
+import {getProducts} from "../../services/productService.ts";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -63,6 +63,8 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null >(null);
     const [address, setAddress] = useState("");
     const [errors, setErrors] = useState<FormErrors>({})
+    const [customers, setCustomers] = useState<Customer[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
 
     const validQuantity = (): boolean => {
         return selectedProductsWithQty.every(
@@ -116,7 +118,7 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
     })
 
     const decreaseQuantityOfProduct = () => {
-        products.map(p=> {
+        products.forEach(p=> {
             const product = selectedProductsWithQty.find(pr => {
                 return pr.product.id === p.id;
             });
@@ -133,8 +135,18 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
         setSubmitted(false);
     }
 
+    useEffect(() => {
+        getCustomers(0, 100)
+            .then(data=>{
+                setCustomers(data.content);
+            });
+        getProducts(0, 100)
+            .then(data=>{
+                setProducts(data.content);
+            });
+    },[])
+
     return (
-        <>
             <Box
                 component="form"
                 onSubmit={handleOnSubmit}
@@ -150,6 +162,7 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                 <MySelect
                     myValue="Products"
                     isMultiValue={true}
+                    products={products}
                     selectedProductsWithQty={selectedProductsWithQty}
                     setSelectedProductsWithQty={setSelectedProductsWithQty}
                 />
@@ -209,7 +222,6 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                     </Button>
                 </Stack>
             </Box>
-        </>
     );
 }
 

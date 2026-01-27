@@ -4,7 +4,7 @@ import {SearchIcon} from "lucide-react";
 import {useState} from "react";
 import type {Customer, OrderRow, Product} from "../types/Types.ts";
 import {getProducts, searchProductByName} from "../services/productService.ts";
-import {getCustomers, searchCustomer} from "../services/customerService.ts";
+import {getCustomers, searchCustomerByName} from "../services/customerService.ts";
 import {getOrders, searchOrderByCustomerName} from "../services/OrderService.ts";
 
 interface SearchProps {
@@ -26,7 +26,10 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
                 })
         }
         else if (value === "" && typeOf === "Customers"){
-            setRows(getCustomers());
+            getCustomers(page, pageSize)
+                .then((data) => {
+                    setRows(data.content);
+                })
         } else if (value === "" && typeOf === "Orders"){
             const orders = getOrders().map((order) => ({
                 id: order.id,
@@ -36,7 +39,7 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
                 address: order.address,
                 date: order.date,
             }));
-            setRows(orders != undefined ? orders: []);
+            setRows(orders ?? []);
         }
     };
 
@@ -48,7 +51,9 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
             })
         }
         else if (typeOf === "Customers"){
-            setRows(searchCustomer(text));
+            searchCustomerByName(text).then((customers: Customer[]) => {
+                setRows(customers);
+            })
         }
         else if (typeOf === "Orders"){
             setRows(searchOrderByCustomerName(text).map((order) => ({
@@ -63,7 +68,6 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
     };
 
     return(
-        <>
             <Paper
                 component="form"
                 onSubmit={handleSubmit}
@@ -86,7 +90,6 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
                     <SearchIcon />
                 </IconButton>
             </Paper>
-        </>
     );
 }
 

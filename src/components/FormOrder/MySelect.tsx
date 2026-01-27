@@ -1,17 +1,16 @@
 import {Autocomplete, Box, Stack, TextField} from "@mui/material"
 import type {Customer, Product} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
-import {getProducts} from "../../services/productService.ts";
 
 interface SelectProps {
     myValue: string;
     isMultiValue: boolean;
-    products?: Product[];
     customers?: Customer[];
     selectedProductsWithQty?: SelectedProduct[];
     selectedCustomer?: Customer | null;
     setSelectedProductsWithQty?: React.Dispatch<React.SetStateAction<SelectedProduct[]>>
-    setSelectedCustomer?: React.Dispatch<React.SetStateAction<Customer | null>>
+    setSelectedCustomer?: React.Dispatch<React.SetStateAction<Customer | null>>,
+    products?: Product[];
 }
 interface SelectedProduct {
     product: Product;
@@ -29,10 +28,10 @@ const MySelect = ({myValue,
                                                   selectedProductsWithQty,
                                                   selectedCustomer,
                                                   setSelectedProductsWithQty,
-                                                  setSelectedCustomer} : SelectProps) => {
+                                                  setSelectedCustomer,
+                                                  products} : SelectProps) => {
 
     const [productOptions, setProductOptions] = useState<Option[]>([]);
-    const [products, setProducts] = useState<Product[]>([]);
 
     const customersOptions = customers?.map((p) => ({
         value: p.id!,
@@ -51,25 +50,21 @@ const MySelect = ({myValue,
     };
 
     useEffect(() => {
-        let finalOptions: Option[];
-        getProducts(0, 100)
-            .then(data=>{
-                const products = data.content.filter((p: Product)=> p.quantity > 0);
+        if (products){
+            let finalOptions: Option[];
+            const productsWithValidQuantity = products.filter((p: Product)=> p.quantity > 0);
 
-                finalOptions = products.map((p: Product) => ({
-                    value: p.id,
-                    label: p.name,
-                }))
-                setProducts(products);
-                setProductOptions(finalOptions);
-            });
-    },[])
+            finalOptions = productsWithValidQuantity.map((p: Product) => ({
+                value: p.id,
+                label: p.name,
+            }))
+            setProductOptions(finalOptions);
+        }
+    },[products])
 
 
 
     return (
-        <>
-
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
                 {/* Autocomplete Select */}
                 <Autocomplete<Option, typeof isMultiValue>
@@ -153,7 +148,6 @@ const MySelect = ({myValue,
                         </Stack>
                     ))}
             </Box>
-        </>
     )
 }
 

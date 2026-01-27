@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import type {GridColDef} from "@mui/x-data-grid";
 import {getOrders} from "../../services/OrderService.ts"
 import MyTable from "../ui/MyTable.tsx";
@@ -94,22 +94,23 @@ const OrdersView = () => {
                     whiteSpace: 'pre-line',
                     height: '100%',          // σημαντικό για να γεμίζει το cell
                     width: '100%',
-                    marginBottom: '24px'
                 }}>
                     {params.value}
                 </div>
             )}
     ];
 
+    useEffect(() => {
+        getOrders().forEach(o=> console.log(o.products));
+    }, [])
+
     return (
-        <>
             <MyTable
                 columns={columns}
                 typeOf={"Orders"}
                 setRows={setRows}
                 rows={rows}
             ></MyTable>
-        </>
     )
 
 }
