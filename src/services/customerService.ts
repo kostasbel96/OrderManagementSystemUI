@@ -1,26 +1,28 @@
-import type {Customer} from "../types/Types.ts";
+import type {Customer, CustomerResponseDto} from "../types/Types.ts";
 
-export let customers: Customer[] = [
-    { id: 1, name: "Mpamps", lastName: "test", email: "test@te.gr", phoneNumber1: "6948675678", phoneNumber2: "6948675678"},
-    { id: 2, name: "Souls", lastName: "test", email: "test@te.gr", phoneNumber1: "6948675678", phoneNumber2: "6948675678" },
-    { id: 3, name: "tasos", lastName: "test", email: "test@te.gr", phoneNumber1: "6948675678", phoneNumber2: "6948675678" },
-    {id: 4, name: "giorgos", lastName: "test", email: "test@te.gr", phoneNumber1: "6948675678", phoneNumber2: "6948675678" },
-];
+const API_URL = "http://localhost:8080/api";
 
-export const addCustomer = (newCustomer: Customer): void => {
-    const customerToAdd: Customer = {
-        ...newCustomer, id: new Date().getTime()
-    }
-    console.log(customerToAdd);
-
-    customers = [...customers, customerToAdd];
+export async function addCustomer(newCustomer: Omit<Customer, "id">): Promise<Customer> {
+    const res = await fetch(`${API_URL}/customers/save`,{
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newCustomer),
+    });
+    if (!res.ok) throw new Error("Failed to create Customer");
+    return await res.json();
 }
 
-export const getCustomers = (limit: number = 0) => {
-    if (limit) return customers.slice(0, limit);
-    return  customers;
+export async function getCustomers(page: number = 0, pageSize: number = 5): Promise<CustomerResponseDto> {
+    let url = `${API_URL}/customers?page=${page}&size=${pageSize}`
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch customers.");
+    const data = await res.json();
+    return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export const searchCustomer = (name: string)=>{
-    return customers.filter(customer => (`${customer.name} ${customer.lastName}`.toLowerCase().includes(name.toLowerCase())));
+export async function searchCustomerByName(name: string) :Promise<Customer[]> {
+    const res = await fetch(`${API_URL}/customers/search?name=${name}&lastName=${name}`);
+    if (!res.ok) throw new Error("Failed to search customers");
+    return await res.json();
 }

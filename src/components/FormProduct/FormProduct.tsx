@@ -99,7 +99,6 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
     }
 
     return (
-        <>
             <Box
                 component="form"
                 onSubmit={handleOnSubmit}
@@ -217,10 +216,6 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                     </Button>
                 </Stack>
             </Box>
-
-
-        </>
-
     )
 }
 

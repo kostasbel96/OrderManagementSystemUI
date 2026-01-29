@@ -11,7 +11,6 @@ const Content = () => {
 
 
     return (
-        <>
             <div className="w-full mt-5">
                 <MyButton value="Add Order" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
                 <MyButton value="Add Product" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
@@ -39,9 +38,6 @@ const Content = () => {
                 </div>
 
             </div>
-
-
-        </>
     );
 };
 

@@ -23,7 +23,6 @@ const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, se
 
 
     return (
-        <>
             <div className="w-full mt-5 flex flex-col space-y-2 justify-center items-center px-4">
                 <Search typeOf={typeOf} setRows={setRows} page={page} pageSize={pageSize}/>
                 <Paper sx={{
@@ -39,6 +38,9 @@ const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, se
                             </Box>
                         ): (
                             <DataGrid
+                                getRowHeight={() => 'auto'}
+                                disableColumnSorting
+                                disableColumnMenu
                                 rows={rows}
                                 columns={columns}
                                 getRowId={(row) => row.id}
@@ -68,11 +70,8 @@ const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, se
                             />
                         )
                     }
-
-
                 </Paper>
             </div>
-        </>
     );
 }
 

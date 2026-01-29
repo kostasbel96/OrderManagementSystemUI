@@ -49,7 +49,7 @@ const ProductsView = () => {
 
                 };
 
-                return (<>
+                return (
                     <div className="flex items-center justify-center gap-2 h-full">
                         <button
                             className="p-2 rounded hover:bg-gray-400"
@@ -65,7 +65,7 @@ const ProductsView = () => {
                         </button>
                     </div>
 
-                </>);
+                );
             }
         }
     ], []);
@@ -81,7 +81,6 @@ const ProductsView = () => {
     }, [page, pageSize]);
 
     return (
-        <>
             <MyTable
                 columns={columns}
                 typeOf={"Products"}
@@ -94,8 +93,6 @@ const ProductsView = () => {
                 page={page}
                 pageSize={pageSize}
             ></MyTable>
-
-        </>
     )
 
 }

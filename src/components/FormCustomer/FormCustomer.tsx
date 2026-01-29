@@ -14,11 +14,17 @@ const formSchema = z.object(
         name: z.string().trim().nonempty("Name is required"),
         lastName: z.string().trim().nonempty("Last Name is required"),
         phone1: z.string().regex(/^\+?\d+$/, "Invalid phone number. Only digits are allowed")
-            .refine(val => val.replace(/\D/g, '').length >= 10, {
+            .refine(val => val.replaceAll(/\D/g, '').length >= 10, {
                 message: "Phone number must have at least 10 digits",
             }),
         phone2: z.string().optional().nullable(),
-        email: z.email("Email is invalid").trim().nonempty("Email is required"),
+        email: z.string()
+            .trim()
+            .optional()
+            .refine(
+                v => !v || z.email().safeParse(v).success,
+                "Email is invalid"
+            ),
     }
 )
 
@@ -64,19 +70,22 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validateForm()) {
-            addCustomer(
-                {
-                    id: -1,
-                    name: values.name,
-                    lastName: values.lastName,
-                    phoneNumber1: values.phone1,
-                    phoneNumber2: values.phone2,
-                    email: values.email
-                }
-            );
+            addCustomer({
+                name: values.name,
+                lastName: values.lastName,
+                phoneNumber1: values.phone1,
+                phoneNumber2: values.phone2,
+                email: values.email
+            }).then((data) => {
+                setSuccess(true);
+                setSubmitted(true);
+                console.log(data);
+            })
+                .catch(()=>{
+                    setSubmitted(true);
+                    setSuccess(false);
+                })
             setValues(initialValues);
-            setSubmitted(true);
-            setSuccess(true);
         } else {
             setSubmitted(true);
             setSuccess(false);
@@ -105,7 +114,6 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
     }
 
     return (
-        <>
             <Box
                 component="form"
                 onSubmit={handleOnSubmit}
@@ -251,7 +259,6 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                     </Button>
                 </Stack>
             </Box>
-        </>
     )
 }
 

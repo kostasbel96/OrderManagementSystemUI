@@ -13,7 +13,6 @@ interface OpenProps {
 const MyCollapse = ({isOpen, value, setSubmitted, setSuccess}: OpenProps) => {
 
     return (
-        <>
             <Collapse in={isOpen}>
                 <Paper
                     elevation={6}
@@ -51,8 +50,6 @@ const MyCollapse = ({isOpen, value, setSubmitted, setSuccess}: OpenProps) => {
                     </Box>
                 </Paper>
             </Collapse>
-
-        </>
     )
 }
 
