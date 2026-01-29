@@ -53,3 +53,14 @@ export interface CustomerResponseDto {
 export interface TableRowsType {
     rows: (Product | Customer | OrderRow)
 }
+
+interface Item{
+    productId: number;
+    quantity: number;
+}
+
+export interface OrderRequest{
+    address: string;
+    customerId: number | null | undefined;
+    items: Item[];
+}

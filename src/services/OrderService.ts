@@ -1,4 +1,4 @@
-import type {Customer, OrderItem, SelectedProduct} from "../types/Types.ts";
+import type {Customer, OrderItem, OrderRequest, SelectedProduct} from "../types/Types.ts";
 interface OrderProps{
     products: SelectedProduct[];
     customer: Customer | null;
@@ -6,19 +6,24 @@ interface OrderProps{
     date?: string;
 }
 
-export let orders: OrderItem[] = [];
+const API_URL = "http://localhost:8080/api";
 
-export const addOrder = ({products, customer, address}: OrderProps) => {
-    const newOrder: OrderItem = {
-        id: new Date().getTime(),
-        products,
-        customer,
-        address,
-        date: new Date().toLocaleDateString()
-    };
+export const orders: OrderItem[] = [];
 
-    orders = [...orders, newOrder];
-};
+export async function addOrder({products, customer, address}: OrderProps): Promise<OrderItem>{
+    const orderRequest: OrderRequest = {
+        address: address,
+        customerId: customer?.id,
+        items: products.map(p=>({productId: p.product.id, quantity: p.quantity}))
+    }
+    const res = await fetch(`${API_URL}/orders/save`,{
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderRequest),
+    });
+    if (!res.ok) throw new Error("Failed to create Customer");
+    return await res.json();
+}
 
 export const getOrders = (limit: number = 0) => {
     if (limit) return orders.slice(0, limit);

@@ -103,28 +103,28 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
         e.preventDefault();
         if (isValid()) {
             console.log(selectedProductsWithQty);
-            addOrder({products:selectedProductsWithQty, customer:selectedCustomer, address:address});
-            decreaseQuantityOfProduct();
+            addOrder(
+                {
+                    products:selectedProductsWithQty,
+                    customer:selectedCustomer,
+                    address:address
+                }
+            ).then((data) => {
+                setSuccess(true);
+                setSubmitted(true);
+                console.log(data);
+            }).catch(()=>{
+                    setSubmitted(true);
+                    setSuccess(false);
+                });
             setSelectedProductsWithQty([]);
             setSelectedCustomer(null);
             setAddress("");
-            setSubmitted(true);
-            setSuccess(true);
         } else {
-            console.log("Not enough quantity selected");
             setSubmitted(true);
             setSuccess(false);
         }
     })
-
-    const decreaseQuantityOfProduct = () => {
-        products.forEach(p=> {
-            const product = selectedProductsWithQty.find(pr => {
-                return pr.product.id === p.id;
-            });
-            return product ? p.quantity -= product.quantity : p;
-        });
-    }
 
     const handleOnReset = (e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
