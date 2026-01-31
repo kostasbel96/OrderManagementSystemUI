@@ -1,4 +1,5 @@
-import type {Customer, OrderItem, OrderRequest, SelectedProduct} from "../types/Types.ts";
+import type {Customer, OrderItem, OrderRequest, OrderResponseDto, SelectedProduct} from "../types/Types.ts";
+
 interface OrderProps{
     products: SelectedProduct[];
     customer: Customer | null;
@@ -25,12 +26,26 @@ export async function addOrder({products, customer, address}: OrderProps): Promi
     return await res.json();
 }
 
-export const getOrders = (limit: number = 0) => {
-    if (limit) return orders.slice(0, limit);
-    return  orders;
+
+export async function getOrders(page: number = 0, pageSize: number = 5): Promise<OrderResponseDto> {
+    let url = `${API_URL}/orders?page=${page}&size=${pageSize}`
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch orders.");
+    const data = await res.json();
+    console.log(data.content);
+    return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export const searchOrderByCustomerName = (name: string) => {
-    return orders.filter(order => (`${order.customer?.name} ${order.customer?.lastName}`.toLowerCase().includes(name.toLowerCase())));
-
+export async function searchOrderByCustomerName(name: string) :Promise<OrderItem[]> {
+    let firstName = "";
+    let lastName = "";
+    if(name.includes(" ")){
+        [firstName, lastName] = name.split(" ");
+    } else {
+        [firstName, lastName] = [name, name];
+    }
+    const res = await fetch(`${API_URL}/orders/search?name=${firstName}&lastName=${lastName}`);
+    if (!res.ok) throw new Error("Failed to search orders.");
+    return await res.json();
 }

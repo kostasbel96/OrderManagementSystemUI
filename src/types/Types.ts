@@ -6,17 +6,17 @@ export interface Product {
 }
 
 export interface Customer {
-    id: number | undefined | null;
+    id?: number;
     name: string;
     lastName: string;
     phoneNumber1: string;
-    phoneNumber2: string | undefined | null;
-    email: string | undefined | null;
+    phoneNumber2?: string;
+    email?: string;
 }
 
 export interface OrderItem {
     id?: number;
-    products: SelectedProduct[];
+    items: SelectedProduct[];
     customer: Customer | null;
     address: string;
     date: string;
@@ -31,13 +31,20 @@ export interface OrderRow {
     id?: number;
     customer: string;
     products: string;
-    quantity: number | string;
+    quantity: string;
     address: string;
     date?: string;
 }
 
 export interface ProductResponseDto {
     content: Product[];
+    totalElements: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+export interface OrderResponseDto {
+    content: OrderItem[];
     totalElements: number;
     pageNumber: number;
     pageSize: number;
@@ -51,16 +58,16 @@ export interface CustomerResponseDto {
 }
 
 export interface TableRowsType {
-    rows: (Product | Customer | OrderRow)
+    rows: (Product | Customer | OrderRow)[];
 }
 
-interface Item{
+export interface Item{
     productId: number;
     quantity: number;
 }
 
 export interface OrderRequest{
     address: string;
-    customerId: number | null | undefined;
+    customerId?: number;
     items: Item[];
 }

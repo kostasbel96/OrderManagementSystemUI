@@ -22,7 +22,14 @@ export async function getCustomers(page: number = 0, pageSize: number = 5): Prom
 }
 
 export async function searchCustomerByName(name: string) :Promise<Customer[]> {
-    const res = await fetch(`${API_URL}/customers/search?name=${name}&lastName=${name}`);
+    let firstName = "";
+    let lastName = "";
+    if(name.includes(" ")){
+        [firstName, lastName] = name.split(" ");
+    } else {
+        [firstName, lastName] = [name, name];
+    }
+    const res = await fetch(`${API_URL}/customers/search?name=${firstName}&lastName=${lastName}`);
     if (!res.ok) throw new Error("Failed to search customers");
     return await res.json();
 }

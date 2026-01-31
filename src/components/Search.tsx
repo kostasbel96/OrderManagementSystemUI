@@ -31,15 +31,17 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
                     setRows(data.content);
                 })
         } else if (value === "" && typeOf === "Orders"){
-            const orders = getOrders().map((order) => ({
-                id: order.id,
-                customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
-                products: order.products.map(p => p.product.name).join("\n"),
-                quantity: order.products.map(p => p.quantity).join("\n"),
-                address: order.address,
-                date: order.date,
-            }));
-            setRows(orders ?? []);
+            getOrders(page, pageSize).then((data) => {
+                const orders = data.content.map((order) => ({
+                    id: order.id,
+                    customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
+                    products: order.items.map(p => p.product.name).join("\n"),
+                    quantity: order.items.map(p => p.quantity).join("\n"),
+                    address: order.address,
+                    date: order.date,
+                }));
+                setRows(orders);
+            });
         }
     };
 
@@ -56,14 +58,19 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
             })
         }
         else if (typeOf === "Orders"){
-            setRows(searchOrderByCustomerName(text).map((order) => ({
-                id: order.id,
-                customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
-                products: order.products.map(p => p.product.name).join("\n"),
-                quantity: order.products.map(p => p.quantity).join("\n"),
-                address: order.address,
-                date: order.date,
-            })));
+            // Note: searchOrderByCustomerName relies on a local array in OrderService which might be empty.
+            // If you have a backend search endpoint, you should use it here.
+            searchOrderByCustomerName(text).then((data) => {
+                const orders = data.map((order) => ({
+                    id: order.id,
+                    customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
+                    products: order.items.map(p => p.product.name).join("\n"),
+                    quantity: order.items.map(p => p.quantity).join("\n"),
+                    address: order.address,
+                    date: order.date,
+                }));
+                setRows(orders);
+            });
         }
     };
 
