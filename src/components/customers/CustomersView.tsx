@@ -22,9 +22,9 @@ const CustomersView = () => {
     ];
 
     useEffect(() => {
-        setLoading(true);
         getCustomers(page, pageSize)
             .then((data) => {
+                setLoading(true);
                 setRows(data.content);
                 setRowCount(data.totalElements);
             })

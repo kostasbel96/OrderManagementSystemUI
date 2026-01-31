@@ -98,9 +98,9 @@ const OrdersView = () => {
     ];
 
     useEffect(() => {
-        setLoading(true);
         getOrders(page, pageSize)
             .then(data => {
+                setLoading(true);
                 const orders: OrderRow[] = [];
                 data.content.forEach(order => {
                     orders.push({

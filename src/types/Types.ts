@@ -6,11 +6,11 @@ export interface Product {
 }
 
 export interface Customer {
-    id?: number;
+    id: number | undefined | null;
     name: string;
     lastName: string;
     phoneNumber1: string;
-    phoneNumber2?: string;
+    phoneNumber2: string | undefined | null;
     email?: string;
 }
 
@@ -68,6 +68,6 @@ export interface Item{
 
 export interface OrderRequest{
     address: string;
-    customerId?: number;
+    customerId: number | undefined | null;
     items: Item[];
 }
