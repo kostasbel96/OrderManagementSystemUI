@@ -27,6 +27,8 @@ const CustomersView = () => {
                 setLoading(true);
                 setRows(data.content);
                 setRowCount(data.totalElements);
+                setPage(data.pageNumber);
+                setPageSize(data.pageSize);
             })
             .finally(() => setLoading(false));
     }, [page, pageSize]);

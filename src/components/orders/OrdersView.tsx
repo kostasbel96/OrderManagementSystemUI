@@ -114,6 +114,8 @@ const OrdersView = () => {
                 });
                 setRows(orders);
                 setRowCount(data.totalElements);
+                setPage(data.pageNumber);
+                setPageSize(data.pageSize);
             })
             .catch(() => console.log("error fetching orders"))
             .finally(() => setLoading(false));
