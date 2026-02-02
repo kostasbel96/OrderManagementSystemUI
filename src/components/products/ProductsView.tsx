@@ -80,6 +80,7 @@ const ProductsView = () => {
                 open={openEdit}
                 handleClose={handleClose}
                 rowToEdit={rowToEdit}
+                typeOf={"Products"}
             />
         </>
 
