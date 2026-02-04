@@ -14,7 +14,7 @@ const ProductsView = () => {
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<Product | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<Product | Customer | undefined>();
 
     const handleClickOpen = (row: Product) => {
         setOpenEdit(true);

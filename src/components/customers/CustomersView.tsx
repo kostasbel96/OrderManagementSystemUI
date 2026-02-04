@@ -3,6 +3,9 @@ import MyTable from "../ui/MyTable.tsx";
 import {useEffect, useState} from "react";
 import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import {getCustomers} from "../../services/customerService.ts";
+import IconButton from "@mui/material/IconButton";
+import {EditIcon} from "lucide-react";
+import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 
 const CustomersView = () => {
 
@@ -11,6 +14,17 @@ const CustomersView = () => {
     const [pageSize, setPageSize] = useState(5);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [rowToEdit, setRowToEdit] = useState<Product | Customer | undefined>();
+
+    const handleClickOpen = (row: Product) => {
+        setOpenEdit(true);
+        setRowToEdit(row);
+    };
+
+    const handleClose = () => {
+        setOpenEdit(false);
+    };
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 120 },
@@ -18,7 +32,25 @@ const CustomersView = () => {
         { field: 'lastName', headerName: 'Last Name', width: 150 },
         {field: 'email', headerName: 'Email', width: 150},
         {field: 'phoneNumber1', headerName: 'Phone Number 1', width: 150},
-        {field: 'phoneNumber2', headerName: 'Phone Number 2', width: 150}
+        {field: 'phoneNumber2', headerName: 'Phone Number 2', width: 150},
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 150,
+            sortable: false,
+            filterable: false,
+            renderCell: (params) => (
+                <IconButton
+                    color="primary"
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        handleClickOpen(params.row);
+                    }}
+                >
+                    <EditIcon />
+                </IconButton>
+            ),
+        },
     ];
 
     useEffect(() => {
@@ -35,6 +67,7 @@ const CustomersView = () => {
 
 
     return (
+        <>
             <MyTable
                 columns={columns}
                 typeOf={"Customers"}
@@ -47,6 +80,14 @@ const CustomersView = () => {
                 page={page}
                 pageSize={pageSize}
             ></MyTable>
+            <PopUpUpdate
+                open={openEdit}
+                handleClose={handleClose}
+                rowToEdit={rowToEdit}
+                typeOf={"Customers"}
+            />
+        </>
+
     );
 
 }
