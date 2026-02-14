@@ -28,7 +28,7 @@ export async function addOrder({products, customer, address}: OrderProps): Promi
 
 
 export async function getOrders(page: number = 0, pageSize: number = 5): Promise<OrderResponseDto> {
-    let url = `${API_URL}/orders?page=${page}&size=${pageSize}`
+    const url = `${API_URL}/orders?page=${page}&size=${pageSize}`
 
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch orders.");
@@ -47,5 +47,12 @@ export async function searchOrderByCustomerName(name: string) :Promise<OrderItem
     }
     const res = await fetch(`${API_URL}/orders/search?name=${firstName}&lastName=${lastName}`);
     if (!res.ok) throw new Error("Failed to search orders.");
+    return await res.json();
+}
+
+export async function getOrder(id: number): Promise<OrderItem> {
+    const url = `${API_URL}/orders/${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch order with id: " + id);
     return await res.json();
 }

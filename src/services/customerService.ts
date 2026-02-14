@@ -13,7 +13,7 @@ export async function addCustomer(newCustomer: Omit<Customer, "id">): Promise<Cu
 }
 
 export async function getCustomers(page: number = 0, pageSize: number = 5): Promise<CustomerResponseDto> {
-    let url = `${API_URL}/customers?page=${page}&size=${pageSize}`
+    const url = `${API_URL}/customers?page=${page}&size=${pageSize}`
 
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch customers.");
@@ -31,5 +31,12 @@ export async function searchCustomerByName(name: string) :Promise<Customer[]> {
     }
     const res = await fetch(`${API_URL}/customers/search?name=${firstName}&lastName=${lastName}`);
     if (!res.ok) throw new Error("Failed to search customers");
+    return await res.json();
+}
+
+export async function getCustomer(id: number): Promise<Customer> {
+    const url = `${API_URL}/customers/${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch customer with id: " +id);
     return await res.json();
 }
