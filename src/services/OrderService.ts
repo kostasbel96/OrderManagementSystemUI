@@ -1,4 +1,11 @@
-import type {Customer, OrderItem, OrderRequest, OrderResponseDto, SelectedProduct} from "../types/Types.ts";
+import type {
+    Customer,
+    OrderItem,
+    OrderRequest,
+    OrderResponse,
+    OrderResponseDto,
+    SelectedProduct
+} from "../types/Types.ts";
 
 interface OrderProps{
     products: SelectedProduct[];
@@ -50,7 +57,7 @@ export async function searchOrderByCustomerName(name: string) :Promise<OrderItem
     return await res.json();
 }
 
-export async function getOrder(id: number): Promise<OrderItem> {
+export async function getOrder(id: number): Promise<OrderResponse> {
     const url = `${API_URL}/orders/${id}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch order with id: " + id);

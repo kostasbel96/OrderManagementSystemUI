@@ -14,6 +14,10 @@ export interface Customer {
     email?: string;
 }
 
+export interface OrderResponse {
+    OrderItem: OrderItem;
+}
+
 export interface OrderItem {
     id?: number;
     items: SelectedProduct[];

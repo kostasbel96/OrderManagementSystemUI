@@ -1,11 +1,13 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import type {Customer, Product} from "../../types/Types.ts";
+import type {Customer, OrderItem, Product, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
+import MySelect from "../FormOrder/MySelect.tsx";
+import {getProducts} from "../../services/productService.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
     handleClose: () => void;
-    rowToEdit: Product | Customer | undefined;
+    rowToEdit: Product | Customer | OrderItem | undefined ;
     typeOf: string;
 }
 
@@ -24,6 +26,15 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
         phoneNumber2: "",
         email: "",
     })
+    const [orderValues, setOrderValues] = useState<OrderItem>({
+        id: -1,
+        address: "",
+        date: "",
+        customer: null,
+        items: [],
+    })
+    const [products, setProducts] = useState<Product[]>([]);
+    const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -44,6 +55,12 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
                     ...prev,
                     [name]: value,
                 }));
+                break;
+            case "Orders":
+                setOrderValues(prev=>({
+                    ...prev,
+                    [name]: value,
+                }))
                 break;
             default:
                 break;
@@ -177,6 +194,69 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
         )
     }
 
+    const renderOrderFields = () => {
+        return (
+            <>
+                <TextField
+                    onChange={handleChange}
+                    InputProps={{ readOnly: true }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Order ID"
+                    fullWidth
+                    variant="standard"
+                    value={orderValues.id}
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    onChange={handleChange}
+                    value={orderValues.customer?.name}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Customer Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    onChange={handleChange}
+                    value={orderValues.customer?.lastName}
+                    margin="dense"
+                    id="lastName"
+                    name="lastName"
+                    label="Customer lastname"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={orderValues.address}
+                    margin="dense"
+                    id="address"
+                    name="address"
+                    label="Address"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <div className="mt-2">
+                    <MySelect
+                        myValue="Products"
+                        isMultiValue={true}
+                        products={products}
+                        selectedProductsWithQty={selectedProductsWithQty}
+                        setSelectedProductsWithQty={setSelectedProductsWithQty}
+                    />
+                </div>
+
+            </>
+        )
+    }
 
     useEffect(() => {
         if (!rowToEdit) return;
@@ -187,6 +267,17 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
                 break;
             case "Customers":
                 setCustomerValues(rowToEdit as Customer);
+                break;
+            case "Orders":
+                console.log("ok");
+                setOrderValues(rowToEdit as OrderItem);
+                getProducts(0, 100)
+                    .then(data=>{
+                        setProducts(data.content);
+                    });
+                setSelectedProductsWithQty([
+                    ...(rowToEdit as OrderItem).items
+                ]);
                 break;
             default:
                 break;
@@ -205,10 +296,17 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
                         id="subscription-form">
                         {typeOf === "Products" ? renderProductFields() : null}
                         {typeOf === "Customers" ? renderCustomerFields() : null}
+                        {typeOf === "Orders" ? renderOrderFields() : null}
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={()=>{
+                            setSelectedProductsWithQty([]);
+                            handleClose()
+                            }
+                        }
+                    >
+                        Cancel</Button>
                     <Button type="submit" form="subscription-form">
                         Save
                     </Button>

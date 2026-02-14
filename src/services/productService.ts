@@ -31,10 +31,17 @@ export async function searchProductByName(name: string) :Promise<Product[]> {
 }
 
 export async function getProducts(page: number = 0, pageSize: number = 5): Promise<ProductResponseDto> {
-    let url = `${API_URL}/products?page=${page}&size=${pageSize}`
+    const url = `${API_URL}/products?page=${page}&size=${pageSize}`
 
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch products.");
     const data = await res.json();
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
+}
+
+export async function getProductByName(name: string): Promise<Product> {
+    const url = `${API_URL}/products/${name}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch product with name: " + name);
+    return await res.json();
 }

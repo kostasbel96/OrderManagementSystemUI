@@ -51,10 +51,8 @@ const MySelect = ({myValue,
 
     useEffect(() => {
         if (products){
-            let finalOptions: Option[];
             const productsWithValidQuantity = products.filter((p: Product)=> p.quantity > 0);
-
-            finalOptions = productsWithValidQuantity.map((p: Product) => ({
+            const finalOptions = productsWithValidQuantity.map((p: Product) => ({
                 value: p.id,
                 label: p.name,
             }))
