@@ -133,8 +133,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
                     onChange={handleChange}
                     value={customerValues.lastName}
                     margin="dense"
-                    id="description"
-                    name="description"
+                    id="lastName"
+                    name="lastName"
                     label="Customer lastname"
                     type="text"
                     fullWidth
@@ -177,10 +177,12 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
         )
     }
 
+
     useEffect(() => {
         if (!rowToEdit) return;
         switch (typeOf) {
             case "Products":
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setProductValues(rowToEdit as Product);
                 break;
             case "Customers":
