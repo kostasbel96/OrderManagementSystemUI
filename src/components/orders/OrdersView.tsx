@@ -100,7 +100,7 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             )},
-        {field: 'date', headerName: 'Date', width: 150, renderCell: (params) => (
+        {field: 'date', headerName: 'Date', width: 100, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering

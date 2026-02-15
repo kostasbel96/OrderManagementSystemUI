@@ -27,12 +27,96 @@ const CustomersView = () => {
     };
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 120 },
-        { field: 'name', headerName: 'Name', width: 150 },
-        { field: 'lastName', headerName: 'Last Name', width: 150 },
-        {field: 'email', headerName: 'Email', width: 150},
-        {field: 'phoneNumber1', headerName: 'Phone Number 1', width: 150},
-        {field: 'phoneNumber2', headerName: 'Phone Number 2', width: 150},
+        { field: 'id', headerName: 'ID', width: 120, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value}
+                </div>
+            )  },
+        { field: 'name', headerName: 'Name', width: 150, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value}
+                </div>
+            ) },
+        { field: 'lastName', headerName: 'Last Name', width: 150, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value}
+                </div>
+            )  },
+        {field: 'email', headerName: 'Email', width: 150, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value}
+                </div>
+            ) },
+        {field: 'phoneNumber1', headerName: 'Phone Number 1', width: 150, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value}
+                </div>
+            ) },
+        {field: 'phoneNumber2', headerName: 'Phone Number 2', width: 150, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value}
+                </div>
+            ) },
         {
             field: 'actions',
             headerName: 'Actions',
