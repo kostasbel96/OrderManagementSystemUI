@@ -49,6 +49,63 @@ const MySelect = ({myValue,
 
     };
 
+    const handleChange = (
+        _: React.SyntheticEvent,
+        selected: Option | Option[] | null
+    ) => {
+        if (isMultiValue) {
+            const selectedArray = Array.isArray(selected) ? selected : [];
+
+            setSelectedProductsWithQty?.(
+                selectedArray.map((s) => {
+                    const existing = selectedProductsWithQty?.find(
+                        (p) => p.product.id === s.value
+                    );
+                    const product = products?.find((p) => p.id === s.value);
+
+                    return existing || { product: product!, quantity: 1 };
+                })
+            );
+        } else {
+            const sel = selected as Option | null;
+            const customer = sel
+                ? customers?.find((c) => c.id === sel.value) || null
+                : null;
+
+            setSelectedCustomer?.(customer);
+        }
+    };
+
+    const getOptions = (): Option[] => {
+        if (myValue === "Products") {
+            return (productOptions || []).filter(
+                (p) =>
+                    !selectedProductsWithQty?.some(
+                        (sel) => sel.product.id === p.value
+                    )
+            );
+        }
+
+        return customersOptions || [];
+    };
+
+    const getSelectedValue = (): Option | Option[] | null => {
+        if (isMultiValue) {
+            return (selectedProductsWithQty ?? []).map((p) => ({
+                value: p.product.id,
+                label: p.product.name,
+            }));
+        }
+
+        if (!selectedCustomer) return null;
+
+        return {
+            value: selectedCustomer.id!,
+            label: `${selectedCustomer.name} ${selectedCustomer.lastName}`,
+        };
+    };
+
+
     useEffect(() => {
         if (products){
             const productsWithValidQuantity = products.filter((p: Product)=> p.quantity > 0);
@@ -63,74 +120,44 @@ const MySelect = ({myValue,
 
 
     return (
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, width: "100%"}}>
                 {/* Autocomplete Select */}
                 <Autocomplete<Option, typeof isMultiValue>
+                    fullWidth
                     multiple={isMultiValue}
-                    options={
-                        myValue === "Products"
-                            ? (productOptions || []).filter(
-                                (p) => !selectedProductsWithQty?.some((sel) => sel.product.id === p.value)
-                            )
-                            : customersOptions || []
-                    }
+                    options={getOptions()}
                     getOptionLabel={(option) => option.label}
-                    value={
-                        isMultiValue
-                            ? selectedProductsWithQty?.map((p) => ({
-                            value: p.product.id,
-                            label: p.product.name,
-                        })) || []
-                            : selectedCustomer
-                                ? { value: selectedCustomer.id!, label: `${selectedCustomer.name} ${selectedCustomer.lastName}` }
-                                : null
-                    }
-                    onChange={(_, selected) => {
-                        if (isMultiValue) {
-                            const selectedArray = Array.isArray(selected) ? selected : [];
-                            setSelectedProductsWithQty?.(
-                                selectedArray.map((s) => {
-                                    const existing = selectedProductsWithQty?.find((p) => p.product.id === s.value);
-                                    const product = products?.find((p) => p.id === s.value);
-                                    return existing || { product: product!, quantity: 1 };
-                                })
-                            );
-                        } else {
-                            const sel = selected as Option | null;
-                            const customer = sel ? customers?.find((c) => c.id === sel.value) || null : null;
-                            setSelectedCustomer?.(customer);
-                        }
-                    }}
+                    value={getSelectedValue()}
+                    onChange={handleChange}
                     renderInput={(params) => (
                         <TextField
                             {...params}
                             label={isMultiValue ? myValue : myValue.slice(0, -1)}
                             placeholder={`Select ${myValue === "Products" ? myValue : myValue.slice(0, -1)}...`}
                             sx={{
-                                width: 250,
+                                width: "100%",
                                 backgroundColor: "white",
                                 borderRadius: 2,
                                 '& .MuiInputLabel-root': {
                                     backgroundColor: 'white',
                                     borderRadius: 2,
-                                    padding: "5px"
+                                    padding: "2px"
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
                                     color: 'gray',
                                     backgroundColor: 'white',
                                     borderRadius: 2,
-                                    padding: "5px",
+                                    padding: "2px",
                                 }
                             }}
                         />
                     )}
-                    sx={{ width: 250 }}
                 />
 
                 {/* Quantity inputs for Products */}
                 {myValue === "Products" &&
                     selectedProductsWithQty?.map((item, index) => (
-                        <Stack direction="row" spacing={2} alignItems="center" key={item.product.id}>
+                        <Stack direction="row" spacing={1} alignItems="end" key={item.product.id}>
                             <Box sx={{ width: 120, textAlign: "center" }}>{item.product.name}:</Box>
                             <TextField
                                 type="number"

@@ -13,7 +13,7 @@ interface OpenProps {
 const MyCollapse = ({isOpen, value, setSubmitted, setSuccess}: OpenProps) => {
 
     return (
-            <Collapse in={isOpen}>
+            <Collapse in={isOpen} sx={{maxWidth: 400, minWidth: 400}}>
                 <Paper
                     elevation={6}
                     sx={{

@@ -262,22 +262,21 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
         if (!rowToEdit) return;
         switch (typeOf) {
             case "Products":
-                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setProductValues(rowToEdit as Product);
                 break;
             case "Customers":
                 setCustomerValues(rowToEdit as Customer);
                 break;
             case "Orders":
-                console.log("ok");
                 setOrderValues(rowToEdit as OrderItem);
                 getProducts(0, 100)
                     .then(data=>{
                         setProducts(data.content);
+                        setSelectedProductsWithQty([
+                            ...(rowToEdit as OrderItem).items
+                        ]);
                     });
-                setSelectedProductsWithQty([
-                    ...(rowToEdit as OrderItem).items
-                ]);
+
                 break;
             default:
                 break;

@@ -18,10 +18,10 @@ const OrdersView = () => {
     const [openEdit, setOpenEdit] = useState(false);
     const [rowToEdit, setRowToEdit] = useState<Product | Customer | OrderItem>();
 
+
     const handleClickOpen = (row: OrderRow) => {
         if (row.id) getOrder(row.id).then(data=> {
-            console.log(data.OrderItem);
-            setRowToEdit({...data.OrderItem});
+            setRowToEdit({...data.orderItem});
         }).finally(()=>setOpenEdit(true));
 
     };
@@ -61,7 +61,11 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'products', headerName: 'Products', width: 200, renderCell: (params) => (
+        {
+            field: 'products',
+            headerName: 'Products',
+            width: 250,
+            renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -71,22 +75,19 @@ const OrdersView = () => {
                     width: '100%',
                     marginBottom: '24px'
                 }}>
-                    {params.value}
+                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'start' }}>
+                        <tbody>
+                        {params.value.map((item: any, index: number) => (
+                            <tr key={index} style={{ borderBottom: '1px solid #ccc' }}>
+                                <td style={{ padding: '4px 8px' }}>{item.product.name}</td>
+                                <td style={{ padding: '4px 8px' }}>{item.quantity}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
                 </div>
-            ) },
-        { field: 'quantity', headerName: 'Quantity', width: 150, renderCell: (params) => (
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',   // vertical centering
-                    justifyContent: 'start', // horizontal centering
-                    whiteSpace: 'pre-line',
-                    height: '100%',          // σημαντικό για να γεμίζει το cell
-                    width: '100%',
-                    marginBottom: '24px'
-                }}>
-                    {params.value}
-                </div>
-            ) },
+            ),
+        },
         {field: 'address', headerName: 'Address', width: 150, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
@@ -119,15 +120,25 @@ const OrdersView = () => {
             sortable: false,
             filterable: false,
             renderCell: (params) => (
-                <IconButton
-                    color="primary"
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        handleClickOpen(params.row);
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
                     }}
                 >
-                    <EditIcon />
-                </IconButton>
+                    <IconButton
+                        color="primary"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handleClickOpen(params.row);
+                        }}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                </div>
             ),
         },
     ];
@@ -141,8 +152,7 @@ const OrdersView = () => {
                     orders.push({
                         id: order.id,
                         customer: `${order.customer?.name} ${order.customer?.lastName}`,
-                        products: order.items.map(item => item.product.name).join("\n"),
-                        quantity: order.items.map(item => item.quantity).join("\n"),
+                        products: order.items,
                         address: order.address,
                         date: order.date
                     });

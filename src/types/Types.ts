@@ -15,7 +15,7 @@ export interface Customer {
 }
 
 export interface OrderResponse {
-    OrderItem: OrderItem;
+    orderItem: OrderItem;
 }
 
 export interface OrderItem {
@@ -34,8 +34,7 @@ export interface SelectedProduct {
 export interface OrderRow {
     id?: number;
     customer: string;
-    products: string;
-    quantity: string;
+    products: SelectedProduct[];
     address: string;
     date?: string;
 }

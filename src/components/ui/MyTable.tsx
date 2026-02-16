@@ -3,8 +3,6 @@ import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import Search from "../Search.tsx";
 import {Box, CircularProgress, Paper} from "@mui/material";
 
-
-
 type TableProps = {
     columns: GridColDef[];
     typeOf: string;
@@ -20,7 +18,6 @@ type TableProps = {
 
 
 const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, setPageSize, page, pageSize}: TableProps)=>{
-
 
     return (
             <div className="w-full mt-5 flex flex-col space-y-2 justify-center items-center px-4">
