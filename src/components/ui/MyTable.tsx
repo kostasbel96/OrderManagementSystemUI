@@ -40,8 +40,6 @@ const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, se
                         ): (
                             <DataGrid
                                 getRowHeight={() => 'auto'}
-                                disableColumnSorting
-                                disableColumnMenu
                                 rows={rows}
                                 columns={columns}
                                 getRowId={(row) => row.id}
@@ -55,6 +53,7 @@ const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, se
                                     setPageSize(model.pageSize);
                                 }}
                                 pageSizeOptions={[5, 10, 20, 50, 100]}
+                                keepNonExistentRowsSelected
                                 checkboxSelection
                                 sx={{
                                     border: 0,
