@@ -44,7 +44,7 @@ export async function getOrders(page: number = 0, pageSize: number = 5): Promise
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export async function searchOrderByCustomerName(name: string) :Promise<OrderItem[]> {
+export async function searchOrderByCustomerName(name: string) :Promise<OrderResponse> {
     let firstName = "";
     let lastName = "";
     if(name.includes(" ")){

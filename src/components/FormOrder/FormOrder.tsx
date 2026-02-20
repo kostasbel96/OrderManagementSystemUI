@@ -8,7 +8,7 @@ import {
 import MySelect from "./MySelect.tsx";
 import {type FormEvent, useEffect, useState} from "react";
 import type {Customer, Product, SelectedProduct} from "../../types/Types.ts";
-import {addOrder} from '../../services/OrderService.ts'
+import {addOrder} from '../../services/orderService.ts'
 import {z} from "zod";
 import {getCustomers} from "../../services/customerService.ts";
 import {getProducts} from "../../services/productService.ts";

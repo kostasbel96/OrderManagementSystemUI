@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import type {GridColDef} from "@mui/x-data-grid";
-import {getOrder, getOrders} from "../../services/OrderService.ts"
+import {getOrder, getOrders} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
 import type {Customer, OrderItem, OrderRow, Product} from "../../types/Types.ts";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";

@@ -15,6 +15,7 @@ export interface Customer {
 }
 
 export interface OrderResponse {
+    orderItems: OrderItem[];
     orderItem: OrderItem;
 }
 

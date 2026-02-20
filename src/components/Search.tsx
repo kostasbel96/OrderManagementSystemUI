@@ -2,10 +2,10 @@ import {InputBase, Paper} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {SearchIcon} from "lucide-react";
 import {useState} from "react";
-import type {Customer, OrderRow, Product} from "../types/Types.ts";
+import type {Customer, OrderItem, OrderRow, Product} from "../types/Types.ts";
 import {getProducts, searchProductByName} from "../services/productService.ts";
 import {getCustomers, searchCustomerByName} from "../services/customerService.ts";
-import {getOrders, searchOrderByCustomerName} from "../services/OrderService.ts";
+import {getOrders, searchOrderByCustomerName} from "../services/orderService.ts";
 
 interface SearchProps {
     typeOf: string;
@@ -35,8 +35,7 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
                 const orders = data.content.map((order) => ({
                     id: order.id,
                     customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
-                    products: order.items.map(p => p.product.name).join("\n"),
-                    quantity: order.items.map(p => p.quantity).join("\n"),
+                    products: order.items,
                     address: order.address,
                     date: order.date,
                 }));
@@ -61,11 +60,10 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
             // Note: searchOrderByCustomerName relies on a local array in OrderService which might be empty.
             // If you have a backend search endpoint, you should use it here.
             searchOrderByCustomerName(text).then((data) => {
-                const orders = data.map((order) => ({
+                const orders = data.orderItems.map((order: OrderItem) => ({
                     id: order.id,
                     customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
-                    products: order.items.map(p => p.product.name).join("\n"),
-                    quantity: order.items.map(p => p.quantity).join("\n"),
+                    products: order.items,
                     address: order.address,
                     date: order.date,
                 }));
