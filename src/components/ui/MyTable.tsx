@@ -2,6 +2,7 @@ import {DataGrid, type GridColDef} from "@mui/x-data-grid";
 import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import Search from "../Search.tsx";
 import {Box, CircularProgress, Paper} from "@mui/material";
+import {useState} from "react";
 
 type TableProps = {
     columns: GridColDef[];
@@ -18,6 +19,7 @@ type TableProps = {
 
 
 const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, setPageSize, page, pageSize}: TableProps)=>{
+    const [isSearching, setIsSearching] = useState(false);
 
     return (
             <div className="w-full mt-5 flex flex-col space-y-2 justify-center items-center px-4">
@@ -25,6 +27,7 @@ const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, se
                         setRows={setRows}
                         page={page}
                         pageSize={pageSize}
+                        setIsSearching={setIsSearching}
                 />
                 <Paper sx={{
                     height: '80%',
@@ -55,6 +58,7 @@ const MyTable = ({columns, typeOf, setRows, rows, loading, rowCount, setPage, se
                                 pageSizeOptions={[5, 10, 20, 50, 100]}
                                 keepNonExistentRowsSelected
                                 checkboxSelection
+                                hideFooter={isSearching}
                                 sx={{
                                     border: 0,
                                     '& .MuiDataGrid-cell': {

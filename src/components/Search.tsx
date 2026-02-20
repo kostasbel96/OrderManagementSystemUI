@@ -1,6 +1,6 @@
-import {InputBase, Paper} from "@mui/material";
+import {Fade, InputBase, Paper} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import {SearchIcon} from "lucide-react";
+import {SearchIcon, XIcon} from "lucide-react";
 import {useState} from "react";
 import type {Customer, OrderItem, OrderRow, Product} from "../types/Types.ts";
 import {getProducts, searchProductByName} from "../services/productService.ts";
@@ -12,9 +12,10 @@ interface SearchProps {
     setRows: React.Dispatch<React.SetStateAction<(Product | Customer | OrderRow)[]>>;
     page: number;
     pageSize: number;
+    setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
+const Search = ({typeOf, setRows, page, pageSize, setIsSearching}: SearchProps) => {
     const [text, setText] = useState("");
 
     const handleChange = (value: string) => {
@@ -23,13 +24,13 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
             getProducts(page, pageSize)
                 .then((data) => {
                     setRows(data.content);
-                })
+                }).finally(()=>setIsSearching(false));
         }
         else if (value === "" && typeOf === "Customers"){
             getCustomers(page, pageSize)
                 .then((data) => {
                     setRows(data.content);
-                })
+                }).finally(()=>setIsSearching(false));
         } else if (value === "" && typeOf === "Orders"){
             getOrders(page, pageSize).then((data) => {
                 const orders = data.content.map((order) => ({
@@ -40,7 +41,7 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
                     date: order.date,
                 }));
                 setRows(orders);
-            });
+            }).finally(()=>setIsSearching(false));
         }
     };
 
@@ -49,12 +50,12 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
         if (typeOf === "Products") {
             searchProductByName(text).then((products: Product[]) => {
                 setRows(products);
-            })
+            }).finally(()=>setIsSearching(true));
         }
         else if (typeOf === "Customers"){
             searchCustomerByName(text).then((customers: Customer[]) => {
                 setRows(customers);
-            })
+            }).finally(()=>setIsSearching(true));
         }
         else if (typeOf === "Orders"){
             // Note: searchOrderByCustomerName relies on a local array in OrderService which might be empty.
@@ -68,9 +69,38 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
                     date: order.date,
                 }));
                 setRows(orders);
-            });
+            }).catch(()=> setRows([]))
+              .finally(()=>setIsSearching(true));
         }
     };
+
+    const handleReset = (e: React.FormEvent) => {
+        e.preventDefault();
+        setText("");
+        if (typeOf === "Products") {
+            getProducts(page, pageSize)
+                .then((data) => {
+                    setRows(data.content);
+                }).finally(()=>setIsSearching(false));
+        }
+        else if (typeOf === "Customers"){
+            getCustomers(page, pageSize)
+                .then((data) => {
+                    setRows(data.content);
+                }).finally(()=>setIsSearching(false));
+        } else if (typeOf === "Orders"){
+            getOrders(page, pageSize).then((data) => {
+                const orders = data.content.map((order) => ({
+                    id: order.id,
+                    customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
+                    products: order.items,
+                    address: order.address,
+                    date: order.date,
+                }));
+                setRows(orders);
+            }).finally(()=>setIsSearching(false));
+        }
+    }
 
     return(
             <Paper
@@ -87,8 +117,19 @@ const Search = ({typeOf, setRows, page, pageSize}: SearchProps) => {
                     sx={{ ml: 1, flex: 1 }}
                     placeholder={`Search ${typeOf === "Orders" ? "by customer name" : typeOf}`}
                     inputProps={{ 'aria-label': 'search google maps' }}
+                    value={text}
                     onChange={(e)=>handleChange(e.target.value)}
                 />
+                <Fade in={Boolean(text)} timeout={200}>
+                    <IconButton
+                        type="button"
+                        sx={{ p: '5px' }}
+                        aria-label="reset"
+                        onClick={handleReset}
+                    >
+                        <XIcon />
+                    </IconButton>
+                </Fade>
                 <IconButton type="button" sx={{ p: '10px' }} aria-label="search"
                     onClick={handleSubmit}
                 >
