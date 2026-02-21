@@ -40,12 +40,14 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
     })
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
+    const [initialItems, setInitialItems] = useState<SelectedProduct[]>([]);
     const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(productValues);
     const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(customerValues);
     const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({
         selectedProductsWithQty: orderValues.items,
         selectedCustomer: orderValues.customer,
-        address: orderValues.address
+        address: orderValues.address,
+        initialItems
     });
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -69,12 +71,13 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
                 }
                 break;
             case "Orders":
-                if (validateOrderForm()){
+                if (validateOrderForm()) {
                     updateOrder(orderValues)
                         .then(data => console.log(data))
-                        .catch(err=>console.log(err))
-                        .finally(()=>setOpen(false));
+                        .catch(err => console.log(err))
+                        .finally(() => setOpen(false));
                 }
+                break;
 
         }
     }
@@ -340,8 +343,10 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
             case "Customers":
                 setCustomerValues(rowToEdit as Customer);
                 break;
-            case "Orders":
-                setOrderValues(rowToEdit as OrderItem);
+            case "Orders":{
+                const order = rowToEdit as OrderItem;
+                setOrderValues(order);
+                setInitialItems(order.items);
                 getProducts(0, 100)
                     .then(data=>{
                         setProducts(data.content);
@@ -351,6 +356,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
                     });
 
                 break;
+            }
             default:
                 break;
         }

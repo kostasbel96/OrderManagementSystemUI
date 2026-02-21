@@ -32,6 +32,7 @@ const orderSchema = z.object({
 
     address: z
         .string()
+        .trim()
         .min(2, "Address is required"),
 })
 
@@ -46,9 +47,10 @@ type UseOrderFormValidationProps = {
     selectedProductsWithQty: SelectedProduct[];
     selectedCustomer: Customer | null;
     address: string;
+    initialItems?: SelectedProduct[];
 }
 
-const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, address}: UseOrderFormValidationProps) => {
+const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, address, initialItems}: UseOrderFormValidationProps) => {
     const [orderErrors, setOrderErrors] = useState<FormErrors>({})
 
     const validQuantity = (): boolean => {
@@ -74,7 +76,11 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
             setOrderErrors(newErrors);
             return false;
         }
-        if (!validQuantity()) {
+        // Έλεγξε μόνο αν άλλαξαν τα προϊόντα
+        const itemsChanged =
+            JSON.stringify(initialItems) !== JSON.stringify(selectedProductsWithQty);
+
+        if (itemsChanged && !validQuantity()) {
             setOrderErrors({
                 quantity: "Quantity in stock is less than you requested."
             });

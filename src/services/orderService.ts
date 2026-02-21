@@ -4,7 +4,7 @@ import type {
     OrderRequest,
     Response,
     OrderResponseDto,
-    SelectedProduct
+    SelectedProduct,
 } from "../types/Types.ts";
 
 interface OrderProps{
