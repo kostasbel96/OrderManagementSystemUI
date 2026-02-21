@@ -160,7 +160,7 @@ const OrdersView = () => {
             })
             .catch(() => console.log("error fetching orders"))
             .finally(() => setLoading(false));
-    }, [page, pageSize])
+    }, [page, pageSize, openEdit])
 
     useEffect(() => {
         console.log(rowToEdit);

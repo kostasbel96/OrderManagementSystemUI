@@ -14,9 +14,10 @@ export interface Customer {
     email?: string;
 }
 
-export interface OrderResponse {
+export interface Response {
     orderItems: OrderItem[];
     orderItem: OrderItem;
+    productDto: Product;
 }
 
 export interface OrderItem {

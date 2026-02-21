@@ -143,7 +143,7 @@ const CustomersView = () => {
                 setPageSize(data.pageSize);
             })
             .finally(() => setLoading(false));
-    }, [page, pageSize]);
+    }, [page, pageSize, openEdit]);
 
 
     return (

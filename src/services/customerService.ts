@@ -40,3 +40,14 @@ export async function getCustomer(id: number): Promise<Customer> {
     if (!res.ok) throw new Error("Failed to fetch customer with id: " +id);
     return await res.json();
 }
+
+export async function updateCustomer(customer: Customer): Promise<Response> {
+    const url = `${API_URL}/customers/update`;
+    const res = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(customer)
+    });
+    if (!res.ok) throw new Error("Failed to update customer");
+    return await res.json();
+}

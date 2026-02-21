@@ -2,7 +2,7 @@ import type {
     Customer,
     OrderItem,
     OrderRequest,
-    OrderResponse,
+    Response,
     OrderResponseDto,
     SelectedProduct
 } from "../types/Types.ts";
@@ -44,7 +44,7 @@ export async function getOrders(page: number = 0, pageSize: number = 5): Promise
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export async function searchOrderByCustomerName(name: string) :Promise<OrderResponse> {
+export async function searchOrderByCustomerName(name: string) :Promise<Response> {
     let firstName = "";
     let lastName = "";
     if(name.includes(" ")){
@@ -57,9 +57,20 @@ export async function searchOrderByCustomerName(name: string) :Promise<OrderResp
     return await res.json();
 }
 
-export async function getOrder(id: number): Promise<OrderResponse> {
+export async function getOrder(id: number): Promise<Response> {
     const url = `${API_URL}/orders/${id}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch order with id: " + id);
+    return await res.json();
+}
+
+export async function updateOrder(order: OrderItem): Promise<Response> {
+    const url = `${API_URL}/orders/update`;
+    const res = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
+    });
+    if (!res.ok) throw new Error("Failed to update order.");
     return await res.json();
 }

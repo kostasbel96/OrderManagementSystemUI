@@ -45,3 +45,14 @@ export async function getProductByName(name: string): Promise<Product> {
     if (!res.ok) throw new Error("Failed to fetch product with name: " + name);
     return await res.json();
 }
+
+export async function updateProduct(product: Product): Promise<Response> {
+    const url = `${API_URL}/products/update`;
+    const res = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(product),
+    });
+    if (!res.ok) throw new Error("Failed to update product");
+    return await res.json();
+}

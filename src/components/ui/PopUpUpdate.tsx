@@ -2,10 +2,12 @@ import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogT
 import type {Customer, OrderItem, Product, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import MySelect from "../FormOrder/MySelect.tsx";
-import {getProducts} from "../../services/productService.ts";
+import {getProducts, updateProduct} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
 import useCustomerFormValidation from "../../hooks/useCustomerFormValidation.ts";
 import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
+import {updateCustomer} from "../../services/customerService.ts";
+import {updateOrder} from "../../services/orderService.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
@@ -52,20 +54,26 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
         switch (typeOf) {
             case "Products":
                 if (validateProductForm()){
-                    console.log(productValues);
-                    setOpen(false);
+                    updateProduct(productValues)
+                        .then(data=>console.log(data))
+                        .catch(err=>console.log(err))
+                        .finally(()=>setOpen(false));
                 }
                 break;
             case "Customers":
                 if (validateCustomerForm()){
-                    console.log(customerValues);
-                    setOpen(false);
+                    updateCustomer(customerValues)
+                        .then(data => console.log(data))
+                        .catch(err=>console.log(err))
+                        .finally(()=>setOpen(false));
                 }
                 break;
             case "Orders":
                 if (validateOrderForm()){
-                    console.log(orderValues);
-                    setOpen(false);
+                    updateOrder(orderValues)
+                        .then(data => console.log(data))
+                        .catch(err=>console.log(err))
+                        .finally(()=>setOpen(false));
                 }
 
         }
