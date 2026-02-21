@@ -1,7 +1,7 @@
 import { Box, TextField, Button, Stack } from "@mui/material"
 import {type FormEvent, useState} from "react";
 import {addCustomer} from "../../services/customerService.ts";
-import {z} from "zod";
+import useCustomerFormValidation, {type FormValues} from "../../hooks/useCustomerFormValidation.ts";
 
 interface FormCustomerProps {
     value: string;
@@ -9,72 +9,26 @@ interface FormCustomerProps {
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const formSchema = z.object(
-    {
-        name: z.string().trim().nonempty("Name is required"),
-        lastName: z.string().trim().nonempty("Last Name is required"),
-        phone1: z.string().regex(/^\+?\d+$/, "Invalid phone number. Only digits are allowed")
-            .refine(val => val.replaceAll(/\D/g, '').length >= 10, {
-                message: "Phone number must have at least 10 digits",
-            }),
-        phone2: z.string().optional().nullable(),
-        email: z.string()
-            .trim()
-            .optional()
-            .refine(
-                v => !v || z.email().safeParse(v).success,
-                "Email is invalid"
-            ),
-    }
-)
-
-type FormValues = z.infer<typeof formSchema>;
-
 const initialValues = {
     name: "",
     lastName: "",
-    phone1: "",
-    phone2: "",
+    phoneNumber1: "",
+    phoneNumber2: "",
     email: ""
-}
-
-type FormErrors = {
-    name?: string;
-    lastName?: string;
-    phone1?: string;
-    phone2?: string;
-    email?: string;
-    message?: string;
 }
 
 const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
     const [values, setValues] = useState<FormValues>(initialValues);
-    const [errors, setErrors] = useState<FormErrors>({});
-
-    const validateForm = () => {
-        const result = formSchema.safeParse(values);
-
-        if (!result.success) {
-            const newErrors: FormErrors = {};
-            result.error.issues.forEach(error => {
-                const fieldName = error.path[0] as keyof FormValues;
-                newErrors[fieldName] = error.message;
-            });
-            setErrors(newErrors);
-            return false;
-        }
-        setErrors({});
-        return true;
-    }
+    const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(values);
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (validateForm()) {
+        if (validateCustomerForm()) {
             addCustomer({
                 name: values.name,
                 lastName: values.lastName,
-                phoneNumber1: values.phone1,
-                phoneNumber2: values.phone2,
+                phoneNumber1: values.phoneNumber1,
+                phoneNumber2: values.phoneNumber2,
                 email: values.email
             }).then((data) => {
                 setSuccess(true);
@@ -97,7 +51,7 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
         e.preventDefault();
         setValues(initialValues);
         setSubmitted(false);
-        setErrors({});
+        setCustomerErrors({});
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +61,7 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
             ...prev,
             [name]: value
         }));
-        setErrors(prev=>({
+        setCustomerErrors(prev=>({
             ...prev,
             [name]: ""
         }))
@@ -135,8 +89,8 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                     value={values.name}
                     onChange={handleChange}
                     variant="outlined"
-                    error={Boolean(errors?.name)}
-                    helperText={errors?.name}
+                    error={Boolean(customerErrors?.name)}
+                    helperText={customerErrors?.name}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',
@@ -158,8 +112,8 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                     value={values.lastName}
                     onChange={handleChange}
                     variant="outlined"
-                    error={Boolean(errors?.lastName)}
-                    helperText={errors?.lastName}
+                    error={Boolean(customerErrors?.lastName)}
+                    helperText={customerErrors?.lastName}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',
@@ -177,13 +131,13 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                 <TextField
                     label="Phone 1"
                     type="tel"
-                    name="phone1"
+                    name="phoneNumber1"
                     placeholder="Phone 1"
-                    value={values.phone1}
+                    value={values.phoneNumber1}
                     onChange={handleChange}
                     variant="outlined"
-                    error={Boolean(errors?.phone1)}
-                    helperText={errors?.phone1}
+                    error={Boolean(customerErrors?.phoneNumber1)}
+                    helperText={customerErrors?.phoneNumber1}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2 ,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',
@@ -200,13 +154,13 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                 <TextField
                     label="Phone 2"
                     type="tel"
-                    name="phone2"
+                    name="phoneNumber2"
                     placeholder="Phone 2"
-                    value={values.phone2}
+                    value={values.phoneNumber2}
                     onChange={handleChange}
                     variant="outlined"
-                    error={Boolean(errors?.phone2)}
-                    helperText={errors?.phone2}
+                    error={Boolean(customerErrors?.phoneNumber2)}
+                    helperText={customerErrors?.phoneNumber2}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2 ,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',
@@ -229,8 +183,8 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
                     value={values.email}
                     onChange={handleChange}
                     variant="outlined"
-                    error={Boolean(errors?.email)}
-                    helperText={errors?.email}
+                    error={Boolean(customerErrors?.email)}
+                    helperText={customerErrors?.email}
                     sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
                         '& .MuiInputLabel-root': {
                             backgroundColor: 'white',

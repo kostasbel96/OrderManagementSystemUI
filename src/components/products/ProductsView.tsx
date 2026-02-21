@@ -21,9 +21,7 @@ const ProductsView = () => {
         setRowToEdit(row);
     };
 
-    const handleClose = () => {
-        setOpenEdit(false);
-    };
+
 
     const columns = useMemo<GridColDef[]>(() => [
         { field: 'id', headerName: 'ID', width: 120, renderCell: (params) => (
@@ -134,7 +132,6 @@ const ProductsView = () => {
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}
-                handleClose={handleClose}
                 rowToEdit={rowToEdit}
                 typeOf={"Products"}
                 setOpen={setOpenEdit}

@@ -22,10 +22,6 @@ const CustomersView = () => {
         setRowToEdit(row);
     };
 
-    const handleClose = () => {
-        setOpenEdit(false);
-    };
-
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 120, renderCell: (params) => (
                 <div
@@ -166,7 +162,7 @@ const CustomersView = () => {
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}
-                handleClose={handleClose}
+                setOpen={setOpenEdit}
                 rowToEdit={rowToEdit}
                 typeOf={"Customers"}
             />

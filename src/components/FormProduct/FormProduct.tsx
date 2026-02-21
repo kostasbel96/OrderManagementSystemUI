@@ -17,11 +17,11 @@ const initialValues = {
 
 const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
     const [values, setValues] = useState<FormValues>(initialValues);
-    const {validateForm, errors, setErrors} = useProductFormValidation(values);
+    const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(values);
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (validateForm()) {
+        if (validateProductForm()) {
             addProduct({
                 name: values.name,
                 description: values.description,
@@ -38,7 +38,7 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
             setValues(initialValues);
 
 
-            setErrors({});
+            setProductErrors({});
         } else {
             setSubmitted(true);
             setSuccess(false);
@@ -53,7 +53,7 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
             ...prev,
             [name]: name === "quantity" ? Number(value) : value
         }));
-        setErrors(prev=>({
+        setProductErrors(prev=>({
            ...prev,
             [name]: ""
         }))
@@ -61,7 +61,7 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setErrors({});
+        setProductErrors({});
         setValues(initialValues);
         setSubmitted(false);
     }
@@ -88,8 +88,8 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                     value={values.name}
                     onChange={handleChange}
                     variant="outlined"
-                    error={Boolean(errors?.name)}
-                    helperText={errors?.name}
+                    error={Boolean(productErrors?.name)}
+                    helperText={productErrors?.name}
                     sx={{
                         width: 300,
                         backgroundColor: "white",
@@ -116,8 +116,8 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                     value={values.description}
                     onChange={handleChange}
                     variant="outlined"
-                    error={Boolean(errors?.description)}
-                    helperText={errors?.description}
+                    error={Boolean(productErrors?.description)}
+                    helperText={productErrors?.description}
                     sx={{
                         width: 300,
                         backgroundColor: "white",
@@ -146,8 +146,8 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                     value={values.quantity}
                     onChange={handleChange}
                     variant="outlined"
-                    error={Boolean(errors?.quantity)}
-                    helperText={errors?.quantity}
+                    error={Boolean(productErrors?.quantity)}
+                    helperText={productErrors?.quantity}
                     sx={{
                         width: 300,
                         backgroundColor: "white",

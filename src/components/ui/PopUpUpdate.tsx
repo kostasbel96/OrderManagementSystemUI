@@ -4,16 +4,17 @@ import {useEffect, useState} from "react";
 import MySelect from "../FormOrder/MySelect.tsx";
 import {getProducts} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
+import useCustomerFormValidation from "../../hooks/useCustomerFormValidation.ts";
+import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
-    handleClose: () => void;
     rowToEdit: Product | Customer | OrderItem | undefined ;
     typeOf: string;
-    setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
+const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
     const [productValues, setProductValues] = useState<Product>({
         id: -1,
         name: "",
@@ -37,20 +38,54 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
     })
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
-    const {validateForm, errors} = useProductFormValidation(productValues);
+    const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(productValues);
+    const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(customerValues);
+    const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({
+        selectedProductsWithQty: orderValues.items,
+        selectedCustomer: orderValues.customer,
+        address: orderValues.address
+    });
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log(rowToEdit);
-        if (validateForm()) {
-            switch (typeOf) {
-                case "Products":
+        switch (typeOf) {
+            case "Products":
+                if (validateProductForm()){
                     console.log(productValues);
-                    setOpen!(false);
-                    break;
-            }
+                    setOpen(false);
+                }
+                break;
+            case "Customers":
+                if (validateCustomerForm()){
+                    console.log(customerValues);
+                    setOpen(false);
+                }
+                break;
+            case "Orders":
+                if (validateOrderForm()){
+                    console.log(orderValues);
+                    setOpen(false);
+                }
+
         }
     }
+
+    const handleClose = () => {
+        switch (typeOf){
+            case "Products":
+                setProductErrors({});
+                break;
+            case "Customers":
+                setCustomerErrors({});
+                break;
+            case "Orders":
+                setOrderErrors({});
+                break;
+
+        }
+        setOpen(false);
+    };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -104,8 +139,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                     type="text"
                     fullWidth
                     variant="standard"
-                    error={Boolean(errors?.name)}
-                    helperText={errors?.name}
+                    error={Boolean(productErrors?.name)}
+                    helperText={productErrors?.name}
                 />
                 <TextField
                     onChange={handleChange}
@@ -117,8 +152,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                     type="text"
                     fullWidth
                     variant="standard"
-                    error={Boolean(errors?.description)}
-                    helperText={errors?.description}
+                    error={Boolean(productErrors?.description)}
+                    helperText={productErrors?.description}
                 />
                 <TextField
                     onChange={handleChange}
@@ -130,8 +165,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                     type="number"
                     fullWidth
                     variant="standard"
-                    error={Boolean(errors?.quantity)}
-                    helperText={errors?.quantity}
+                    error={Boolean(productErrors?.quantity)}
+                    helperText={productErrors?.quantity}
                 />
             </>
         )
@@ -162,6 +197,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                     type="text"
                     fullWidth
                     variant="standard"
+                    error={Boolean(customerErrors?.name)}
+                    helperText={customerErrors?.name}
                 />
                 <TextField
                     onChange={handleChange}
@@ -173,6 +210,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                     type="text"
                     fullWidth
                     variant="standard"
+                    error={Boolean(customerErrors?.lastName)}
+                    helperText={customerErrors?.lastName}
                 />
                 <TextField
                     onChange={handleChange}
@@ -184,6 +223,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                     type="text"
                     fullWidth
                     variant="standard"
+                    error={Boolean(customerErrors?.phoneNumber1)}
+                    helperText={customerErrors?.phoneNumber1}
                 />
                 <TextField
                     onChange={handleChange}
@@ -195,6 +236,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                     type="text"
                     fullWidth
                     variant="standard"
+                    error={Boolean(customerErrors?.phoneNumber2)}
+                    helperText={customerErrors?.phoneNumber2}
                 />
                 <TextField
                     onChange={handleChange}
@@ -206,6 +249,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                     type="text"
                     fullWidth
                     variant="standard"
+                    error={Boolean(customerErrors?.email)}
+                    helperText={customerErrors?.email}
                 />
             </>
         )
@@ -260,6 +305,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                     type="text"
                     fullWidth
                     variant="standard"
+                    error={Boolean(orderErrors?.address)}
+                    helperText={orderErrors?.address}
                 />
                 <div className="mt-2">
                     <MySelect
@@ -269,6 +316,7 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                         selectedProductsWithQty={selectedProductsWithQty}
                         setSelectedProductsWithQty={setSelectedProductsWithQty}
                     />
+                    {orderErrors && (<p className="text-sm text-red-600">{orderErrors.products || orderErrors.quantity}</p>)}
                 </div>
 
             </>
@@ -299,6 +347,13 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdat
                 break;
         }
     }, [rowToEdit, typeOf]);
+
+    useEffect(() => {
+        setOrderValues(prev => ({
+            ...prev,
+            items: selectedProductsWithQty
+        }));
+    }, [selectedProductsWithQty]);
 
     return (
             <Dialog open={open} onClose={handleClose}>

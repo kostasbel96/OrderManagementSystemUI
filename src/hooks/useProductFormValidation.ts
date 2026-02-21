@@ -17,13 +17,10 @@ type FormErrors = {
     quantity?: string;
 }
 
-
-
-
 const useProductFormValidation = (values: FormValues) => {
-    const [errors, setErrors] = useState<FormErrors>({});
+    const [productErrors, setProductErrors] = useState<FormErrors>({});
 
-    const validateForm = () => {
+    const validateProductForm = () => {
         const result = formSchema.safeParse(values);
 
         if (!result.success) {
@@ -32,17 +29,17 @@ const useProductFormValidation = (values: FormValues) => {
                 const fieldName = error.path[0] as keyof FormValues;
                 newErrors[fieldName] = error.message;
             });
-            setErrors(newErrors);
+            setProductErrors(newErrors);
             return false;
         }
-        setErrors({});
+        setProductErrors({});
         return true;
     }
 
     return {
-        validateForm,
-        errors,
-        setErrors
+        validateProductForm,
+        productErrors,
+        setProductErrors
     }
 }
 
