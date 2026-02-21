@@ -3,15 +3,17 @@ import type {Customer, OrderItem, Product, SelectedProduct} from "../../types/Ty
 import {useEffect, useState} from "react";
 import MySelect from "../FormOrder/MySelect.tsx";
 import {getProducts} from "../../services/productService.ts";
+import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
     handleClose: () => void;
     rowToEdit: Product | Customer | OrderItem | undefined ;
     typeOf: string;
+    setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) => {
+const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
     const [productValues, setProductValues] = useState<Product>({
         id: -1,
         name: "",
@@ -35,10 +37,19 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
     })
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
+    const {validateForm, errors} = useProductFormValidation(productValues);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log(rowToEdit);
+        if (validateForm()) {
+            switch (typeOf) {
+                case "Products":
+                    console.log(productValues);
+                    setOpen!(false);
+                    break;
+            }
+        }
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +104,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
                     type="text"
                     fullWidth
                     variant="standard"
+                    error={Boolean(errors?.name)}
+                    helperText={errors?.name}
                 />
                 <TextField
                     onChange={handleChange}
@@ -104,6 +117,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
                     type="text"
                     fullWidth
                     variant="standard"
+                    error={Boolean(errors?.description)}
+                    helperText={errors?.description}
                 />
                 <TextField
                     onChange={handleChange}
@@ -115,6 +130,8 @@ const PopUpUpdate = ({open, handleClose, rowToEdit, typeOf}: PopUpUpdateProps) =
                     type="number"
                     fullWidth
                     variant="standard"
+                    error={Boolean(errors?.quantity)}
+                    helperText={errors?.quantity}
                 />
             </>
         )

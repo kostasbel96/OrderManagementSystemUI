@@ -137,6 +137,7 @@ const ProductsView = () => {
                 handleClose={handleClose}
                 rowToEdit={rowToEdit}
                 typeOf={"Products"}
+                setOpen={setOpenEdit}
             />
         </>
 

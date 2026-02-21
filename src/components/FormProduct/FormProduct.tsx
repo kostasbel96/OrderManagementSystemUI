@@ -1,28 +1,12 @@
 import {type FormEvent, useState} from "react";
 import {addProduct} from "../../services/productService.ts";
 import { Box, TextField, Button, Stack } from "@mui/material"
-import {z} from "zod";
+import useProductFormValidation, {type FormValues} from "../../hooks/useProductFormValidation.ts";
 
 interface FormProductProps {
     value: string;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const formSchema = z.object(
-    {
-        name: z.string().trim().nonempty("Product Name is required"),
-        description: z.string().trim().nonempty("Description is required"),
-        quantity: z.coerce.number().min(1, "Quantity must be at least 1")
-    }
-)
-
-type FormValues = z.infer<typeof formSchema>;
-
-type FormErrors = {
-    name?: string;
-    description?: string;
-    quantity?: string;
 }
 
 const initialValues = {
@@ -33,23 +17,7 @@ const initialValues = {
 
 const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
     const [values, setValues] = useState<FormValues>(initialValues);
-    const [errors, setErrors] = useState<FormErrors>({});
-
-    const validateForm = () => {
-        const result = formSchema.safeParse(values);
-
-        if (!result.success) {
-            const newErrors: FormErrors = {};
-            result.error.issues.forEach(error => {
-                const fieldName = error.path[0] as keyof FormValues;
-                newErrors[fieldName] = error.message;
-            });
-            setErrors(newErrors);
-            return false;
-        }
-        setErrors({});
-        return true;
-    }
+    const {validateForm, errors, setErrors} = useProductFormValidation(values);
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
