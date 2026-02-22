@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import type {GridColDef} from "@mui/x-data-grid";
 import {getOrder, getOrders} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
-import type {Customer, OrderItem, OrderRow, Product} from "../../types/Types.ts";
+import type {Customer, OrderItem, OrderRow, Product, SelectedProduct} from "../../types/Types.ts";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
@@ -73,7 +73,7 @@ const OrdersView = () => {
                 }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'start' }}>
                         <tbody>
-                        {params.value.map((item: any, index: number) => (
+                        {params.value.map((item: SelectedProduct, index: number) => (
                             <tr key={index} style={{ borderBottom: '1px solid #ccc' }}>
                                 <td style={{ padding: '4px 8px' }}>{item.product.name}</td>
                                 <td style={{ padding: '4px 8px' }}>{item.quantity}</td>
