@@ -54,9 +54,11 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
     const [orderErrors, setOrderErrors] = useState<FormErrors>({})
 
     const validQuantity = (): boolean => {
-        return selectedProductsWithQty.every(
-            p => p.quantity <= p.product.quantity
-        );
+        const changedProducts = selectedProductsWithQty.filter(sp => {
+            const original = (initialItems ?? []).find(i => i.product.id === sp.product.id);
+            return !original || original.quantity !== sp.quantity;
+        });
+        return changedProducts.every(sp => sp.quantity <= sp.product.quantity);
     }
 
     const validateOrderForm = (): boolean => {
@@ -76,11 +78,8 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
             setOrderErrors(newErrors);
             return false;
         }
-        // Έλεγξε μόνο αν άλλαξαν τα προϊόντα
-        const itemsChanged =
-            JSON.stringify(initialItems) !== JSON.stringify(selectedProductsWithQty);
 
-        if (itemsChanged && !validQuantity()) {
+        if (!validQuantity()) {
             setOrderErrors({
                 quantity: "Quantity in stock is less than you requested."
             });

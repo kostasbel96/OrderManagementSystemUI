@@ -44,7 +44,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
     const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(productValues);
     const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(customerValues);
     const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({
-        selectedProductsWithQty: orderValues.items,
+        selectedProductsWithQty: selectedProductsWithQty,
         selectedCustomer: orderValues.customer,
         address: orderValues.address,
         initialItems
@@ -346,7 +346,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
             case "Orders":{
                 const order = rowToEdit as OrderItem;
                 setOrderValues(order);
-                setInitialItems(order.items);
+                setInitialItems([...order.items]);
                 getProducts(0, 100)
                     .then(data=>{
                         setProducts(data.content);
