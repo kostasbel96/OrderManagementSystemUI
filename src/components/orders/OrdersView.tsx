@@ -162,10 +162,6 @@ const OrdersView = () => {
             .finally(() => setLoading(false));
     }, [page, pageSize, openEdit])
 
-    useEffect(() => {
-        console.log(rowToEdit);
-    }, [rowToEdit]);
-
     return (
         <>
             <MyTable

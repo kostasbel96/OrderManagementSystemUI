@@ -51,7 +51,7 @@ type UseOrderFormValidationProps = {
 }
 
 const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, address, initialItems}: UseOrderFormValidationProps) => {
-    const [orderErrors, setOrderErrors] = useState<FormErrors>({})
+    const [orderErrors, setOrderErrors] = useState<FormErrors>({});
 
     const validQuantity = (): boolean => {
         const changedProducts = selectedProductsWithQty.filter(sp => {
