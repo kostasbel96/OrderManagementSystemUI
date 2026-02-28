@@ -53,12 +53,20 @@ type UseOrderFormValidationProps = {
 const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, address, initialItems}: UseOrderFormValidationProps) => {
     const [orderErrors, setOrderErrors] = useState<FormErrors>({});
 
-    const validQuantity = (): boolean => {
+    const validQuantity = (): {notValidProducts: SelectedProduct[], isValid: boolean} => {
         const changedProducts = selectedProductsWithQty.filter(sp => {
             const original = (initialItems ?? []).find(i => i.product.id === sp.product.id);
             return !original || original.quantity !== sp.quantity;
         });
-        return changedProducts.every(sp => sp.quantity <= sp.product.quantity);
+
+        const notValidProducts = changedProducts.filter(
+            sp => sp.quantity > sp.product.quantity
+        );
+
+        return {
+            notValidProducts,
+            isValid: notValidProducts.length === 0
+        };
     }
 
     const validateOrderForm = (): boolean => {
@@ -67,6 +75,15 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
             customer: selectedCustomer,
             products: selectedProductsWithQty,
             address: address
+        });
+        const {notValidProducts, isValid} = validQuantity();
+        const productNames = notValidProducts
+            .map(sp => sp.product.name)
+            .join(", ")
+            .toUpperCase();
+
+        setOrderErrors({
+            quantity: `Quantity in stock of ${productNames} is less than you requested.`
         });
 
         if (!result.success) {
@@ -79,9 +96,9 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
             return false;
         }
 
-        if (!validQuantity()) {
+        if (!isValid) {
             setOrderErrors({
-                quantity: "Quantity in stock is less than you requested."
+                quantity: `Quantity in stock of ${productNames} is less than you requested.`
             });
             return false;
         }

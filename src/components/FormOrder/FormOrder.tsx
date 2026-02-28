@@ -25,6 +25,7 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({selectedProductsWithQty, selectedCustomer, address});
+    const [added, setAdded] = useState(false);
 
 
 
@@ -42,6 +43,7 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                 setSuccess(true);
                 setSubmitted(true);
                 console.log(data);
+                setAdded(true);
             }).catch(()=>{
                     setSubmitted(true);
                     setSuccess(false);
@@ -73,7 +75,7 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
             .then(data=>{
                 setProducts(data.content);
             });
-    },[])
+    },[added])
 
     return (
             <Box
