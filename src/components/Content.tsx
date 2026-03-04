@@ -8,15 +8,31 @@ const Content = () => {
     const [activeValue, setActiveValue] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState("");
 
 
     return (
             <div className="w-full mt-5">
-                <MyButton value="Add Order" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
-                <MyButton value="Add Product" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
+                <MyButton value="Add Order"
+                          activeValue={activeValue}
+                          submitted={submitted}
+                          setOpen={setOpen}
+                          setActiveValue={setActiveValue}
+                          open={open} />
+                <MyButton value="Add Product"
+                          activeValue={activeValue}
+                          submitted={submitted}
+                          setOpen={setOpen}
+                          setActiveValue={setActiveValue}
+                          open={open}
+                />
                 <MyButton value="Add Customer" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
                 <div className="flex justify-center mt-2 relative">
-                    <MyCollapse isOpen={open} value={activeValue ?? ""} setSubmitted={setSubmitted} setSuccess={setSuccess}/>
+                    <MyCollapse isOpen={open} value={activeValue ?? ""}
+                                setSubmitted={setSubmitted}
+                                setSuccess={setSuccess}
+                                setPopUpMessage={setPopUpMessage}
+                    />
                 </div>
 
                 <div
@@ -27,6 +43,7 @@ const Content = () => {
                         submitted && (
                             <div className="flex justify-center p-1 shadow-lg">
                                 <PopUp
+                                    popUpMessage={popUpMessage}
                                     title={activeValue ?? ""}
                                     setSubmitted={setSubmitted}
                                     success={success}

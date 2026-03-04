@@ -5,9 +5,10 @@ import CloseIcon from "@mui/icons-material/Close";
 interface PopUpDeniedProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     title: string;
+    popUpMessage: string;
 }
 
-const PopUpDenied = ({setSubmitted, title}: PopUpDeniedProps)=>{
+const PopUpDenied = ({setSubmitted, title, popUpMessage}: PopUpDeniedProps)=>{
     let popUpTitle;
 
     if (title.includes("Product")){
@@ -38,7 +39,7 @@ const PopUpDenied = ({setSubmitted, title}: PopUpDeniedProps)=>{
                 </IconButton>
             }
         >
-            {`${popUpTitle} cannot be added!`}
+            {`${popUpMessage} ${popUpTitle} cannot be added!`}
         </Alert>
     )
 }

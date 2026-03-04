@@ -38,7 +38,7 @@ const Search = ({typeOf, setRows, page, pageSize, setIsSearching}: SearchProps) 
                     customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
                     products: order.items,
                     address: order.address,
-                    date: order.date,
+                    date: order.date ? new Date(order.date) : undefined
                 }));
                 setRows(orders);
             }).finally(()=>setIsSearching(false));
@@ -66,7 +66,7 @@ const Search = ({typeOf, setRows, page, pageSize, setIsSearching}: SearchProps) 
                     customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
                     products: order.items,
                     address: order.address,
-                    date: order.date,
+                    date: order.date ? new Date(order.date) : undefined,
                 }));
                 setRows(orders);
             }).catch(()=> setRows([]))
@@ -95,7 +95,7 @@ const Search = ({typeOf, setRows, page, pageSize, setIsSearching}: SearchProps) 
                     customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
                     products: order.items,
                     address: order.address,
-                    date: order.date,
+                    date: order.date ? new Date(order.date) : undefined,
                 }));
                 setRows(orders);
             }).finally(()=>setIsSearching(false));

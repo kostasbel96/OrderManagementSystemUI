@@ -6,6 +6,8 @@ import {getProducts} from "../../services/productService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
+import DeleteIcon from '@mui/icons-material/Delete';
+import PopUpDelete from "../ui/PopUpDelete.tsx";
 
 const ProductsView = () => {
     const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>([]);
@@ -15,12 +17,18 @@ const ProductsView = () => {
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [rowToEdit, setRowToEdit] = useState<Product>();
+    const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
+    const [onDeleteContent, setOnDeleteContent] = useState<Product>();
 
     const handleClickOpen = (row: Product) => {
         setOpenEdit(true);
         setRowToEdit(row);
     };
 
+    const handleOnDelete = (row: Product) =>{
+        setOpenDeletePopUp(true);
+        setOnDeleteContent(row);
+    }
 
 
     const columns = useMemo<GridColDef[]>(() => [
@@ -91,15 +99,27 @@ const ProductsView = () => {
             sortable: false,
             filterable: false,
             renderCell: (params) => (
-                <IconButton
-                    color="primary"
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        handleClickOpen(params.row);
-                    }}
-                >
-                    <EditIcon />
-                </IconButton>
+                <>
+                    <IconButton
+                        color="primary"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handleClickOpen(params.row);
+                        }}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton
+                        color="error"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handleOnDelete(params.row);
+                        }}
+                    >
+                        <DeleteIcon/>
+                    </IconButton>
+                </>
+
             ),
         },
     ], []);
@@ -114,7 +134,7 @@ const ProductsView = () => {
                 setPageSize(data.pageSize);
             })
             .finally(() => setLoading(false));
-    }, [page, pageSize, openEdit]);
+    }, [page, pageSize, openEdit, openDeletePopUp]);
 
     return (
         <>
@@ -136,6 +156,13 @@ const ProductsView = () => {
                 typeOf={"Products"}
                 setOpen={setOpenEdit}
             />
+            <PopUpDelete
+                open={openDeletePopUp}
+                rowToEdit={onDeleteContent}
+                typeOf={"Products"}
+                setOpen={setOpenDeletePopUp}
+            />
+
         </>
 
     )

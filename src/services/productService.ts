@@ -14,14 +14,25 @@ export let products: Product[];
 
 const API_URL = "http://localhost:8080/api";
 
-export async function addProduct(newProduct: Omit<Product, "id">): Promise<Product> {
+export async function addProduct(newProduct: Omit<Product, "id">): Promise<Response> {
     const res = await fetch(`${API_URL}/products/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newProduct),
     });
-    if (!res.ok) throw new Error("Failed to create product");
-    return await res.json();
+    let data;
+    try {
+        data = await res.json();
+    } catch {
+        data = null;
+    }
+
+    if (!res.ok) {
+        const errorMessage = data?.errorResponse?.message || "Failed to create product";
+        throw new Error(errorMessage);
+    }
+
+    return data;
 }
 
 export async function searchProductByName(name: string) :Promise<Product[]> {
@@ -54,5 +65,16 @@ export async function updateProduct(product: Product): Promise<Response> {
         body: JSON.stringify(product),
     });
     if (!res.ok) throw new Error("Failed to update product");
+    return await res.json();
+}
+
+export async function deleteProduct(product: Product): Promise<Response> {
+    const url = `${API_URL}/products/delete`;
+    const res = await fetch(url, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(product),
+    });
+    if (!res.ok) throw new Error("Failed to delete product");
     return await res.json();
 }

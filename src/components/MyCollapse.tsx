@@ -8,9 +8,10 @@ interface OpenProps {
     value: string;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+    setPopUpMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const MyCollapse = ({isOpen, value, setSubmitted, setSuccess}: OpenProps) => {
+const MyCollapse = ({isOpen, value, setSubmitted, setSuccess, setPopUpMessage}: OpenProps) => {
 
     return (
             <Collapse in={isOpen} sx={{maxWidth: 400, minWidth: 400}}>
@@ -30,6 +31,7 @@ const MyCollapse = ({isOpen, value, setSubmitted, setSuccess}: OpenProps) => {
                                 value={value}
                                 setSubmitted={setSubmitted}
                                 setSuccess={setSuccess}
+                                setPopUpMessage={setPopUpMessage}
                             />
                         )}
 

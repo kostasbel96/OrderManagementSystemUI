@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import type {GridColDef} from "@mui/x-data-grid";
+import {type GridColDef, GridFilterInputValue, type GridFilterOperator} from "@mui/x-data-grid";
 import {getOrder, getOrders} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
 import type {Customer, OrderItem, OrderRow, Product, SelectedProduct} from "../../types/Types.ts";
@@ -24,6 +24,26 @@ const OrdersView = () => {
             setRowToEdit({...data.orderItem});
         }).finally(()=>setOpenEdit(true));
 
+    };
+    const productsFilterOperator: GridFilterOperator = {
+        label: 'contains',
+        value: 'containsProduct',
+        getApplyFilterFn: (filterItem) => {
+            if (!filterItem.value) return null;
+
+            return (row) => {
+                const products = row as SelectedProduct[];
+
+                if (!products || products.length === 0) return false;
+
+                return products.some(p =>
+                    p.product.name
+                        .toLowerCase()
+                        .includes(String(filterItem.value).toLowerCase())
+                );
+            };
+        },
+        InputComponent: GridFilterInputValue,
     };
 
     const columns: GridColDef[] = [
@@ -61,6 +81,7 @@ const OrdersView = () => {
             field: 'products',
             headerName: 'Products',
             width: 250,
+            filterOperators: [productsFilterOperator],
             renderCell: (params) => (
                 <div style={{
                     display: 'flex',
@@ -97,7 +118,7 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             )},
-        {field: 'date', headerName: 'Date', width: 100, renderCell: (params) => (
+        {field: 'date', headerName: 'Date', type: 'date', width: 100, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -106,7 +127,9 @@ const OrdersView = () => {
                     height: '100%',          // σημαντικό για να γεμίζει το cell
                     width: '100%',
                 }}>
-                    {params.value}
+                    {params.value
+                        ? params.value.toLocaleDateString()
+                        : ''}
                 </div>
             )},
         {
@@ -150,7 +173,7 @@ const OrdersView = () => {
                         customer: `${order.customer?.name} ${order.customer?.lastName}`,
                         products: order.items,
                         address: order.address,
-                        date: order.date
+                        date: order.date ? new Date(order.date) : undefined
                     });
                 });
                 setRows(orders);

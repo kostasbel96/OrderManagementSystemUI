@@ -18,6 +18,11 @@ export interface Response {
     orderItems: OrderItem[];
     orderItem: OrderItem;
     productDto: Product;
+    errorResponse: ErrorResponse;
+}
+
+export interface ErrorResponse{
+    message: string;
 }
 
 export interface OrderItem {
@@ -38,7 +43,7 @@ export interface OrderRow {
     customer: string;
     products: SelectedProduct[];
     address: string;
-    date?: string;
+    date?: string | Date;
 }
 
 export interface ProductResponseDto {

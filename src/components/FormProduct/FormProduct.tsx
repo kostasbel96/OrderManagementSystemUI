@@ -7,6 +7,7 @@ interface FormProductProps {
     value: string;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+    setPopUpMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const initialValues = {
@@ -15,7 +16,7 @@ const initialValues = {
     quantity: 1,
 }
 
-const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
+const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormProductProps) => {
     const [values, setValues] = useState<FormValues>(initialValues);
     const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(values);
 
@@ -31,7 +32,8 @@ const FormProduct = ({value, setSubmitted, setSuccess}: FormProductProps) => {
                 setSubmitted(true);
                     console.log(data);
                 })
-                .catch(()=>{
+                .catch((error)=>{
+                    setPopUpMessage(error.message);
                     setSubmitted(true);
                     setSuccess(false);
                 })
