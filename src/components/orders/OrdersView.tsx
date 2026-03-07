@@ -96,7 +96,10 @@ const OrdersView = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'start' }}>
                         <tbody>
                         {params.value.map((item: SelectedProduct, index: number) => (
-                            <tr key={index} style={{ borderBottom: '1px solid #ccc' }}>
+                            <tr key={index} style={{display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                borderBottom: '1px solid #ccc' }}>
                                 <td style={{ padding: '4px 8px' }}>{item.product.name}</td>
                                 <td style={{ padding: '4px 8px' }}>{item.quantity}</td>
                             </tr>
