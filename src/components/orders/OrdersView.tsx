@@ -82,6 +82,7 @@ const OrdersView = () => {
             headerName: 'Products',
             width: 250,
             filterOperators: [productsFilterOperator],
+            sortable: false,
             renderCell: (params) => (
                 <div style={{
                     display: 'flex',

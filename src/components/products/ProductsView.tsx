@@ -8,6 +8,7 @@ import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import DeleteIcon from '@mui/icons-material/Delete';
 import PopUpDelete from "../ui/PopUpDelete.tsx";
+import PopUpItemDeleted from "../popup/PopUpItemDeleted.tsx";
 
 const ProductsView = () => {
     const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>([]);
@@ -19,6 +20,7 @@ const ProductsView = () => {
     const [rowToEdit, setRowToEdit] = useState<Product>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Product>();
+    const [submitted, setSubmitted] = useState(false);
 
     const handleClickOpen = (row: Product) => {
         setOpenEdit(true);
@@ -161,7 +163,18 @@ const ProductsView = () => {
                 rowToEdit={onDeleteContent}
                 typeOf={"Products"}
                 setOpen={setOpenDeletePopUp}
+                setSubmitted={setSubmitted}
             />
+            <div className="flex justify-center items-center mt-2 w-full mx-auto">
+                {submitted && (
+                    <PopUpItemDeleted
+                        setSubmitted={setSubmitted}
+                        typeOf={"product"}
+                        item={onDeleteContent as Product}
+                    />
+                )}
+            </div>
+
 
         </>
 

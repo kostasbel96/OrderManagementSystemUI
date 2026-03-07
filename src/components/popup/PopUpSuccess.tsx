@@ -22,30 +22,27 @@ const PopUpSuccess = ({setSubmitted, title}: FormPopUpProps) => {
     }
 
     return (
-        <>
-            <Alert
-                severity="success"
-                variant="filled"
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                }}
-                action={
-                    <IconButton
-                        color="inherit"
-                        size="small"
-                        onClick={() => setSubmitted(false)}
-                        sx={{ mb: 1 }}
-                    >
-                        <CheckIcon />
-                    </IconButton>
-                }
-            >
-                {`${popUpTitle} added successfully!`}
-            </Alert>
-
-        </>
+        <Alert
+            severity="success"
+            variant="filled"
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+            }}
+            action={
+                <IconButton
+                    color="inherit"
+                    size="small"
+                    onClick={() => setSubmitted(false)}
+                    sx={{ mb: 1 }}
+                >
+                    <CheckIcon />
+                </IconButton>
+            }
+        >
+            {`${popUpTitle} added successfully!`}
+        </Alert>
     )
 }
 
