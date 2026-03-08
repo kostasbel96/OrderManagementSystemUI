@@ -6,6 +6,9 @@ import type {Customer, OrderItem, OrderRow, Product, SelectedProduct} from "../.
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
+import PopUpDelete from "../ui/PopUpDelete.tsx";
+import PopUpItemDeleted from "../popup/PopUpItemDeleted.tsx";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 
 const OrdersView = () => {
@@ -17,6 +20,9 @@ const OrdersView = () => {
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [rowToEdit, setRowToEdit] = useState<Product | Customer | OrderItem>();
+    const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
+    const [onDeleteContent, setOnDeleteContent] = useState<OrderItem>();
+    const [submitted, setSubmitted] = useState(false);
 
 
     const handleClickOpen = (row: OrderRow) => {
@@ -24,7 +30,13 @@ const OrdersView = () => {
             setRowToEdit({...data.orderItem});
         }).finally(()=>setOpenEdit(true));
 
-    };
+    }
+
+    const handleOnDelete = (row: OrderItem) =>{
+        setOpenDeletePopUp(true);
+        setOnDeleteContent(row);
+    }
+
     const productsFilterOperator: GridFilterOperator = {
         label: 'contains',
         value: 'containsProduct',
@@ -161,6 +173,15 @@ const OrdersView = () => {
                     >
                         <EditIcon />
                     </IconButton>
+                    <IconButton
+                        color="error"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handleOnDelete(params.row);
+                        }}
+                    >
+                        <DeleteIcon/>
+                    </IconButton>
                 </div>
             ),
         },
@@ -187,7 +208,7 @@ const OrdersView = () => {
             })
             .catch(() => console.log("error fetching orders"))
             .finally(() => setLoading(false));
-    }, [page, pageSize, openEdit])
+    }, [page, pageSize, openEdit, openDeletePopUp])
 
     return (
         <>
@@ -209,6 +230,22 @@ const OrdersView = () => {
                 rowToEdit={rowToEdit}
                 typeOf={"Orders"}
             />
+            <PopUpDelete
+                open={openDeletePopUp}
+                rowToEdit={onDeleteContent}
+                typeOf={"Orders"}
+                setOpen={setOpenDeletePopUp}
+                setSubmitted={setSubmitted}
+            />
+            <div className="flex justify-center items-center mt-2 w-full mx-auto">
+                {submitted && (
+                    <PopUpItemDeleted
+                        setSubmitted={setSubmitted}
+                        typeOf={"order"}
+                        item={onDeleteContent as OrderItem}
+                    />
+                )}
+            </div>
         </>
 
     )

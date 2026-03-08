@@ -51,3 +51,14 @@ export async function updateCustomer(customer: Customer): Promise<Response> {
     if (!res.ok) throw new Error("Failed to update customer");
     return await res.json();
 }
+
+export async function deleteCustomer(customer: Customer): Promise<Response> {
+    const url = `${API_URL}/customers/delete`;
+    const res = await fetch(url, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(customer),
+    });
+    if (!res.ok) throw new Error("Failed to delete customer");
+    return await res.json();
+}

@@ -74,3 +74,14 @@ export async function updateOrder(order: OrderItem): Promise<Response> {
     if (!res.ok) throw new Error("Failed to update order.");
     return await res.json();
 }
+
+export async function deleteOrder(order: OrderItem): Promise<Response> {
+    const url = `${API_URL}/orders/delete`;
+    const res = await fetch(url, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
+    });
+    if (!res.ok) throw new Error("Failed to delete order");
+    return await res.json();
+}

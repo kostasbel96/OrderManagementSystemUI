@@ -6,6 +6,9 @@ import {getCustomers} from "../../services/customerService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
+import DeleteIcon from "@mui/icons-material/Delete";
+import PopUpDelete from "../ui/PopUpDelete.tsx";
+import PopUpItemDeleted from "../popup/PopUpItemDeleted.tsx";
 
 const CustomersView = () => {
 
@@ -16,11 +19,19 @@ const CustomersView = () => {
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [rowToEdit, setRowToEdit] = useState<Product | Customer | undefined>();
+    const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
+    const [onDeleteContent, setOnDeleteContent] = useState<Customer>();
+    const [submitted, setSubmitted] = useState(false);
 
     const handleClickOpen = (row: Product) => {
         setOpenEdit(true);
         setRowToEdit(row);
     };
+
+    const handleOnDelete = (row: Customer) =>{
+        setOpenDeletePopUp(true);
+        setOnDeleteContent(row);
+    }
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 120, renderCell: (params) => (
@@ -120,15 +131,27 @@ const CustomersView = () => {
             sortable: false,
             filterable: false,
             renderCell: (params) => (
-                <IconButton
-                    color="primary"
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        handleClickOpen(params.row);
-                    }}
-                >
-                    <EditIcon />
-                </IconButton>
+                <>
+                    <IconButton
+                        color="primary"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handleClickOpen(params.row);
+                        }}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton
+                        color="error"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handleOnDelete(params.row);
+                        }}
+                    >
+                        <DeleteIcon/>
+                    </IconButton>
+                </>
+
             ),
         },
     ];
@@ -143,7 +166,7 @@ const CustomersView = () => {
                 setPageSize(data.pageSize);
             })
             .finally(() => setLoading(false));
-    }, [page, pageSize, openEdit]);
+    }, [page, pageSize, openEdit, openDeletePopUp]);
 
 
     return (
@@ -166,6 +189,22 @@ const CustomersView = () => {
                 rowToEdit={rowToEdit}
                 typeOf={"Customers"}
             />
+            <PopUpDelete
+                open={openDeletePopUp}
+                rowToEdit={onDeleteContent}
+                typeOf={"Customers"}
+                setOpen={setOpenDeletePopUp}
+                setSubmitted={setSubmitted}
+            />
+            <div className="flex justify-center items-center mt-2 w-full mx-auto">
+                {submitted && (
+                    <PopUpItemDeleted
+                        setSubmitted={setSubmitted}
+                        typeOf={"customer"}
+                        item={onDeleteContent as Customer}
+                    />
+                )}
+            </div>
         </>
 
     );

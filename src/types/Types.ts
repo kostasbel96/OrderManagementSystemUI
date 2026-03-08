@@ -10,7 +10,7 @@ export interface Customer {
     name: string;
     lastName: string;
     phoneNumber1: string;
-    phoneNumber2?: string | undefined | null;
+    phoneNumber2: string | undefined | null;
     email?: string;
 }
 
@@ -19,6 +19,7 @@ export interface Response {
     orderItem: OrderItem;
     productDto: Product;
     errorResponse: ErrorResponse;
+    customer: Customer;
 }
 
 export interface ErrorResponse{
@@ -28,7 +29,7 @@ export interface ErrorResponse{
 export interface OrderItem {
     id?: number;
     items: SelectedProduct[];
-    customer: Customer | null;
+    customer: Customer;
     address: string;
     date: string;
 }
