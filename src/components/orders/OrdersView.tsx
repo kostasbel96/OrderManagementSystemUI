@@ -7,7 +7,7 @@ import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
-import PopUpItemDeleted from "../popup/PopUpItemDeleted.tsx";
+import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 
@@ -23,11 +23,12 @@ const OrdersView = () => {
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<OrderItem>();
     const [submitted, setSubmitted] = useState(false);
-
+    const [operation, setOperation] = useState("");
 
     const handleClickOpen = (row: OrderRow) => {
         if (row.id) getOrder(row.id).then(data=> {
             setRowToEdit({...data.orderItem});
+            setOperation("updated");
         }).finally(()=>setOpenEdit(true));
 
     }
@@ -35,6 +36,7 @@ const OrdersView = () => {
     const handleOnDelete = (row: OrderItem) =>{
         setOpenDeletePopUp(true);
         setOnDeleteContent(row);
+        setOperation("deleted");
     }
 
     const productsFilterOperator: GridFilterOperator = {
@@ -229,6 +231,7 @@ const OrdersView = () => {
                 setOpen={setOpenEdit}
                 rowToEdit={rowToEdit}
                 typeOf={"Orders"}
+                setSubmitted={setSubmitted}
             />
             <PopUpDelete
                 open={openDeletePopUp}
@@ -239,10 +242,11 @@ const OrdersView = () => {
             />
             <div className="flex justify-center items-center mt-2 w-full mx-auto">
                 {submitted && (
-                    <PopUpItemDeleted
+                    <PopUpItemOperation
                         setSubmitted={setSubmitted}
                         typeOf={"order"}
-                        item={onDeleteContent as OrderItem}
+                        item={rowToEdit as OrderItem}
+                        operation={operation}
                     />
                 )}
             </div>

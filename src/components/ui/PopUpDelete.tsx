@@ -1,12 +1,12 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import type {Customer, OrderRow, Product} from "../../types/Types.ts";
+import type {Customer, OrderItem, Product} from "../../types/Types.ts";
 import {deleteProduct} from "../../services/productService.ts";
 import {deleteCustomer} from "../../services/customerService.ts";
 import {deleteOrder, getOrder} from "../../services/orderService.ts";
 
 interface PopUpDeleteProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderRow | undefined ;
+    rowToEdit: Product | Customer | OrderItem | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,7 +45,7 @@ const PopUpDelete = ({open, rowToEdit,
                     .finally(()=> setOpen(false));
                 break;
             case "Orders":
-                getOrder((rowToEdit as OrderRow).id as number)
+                getOrder((rowToEdit as OrderItem).id as number)
                     .then(data => {
                         const order = data.orderItem;
                         deleteOrder(order)
@@ -201,11 +201,11 @@ const PopUpDelete = ({open, rowToEdit,
                     label="Order ID"
                     fullWidth
                     variant="standard"
-                    value={(rowToEdit as OrderRow)?.id}
+                    value={(rowToEdit as OrderItem)?.id}
                 />
                 <TextField
                     InputProps={{ readOnly: true }}
-                    value={(rowToEdit as OrderRow)?.customer}
+                    value={(rowToEdit as OrderItem)?.customer}
                     margin="dense"
                     id="name"
                     name="name"
@@ -216,7 +216,7 @@ const PopUpDelete = ({open, rowToEdit,
                 />
                 <TextField
                     InputProps={{ readOnly: true }}
-                    value={(rowToEdit as OrderRow)?.address}
+                    value={(rowToEdit as OrderItem)?.address}
                     margin="dense"
                     id="address"
                     name="address"

@@ -29,7 +29,7 @@ export interface ErrorResponse{
 export interface OrderItem {
     id?: number;
     items: SelectedProduct[];
-    customer: Customer;
+    customer?: Customer;
     address: string;
     date: string;
 }

@@ -8,7 +8,7 @@ import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
-import PopUpItemDeleted from "../popup/PopUpItemDeleted.tsx";
+import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 
 const CustomersView = () => {
 
@@ -22,15 +22,18 @@ const CustomersView = () => {
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Customer>();
     const [submitted, setSubmitted] = useState(false);
+    const [operation, setOperation] = useState("");
 
     const handleClickOpen = (row: Product) => {
         setOpenEdit(true);
         setRowToEdit(row);
+        setOperation("updated");
     };
 
     const handleOnDelete = (row: Customer) =>{
         setOpenDeletePopUp(true);
         setOnDeleteContent(row);
+        setOperation("deleted");
     }
 
     const columns: GridColDef[] = [
@@ -188,6 +191,7 @@ const CustomersView = () => {
                 setOpen={setOpenEdit}
                 rowToEdit={rowToEdit}
                 typeOf={"Customers"}
+                setSubmitted={setSubmitted}
             />
             <PopUpDelete
                 open={openDeletePopUp}
@@ -198,10 +202,11 @@ const CustomersView = () => {
             />
             <div className="flex justify-center items-center mt-2 w-full mx-auto">
                 {submitted && (
-                    <PopUpItemDeleted
+                    <PopUpItemOperation
                         setSubmitted={setSubmitted}
                         typeOf={"customer"}
-                        item={onDeleteContent as Customer}
+                        item={rowToEdit as Customer}
+                        operation={operation}
                     />
                 )}
             </div>

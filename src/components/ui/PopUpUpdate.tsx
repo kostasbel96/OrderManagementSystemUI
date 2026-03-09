@@ -14,9 +14,10 @@ interface PopUpUpdateProps{
     rowToEdit: Product | Customer | OrderItem | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
+const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpdateProps) => {
     const [productValues, setProductValues] = useState<Product>({
         id: -1,
         name: "",
@@ -35,7 +36,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
         id: -1,
         address: "",
         date: "",
-        customer: null,
+        customer: undefined,
         items: [],
     })
     const [products, setProducts] = useState<Product[]>([]);
@@ -45,19 +46,19 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
     const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(customerValues);
     const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({
         selectedProductsWithQty: selectedProductsWithQty,
-        selectedCustomer: orderValues.customer,
+        selectedCustomer: orderValues.customer as Customer,
         address: orderValues.address,
         initialItems
     });
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log(rowToEdit);
         switch (typeOf) {
             case "Products":
                 if (validateProductForm()){
                     updateProduct(productValues)
-                        .then(data=>console.log(data))
+                        .then(data=>{console.log(data);
+                                            setSubmitted(true);})
                         .catch(err=>console.log(err))
                         .finally(()=>setOpen(false));
                 }
@@ -65,7 +66,8 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
             case "Customers":
                 if (validateCustomerForm()){
                     updateCustomer(customerValues)
-                        .then(data => console.log(data))
+                        .then(data => {console.log(data);
+                                                setSubmitted(true);})
                         .catch(err=>console.log(err))
                         .finally(()=>setOpen(false));
                 }
@@ -73,7 +75,8 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen}: PopUpUpdateProps) => {
             case "Orders":
                 if (validateOrderForm()) {
                     updateOrder(orderValues)
-                        .then(data => console.log(data))
+                        .then(data => {console.log(data);
+                                                setSubmitted(true);})
                         .catch(err => console.log(err))
                         .finally(() => setOpen(false));
                 }

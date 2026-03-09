@@ -1,4 +1,4 @@
-import type {Customer, OrderRow, Product} from "../../types/Types.ts";
+import type {Customer, OrderItem, Product} from "../../types/Types.ts";
 import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
 import Alert from "@mui/material/Alert";
@@ -6,20 +6,21 @@ import {useEffect, useState} from "react";
 
 interface PopUpItemDeletedProps {
     typeOf: string;
-    item: Product | Customer | OrderRow;
+    item: Product | Customer | OrderItem;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+    operation: string;
 }
 
-const PopUpItemDeleted = ({item, typeOf, setSubmitted} : PopUpItemDeletedProps) => {
-    const [deletedItem, setDeletedItem] = useState<Product | Customer | OrderRow>();
+const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemDeletedProps) => {
+    const [operationItem, setOperationItem] = useState<Product | Customer | OrderItem>();
 
     useEffect(() => {
         if (typeOf === "product"){
-            setDeletedItem(item as Product);
+            setOperationItem(item as Product);
         } else if (typeOf === "customer"){
-            setDeletedItem(item as Customer);
+            setOperationItem(item as Customer);
         } else if (typeOf === "order") {
-            setDeletedItem(item as OrderRow);
+            setOperationItem(item as OrderItem);
         }
     }, []);
 
@@ -43,11 +44,13 @@ const PopUpItemDeleted = ({item, typeOf, setSubmitted} : PopUpItemDeletedProps) 
                 </IconButton>
             }
         >
-            { (typeOf === "product" && deletedItem) && (`Product ${(deletedItem as Product).name} deleted successfully!` ) }
-            { (typeOf === "customer" && deletedItem) && (`Customer ${(deletedItem as Customer).name} ${(deletedItem as Customer).lastName} deleted successfully!` ) }
-            { (typeOf === "order" && deletedItem) && (`Order ${(deletedItem as OrderRow).id} deleted successfully!` ) }
+            { (typeOf === "product" && operationItem) && 
+                (`Product ${(operationItem as Product).name} ${operation} successfully!` ) }
+            { (typeOf === "customer" && operationItem) && 
+                (`Customer ${(operationItem as Customer).name} ${(operationItem as Customer).lastName} ${operation} successfully!` ) }
+            { (typeOf === "order" && operationItem) && (`Order ${(operationItem as OrderItem).id} ${operation} successfully!` ) }
         </Alert>
             )
 }
 
-export default PopUpItemDeleted;
+export default PopUpItemOperation;

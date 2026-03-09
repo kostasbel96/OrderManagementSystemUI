@@ -45,7 +45,7 @@ type FormErrors = {
 
 type UseOrderFormValidationProps = {
     selectedProductsWithQty: SelectedProduct[];
-    selectedCustomer: Customer | null;
+    selectedCustomer: Customer;
     address: string;
     initialItems?: SelectedProduct[];
 }
