@@ -2,10 +2,10 @@ import {Fade, InputBase, Paper} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {SearchIcon, XIcon} from "lucide-react";
 import {useState} from "react";
-import type {Customer, OrderItem, OrderRow, Product} from "../types/Types.ts";
-import {getProducts, searchProductByName} from "../services/productService.ts";
-import {getCustomers, searchCustomerByName} from "../services/customerService.ts";
-import {getOrders, searchOrderByCustomerName} from "../services/orderService.ts";
+import type {Customer, OrderRow, Product} from "../types/Types.ts";
+import {getProducts} from "../services/productService.ts";
+import {getCustomers} from "../services/customerService.ts";
+import {getOrders} from "../services/orderService.ts";
 
 interface SearchProps {
     typeOf: string;
@@ -13,9 +13,11 @@ interface SearchProps {
     page: number;
     pageSize: number;
     setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
+    setSearchName: React.Dispatch<React.SetStateAction<string>>;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Search = ({typeOf, setRows, page, pageSize, setIsSearching}: SearchProps) => {
+const Search = ({typeOf, setRows, page, pageSize, setIsSearching, setSearchName, setPage}: SearchProps) => {
     const [text, setText] = useState("");
 
     const handleChange = (value: string) => {
@@ -48,31 +50,21 @@ const Search = ({typeOf, setRows, page, pageSize, setIsSearching}: SearchProps) 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (typeOf === "Products") {
-            searchProductByName(text).then((products: Product[]) => {
-                setRows(products);
-            }).finally(()=>setIsSearching(true));
+            setPage(0);
+            setIsSearching(true);
+            setSearchName(text);
         }
         else if (typeOf === "Customers"){
-            searchCustomerByName(text).then((customers: Customer[]) => {
-                setRows(customers);
-            }).finally(()=>setIsSearching(true));
+            setPage(0);
+            setIsSearching(true);
+            setSearchName(text);
         }
-        else if (typeOf === "Orders"){
-            // Note: searchOrderByCustomerName relies on a local array in OrderService which might be empty.
-            // If you have a backend search endpoint, you should use it here.
-            searchOrderByCustomerName(text).then((data) => {
-                const orders = data.orderItems.map((order: OrderItem) => ({
-                    id: order.id,
-                    customer: `${order?.customer?.name ?? "Unknown"} ${order?.customer?.lastName ?? ""}`,
-                    products: order.items,
-                    address: order.address,
-                    date: order.date ? new Date(order.date) : undefined,
-                }));
-                setRows(orders);
-            }).catch(()=> setRows([]))
-              .finally(()=>setIsSearching(true));
+        else if (typeOf === "Orders") {
+            setPage(0);
+            setIsSearching(true);
+            setSearchName(text);
         }
-    };
+    }
 
     const handleReset = (e: React.FormEvent) => {
         e.preventDefault();

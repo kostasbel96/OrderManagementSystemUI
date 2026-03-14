@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {type GridColDef, GridFilterInputValue, type GridFilterOperator} from "@mui/x-data-grid";
-import {getOrder, getOrders} from "../../services/orderService.ts"
+import {getOrder, getOrders, searchOrderByCustomerName} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
 import type {Customer, OrderItem, OrderRow, Product, SelectedProduct} from "../../types/Types.ts";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
@@ -18,6 +18,8 @@ const OrdersView = () => {
     const [pageSize, setPageSize] = useState(5);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [searchName, setSearchName] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [rowToEdit, setRowToEdit] = useState<Product | Customer | OrderItem>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
@@ -190,9 +192,10 @@ const OrdersView = () => {
     ];
 
     useEffect(() => {
-        getOrders(page, pageSize)
+        setLoading(true);
+        const fetcher = isSearching ? searchOrderByCustomerName(searchName, page, pageSize) : getOrders(page, pageSize);
+        fetcher
             .then(data => {
-                setLoading(true);
                 const orders: OrderRow[] = [];
                 data.content.forEach(order => {
                     orders.push({
@@ -210,7 +213,7 @@ const OrdersView = () => {
             })
             .catch(() => console.log("error fetching orders"))
             .finally(() => setLoading(false));
-    }, [page, pageSize, openEdit, openDeletePopUp])
+    }, [page, pageSize, isSearching, searchName, openEdit, openDeletePopUp])
 
     return (
         <>
@@ -225,6 +228,8 @@ const OrdersView = () => {
                 setPageSize={setPageSize}
                 page={page}
                 pageSize={pageSize}
+                setSearchName={setSearchName}
+                setIsSearching={setIsSearching}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}

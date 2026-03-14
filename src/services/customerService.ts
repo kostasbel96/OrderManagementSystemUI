@@ -21,7 +21,7 @@ export async function getCustomers(page: number = 0, pageSize: number = 5): Prom
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export async function searchCustomerByName(name: string) :Promise<Customer[]> {
+export async function searchCustomerByName(name: string, page: number = 0, pageSize: number = 5) :Promise<CustomerResponseDto> {
     let firstName = "";
     let lastName = "";
     if(name.includes(" ")){
@@ -29,9 +29,10 @@ export async function searchCustomerByName(name: string) :Promise<Customer[]> {
     } else {
         [firstName, lastName] = [name, name];
     }
-    const res = await fetch(`${API_URL}/customers/search?name=${firstName}&lastName=${lastName}`);
+    const res = await fetch(`${API_URL}/customers/search?name=${firstName}&lastName=${lastName}&page=${page}&pageSize=${pageSize}`);
     if (!res.ok) throw new Error("Failed to search customers");
-    return await res.json();
+    const data = await res.json();
+    return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
 export async function getCustomer(id: number): Promise<Customer> {

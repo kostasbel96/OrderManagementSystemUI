@@ -35,10 +35,11 @@ export async function addProduct(newProduct: Omit<Product, "id">): Promise<Respo
     return data;
 }
 
-export async function searchProductByName(name: string) :Promise<Product[]> {
-    const res = await fetch(`${API_URL}/products/search?name=${name}`);
+export async function searchProductByName(name: string, page: number = 0, pageSize: number = 5) :Promise<ProductResponseDto> {
+    const res = await fetch(`${API_URL}/products/search?name=${name}&page=${page}&pageSize=${pageSize}`);
     if (!res.ok) throw new Error("Failed to search product");
-    return await res.json();
+    const data = await res.json();
+    return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
 export async function getProducts(page: number = 0, pageSize: number = 5): Promise<ProductResponseDto> {

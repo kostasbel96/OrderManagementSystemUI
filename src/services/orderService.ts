@@ -40,11 +40,10 @@ export async function getOrders(page: number = 0, pageSize: number = 5): Promise
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch orders.");
     const data = await res.json();
-    console.log(data.content);
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export async function searchOrderByCustomerName(name: string) :Promise<Response> {
+export async function searchOrderByCustomerName(name: string, page: number = 0, pageSize: number = 5) :Promise<OrderResponseDto> {
     let firstName = "";
     let lastName = "";
     if(name.includes(" ")){
@@ -52,9 +51,10 @@ export async function searchOrderByCustomerName(name: string) :Promise<Response>
     } else {
         [firstName, lastName] = [name, name];
     }
-    const res = await fetch(`${API_URL}/orders/search?name=${firstName}&lastName=${lastName}`);
+    const res = await fetch(`${API_URL}/orders/search?name=${firstName}&lastName=${lastName}&page=${page}&pageSize=${pageSize}`);
     if (!res.ok) throw new Error("Failed to search orders.");
-    return await res.json();
+    const data = await res.json();
+    return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
 export async function getOrder(id: number): Promise<Response> {

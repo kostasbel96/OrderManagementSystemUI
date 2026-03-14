@@ -2,7 +2,7 @@ import {type GridColDef} from '@mui/x-data-grid';
 import {useEffect, useMemo, useState} from "react";
 import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import MyTable from "../ui/MyTable.tsx";
-import {getProducts} from "../../services/productService.ts";
+import {getProducts, searchProductByName} from "../../services/productService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
@@ -22,6 +22,8 @@ const ProductsView = () => {
     const [onDeleteContent, setOnDeleteContent] = useState<Product>();
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
+    const [searchName, setSearchName] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
 
     const handleClickOpen = (row: Product) => {
         setOpenEdit(true);
@@ -130,16 +132,18 @@ const ProductsView = () => {
     ], []);
 
     useEffect(() => {
-        getProducts(page, pageSize)
+        setLoading(true);
+        const fetchData = isSearching
+            ? searchProductByName(searchName, page, pageSize)
+            : getProducts(page, pageSize);
+
+        fetchData
             .then((data) => {
-                setLoading(true);
                 setRows(data.content);
                 setRowCount(data.totalElements);
-                setPage(data.pageNumber);
-                setPageSize(data.pageSize);
             })
             .finally(() => setLoading(false));
-    }, [page, pageSize, openEdit, openDeletePopUp]);
+    }, [page, pageSize, searchName, isSearching, openEdit, openDeletePopUp]);
 
     return (
         <>
@@ -154,6 +158,8 @@ const ProductsView = () => {
                 setPageSize={setPageSize}
                 page={page}
                 pageSize={pageSize}
+                setSearchName={setSearchName}
+                setIsSearching={setIsSearching}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}

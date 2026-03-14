@@ -2,7 +2,7 @@ import type {GridColDef} from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
 import {useEffect, useState} from "react";
 import type {Customer, OrderRow, Product} from "../../types/Types.ts";
-import {getCustomers} from "../../services/customerService.ts";
+import {getCustomers, searchCustomerByName} from "../../services/customerService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
@@ -23,6 +23,8 @@ const CustomersView = () => {
     const [onDeleteContent, setOnDeleteContent] = useState<Customer>();
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
+    const [searchName, setSearchName] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
 
     const handleClickOpen = (row: Product) => {
         setOpenEdit(true);
@@ -160,16 +162,18 @@ const CustomersView = () => {
     ];
 
     useEffect(() => {
-        getCustomers(page, pageSize)
+        setLoading(true);
+        const fetchData = isSearching
+            ? searchCustomerByName(searchName, page, pageSize)
+            : getCustomers(page, pageSize);
+
+        fetchData
             .then((data) => {
-                setLoading(true);
                 setRows(data.content);
                 setRowCount(data.totalElements);
-                setPage(data.pageNumber);
-                setPageSize(data.pageSize);
             })
             .finally(() => setLoading(false));
-    }, [page, pageSize, openEdit, openDeletePopUp]);
+    }, [page, pageSize, searchName, isSearching, openEdit, openDeletePopUp]);
 
 
     return (
@@ -185,6 +189,8 @@ const CustomersView = () => {
                 setPageSize={setPageSize}
                 page={page}
                 pageSize={pageSize}
+                setSearchName={setSearchName}
+                setIsSearching={setIsSearching}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}
