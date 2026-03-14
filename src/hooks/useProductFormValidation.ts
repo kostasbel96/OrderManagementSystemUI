@@ -5,7 +5,7 @@ const formSchema = z.object(
     {
         name: z.string().trim().nonempty("Product Name is required"),
         description: z.string().trim().nonempty("Description is required"),
-        quantity: z.coerce.number().min(1, "Quantity must be at least 1")
+        quantity: z.coerce.number().min(0, "Quantity must be at least 0")
     }
 )
 
