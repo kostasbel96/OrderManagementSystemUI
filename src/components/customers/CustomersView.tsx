@@ -1,7 +1,7 @@
 import type {GridColDef} from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
 import {useEffect, useState} from "react";
-import type {Customer, OrderRow, Product} from "../../types/Types.ts";
+import type {Customer, OrderItem, OrderRow, Product} from "../../types/Types.ts";
 import {getCustomers, searchCustomerByName} from "../../services/customerService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
@@ -18,7 +18,7 @@ const CustomersView = () => {
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<Product | Customer | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Customer>();
     const [submitted, setSubmitted] = useState(false);
@@ -26,7 +26,7 @@ const CustomersView = () => {
     const [searchName, setSearchName] = useState("");
     const [isSearching, setIsSearching] = useState(false);
 
-    const handleClickOpen = (row: Product) => {
+    const handleClickOpen = (row: Customer) => {
         setOpenEdit(true);
         setRowToEdit(row);
         setOperation("updated");
@@ -199,6 +199,7 @@ const CustomersView = () => {
                 setSubmitted={setSubmitted}
             />
             <PopUpDelete
+                setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
                 typeOf={"Customers"}

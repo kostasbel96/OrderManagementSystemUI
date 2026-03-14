@@ -1,4 +1,4 @@
-import type {Customer, CustomerResponseDto} from "../types/Types.ts";
+import type {Customer, CustomerResponseDto, ResponseDTO} from "../types/Types.ts";
 
 const API_URL = "http://192.168.1.2:8080/api";
 
@@ -42,7 +42,7 @@ export async function getCustomer(id: number): Promise<Customer> {
     return await res.json();
 }
 
-export async function updateCustomer(customer: Customer): Promise<Response> {
+export async function updateCustomer(customer: Customer): Promise<ResponseDTO> {
     const url = `${API_URL}/customers/update`;
     const res = await fetch(url, {
         method: "PUT",
@@ -53,7 +53,7 @@ export async function updateCustomer(customer: Customer): Promise<Response> {
     return await res.json();
 }
 
-export async function deleteCustomer(customer: Customer): Promise<Response> {
+export async function deleteCustomer(customer: Customer): Promise<ResponseDTO> {
     const url = `${API_URL}/customers/delete`;
     const res = await fetch(url, {
         method: "DELETE",

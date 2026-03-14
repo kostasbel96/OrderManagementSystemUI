@@ -1,8 +1,8 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import type {Customer, OrderItem, Product} from "../../types/Types.ts";
+import type {Customer, OrderItem, Product, ResponseDTO} from "../../types/Types.ts";
 import {deleteProduct} from "../../services/productService.ts";
 import {deleteCustomer} from "../../services/customerService.ts";
-import {deleteOrder, getOrder} from "../../services/orderService.ts";
+import {deleteOrder} from "../../services/orderService.ts";
 
 interface PopUpDeleteProps{
     open: boolean;
@@ -10,10 +10,11 @@ interface PopUpDeleteProps{
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | undefined>>;
 }
 
 const PopUpDelete = ({open, rowToEdit,
-                     typeOf, setOpen, setSubmitted}: PopUpDeleteProps) => {
+                     typeOf, setOpen, setSubmitted, setRowToEdit}: PopUpDeleteProps) => {
 
     const handleClose = () => {
         setOpen(false);
@@ -24,8 +25,9 @@ const PopUpDelete = ({open, rowToEdit,
         switch (typeOf) {
             case "Products":
                 deleteProduct(rowToEdit as Product)
-                    .then(data => {
+                    .then((data: ResponseDTO) => {
                         console.log(data);
+                        setRowToEdit(data.productDto);
                         setSubmitted(true);
                     })
                     .catch(err => {
@@ -35,8 +37,9 @@ const PopUpDelete = ({open, rowToEdit,
                 break;
             case "Customers":
                 deleteCustomer(rowToEdit as Customer)
-                    .then(data => {
+                    .then((data: ResponseDTO) => {
                         console.log(data);
+                        setRowToEdit(data.customer);
                         setSubmitted(true);
                     })
                     .catch(err => {
@@ -45,20 +48,16 @@ const PopUpDelete = ({open, rowToEdit,
                     .finally(()=> setOpen(false));
                 break;
             case "Orders":
-                getOrder((rowToEdit as OrderItem).id as number)
-                    .then(data => {
-                        const order = data.orderItem;
-                        deleteOrder(order)
-                            .then(data => {
-                                console.log(data);
-                                setSubmitted(true);
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            })
-                            .finally(()=> setOpen(false));
+                deleteOrder(rowToEdit as OrderItem)
+                    .then((data: ResponseDTO) => {
+                        console.log(data);
+                        setRowToEdit(data.orderItem);
+                        setSubmitted(true);
                     })
-
+                    .catch(err => {
+                        console.log(err);
+                    })
+                    .finally(()=> setOpen(false));
                 break;
         }
         console.log(rowToEdit)
@@ -205,7 +204,7 @@ const PopUpDelete = ({open, rowToEdit,
                 />
                 <TextField
                     InputProps={{ readOnly: true }}
-                    value={(rowToEdit as OrderItem)?.customer}
+                    value={`${(rowToEdit as OrderItem)?.customer?.name} ${(rowToEdit as OrderItem)?.customer?.lastName}`}
                     margin="dense"
                     id="name"
                     name="name"

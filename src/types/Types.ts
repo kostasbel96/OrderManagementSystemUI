@@ -14,7 +14,7 @@ export interface Customer {
     email?: string;
 }
 
-export interface Response {
+export interface ResponseDTO {
     orderItems: OrderItem[];
     orderItem: OrderItem;
     productDto: Product;

@@ -22,6 +22,9 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
         } else if (typeOf === "order") {
             setOperationItem(item as OrderItem);
         }
+        setTimeout(()=>{
+            setSubmitted(false);
+        }, 2000);
     }, []);
 
     return (

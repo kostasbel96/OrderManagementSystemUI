@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {type GridColDef, GridFilterInputValue, type GridFilterOperator} from "@mui/x-data-grid";
 import {getOrder, getOrders, searchOrderByCustomerName} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
-import type {Customer, OrderItem, OrderRow, Product, SelectedProduct} from "../../types/Types.ts";
+import type {Customer, OrderItem, OrderRow, Product, ResponseDTO, SelectedProduct} from "../../types/Types.ts";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
@@ -21,24 +21,25 @@ const OrdersView = () => {
     const [searchName, setSearchName] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<Product | Customer | OrderItem>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<OrderItem>();
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
 
     const handleClickOpen = (row: OrderRow) => {
-        if (row.id) getOrder(row.id).then(data=> {
+        if (row.id) getOrder(row.id).then((data: ResponseDTO)=> {
             setRowToEdit({...data.orderItem});
             setOperation("updated");
         }).finally(()=>setOpenEdit(true));
 
     }
 
-    const handleOnDelete = (row: OrderItem) =>{
-        setOpenDeletePopUp(true);
-        setOnDeleteContent(row);
-        setOperation("deleted");
+    const handleOnDelete = (row: OrderRow) =>{
+        if (row.id) getOrder(row.id).then((data: ResponseDTO)=> {
+            setOnDeleteContent({...data.orderItem});
+            setOperation("deleted");
+        }).finally(()=>setOpenDeletePopUp(true));
     }
 
     const productsFilterOperator: GridFilterOperator = {
@@ -238,6 +239,7 @@ const OrdersView = () => {
                 setSubmitted={setSubmitted}
             />
             <PopUpDelete
+                setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
                 typeOf={"Orders"}

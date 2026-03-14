@@ -2,9 +2,8 @@ import type {
     Customer,
     OrderItem,
     OrderRequest,
-    Response,
     OrderResponseDto,
-    SelectedProduct,
+    SelectedProduct, ResponseDTO,
 } from "../types/Types.ts";
 
 interface OrderProps{
@@ -57,14 +56,14 @@ export async function searchOrderByCustomerName(name: string, page: number = 0, 
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export async function getOrder(id: number): Promise<Response> {
+export async function getOrder(id: number): Promise<ResponseDTO> {
     const url = `${API_URL}/orders/${id}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch order with id: " + id);
     return await res.json();
 }
 
-export async function updateOrder(order: OrderItem): Promise<Response> {
+export async function updateOrder(order: OrderItem): Promise<ResponseDTO> {
     const url = `${API_URL}/orders/update`;
     const res = await fetch(url, {
         method: "PUT",
@@ -75,7 +74,7 @@ export async function updateOrder(order: OrderItem): Promise<Response> {
     return await res.json();
 }
 
-export async function deleteOrder(order: OrderItem): Promise<Response> {
+export async function deleteOrder(order: OrderItem): Promise<ResponseDTO> {
     const url = `${API_URL}/orders/delete`;
     const res = await fetch(url, {
         method: "DELETE",

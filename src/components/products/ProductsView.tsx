@@ -1,6 +1,6 @@
 import {type GridColDef} from '@mui/x-data-grid';
 import {useEffect, useMemo, useState} from "react";
-import type {Customer, OrderRow, Product} from "../../types/Types.ts";
+import type {Customer, OrderItem, OrderRow, Product} from "../../types/Types.ts";
 import MyTable from "../ui/MyTable.tsx";
 import {getProducts, searchProductByName} from "../../services/productService.ts";
 import IconButton from "@mui/material/IconButton";
@@ -17,7 +17,7 @@ const ProductsView = () => {
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<Product>();
+    const [rowToEdit, setRowToEdit] = useState<Product | Customer | OrderItem | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Product>();
     const [submitted, setSubmitted] = useState(false);
@@ -168,6 +168,7 @@ const ProductsView = () => {
                 setSubmitted={setSubmitted}
             />
             <PopUpDelete
+                setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
                 typeOf={"Products"}

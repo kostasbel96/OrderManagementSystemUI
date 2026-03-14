@@ -1,4 +1,4 @@
-import type {Product, ProductResponseDto} from "../types/Types.ts";
+import type {Product, ProductResponseDto, ResponseDTO} from "../types/Types.ts";
 
 export let products: Product[];
 // products = [
@@ -58,7 +58,7 @@ export async function getProductByName(name: string): Promise<Product> {
     return await res.json();
 }
 
-export async function updateProduct(product: Product): Promise<Response> {
+export async function updateProduct(product: Product): Promise<ResponseDTO> {
     const url = `${API_URL}/products/update`;
     const res = await fetch(url, {
         method: "PUT",
@@ -69,7 +69,7 @@ export async function updateProduct(product: Product): Promise<Response> {
     return await res.json();
 }
 
-export async function deleteProduct(product: Product): Promise<Response> {
+export async function deleteProduct(product: Product): Promise<ResponseDTO> {
     const url = `${API_URL}/products/delete`;
     const res = await fetch(url, {
         method: "DELETE",
