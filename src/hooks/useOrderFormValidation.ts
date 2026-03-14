@@ -45,7 +45,7 @@ type FormErrors = {
 
 type UseOrderFormValidationProps = {
     selectedProductsWithQty: SelectedProduct[];
-    selectedCustomer: Customer;
+    selectedCustomer: Customer | null;
     address: string;
     initialItems?: SelectedProduct[];
 }
@@ -54,14 +54,12 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
     const [orderErrors, setOrderErrors] = useState<FormErrors>({});
 
     const validQuantity = (): {notValidProducts: SelectedProduct[], isValid: boolean} => {
-        const changedProducts = selectedProductsWithQty.filter(sp => {
+        const notValidProducts = selectedProductsWithQty.filter(sp => {
             const original = (initialItems ?? []).find(i => i.product.id === sp.product.id);
-            return !original || original.quantity !== sp.quantity;
+            const originalQuantity = original ? original.quantity : 0;
+            const availableStock = sp.product.quantity + originalQuantity;
+            return sp.quantity > availableStock;
         });
-
-        const notValidProducts = changedProducts.filter(
-            sp => sp.quantity > sp.product.quantity
-        );
 
         return {
             notValidProducts,
@@ -81,10 +79,6 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
             .map(sp => sp.product.name)
             .join(", ")
             .toUpperCase();
-
-        setOrderErrors({
-            quantity: `Quantity in stock of ${productNames} is less than you requested.`
-        });
 
         if (!result.success) {
             const newErrors: FormErrors = {};

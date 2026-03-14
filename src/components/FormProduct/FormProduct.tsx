@@ -26,7 +26,7 @@ const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormPro
             addProduct({
                 name: values.name,
                 description: values.description,
-                quantity: values.quantity
+                quantity: Number(values.quantity)
             }).then((data) => {
                 setSuccess(true);
                 setSubmitted(true);
@@ -53,7 +53,7 @@ const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormPro
         const {name, value} = e.target;
         setValues(prev=> ({
             ...prev,
-            [name]: name === "quantity" ? Number(value) : value
+            [name]: value
         }));
         setProductErrors(prev=>({
            ...prev,

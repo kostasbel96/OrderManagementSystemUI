@@ -107,7 +107,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
             case "Products":
                 setProductValues(prev => ({
                     ...prev,
-                    [name]: name === "quantity" ? Number(value) : value,
+                    [name]: value,
                 }));
                 break;
             case "Customers":

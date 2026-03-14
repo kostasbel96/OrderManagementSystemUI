@@ -32,6 +32,7 @@ const MySelect = ({myValue,
                                                   products} : SelectProps) => {
 
     const [productOptions, setProductOptions] = useState<Option[]>([]);
+    const [quantityValue, setQuantityValue] = useState<string>("");
 
     const customersOptions = customers?.map((p) => ({
         value: p.id!,
@@ -39,6 +40,7 @@ const MySelect = ({myValue,
     }));
 
     const handleQuantityChange = (index: number, quantity: number) => {
+        setQuantityValue(quantity.toString());
         if (!setSelectedProductsWithQty) return;
         const safeQuantity = Math.max(1, quantity);
         setSelectedProductsWithQty((prev: SelectedProduct[]) => {
@@ -161,7 +163,7 @@ const MySelect = ({myValue,
                             <Box sx={{ width: 120, textAlign: "center" }}>{item.product.name}:</Box>
                             <TextField
                                 type="number"
-                                value={item.quantity}
+                                value={quantityValue === "" ? item.quantity : quantityValue}
                                 onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
                                 inputProps={{ min: 1 }}
                                 sx={{
