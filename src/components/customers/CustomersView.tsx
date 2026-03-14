@@ -181,7 +181,6 @@ const CustomersView = () => {
             <MyTable
                 columns={columns}
                 typeOf={"Customers"}
-                setRows={setRows}
                 rows={rows}
                 loading={loading}
                 setPage={setPage}

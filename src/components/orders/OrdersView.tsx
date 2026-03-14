@@ -220,7 +220,6 @@ const OrdersView = () => {
             <MyTable
                 columns={columns}
                 typeOf={"Orders"}
-                setRows={setRows}
                 rows={rows}
                 loading={loading}
                 setPage={setPage}

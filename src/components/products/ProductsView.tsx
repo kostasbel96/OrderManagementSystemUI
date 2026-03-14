@@ -150,7 +150,6 @@ const ProductsView = () => {
             <MyTable
                 columns={columns}
                 typeOf={"Products"}
-                setRows={setRows}
                 rows={rows}
                 loading={loading}
                 setPage={setPage}
