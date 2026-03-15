@@ -1,6 +1,6 @@
 import type {Customer, CustomerResponseDto, ResponseDTO} from "../types/Types.ts";
 
-const API_URL = "http://192.168.1.2:8080/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export async function addCustomer(newCustomer: Omit<Customer, "id">): Promise<Customer> {
     const res = await fetch(`${API_URL}/customers/save`,{

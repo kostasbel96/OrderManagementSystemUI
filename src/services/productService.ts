@@ -12,7 +12,7 @@ export let products: Product[];
 //     {id: 8, name: "Laptop1", description: "test", quantity: 19 },
 // ]
 
-const API_URL = "http://192.168.1.2:8080/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export async function addProduct(newProduct: Omit<Product, "id">): Promise<Response> {
     const res = await fetch(`${API_URL}/products/save`,{
