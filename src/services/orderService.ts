@@ -33,8 +33,8 @@ export async function addOrder({products, customer, address}: OrderProps): Promi
 }
 
 
-export async function getOrders(page: number = 0, pageSize: number = 5): Promise<OrderResponseDto> {
-    const url = `${API_URL}/orders?page=${page}&size=${pageSize}`
+export async function getOrders(page: number = 0, pageSize: number = 5, sortBy: string = "date", sortDirection: string = "desc"): Promise<OrderResponseDto> {
+    const url = `${API_URL}/orders?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
 
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch orders.");
@@ -42,7 +42,7 @@ export async function getOrders(page: number = 0, pageSize: number = 5): Promise
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export async function searchOrderByCustomerName(name: string, page: number = 0, pageSize: number = 5) :Promise<OrderResponseDto> {
+export async function searchOrderByCustomerName(name: string, page: number = 0, pageSize: number = 5, sortBy: string = "date", sortDirection: string = "desc") :Promise<OrderResponseDto> {
     let firstName = "";
     let lastName = "";
     if(name.includes(" ")){
@@ -50,7 +50,7 @@ export async function searchOrderByCustomerName(name: string, page: number = 0, 
     } else {
         [firstName, lastName] = [name, name];
     }
-    const res = await fetch(`${API_URL}/orders/search?name=${firstName}&lastName=${lastName}&page=${page}&pageSize=${pageSize}`);
+    const res = await fetch(`${API_URL}/orders/search?name=${firstName}&lastName=${lastName}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`);
     if (!res.ok) throw new Error("Failed to search orders.");
     const data = await res.json();
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};

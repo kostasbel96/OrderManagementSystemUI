@@ -35,15 +35,15 @@ export async function addProduct(newProduct: Omit<Product, "id">): Promise<Respo
     return data;
 }
 
-export async function searchProductByName(name: string, page: number = 0, pageSize: number = 5) :Promise<ProductResponseDto> {
-    const res = await fetch(`${API_URL}/products/search?name=${name}&page=${page}&pageSize=${pageSize}`);
+export async function searchProductByName(name: string, page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc") :Promise<ProductResponseDto> {
+    const res = await fetch(`${API_URL}/products/search?name=${name}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`);
     if (!res.ok) throw new Error("Failed to search product");
     const data = await res.json();
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export async function getProducts(page: number = 0, pageSize: number = 5): Promise<ProductResponseDto> {
-    const url = `${API_URL}/products?page=${page}&size=${pageSize}`
+export async function getProducts(page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc"): Promise<ProductResponseDto> {
+    const url = `${API_URL}/products?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
 
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch products.");

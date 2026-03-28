@@ -1,4 +1,4 @@
-import {type GridColDef} from '@mui/x-data-grid';
+import {type GridColDef, type GridSortModel} from '@mui/x-data-grid';
 import {useEffect, useMemo, useState} from "react";
 import type {Customer, OrderItem, OrderRow, Product} from "../../types/Types.ts";
 import MyTable from "../ui/MyTable.tsx";
@@ -24,6 +24,7 @@ const ProductsView = () => {
     const [operation, setOperation] = useState("");
     const [searchName, setSearchName] = useState("");
     const [isSearching, setIsSearching] = useState(false);
+    const [sortModel, setSortModel] = useState<GridSortModel>([{field: "name", sort: "asc"}]);
 
     const handleClickOpen = (row: Product) => {
         setOpenEdit(true);
@@ -134,8 +135,8 @@ const ProductsView = () => {
     useEffect(() => {
         setLoading(true);
         const fetchData = isSearching
-            ? searchProductByName(searchName, page, pageSize)
-            : getProducts(page, pageSize);
+            ? searchProductByName(searchName, page, pageSize, sortModel[0]?.field, sortModel[0]?.sort ?? "asc")
+            : getProducts(page, pageSize, sortModel[0]?.field, sortModel[0]?.sort ?? "asc");
 
         fetchData
             .then((data) => {
@@ -143,7 +144,7 @@ const ProductsView = () => {
                 setRowCount(data.totalElements);
             })
             .finally(() => setLoading(false));
-    }, [page, pageSize, searchName, isSearching, openEdit, openDeletePopUp]);
+    }, [page, pageSize, searchName, isSearching, openEdit, openDeletePopUp, sortModel]);
 
     return (
         <>
@@ -159,6 +160,8 @@ const ProductsView = () => {
                 pageSize={pageSize}
                 setSearchName={setSearchName}
                 setIsSearching={setIsSearching}
+                setSortModel={setSortModel}
+                sortModel={sortModel}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}

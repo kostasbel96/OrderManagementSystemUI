@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {type GridColDef, GridFilterInputValue, type GridFilterOperator} from "@mui/x-data-grid";
+import {type GridColDef, GridFilterInputValue, type GridFilterOperator, type GridSortModel} from "@mui/x-data-grid";
 import {getOrder, getOrders, searchOrderByCustomerName} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
 import type {Customer, OrderItem, OrderRow, Product, ResponseDTO, SelectedProduct} from "../../types/Types.ts";
@@ -26,6 +26,7 @@ const OrdersView = () => {
     const [onDeleteContent, setOnDeleteContent] = useState<OrderItem>();
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
+    const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
 
     const handleClickOpen = (row: OrderRow) => {
         if (row.id) getOrder(row.id).then((data: ResponseDTO)=> {
@@ -194,7 +195,9 @@ const OrdersView = () => {
 
     useEffect(() => {
         setLoading(true);
-        const fetcher = isSearching ? searchOrderByCustomerName(searchName, page, pageSize) : getOrders(page, pageSize);
+        const fetcher = isSearching
+            ? searchOrderByCustomerName(searchName, page, pageSize, sortModel[0]?.field, sortModel[0]?.sort ?? "asc" )
+            : getOrders(page, pageSize, sortModel[0]?.field, sortModel[0]?.sort ?? "asc");
         fetcher
             .then(data => {
                 const orders: OrderRow[] = [];
@@ -214,7 +217,7 @@ const OrdersView = () => {
             })
             .catch(() => console.log("error fetching orders"))
             .finally(() => setLoading(false));
-    }, [page, pageSize, isSearching, searchName, openEdit, openDeletePopUp])
+    }, [page, pageSize, isSearching, searchName, openEdit, openDeletePopUp, sortModel])
 
     return (
         <>
@@ -230,6 +233,8 @@ const OrdersView = () => {
                 pageSize={pageSize}
                 setSearchName={setSearchName}
                 setIsSearching={setIsSearching}
+                setSortModel={setSortModel}
+                sortModel={sortModel}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}
