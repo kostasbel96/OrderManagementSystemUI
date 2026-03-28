@@ -8,13 +8,7 @@ const Layout = () => {
             {/* Sidebar */}
             <SidebarLayout>
                 {/* Right side */}
-                <div className="flex flex-col">
-                    <div className="flex flex-col flex-1">
-                        <Main />
-                    </div>
-
-                </div>
-
+                <Main />
             </SidebarLayout>
         </>
 
