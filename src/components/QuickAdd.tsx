@@ -3,7 +3,7 @@ import MyCollapse from "./MyCollapse.tsx";
 import {useState} from "react";
 import PopUp from "./popup/PopUp.tsx";
 
-const Content = () => {
+const QuickAdd = () => {
     const [open, setOpen] = useState(false);
     const [activeValue, setActiveValue] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
@@ -58,4 +58,4 @@ const Content = () => {
     );
 };
 
-export default Content;
+export default QuickAdd;

@@ -1,10 +1,11 @@
 import './App.css'
 import Layout from "./components/Layout.tsx";
 import {BrowserRouter, Route, Routes} from "react-router";
-import Content from "./components/Content.tsx";
+import QuickAdd from "./components/QuickAdd.tsx";
 import ProductsView from "./components/products/ProductsView.tsx";
 import OrdersView from "./components/orders/OrdersView.tsx";
 import CustomersView from "./components/customers/CustomersView.tsx";
+import Dashboard from "./components/Dashboard.tsx";
 
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
                   <Route path="products" element={<ProductsView/>}/>
                   <Route path="orders" element={<OrdersView/>}/>
                   <Route path="customers" element={<CustomersView/>}/>
-                  <Route index element={<Content/>}/>
+                  <Route path="add" element={<QuickAdd/>}/>
+                  <Route index element={<Dashboard/>}/>
           </Route>
       </Routes>
   </BrowserRouter>

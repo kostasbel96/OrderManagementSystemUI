@@ -1,10 +1,21 @@
-import { LayoutDashboard, Package, ShoppingCart, Users, Settings, Menu, X } from "lucide-react";
+import {
+    LayoutDashboard,
+    Package,
+    ShoppingCart,
+    Users,
+    Settings,
+    Menu,
+    X,
+    PlusIcon,
+    Linkedin,
+    Github
+} from "lucide-react";
 import { type ReactNode, useState } from "react";
-import { NavLink } from "react-router";
-import Footer from "./Footer.tsx";
+import {NavLink } from "react-router";
 
 export default function SidebarLayout({ children }: { children: ReactNode }) {
     const [open, setOpen] = useState(false);
+    const [label, setLabel] = useState("Dashboard");
 
     return (
         <div className="flex h-screen bg-gray-100">
@@ -24,12 +35,27 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
 
                 {/* Menu */}
                 <nav className="flex flex-col p-4 gap-2 text-gray-700">
-                    <NavItem to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" />
-                    <NavItem to="/products" icon={<Package size={18} />} label="Products" />
-                    <NavItem to="/orders" icon={<ShoppingCart size={18} />} label="Orders" />
-                    <NavItem to="/customers" icon={<Users size={18} />} label="Customers" />
-                    <NavItem to="/settings" icon={<Settings size={18} />} label="Settings" />
+                    <NavItem to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" setLabel={setLabel}/>
+                    <NavItem to="/add" icon={<PlusIcon size={18} />} label="Quick Add" setLabel={setLabel}/>
+                    <NavItem to="/products" icon={<Package size={18} />} label="Products" setLabel={setLabel}/>
+                    <NavItem to="/orders" icon={<ShoppingCart size={18} />} label="Orders" setLabel={setLabel}/>
+                    <NavItem to="/customers" icon={<Users size={18} />} label="Customers" setLabel={setLabel}/>
+                    <NavItem to="/settings" icon={<Settings size={18} />} label="Settings" setLabel={setLabel}/>
                 </nav>
+                <div className="flex flex-row-reverse p-4 fixed bottom-0 right-0">
+                    <div className="flex space-x-3 hover:cursor-pointer text-xs">
+                        <a href="https://www.linkedin.com/in/kostas-veloutsos-026246266/"
+                           target="_blank"
+                        >
+                            <Linkedin size={18}/>
+                        </a>
+                        <a href="https://github.com/kostasbel96"
+                           target="_blank"
+                        >
+                            <Github size={18}/>
+                        </a>
+                    </div>
+                </div>
             </aside>
 
             {/* Overlay for mobile */}
@@ -42,11 +68,10 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                     <button className="md:hidden" onClick={() => setOpen(true)}>
                         <Menu />
                     </button>
-                    <h1 className="font-semibold text-gray-700">Dashboard</h1>
+                    <h1 className="font-semibold text-gray-700">{label}</h1>
                 </header>
 
                 <main className="overflow-y-auto h-[calc(100vh-7.5rem)]">{children}</main>
-                <Footer />
             </div>
         </div>
     );
@@ -56,16 +81,18 @@ type NavItemProps = {
     to: string;
     icon: ReactNode;
     label: string;
+    setLabel: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function NavItem({ to, icon, label }: NavItemProps) {
+function NavItem({ to, icon, label, setLabel }: NavItemProps) {
     return (
         <NavLink
             to={to}
             className={({ isActive }: { isActive: boolean }) =>
                 `flex items-center gap-3 px-3 py-2 rounded-lg transition
-         ${isActive ? "bg-blue-100 text-blue-600" : "hover:bg-gray-100"}`
+                ${isActive ? "bg-blue-100 text-blue-600" : "hover:bg-gray-100"}`
             }
+            onClick={() => setLabel(label)}
         >
             {icon}
             <span className="text-sm font-medium">{label}</span>
