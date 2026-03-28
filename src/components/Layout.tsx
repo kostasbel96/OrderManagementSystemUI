@@ -1,16 +1,25 @@
-import Header from "./Header.tsx";
-import Footer from "./Footer.tsx";
-import {Outlet} from "react-router";
+import Main from "./Main.tsx";
+import SidebarLayout from "./SidebarLayout.tsx";
 
 
 const Layout = () => {
     return (
         <>
-            <Header/>
-                <Outlet/>
-            <Footer/>
+            {/* Sidebar */}
+            <SidebarLayout>
+                {/* Right side */}
+                <div className="flex flex-col">
+                    <div className="flex flex-col flex-1">
+                        <Main />
+                    </div>
+
+                </div>
+
+            </SidebarLayout>
         </>
-    )
-}
+
+
+    );
+};
 
 export default Layout;

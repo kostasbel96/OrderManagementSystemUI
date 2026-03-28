@@ -12,7 +12,7 @@ const Content = () => {
 
 
     return (
-            <div className="w-full mt-5">
+            <div className="mt-5 text-center">
                 <MyButton value="Add Order"
                           activeValue={activeValue}
                           submitted={submitted}
