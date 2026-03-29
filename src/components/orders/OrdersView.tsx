@@ -65,7 +65,7 @@ const OrdersView = () => {
     };
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 120, renderCell: (params) => (
+        { field: 'id', headerName: 'ID', width: 80, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -80,7 +80,7 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'customer', headerName: 'Customer', width: 200, renderCell: (params) => (
+        { field: 'customer', headerName: 'Customer', width: 300, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -98,7 +98,7 @@ const OrdersView = () => {
         {
             field: 'products',
             headerName: 'Products',
-            width: 250,
+            width: 300,
             filterOperators: [productsFilterOperator],
             sortable: false,
             renderCell: (params) => (
@@ -127,7 +127,7 @@ const OrdersView = () => {
                 </div>
             ),
         },
-        {field: 'address', headerName: 'Address', width: 150, renderCell: (params) => (
+        {field: 'address', headerName: 'Address', width: 250, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -140,7 +140,7 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             )},
-        {field: 'date', headerName: 'Date', type: 'date', width: 100, renderCell: (params) => (
+        {field: 'date', headerName: 'Date', type: 'date', width: 200, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
