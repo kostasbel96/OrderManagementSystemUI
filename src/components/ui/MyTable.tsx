@@ -31,10 +31,11 @@ const MyTable = ({columns, typeOf, rows, setSortModel, sortModel, loading, rowCo
                     setPage={setPage}
                 />
                 <Paper sx={{
-                    height: '80%',
+                    maxHeight: 'calc(100vh - 300px)',
                     width: '100%',
-                    maxWidth: 1100,
-                    marginBottom: 2
+                    marginBottom: 2,
+                    display: 'flex',
+                    flexDirection: 'column'
                 }}
                 >
                     <DataGrid
@@ -59,6 +60,7 @@ const MyTable = ({columns, typeOf, rows, setSortModel, sortModel, loading, rowCo
                         keepNonExistentRowsSelected
                         checkboxSelection
                         sx={{
+                            height: '100%',
                             border: 0,
                             '& .MuiDataGrid-cell': {
                                 alignItems: 'flex-start',

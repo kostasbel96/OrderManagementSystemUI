@@ -38,8 +38,6 @@ const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormPro
                     setSuccess(false);
                 })
             setValues(initialValues);
-
-
             setProductErrors({});
         } else {
             setSubmitted(true);

@@ -2,14 +2,15 @@ import type {Customer, CustomerResponseDto, ResponseDTO} from "../types/Types.ts
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function addCustomer(newCustomer: Omit<Customer, "id">): Promise<Customer> {
+export async function addCustomer(newCustomer: Omit<Customer, "id">): Promise<Response> {
     const res = await fetch(`${API_URL}/customers/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newCustomer),
     });
-    if (!res.ok) throw new Error("Failed to create Customer");
-    return await res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.errorResponse.message);
+    return data;
 }
 
 export async function getCustomers(page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc"): Promise<CustomerResponseDto> {

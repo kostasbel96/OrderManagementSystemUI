@@ -44,6 +44,7 @@ const MyCollapse = ({isOpen, value, setSubmitted, setSuccess, setPopUpMessage}: 
 
                         {value.includes("Customer") && (
                             <FormCustomer
+                                setPopUpMessage={setPopUpMessage}
                                 value={value}
                                 setSubmitted={setSubmitted}
                                 setSuccess={setSuccess}

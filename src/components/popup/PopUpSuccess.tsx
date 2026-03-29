@@ -1,7 +1,6 @@
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
-import {useEffect} from "react";
 
 
 interface FormPopUpProps {
@@ -21,12 +20,6 @@ const PopUpSuccess = ({setSubmitted, title}: FormPopUpProps) => {
     } else {
         popUpTitle = "Order"
     }
-
-    useEffect(() => {
-        setTimeout(()=>{
-            setSubmitted(false);
-        }, 2000);
-    }, []);
 
     return (
         <Alert

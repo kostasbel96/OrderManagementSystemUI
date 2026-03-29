@@ -66,8 +66,10 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
             case "Customers":
                 if (validateCustomerForm()){
                     updateCustomer(customerValues)
-                        .then(data => {console.log(data);
-                                                setSubmitted(true);})
+                        .then(data => {
+                            console.log(data);
+                            setSubmitted(true);
+                        })
                         .catch(err=>console.log(err))
                         .finally(()=>setOpen(false));
                 }

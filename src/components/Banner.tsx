@@ -6,7 +6,7 @@ type Props = {
 const Banner = ({title}: Props) => {
     return (
         <>
-            <div className="bg-linear-to-br from-blue-600 to-yellow-400 h-32 w-full flex items-center justify-center text-white">
+            <div className="bg-linear-to-br from-blue-600 to-yellow-400 h-18 w-full flex items-center justify-center text-white">
                 <h1 className="sm:text-2xl font-bold drop-shadow-lg">{title}</h1>
             </div>
         </>

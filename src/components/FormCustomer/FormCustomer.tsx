@@ -7,6 +7,7 @@ interface FormCustomerProps {
     value: string;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+    setPopUpMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const initialValues = {
@@ -17,7 +18,7 @@ const initialValues = {
     email: ""
 }
 
-const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
+const FormCustomer = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormCustomerProps) => {
     const [values, setValues] = useState<FormValues>(initialValues);
     const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(values);
 
@@ -33,12 +34,14 @@ const FormCustomer = ({value, setSubmitted, setSuccess}: FormCustomerProps) => {
             }).then((data) => {
                 setSuccess(true);
                 setSubmitted(true);
+                setPopUpMessage("Customer added successfully.")
                 console.log(data);
+            }).catch((error)=>{
+                console.log(error.message);
+                setPopUpMessage(error.message);
+                setSubmitted(true);
+                setSuccess(false);
             })
-                .catch(()=>{
-                    setSubmitted(true);
-                    setSuccess(false);
-                })
             setValues(initialValues);
         } else {
             setSubmitted(true);
