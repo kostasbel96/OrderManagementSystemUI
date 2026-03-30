@@ -28,7 +28,7 @@ export async function addOrder({products, customer, address}: OrderProps): Promi
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderRequest),
     });
-    if (!res.ok) throw new Error("Failed to create Customer");
+    if (!res.ok) throw new Error("Failed to create order");
     return await res.json();
 }
 

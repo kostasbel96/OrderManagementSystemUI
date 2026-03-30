@@ -1,5 +1,5 @@
 import { Box, TextField, Button, Stack } from "@mui/material"
-import {type FormEvent, useState} from "react";
+import {type FormEvent, useEffect, useState} from "react";
 import {addCustomer} from "../../services/customerService.ts";
 import useCustomerFormValidation, {type FormValues} from "../../hooks/useCustomerFormValidation.ts";
 
@@ -69,6 +69,10 @@ const FormCustomer = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormCu
             [name]: ""
         }))
     }
+
+    useEffect(() => {
+        setPopUpMessage("");
+    }, []);
 
     return (
             <Box

@@ -1,4 +1,4 @@
-import {type FormEvent, useState} from "react";
+import {type FormEvent, useEffect, useState} from "react";
 import {addProduct} from "../../services/productService.ts";
 import { Box, TextField, Button, Stack } from "@mui/material"
 import useProductFormValidation, {type FormValues} from "../../hooks/useProductFormValidation.ts";
@@ -30,13 +30,12 @@ const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormPro
             }).then((data) => {
                 setSuccess(true);
                 setSubmitted(true);
-                    console.log(data);
-                })
-                .catch((error)=>{
-                    setPopUpMessage(error.message);
-                    setSubmitted(true);
-                    setSuccess(false);
-                })
+                console.log(data);
+            }).catch((error)=>{
+                setPopUpMessage(error.message);
+                setSubmitted(true);
+                setSuccess(false);
+            })
             setValues(initialValues);
             setProductErrors({});
         } else {
@@ -65,6 +64,10 @@ const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormPro
         setValues(initialValues);
         setSubmitted(false);
     }
+
+    useEffect(() => {
+        setPopUpMessage("");
+    }, []);
 
     return (
             <Box

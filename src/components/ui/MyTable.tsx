@@ -32,6 +32,7 @@ const MyTable = ({columns, typeOf, rows, setSortModel, sortModel, loading, rowCo
                 />
                 <Paper sx={{
                     maxHeight: 'calc(100vh - 300px)',
+                    maxWidth: 1250,
                     width: '100%',
                     marginBottom: 2,
                     display: 'flex',

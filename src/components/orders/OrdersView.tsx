@@ -80,7 +80,7 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'customer', headerName: 'Customer', width: 300, renderCell: (params) => (
+        { field: 'customer', headerName: 'Customer', width: 260, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -98,7 +98,7 @@ const OrdersView = () => {
         {
             field: 'products',
             headerName: 'Products',
-            width: 300,
+            width: 260,
             filterOperators: [productsFilterOperator],
             sortable: false,
             renderCell: (params) => (

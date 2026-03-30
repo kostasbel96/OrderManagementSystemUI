@@ -1,4 +1,4 @@
-import {useButtonClicked} from "../hooks/useButtonClicked.ts";
+import {useButtonClicked} from "../../hooks/useButtonClicked.ts";
 import { Button } from "@mui/material";
 
 

@@ -39,6 +39,7 @@ const MyCollapse = ({isOpen, value, setSubmitted, setSuccess, setPopUpMessage}: 
                             <FormOrder
                                 setSubmitted={setSubmitted}
                                 setSuccess={setSuccess}
+                                setPopUpMessage={setPopUpMessage}
                             />
                         )}
 

@@ -16,9 +16,10 @@ import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+    setPopUpMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
+const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) => {
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null >(null);
     const [address, setAddress] = useState("");
@@ -44,10 +45,11 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                 setSubmitted(true);
                 console.log(data);
                 setAdded(true);
-            }).catch(()=>{
-                    setSubmitted(true);
-                    setSuccess(false);
-                });
+            }).catch((error)=>{
+                setPopUpMessage(error.message);
+                setSubmitted(true);
+                setSuccess(false);
+            });
             setSelectedProductsWithQty([]);
             setSelectedCustomer(null);
             setAddress("");
@@ -76,6 +78,10 @@ const FormOrder = ({setSubmitted, setSuccess}: FormOrderProps) => {
                 setProducts(data.content);
             });
     },[added])
+
+    useEffect(() => {
+        setPopUpMessage("");
+    }, []);
 
     return (
             <Box

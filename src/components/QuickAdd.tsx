@@ -1,4 +1,4 @@
-import MyButton from "./MyButton.tsx";
+import MyButton from "./ui/MyButton.tsx";
 import MyCollapse from "./MyCollapse.tsx";
 import {useState} from "react";
 import PopUp from "./popup/PopUp.tsx";

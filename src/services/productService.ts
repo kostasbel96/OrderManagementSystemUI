@@ -14,7 +14,7 @@ export let products: Product[];
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function addProduct(newProduct: Omit<Product, "id">): Promise<Response> {
+export async function addProduct(newProduct: Omit<Product, "id">): Promise<ResponseDTO> {
     const res = await fetch(`${API_URL}/products/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -32,7 +32,7 @@ export async function addProduct(newProduct: Omit<Product, "id">): Promise<Respo
         throw new Error(errorMessage);
     }
 
-    return data;
+    return data?.productDto;
 }
 
 export async function searchProductByName(name: string, page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc") :Promise<ProductResponseDto> {

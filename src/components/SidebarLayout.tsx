@@ -26,7 +26,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                     ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static`}
             >
                 {/* Header in Sidebar for mobile */}
-                <div className="flex items-center justify-between border-b md:hidden">
+                <div className="flex items-center justify-between border-b md:hidden p-2">
                     <span className="font-bold text-lg">Admin Panel</span>
                     <button onClick={() => setOpen(false)}>
                         <X />
@@ -35,12 +35,12 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
 
                 {/* Menu */}
                 <nav className="flex flex-col p-4 gap-2 text-gray-700">
-                    <NavItem to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" setLabel={setLabel}/>
-                    <NavItem to="/add" icon={<PlusIcon size={18} />} label="Quick Add" setLabel={setLabel}/>
-                    <NavItem to="/products" icon={<Package size={18} />} label="Products" setLabel={setLabel}/>
-                    <NavItem to="/orders" icon={<ShoppingCart size={18} />} label="Orders" setLabel={setLabel}/>
-                    <NavItem to="/customers" icon={<Users size={18} />} label="Customers" setLabel={setLabel}/>
-                    <NavItem to="/settings" icon={<Settings size={18} />} label="Settings" setLabel={setLabel}/>
+                    <NavItem to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" setLabel={setLabel} setOpen={setOpen} />
+                    <NavItem to="/add" icon={<PlusIcon size={18} />} label="Quick Add" setLabel={setLabel} setOpen={setOpen}/>
+                    <NavItem to="/products" icon={<Package size={18} />} label="Products" setLabel={setLabel} setOpen={setOpen}/>
+                    <NavItem to="/orders" icon={<ShoppingCart size={18} />} label="Orders" setLabel={setLabel} setOpen={setOpen}/>
+                    <NavItem to="/customers" icon={<Users size={18} />} label="Customers" setLabel={setLabel} setOpen={setOpen}/>
+                    <NavItem to="/settings" icon={<Settings size={18} />} label="Settings" setLabel={setLabel} setOpen={setOpen}/>
                 </nav>
                 <div className="flex flex-row-reverse p-4 fixed bottom-0 right-0">
                     <div className="flex space-x-3 hover:cursor-pointer text-xs">
@@ -82,9 +82,10 @@ type NavItemProps = {
     icon: ReactNode;
     label: string;
     setLabel: React.Dispatch<React.SetStateAction<string>>;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function NavItem({ to, icon, label, setLabel }: NavItemProps) {
+function NavItem({ to, icon, label, setLabel, setOpen }: NavItemProps) {
     return (
         <NavLink
             to={to}
@@ -92,7 +93,7 @@ function NavItem({ to, icon, label, setLabel }: NavItemProps) {
                 `flex items-center gap-3 px-3 py-2 rounded-lg transition
                 ${isActive ? "bg-blue-100 text-blue-600" : "hover:bg-gray-100"}`
             }
-            onClick={() => setLabel(label)}
+            onClick={() => {setLabel(label);setOpen(false);}}
         >
             {icon}
             <span className="text-sm font-medium">{label}</span>
