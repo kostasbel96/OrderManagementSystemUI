@@ -9,6 +9,7 @@ import {EditIcon} from "lucide-react";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ProductsCell from "./ProductsCell.tsx";
 
 
 const OrdersView = () => {
@@ -27,6 +28,11 @@ const OrdersView = () => {
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
+    const [openRows, setOpenRows] = useState<{[key: string]: boolean}>({});
+
+    const toggleRow = (id: string) => {
+        setOpenRows(prev => ({ ...prev, [id]: !prev[id] }));
+    };
 
     const handleClickOpen = (row: OrderRow) => {
         if (row.id) getOrder(row.id).then((data: ResponseDTO)=> {
@@ -102,66 +108,12 @@ const OrdersView = () => {
             filterOperators: [productsFilterOperator],
             sortable: false,
             renderCell: (params) => (
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',   // vertical centering
-                    justifyContent: 'start', // horizontal centering
-                    whiteSpace: 'pre-line',
-                    height: '100%',          // σημαντικό για να γεμίζει το cell
-                    width: '100%',
-                    marginBottom: '24px'
-                }}>
-                    <table
-                        style={{
-                            width: '100%',
-                            borderCollapse: 'collapse',
-                            tableLayout: 'fixed'
-                        }}
-                    >
-                        <thead>
-                        <tr>
-                            <th style={{ width: '40%', padding: '8px', textAlign: 'left', textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                                Product
-                            </th>
-                            <th style={{ width: '30%', padding: '8px', textAlign: 'center', textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                                Quantity
-                            </th>
-                            <th style={{ width: '30%', padding: '8px', textAlign: 'right', textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                                Price
-                            </th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        {params.value.map((item: SelectedProduct, index: number) => (
-                            <tr key={index} style={{ borderBottom: '1px solid #eee' }}>
-                                <td
-                                    style={{
-                                        padding: '8px',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap'
-                                    }}
-                                >
-                                    {item.product.name}
-                                </td>
-
-                                <td style={{ padding: '8px', textAlign: 'center', textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                                    {item.quantity} pcs
-                                </td>
-
-                                <td style={{ padding: '8px', textAlign: 'right', textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                                    {item.price} €
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
+                <div className="flex items-center justify-start h-full">
+                    <ProductsCell
+                        products={params.row.products}
+                        open={openRows[params.row.id]}
+                        onToggle={() => toggleRow(params.row.id)}
+                    />
                 </div>
             ),
         },
