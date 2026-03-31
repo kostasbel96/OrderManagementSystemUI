@@ -10,7 +10,7 @@ interface ProductsCellProps{
 const ProductsCell = ({products, open, onToggle}: ProductsCellProps) => {
 
     return (
-        <div style={{ width: "100%", fontSize: "13px" }}>
+        <div style={{ width: "100%" }}>
             <div
                 onClick={(e) => { e.stopPropagation(); onToggle(); }}
                 style={{
