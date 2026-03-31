@@ -44,7 +44,7 @@ const ProductsCell = ({products, open, onToggle}: ProductsCellProps) => {
                             <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                 {item.product.name}
                             </div>
-                            <div style={{ textAlign: "center", color: "#555" }}>{item.quantity} pcs</div>
+                            <div style={{ textAlign: "center", color: "#555" }}>{item.quantity} pcs x </div>
                             <div style={{ textAlign: "right", fontWeight: 500 }}>{item.price} €</div>
                         </div>
                     ))}
