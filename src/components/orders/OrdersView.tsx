@@ -65,7 +65,7 @@ const OrdersView = () => {
     };
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 80, renderCell: (params) => (
+        { field: 'id', headerName: 'ID', width: 60, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -80,7 +80,7 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'customer', headerName: 'Customer', width: 260, renderCell: (params) => (
+        { field: 'customer', headerName: 'Customer', width: 240, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -98,7 +98,7 @@ const OrdersView = () => {
         {
             field: 'products',
             headerName: 'Products',
-            width: 260,
+            width: 340,
             filterOperators: [productsFilterOperator],
             sortable: false,
             renderCell: (params) => (
@@ -111,16 +111,53 @@ const OrdersView = () => {
                     width: '100%',
                     marginBottom: '24px'
                 }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'start' }}>
+                    <table
+                        style={{
+                            width: '100%',
+                            borderCollapse: 'collapse',
+                            tableLayout: 'fixed'
+                        }}
+                    >
+                        <thead>
+                        <tr>
+                            <th style={{ width: '40%', padding: '8px', textAlign: 'left', textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                                Product
+                            </th>
+                            <th style={{ width: '30%', padding: '8px', textAlign: 'center', textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                                Quantity
+                            </th>
+                            <th style={{ width: '30%', padding: '8px', textAlign: 'right', textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                                Price
+                            </th>
+                        </tr>
+                        </thead>
+
                         <tbody>
                         {params.value.map((item: SelectedProduct, index: number) => (
-                            <tr key={index} style={{display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                borderBottom: '1px solid #ccc' }}>
-                                <td style={{ padding: '4px 8px' }}>{item.product.name}</td>
-                                <td style={{ padding: '4px 8px' }}>{item.quantity}</td>
-                                <td style={{ padding: '4px 8px' }}>{item.price} €</td>
+                            <tr key={index} style={{ borderBottom: '1px solid #eee' }}>
+                                <td
+                                    style={{
+                                        padding: '8px',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    {item.product.name}
+                                </td>
+
+                                <td style={{ padding: '8px', textAlign: 'center', textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                                    {item.quantity} pcs
+                                </td>
+
+                                <td style={{ padding: '8px', textAlign: 'right', textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                                    {item.price} €
+                                </td>
                             </tr>
                         ))}
                         </tbody>
@@ -128,7 +165,7 @@ const OrdersView = () => {
                 </div>
             ),
         },
-        {field: 'address', headerName: 'Address', width: 200, renderCell: (params) => (
+        {field: 'address', headerName: 'Address', width: 180, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -153,7 +190,7 @@ const OrdersView = () => {
                     {params.value ? params.value + " €" : ""}
                 </div>
             ) },
-        {field: 'date', headerName: 'Date', type: 'date', width: 100, renderCell: (params) => (
+        {field: 'date', headerName: 'Date', type: 'date', width: 80, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -180,7 +217,7 @@ const OrdersView = () => {
                         height: '100%',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'start'
                     }}
                 >
                     <IconButton
