@@ -5,14 +5,13 @@ import type {SelectedProduct, Customer} from '../types/Types.ts';
 const productSchema = z.object({
     id: z.number(),
     name: z.string(),
-    quantity: z.number(),
+    quantity: z.number()
 });
 
 const selectedProductSchema = z.object({
     product: productSchema,
-    quantity: z
-        .number()
-        .min(1, "Quantity must be at least 1")
+    quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
+    price: z.coerce.number().min(0, "Price must be at least 0")
 });
 
 const orderSchema = z.object({
@@ -40,7 +39,9 @@ type FormErrors = {
     products?: string;
     customer?: string;
     address?: string;
-    quantity?: string;
+    productQuantity?: string;
+    productPrice?: string;
+    stockError?: string;
 }
 
 type UseOrderFormValidationProps = {
@@ -83,16 +84,29 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
         if (!result.success) {
             const newErrors: FormErrors = {};
             result.error.issues.forEach(error => {
-                const fieldName = error.path[0] as keyof FormErrors;
-                newErrors[fieldName] = error.message;
-            })
+                if (error.path[0] === "products") {
+                    const field = error.path[2];
+
+                    if (field === "quantity") {
+                        newErrors.productQuantity = error.message;
+                    }
+
+                    if (field === "price") {
+                        newErrors.productPrice = error.message;
+                    }
+
+                } else {
+                    const fieldName = error.path[0] as keyof FormErrors;
+                    newErrors[fieldName] = error.message;
+                }
+            });
             setOrderErrors(newErrors);
             return false;
         }
 
         if (!isValid) {
             setOrderErrors({
-                quantity: `Quantity in stock of ${productNames} is less than you requested.`
+                stockError: `Quantity in stock of ${productNames} is less than you requested.`
             });
             return false;
         }

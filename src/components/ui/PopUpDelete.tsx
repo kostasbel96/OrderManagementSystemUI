@@ -107,7 +107,18 @@ const PopUpDelete = ({open, rowToEdit,
                     id="quantity"
                     name="quantity"
                     label="Product Quantity"
-                    type="number"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={(rowToEdit as Product)?.price}
+                    margin="dense"
+                    id="price"
+                    name="price"
+                    label="Product price"
+                    type="text"
                     fullWidth
                     variant="standard"
                 />

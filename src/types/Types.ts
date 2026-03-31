@@ -3,6 +3,7 @@ export interface Product {
     name: string;
     description: string;
     quantity: number;
+    price: number;
 }
 
 export interface Customer {
@@ -32,11 +33,13 @@ export interface OrderItem {
     customer?: Customer;
     address: string;
     date: string;
+    price: string;
 }
 
 export interface SelectedProduct {
     product: Product;
     quantity: number;
+    price: number;
 }
 
 export interface OrderRow {
@@ -44,6 +47,7 @@ export interface OrderRow {
     customer: string;
     products: SelectedProduct[];
     address: string;
+    total: number;
     date?: string | Date;
 }
 
@@ -75,6 +79,7 @@ export interface TableRowsType {
 export interface Item{
     productId: number;
     quantity: number;
+    price: string;
 }
 
 export interface OrderRequest{

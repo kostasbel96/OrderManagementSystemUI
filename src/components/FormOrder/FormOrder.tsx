@@ -103,7 +103,10 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
                     selectedProductsWithQty={selectedProductsWithQty}
                     setSelectedProductsWithQty={setSelectedProductsWithQty}
                 />
-                {orderErrors && (<p className="text-sm text-red-900">{orderErrors.products || orderErrors.quantity}</p>)}
+                {orderErrors && (<p className="text-sm text-red-900">
+                    {orderErrors.products || orderErrors.productQuantity
+                        || orderErrors.productPrice || orderErrors.stockError}
+                </p>)}
 
                 <MySelect
                     myValue="Customers"

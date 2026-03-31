@@ -100,6 +100,21 @@ const ProductsView = () => {
                     {params.value}
                 </div>
             ) },
+        {field: 'price', headerName: 'Price', width: 80, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value ? params.value + " €" : ""}
+                </div>
+            ) },
         {
             field: 'actions',
             headerName: 'Actions',

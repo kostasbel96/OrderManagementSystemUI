@@ -120,6 +120,7 @@ const OrdersView = () => {
                                 borderBottom: '1px solid #ccc' }}>
                                 <td style={{ padding: '4px 8px' }}>{item.product.name}</td>
                                 <td style={{ padding: '4px 8px' }}>{item.quantity}</td>
+                                <td style={{ padding: '4px 8px' }}>{item.price} €</td>
                             </tr>
                         ))}
                         </tbody>
@@ -127,7 +128,7 @@ const OrdersView = () => {
                 </div>
             ),
         },
-        {field: 'address', headerName: 'Address', width: 250, renderCell: (params) => (
+        {field: 'address', headerName: 'Address', width: 200, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -140,7 +141,19 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             )},
-        {field: 'date', headerName: 'Date', type: 'date', width: 200, renderCell: (params) => (
+        { field: 'total', headerName: 'Total', width: 120, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'start',
+                        height: '100%',
+                    }}
+                >
+                    {params.value ? params.value + " €" : ""}
+                </div>
+            ) },
+        {field: 'date', headerName: 'Date', type: 'date', width: 100, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -202,11 +215,16 @@ const OrdersView = () => {
             .then(data => {
                 const orders: OrderRow[] = [];
                 data.content.forEach(order => {
+                    // Calculate total
+                    const orderTotal = order.items
+                        .reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                    
                     orders.push({
                         id: order.id,
                         customer: `${order.customer?.name} ${order.customer?.lastName}`,
                         products: order.items,
                         address: order.address,
+                        total: orderTotal,
                         date: order.date ? new Date(order.date) : undefined
                     });
                 });

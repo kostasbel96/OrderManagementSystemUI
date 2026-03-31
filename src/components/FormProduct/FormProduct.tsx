@@ -14,6 +14,7 @@ const initialValues = {
     name: "",
     description: "",
     quantity: 1,
+    price: 1
 }
 
 const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormProductProps) => {
@@ -26,7 +27,8 @@ const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormPro
             addProduct({
                 name: values.name,
                 description: values.description,
-                quantity: Number(values.quantity)
+                quantity: Number(values.quantity),
+                price: values.price
             }).then((data) => {
                 setSuccess(true);
                 setSubmitted(true);
@@ -139,35 +141,67 @@ const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormPro
                     }}
                 />
 
-                {/* Quantity */}
-                <TextField
-                    label="Quantity"
-                    type="number"
-                    inputProps={{ min: 1 }}
-                    placeholder="Quantity in stock"
-                    name="quantity"
-                    value={values.quantity}
-                    onChange={handleChange}
-                    variant="outlined"
-                    error={Boolean(productErrors?.quantity)}
-                    helperText={productErrors?.quantity}
-                    sx={{
-                        width: 300,
-                        backgroundColor: "white",
-                        borderRadius: 2,
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
+                <div className="flex flex-column space-x-1">
+                    {/* Quantity */}
+                    <TextField
+                        label="Quantity"
+                        type="number"
+                        inputProps={{ min: 1 }}
+                        placeholder="Quantity in stock"
+                        name="quantity"
+                        value={values.quantity}
+                        onChange={handleChange}
+                        variant="outlined"
+                        error={Boolean(productErrors?.quantity)}
+                        helperText={productErrors?.quantity}
+                        sx={{
+                            width: 150,
+                            backgroundColor: "white",
                             borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
+                            '& .MuiInputLabel-root': {
+                                backgroundColor: 'white',
+                                borderRadius: 2,
+                                padding: "5px"
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'gray',
+                                backgroundColor: 'white',
+                                borderRadius: 2,
+                                padding: "5px",
+                            }
+                        }}
+                    />
+                    {/* Price */}
+                    <TextField
+                        label="Price"
+                        type="number"
+                        inputProps={{ min: 0 }}
+                        placeholder="Product price"
+                        name="price"
+                        value={values.price}
+                        onChange={handleChange}
+                        variant="outlined"
+                        error={Boolean(productErrors?.price)}
+                        helperText={productErrors?.price}
+                        sx={{
+                            width: 150,
+                            backgroundColor: "white",
                             borderRadius: 2,
-                            padding: "5px",
-                        }
-                    }}
-                />
+                            '& .MuiInputLabel-root': {
+                                backgroundColor: 'white',
+                                borderRadius: 2,
+                                padding: "5px"
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'gray',
+                                backgroundColor: 'white',
+                                borderRadius: 2,
+                                padding: "5px",
+                            }
+                        }}
+                    />
+                </div>
+
 
                 {/* Buttons */}
                 <Stack direction="row" spacing={2} sx={{ mt: 1 }}>

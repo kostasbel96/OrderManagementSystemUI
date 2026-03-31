@@ -21,7 +21,10 @@ export async function addOrder({products, customer, address}: OrderProps): Promi
     const orderRequest: OrderRequest = {
         address: address,
         customerId: customer?.id,
-        items: products.map(p=>({productId: p.product.id, quantity: p.quantity}))
+        items: products
+            .map(p=>(
+                {productId: p.product.id, quantity: p.quantity, price: p.price.toString()}
+            ))
     }
     const res = await fetch(`${API_URL}/orders/save`,{
         method: "POST",

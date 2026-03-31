@@ -23,6 +23,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
         name: "",
         description: "",
         quantity: 0,
+        price: 0
     });
     const [customerValues, setCustomerValues] = useState<Customer>({
         id: -1,
@@ -38,6 +39,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
         date: "",
         customer: undefined,
         items: [],
+        price: ""
     })
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
@@ -183,6 +185,19 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                     variant="standard"
                     error={Boolean(productErrors?.quantity)}
                     helperText={productErrors?.quantity}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={productValues.price}
+                    margin="dense"
+                    id="price"
+                    name="price"
+                    label="Product price"
+                    type="number"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(productErrors?.price)}
+                    helperText={productErrors?.price}
                 />
             </>
         )
@@ -332,7 +347,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                         selectedProductsWithQty={selectedProductsWithQty}
                         setSelectedProductsWithQty={setSelectedProductsWithQty}
                     />
-                    {orderErrors && (<p className="text-sm text-red-600">{orderErrors.products || orderErrors.quantity}</p>)}
+                    {orderErrors && (<p className="text-sm text-red-600">{orderErrors.products || orderErrors.stockError}</p>)}
                 </div>
 
             </>

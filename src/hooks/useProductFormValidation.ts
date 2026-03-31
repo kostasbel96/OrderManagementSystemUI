@@ -5,7 +5,8 @@ const formSchema = z.object(
     {
         name: z.string().trim().nonempty("Product Name is required"),
         description: z.string().trim().nonempty("Description is required"),
-        quantity: z.coerce.number().min(0, "Quantity must be at least 0")
+        quantity: z.coerce.number().min(0, "Quantity must be at least 0"),
+        price: z.coerce.number().min(0, "Price must be at least 0")
     }
 )
 
@@ -15,6 +16,7 @@ type FormErrors = {
     name?: string;
     description?: string;
     quantity?: string;
+    price?: string;
 }
 
 const useProductFormValidation = (values: FormValues) => {

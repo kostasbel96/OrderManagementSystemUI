@@ -1,5 +1,5 @@
 import {Autocomplete, Box, Stack, TextField} from "@mui/material"
-import type {Customer, Product} from "../../types/Types.ts";
+import type {Customer, Product, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 
 interface SelectProps {
@@ -12,10 +12,6 @@ interface SelectProps {
     setSelectedCustomer?: React.Dispatch<React.SetStateAction<Customer | null>>,
     products?: Product[];
 }
-interface SelectedProduct {
-    product: Product;
-    quantity: number;
-}
 
 interface Option {
     value: number;
@@ -23,16 +19,17 @@ interface Option {
 }
 
 const MySelect = ({myValue,
-                                                  isMultiValue,
-                                                  customers,
-                                                  selectedProductsWithQty,
-                                                  selectedCustomer,
-                                                  setSelectedProductsWithQty,
-                                                  setSelectedCustomer,
-                                                  products} : SelectProps) => {
+                      isMultiValue,
+                      customers,
+                      selectedProductsWithQty,
+                      selectedCustomer,
+                      setSelectedProductsWithQty,
+                      setSelectedCustomer,
+                      products} : SelectProps) => {
 
     const [productOptions, setProductOptions] = useState<Option[]>([]);
     const [quantityValue, setQuantityValue] = useState<{id: number, quantity: string}>();
+    const [priceValue, setPriceValue] = useState<{id: number, price: string}>();
 
     const customersOptions = customers?.map((p) => ({
         value: p.id!,
@@ -51,21 +48,35 @@ const MySelect = ({myValue,
 
     };
 
+
+    const handlePriceChange = (
+                                e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+                                index: number,
+                                id: number) => {
+        const price = e.target.value
+        setPriceValue({id:id, price: price.toString()});
+        if (!setSelectedProductsWithQty) return;
+        const safePrice = Math.max(0, Number(price));
+        setSelectedProductsWithQty((prev: SelectedProduct[]) => {
+            const copy = [...prev];
+            copy[index] = { ...copy[index], price: safePrice};
+            return copy;
+        })
+    };
+
     const handleChange = (
         _: React.SyntheticEvent,
         selected: Option | Option[] | null
     ) => {
         if (isMultiValue) {
             const selectedArray = Array.isArray(selected) ? selected : [];
-
             setSelectedProductsWithQty?.(
                 selectedArray.map((s) => {
                     const existing = selectedProductsWithQty?.find(
                         (p) => p.product.id === s.value
                     );
                     const product = products?.find((p) => p.id === s.value);
-
-                    return existing || { product: product!, quantity: 1 };
+                    return existing || { product: product!, quantity: 1, price: product!.price };
                 })
             );
         } else {
@@ -163,6 +174,7 @@ const MySelect = ({myValue,
                             <Box sx={{ width: 120, textAlign: "center" }}>{item.product.name}:</Box>
                             <TextField
                                 type="number"
+                                label={"Quantity"}
                                 value={quantityValue?.id === item.product.id ? quantityValue.quantity : item.quantity}
                                 onChange={(e) => handleQuantityChange(index, Number(e.target.value), item.product.id)}
                                 inputProps={{ min: 1 }}
@@ -170,6 +182,28 @@ const MySelect = ({myValue,
                                     width: 100,
                                     backgroundColor: "white",
                                     borderRadius: 2,
+                                    '.MuiInputLabel-root':{
+                                        backgroundColor: 'white',
+                                        padding: '0.25rem',
+                                        borderRadius: 2
+                                    }
+                                }}
+                            />
+                            <TextField
+                                type="number"
+                                label={"Price"}
+                                value={priceValue?.id === item.product.id ? priceValue.price : item.price}
+                                onChange={(e) => handlePriceChange(e, index, item.product.id)}
+                                inputProps={{ min: 0 }}
+                                sx={{
+                                    width: 100,
+                                    backgroundColor: "white",
+                                    borderRadius: 2,
+                                    '.MuiInputLabel-root':{
+                                        backgroundColor: 'white',
+                                        padding: '0.25rem',
+                                        borderRadius: 2
+                                    }
                                 }}
                             />
                         </Stack>
