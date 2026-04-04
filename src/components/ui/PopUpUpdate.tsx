@@ -1,7 +1,7 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
 import type {Customer, OrderItem, Product, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
-import MySelect from "../FormOrder/MySelect.tsx";
+import ProductsAutocomplete from "../FormOrder/ProductsAutocomplete.tsx";
 import {getProducts, updateProduct} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
 import useCustomerFormValidation from "../../hooks/useCustomerFormValidation.ts";
@@ -340,7 +340,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                     helperText={orderErrors?.address}
                 />
                 <div className="mt-2">
-                    <MySelect
+                    <ProductsAutocomplete
                         myValue="Products"
                         isMultiValue={true}
                         products={products}

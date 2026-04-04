@@ -5,13 +5,14 @@ import {
     Divider,
     Stack,
 } from "@mui/material";
-import MySelect from "./MySelect.tsx";
+import ProductsAutocomplete from "./ProductsAutocomplete.tsx";
 import {type FormEvent, useEffect, useState} from "react";
 import type {Customer, Product, SelectedProduct} from "../../types/Types.ts";
 import {addOrder} from '../../services/orderService.ts'
 import {getCustomers} from "../../services/customerService.ts";
 import {getProducts} from "../../services/productService.ts";
 import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
+import CustomersAutocomplete from "./CustomersAutocomplete.tsx";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -96,9 +97,7 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
                     gap: 2,
                 }}
             >
-                <MySelect
-                    myValue="Products"
-                    isMultiValue={true}
+                <ProductsAutocomplete
                     products={products}
                     selectedProductsWithQty={selectedProductsWithQty}
                     setSelectedProductsWithQty={setSelectedProductsWithQty}
@@ -108,9 +107,14 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
                         || orderErrors.productPrice || orderErrors.stockError}
                 </p>)}
 
-                <MySelect
-                    myValue="Customers"
-                    isMultiValue={false}
+                {/*<MySelect*/}
+                {/*    myValue="Customers"*/}
+                {/*    isMultiValue={false}*/}
+                {/*    customers={customers}*/}
+                {/*    selectedCustomer={selectedCustomer}*/}
+                {/*    setSelectedCustomer={setSelectedCustomer}*/}
+                {/*/>*/}
+                <CustomersAutocomplete
                     customers={customers}
                     selectedCustomer={selectedCustomer}
                     setSelectedCustomer={setSelectedCustomer}
