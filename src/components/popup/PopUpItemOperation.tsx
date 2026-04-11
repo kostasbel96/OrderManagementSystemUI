@@ -28,31 +28,33 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
     }, []);
 
     return (
-        <Alert
-            severity="success"
-            variant="filled"
-            sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-            }}
-            action={
-                <IconButton
-                    color="inherit"
-                    size="small"
-                    onClick={() => setSubmitted(false)}
-                    sx={{ mb: 1 }}
-                >
-                    <CheckIcon />
-                </IconButton>
-            }
-        >
-            { (typeOf === "product" && operationItem) && 
-                (`Product ${(operationItem as Product).name} ${operation} successfully!` ) }
-            { (typeOf === "customer" && operationItem) && 
-                (`Customer ${(operationItem as Customer).name} ${(operationItem as Customer).lastName} ${operation} successfully!` ) }
-            { (typeOf === "order" && operationItem) && (`Order ${(operationItem as OrderItem).id} ${operation} successfully!` ) }
-        </Alert>
+        <div className="mt-1 shadow-lg mr-1 absolute top-0 right-0">
+            <Alert
+                severity="success"
+                variant="filled"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+                action={
+                    <IconButton
+                        color="inherit"
+                        size="small"
+                        onClick={() => setSubmitted(false)}
+                        sx={{ mb: 1 }}
+                    >
+                        <CheckIcon />
+                    </IconButton>
+                }
+            >
+                { (typeOf === "product" && operationItem) &&
+                    (`Product ${(operationItem as Product).name} ${operation} successfully!` ) }
+                { (typeOf === "customer" && operationItem) &&
+                    (`Customer ${(operationItem as Customer).name} ${(operationItem as Customer).lastName} ${operation} successfully!` ) }
+                { (typeOf === "order" && operationItem) && (`Order ${(operationItem as OrderItem).id} ${operation} successfully!` ) }
+            </Alert>
+        </div>
             )
 }
 

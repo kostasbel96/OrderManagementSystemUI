@@ -341,8 +341,6 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                 />
                 <div className="mt-2">
                     <ProductsAutocomplete
-                        myValue="Products"
-                        isMultiValue={true}
                         products={products}
                         selectedProductsWithQty={selectedProductsWithQty}
                         setSelectedProductsWithQty={setSelectedProductsWithQty}
