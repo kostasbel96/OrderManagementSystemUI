@@ -36,7 +36,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                 {/* Menu */}
                 <nav className="flex flex-col p-4 gap-2 text-gray-700">
                     <NavItem to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" setLabel={setLabel} setOpen={setOpen} />
-                    <NavItem to="/add" icon={<PlusIcon size={18} />} label="Quick Add" setLabel={setLabel} setOpen={setOpen}/>
+                    <NavItem to="/add" icon={<PlusIcon size={18} />} label="Add" setLabel={setLabel} setOpen={setOpen}/>
                     <NavItem to="/products" icon={<Package size={18} />} label="Products" setLabel={setLabel} setOpen={setOpen}/>
                     <NavItem to="/orders" icon={<ShoppingCart size={18} />} label="Orders" setLabel={setLabel} setOpen={setOpen}/>
                     <NavItem to="/customers" icon={<Users size={18} />} label="Customers" setLabel={setLabel} setOpen={setOpen}/>

@@ -141,7 +141,7 @@ const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormPro
                     }}
                 />
 
-                <div className="flex flex-column space-x-1">
+                <div className="flex flex-column gap-2">
                     {/* Quantity */}
                     <TextField
                         label="Quantity"
