@@ -3,6 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
 import Alert from "@mui/material/Alert";
 import {useEffect, useState} from "react";
+import { motion } from "framer-motion";
 
 interface PopUpItemDeletedProps {
     typeOf: string;
@@ -28,7 +29,16 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
     }, []);
 
     return (
-        <div className="mt-1 shadow-lg mr-1 absolute top-0 right-0">
+        <motion.div
+            className="backdrop mt-1 shadow-lg mr-1 absolute top-0 right-0"
+            initial={{ y: -80, opacity: 0, scale: 0.9 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: -80, opacity: 0, scale: 0.9 }}
+            transition={{
+                type: "spring",
+                stiffness: 500,
+                damping: 20,
+            }}>
             <Alert
                 severity="success"
                 variant="filled"
@@ -54,7 +64,8 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
                     (`Customer ${(operationItem as Customer).name} ${(operationItem as Customer).lastName} ${operation} successfully!` ) }
                 { (typeOf === "order" && operationItem) && (`Order ${(operationItem as OrderItem).id} ${operation} successfully!` ) }
             </Alert>
-        </div>
+        </motion.div>
+
             )
 }
 
