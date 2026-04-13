@@ -13,6 +13,7 @@ export interface Customer {
     phoneNumber1: string;
     phoneNumber2: string | undefined | null;
     email?: string;
+    balance: number;
 }
 
 export interface ResponseDTO {
@@ -33,7 +34,7 @@ export interface OrderItem {
     customer?: Customer;
     address: string;
     date: string;
-    price: string;
+    total: string;
 }
 
 export interface SelectedProduct {

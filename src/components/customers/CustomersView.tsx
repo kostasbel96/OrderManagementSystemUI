@@ -131,6 +131,23 @@ const CustomersView = () => {
                 </div>
             ) },
         {
+            field: 'balance', headerName: 'Balance', sortable: false, filterable: false, width: 150, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value}
+                </div>
+            )
+        },
+        {
             field: 'actions',
             headerName: 'Actions',
             width: 150,

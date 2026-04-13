@@ -205,15 +205,14 @@ const OrdersView = () => {
                 const orders: OrderRow[] = [];
                 data.content.forEach(order => {
                     // Calculate total
-                    const orderTotal = order.items
-                        .reduce((sum, item) => sum + (item.quantity * item.price), 0);
-                    
+                    // const orderTotal = order.items
+                    //     .reduce((sum, item) => sum + (item.quantity * item.price), 0);
                     orders.push({
                         id: order.id,
                         customer: `${order.customer?.name} ${order.customer?.lastName}`,
                         products: order.items,
                         address: order.address,
-                        total: orderTotal,
+                        total: Number(order.total),
                         date: order.date ? new Date(order.date) : undefined
                     });
                 });
