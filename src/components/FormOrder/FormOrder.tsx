@@ -24,9 +24,10 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null >(null);
     const [address, setAddress] = useState("");
+    const [deposit, setDeposit] = useState<string>("");
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
-    const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({selectedProductsWithQty, selectedCustomer, address});
+    const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({selectedProductsWithQty, selectedCustomer, address, deposit});
     const [added, setAdded] = useState(false);
 
 
@@ -35,11 +36,13 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
         e.preventDefault();
         if (validateOrderForm()) {
             console.log(selectedProductsWithQty);
+            console.log("DEPOSIT: ", deposit);
             addOrder(
                 {
                     products:selectedProductsWithQty,
                     customer:selectedCustomer,
-                    address:address
+                    address:address,
+                    deposit: Number(deposit)
                 }
             ).then((data) => {
                 setSuccess(true);
@@ -54,6 +57,7 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
             setSelectedProductsWithQty([]);
             setSelectedCustomer(null);
             setAddress("");
+            setDeposit("");
         } else {
             setSubmitted(true);
             setSuccess(false);
@@ -65,9 +69,17 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
         setSelectedProductsWithQty([]);
         setSelectedCustomer(null);
         setAddress("");
+        setDeposit("");
         setOrderErrors({});
         setSubmitted(false);
     }
+
+    const handleDepositChange = (
+        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const dep = e.target.value
+        const safeDeposit = Math.max(0, Number(dep));
+        setDeposit(safeDeposit.toString());
+    };
 
     useEffect(() => {
         getCustomers(0, 100)
@@ -106,14 +118,6 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
                     {orderErrors.products || orderErrors.productQuantity
                         || orderErrors.productPrice || orderErrors.stockError}
                 </p>)}
-
-                {/*<MySelect*/}
-                {/*    myValue="Customers"*/}
-                {/*    isMultiValue={false}*/}
-                {/*    customers={customers}*/}
-                {/*    selectedCustomer={selectedCustomer}*/}
-                {/*    setSelectedCustomer={setSelectedCustomer}*/}
-                {/*/>*/}
                 <CustomersAutocomplete
                     customers={customers}
                     selectedCustomer={selectedCustomer}
@@ -147,6 +151,31 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
                     }}
                 />
                 {orderErrors && (<p className="text-sm text-red-900">{orderErrors.address}</p>)}
+                <TextField
+                    className="rounded"
+                    label="Deposit"
+                    type="number"
+                    variant="outlined"
+                    value={deposit}
+                    onChange={(e) => handleDepositChange(e)}
+                    sx={{ width: 250,
+                        backgroundColor: "white",
+                        color: "black",
+                        '& .MuiInputLabel-root': {
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px"
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'gray',
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            padding: "5px",
+                        }
+
+                    }}
+                />
+                {orderErrors && (<p className="text-sm text-red-900">{orderErrors.deposit}</p>)}
 
                 <Stack direction="row" spacing={2}>
                     <Button

@@ -35,6 +35,7 @@ export interface OrderItem {
     address: string;
     date: string;
     total: string;
+    deposit: number;
 }
 
 export interface SelectedProduct {
@@ -49,6 +50,7 @@ export interface OrderRow {
     products: SelectedProduct[];
     address: string;
     total: number;
+    deposit: number;
     date?: string | Date;
 }
 
@@ -85,6 +87,7 @@ export interface Item{
 
 export interface OrderRequest{
     address: string;
+    deposit: number;
     customerId: number | undefined | null;
     items: Item[];
 }

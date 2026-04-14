@@ -104,7 +104,7 @@ const OrdersView = () => {
         {
             field: 'products',
             headerName: 'Products',
-            width: 340,
+            width: 300,
             filterOperators: [productsFilterOperator],
             sortable: false,
             renderCell: (params) => (
@@ -130,7 +130,19 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             )},
-        { field: 'total', headerName: 'Total', width: 120, renderCell: (params) => (
+        { field: 'total', headerName: 'Total', width: 100, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'start',
+                        height: '100%',
+                    }}
+                >
+                    {params.value ? params.value + " €" : ""}
+                </div>
+            ) },
+        { field: 'deposit', headerName: 'Deposit', width: 100, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -213,6 +225,7 @@ const OrdersView = () => {
                         products: order.items,
                         address: order.address,
                         total: Number(order.total),
+                        deposit: Number(order.deposit),
                         date: order.date ? new Date(order.date) : undefined
                     });
                 });
