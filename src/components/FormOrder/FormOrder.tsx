@@ -35,8 +35,6 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
     const handleOnSubmit = ((e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validateOrderForm()) {
-            console.log(selectedProductsWithQty);
-            console.log("DEPOSIT: ", deposit);
             addOrder(
                 {
                     products:selectedProductsWithQty,

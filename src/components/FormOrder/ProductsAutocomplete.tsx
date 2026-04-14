@@ -159,7 +159,6 @@ const ProductsAutocomplete = ({
                                 label={"Price"}
                                 value={priceValue?.id === item.product.id ? priceValue.price : item.price}
                                 onChange={(e) => handlePriceChange(e, index, item.product.id)}
-                                inputProps={{ min: 0 }}
                                 sx={{
                                     width: 100,
                                     backgroundColor: "white",
