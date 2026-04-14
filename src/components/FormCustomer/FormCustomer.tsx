@@ -30,7 +30,8 @@ const FormCustomer = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormCu
                 lastName: values.lastName,
                 phoneNumber1: values.phoneNumber1,
                 phoneNumber2: values.phoneNumber2,
-                email: values.email
+                email: values.email,
+                balance: 0
             }).then((data) => {
                 setSuccess(true);
                 setSubmitted(true);

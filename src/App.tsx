@@ -1,6 +1,6 @@
 import './App.css'
 import Layout from "./components/Layout.tsx";
-import {BrowserRouter, Route, Routes} from "react-router";
+import {HashRouter, Route, Routes} from "react-router";
 import QuickAdd from "./components/QuickAdd.tsx";
 import ProductsView from "./components/products/ProductsView.tsx";
 import OrdersView from "./components/orders/OrdersView.tsx";
@@ -11,7 +11,7 @@ import Dashboard from "./components/Dashboard.tsx";
 function App() {
 
   return (
-  <BrowserRouter>
+  <HashRouter>
       <Routes>
           <Route element={<Layout/>}>
                   <Route path="products" element={<ProductsView/>}/>
@@ -21,7 +21,7 @@ function App() {
                   <Route index element={<Dashboard/>}/>
           </Route>
       </Routes>
-  </BrowserRouter>
+  </HashRouter>
   )
 }
 

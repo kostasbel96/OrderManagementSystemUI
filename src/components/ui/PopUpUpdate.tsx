@@ -32,14 +32,14 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
         phoneNumber1: "",
         phoneNumber2: "",
         email: "",
+        balance: 0
     })
     const [orderValues, setOrderValues] = useState<OrderItem>({
         id: -1,
         address: "",
         date: "",
         customer: undefined,
-        items: [],
-        price: ""
+        items: []
     })
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);

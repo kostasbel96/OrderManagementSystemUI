@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite"
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: './'
   // server: {
   //   host: true,        // απαραίτητο για LAN access
   //   port: 5173,

@@ -51,7 +51,7 @@ type UseOrderFormValidationProps = {
     selectedProductsWithQty: SelectedProduct[];
     selectedCustomer: Customer | null;
     address: string;
-    deposit: string;
+    deposit?: string;
     initialItems?: SelectedProduct[];
 }
 
