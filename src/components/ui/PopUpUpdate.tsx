@@ -39,7 +39,8 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
         address: "",
         date: "",
         customer: undefined,
-        items: []
+        items: [],
+        deposit: ""
     })
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
@@ -50,6 +51,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
         selectedProductsWithQty: selectedProductsWithQty,
         selectedCustomer: orderValues.customer as Customer,
         address: orderValues.address,
+        deposit: orderValues.deposit,
         initialItems
     });
 
@@ -338,6 +340,19 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                     variant="standard"
                     error={Boolean(orderErrors?.address)}
                     helperText={orderErrors?.address}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={orderValues.deposit}
+                    margin="dense"
+                    id="deposit"
+                    name="deposit"
+                    label="Deposit"
+                    type="number"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(orderErrors?.deposit)}
+                    helperText={orderErrors?.deposit}
                 />
                 <div className="mt-2">
                     <ProductsAutocomplete

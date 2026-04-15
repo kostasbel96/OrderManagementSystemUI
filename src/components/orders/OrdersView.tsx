@@ -171,7 +171,7 @@ const OrdersView = () => {
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 150,
+            width: 130,
             sortable: false,
             filterable: false,
             renderCell: (params) => (

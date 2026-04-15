@@ -11,7 +11,7 @@ interface OrderProps{
     customer: Customer | null;
     address: string;
     date?: string;
-    deposit: number;
+    deposit: string;
 }
 
 const API_URL = import.meta.env.VITE_API_URL;

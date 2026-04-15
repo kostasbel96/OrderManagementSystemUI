@@ -40,7 +40,7 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
                     products:selectedProductsWithQty,
                     customer:selectedCustomer,
                     address:address,
-                    deposit: Number(deposit)
+                    deposit: deposit
                 }
             ).then((data) => {
                 setSuccess(true);

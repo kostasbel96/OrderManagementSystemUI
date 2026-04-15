@@ -87,7 +87,7 @@ export interface Item{
 
 export interface OrderRequest{
     address: string;
-    deposit: number;
+    deposit: string;
     customerId: number | undefined | null;
     items: Item[];
 }
