@@ -1,227 +1,202 @@
-import {type FormEvent, useEffect, useState} from "react";
-import {addProduct} from "../../services/productService.ts";
-import { Box, TextField, Button, Stack } from "@mui/material"
-import useProductFormValidation, {type FormValues} from "../../hooks/useProductFormValidation.ts";
+import { type FormEvent, useEffect, useState } from "react";
+import { addProduct } from "../../services/productService.ts";
+import { Box, TextField, Button, Stack, Paper, Grid } from "@mui/material";
+import useProductFormValidation, {
+    type FormValues
+} from "../../hooks/useProductFormValidation.ts";
 
 interface FormProductProps {
-    value: string;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
     setPopUpMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const initialValues = {
+const initialValues: FormValues = {
     name: "",
     description: "",
     quantity: 1,
     price: 1
-}
+};
 
-const FormProduct = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormProductProps) => {
+const FormProduct = ({
+                         setSubmitted,
+                         setSuccess,
+                         setPopUpMessage
+                     }: FormProductProps) => {
+
     const [values, setValues] = useState<FormValues>(initialValues);
-    const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(values);
+
+    const {
+        validateProductForm,
+        productErrors,
+        setProductErrors
+    } = useProductFormValidation(values);
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (validateProductForm()) {
             addProduct({
                 name: values.name,
                 description: values.description,
                 quantity: Number(values.quantity),
-                price: values.price
-            }).then((data) => {
-                setSuccess(true);
-                setSubmitted(true);
-                console.log(data);
-            }).catch((error)=>{
-                setPopUpMessage(error.message);
-                setSubmitted(true);
-                setSuccess(false);
+                price: Number(values.price)
             })
+                .then((data) => {
+                    setSuccess(true);
+                    setSubmitted(true);
+                    setPopUpMessage("Product created successfully");
+                    console.log(data);
+                })
+                .catch((error) => {
+                    setPopUpMessage(error.message);
+                    setSubmitted(true);
+                    setSuccess(false);
+                });
+
             setValues(initialValues);
             setProductErrors({});
         } else {
             setSubmitted(true);
             setSuccess(false);
         }
-
-    }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        const {name, value} = e.target;
-        setValues(prev=> ({
+        const { name, value } = e.target;
+
+        setValues((prev) => ({
             ...prev,
             [name]: value
         }));
-        setProductErrors(prev=>({
-           ...prev,
+
+        setProductErrors((prev) => ({
+            ...prev,
             [name]: ""
-        }))
-    }
+        }));
+    };
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setProductErrors({});
         setValues(initialValues);
+        setProductErrors({});
         setSubmitted(false);
-    }
+    };
 
     useEffect(() => {
         setPopUpMessage("");
     }, []);
 
     return (
+        <Paper
+            elevation={6}
+            sx={{
+                p: 3,
+                borderRadius: 2,
+                width: "100%",
+                maxWidth: 700,
+                margin: "0 auto"
+            }}
+        >
             <Box
                 component="form"
                 onSubmit={handleOnSubmit}
                 onReset={handleOnReset}
-                sx={{
-                    p: 5,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 2,
-                    width: "100%",
-                }}
             >
-                {/* Product Name */}
-                <TextField
-                    label={value.split(" ")[1]}
-                    placeholder={value.split(" ")[1]}
-                    name="name"
-                    value={values.name}
-                    onChange={handleChange}
-                    variant="outlined"
-                    error={Boolean(productErrors?.name)}
-                    helperText={productErrors?.name}
-                    sx={{
-                        width: 300,
-                        backgroundColor: "white",
-                        borderRadius: 2,
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px",
-                        }
-                    }}
-                />
+                <Grid container spacing={2}>
 
-                {/* Description */}
-                <TextField
-                    label="Description"
-                    placeholder="Description"
-                    name="description"
-                    value={values.description}
-                    onChange={handleChange}
-                    variant="outlined"
-                    error={Boolean(productErrors?.description)}
-                    helperText={productErrors?.description}
-                    sx={{
-                        width: 300,
-                        backgroundColor: "white",
-                        borderRadius: 2,
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px",
-                        }
-                    }}
-                />
+                    {/* Title section */}
+                    <Grid size={{ xs: 12 }}>
+                        <Box sx={{ fontSize: 18, fontWeight: 600 }}>
+                            Create Product
+                        </Box>
+                    </Grid>
 
-                <div className="flex flex-column gap-2">
-                    {/* Quantity */}
-                    <TextField
-                        label="Quantity"
-                        type="number"
-                        inputProps={{ min: 1 }}
-                        placeholder="Quantity in stock"
-                        name="quantity"
-                        value={values.quantity}
-                        onChange={handleChange}
-                        variant="outlined"
-                        error={Boolean(productErrors?.quantity)}
-                        helperText={productErrors?.quantity}
-                        sx={{
-                            width: 150,
-                            backgroundColor: "white",
-                            borderRadius: 2,
-                            '& .MuiInputLabel-root': {
-                                backgroundColor: 'white',
-                                borderRadius: 2,
-                                padding: "5px"
-                            },
-                            '& .MuiInputLabel-root.Mui-focused': {
-                                color: 'gray',
-                                backgroundColor: 'white',
-                                borderRadius: 2,
-                                padding: "5px",
-                            }
-                        }}
-                    />
-                    {/* Price */}
-                    <TextField
-                        label="Price"
-                        type="number"
-                        inputProps={{ min: 0 }}
-                        placeholder="Product price"
-                        name="price"
-                        value={values.price}
-                        onChange={handleChange}
-                        variant="outlined"
-                        error={Boolean(productErrors?.price)}
-                        helperText={productErrors?.price}
-                        sx={{
-                            width: 150,
-                            backgroundColor: "white",
-                            borderRadius: 2,
-                            '& .MuiInputLabel-root': {
-                                backgroundColor: 'white',
-                                borderRadius: 2,
-                                padding: "5px"
-                            },
-                            '& .MuiInputLabel-root.Mui-focused': {
-                                color: 'gray',
-                                backgroundColor: 'white',
-                                borderRadius: 2,
-                                padding: "5px",
-                            }
-                        }}
-                    />
-                </div>
+                    {/* Name */}
+                    <Grid size={{ xs: 12}}>
+                        <TextField
+                            fullWidth
+                            label="Product Name"
+                            name="name"
+                            value={values.name}
+                            onChange={handleChange}
+                            error={Boolean(productErrors?.name)}
+                            helperText={productErrors?.name}
+                        />
+                    </Grid>
 
+                    {/* Description */}
+                    <Grid size={{ xs: 12}}>
+                        <TextField
+                            fullWidth
+                            label="Description"
+                            name="description"
+                            value={values.description}
+                            onChange={handleChange}
+                            error={Boolean(productErrors?.description)}
+                            helperText={productErrors?.description}
+                            multiline
+                            rows={3}
+                        />
+                    </Grid>
 
-                {/* Buttons */}
-                <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                    >
-                        Create
-                    </Button>
-                    <Button
-                        type="reset"
-                        variant="contained"
-                        color="error"
-                    >
-                        Reset
-                    </Button>
-                </Stack>
+                    {/* Quantity + Price */}
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            fullWidth
+                            label="Quantity"
+                            type="number"
+                            inputProps={{ min: 1 }}
+                            name="quantity"
+                            value={values.quantity}
+                            onChange={handleChange}
+                            error={Boolean(productErrors?.quantity)}
+                            helperText={productErrors?.quantity}
+                        />
+                    </Grid>
+
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            fullWidth
+                            label="Price"
+                            type="number"
+                            inputProps={{ min: 0 }}
+                            name="price"
+                            value={values.price}
+                            onChange={handleChange}
+                            error={Boolean(productErrors?.price)}
+                            helperText={productErrors?.price}
+                        />
+                    </Grid>
+
+                    {/* Buttons */}
+                    <Grid size={{ xs: 12 }}>
+                        <Stack
+                            direction="row"
+                            spacing={2}
+                            justifyContent="flex-end"
+                        >
+                            <Button
+                                type="reset"
+                                variant="outlined"
+                                color="error"
+                            >
+                                Reset
+                            </Button>
+
+                            <Button
+                                type="submit"
+                                variant="contained"
+                            >
+                                Create
+                            </Button>
+                        </Stack>
+                    </Grid>
+
+                </Grid>
             </Box>
-    )
-}
+        </Paper>
+    );
+};
 
 export default FormProduct;

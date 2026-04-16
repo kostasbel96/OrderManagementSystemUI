@@ -10,6 +10,7 @@ interface PopupProps {
 }
 
 const PopUp = ({title, setSubmitted, success, popUpMessage}: PopupProps)=>{
+
     return (
         <motion.div
             className="backdrop"

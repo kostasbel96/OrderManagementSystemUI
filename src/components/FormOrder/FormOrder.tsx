@@ -4,13 +4,16 @@ import {
     TextField,
     Divider,
     Stack,
+    Paper,
+    Grid,
+    Typography
 } from "@mui/material";
 import ProductsAutocomplete from "./ProductsAutocomplete.tsx";
-import {type FormEvent, useEffect, useState} from "react";
-import type {Customer, Product, SelectedProduct} from "../../types/Types.ts";
-import {addOrder} from '../../services/orderService.ts'
-import {getCustomers} from "../../services/customerService.ts";
-import {getProducts} from "../../services/productService.ts";
+import { type FormEvent, useEffect, useState } from "react";
+import type { Customer, Product, SelectedProduct } from "../../types/Types.ts";
+import { addOrder } from "../../services/orderService.ts";
+import { getCustomers } from "../../services/customerService.ts";
+import { getProducts } from "../../services/productService.ts";
 import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
 import CustomersAutocomplete from "./CustomersAutocomplete.tsx";
 
@@ -20,38 +23,56 @@ interface FormOrderProps {
     setPopUpMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) => {
+const FormOrder = ({
+                       setSubmitted,
+                       setSuccess,
+                       setPopUpMessage
+                   }: FormOrderProps) => {
+
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
-    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null >(null);
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
     const [address, setAddress] = useState("");
     const [deposit, setDeposit] = useState<string>("");
+
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
-    const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({selectedProductsWithQty, selectedCustomer, address, deposit});
+
     const [added, setAdded] = useState(false);
 
+    const {
+        validateOrderForm,
+        orderErrors,
+        setOrderErrors
+    } = useOrderFormValidation({
+        selectedProductsWithQty,
+        selectedCustomer,
+        address,
+        deposit
+    });
 
-
-    const handleOnSubmit = ((e:  FormEvent<HTMLFormElement>) => {
+    const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (validateOrderForm()) {
-            addOrder(
-                {
-                    products:selectedProductsWithQty,
-                    customer:selectedCustomer,
-                    address:address,
-                    deposit: deposit
-                }
-            ).then((data) => {
-                setSuccess(true);
-                setSubmitted(true);
-                console.log(data);
-                setAdded(true);
-            }).catch((error)=>{
-                setPopUpMessage(error.message);
-                setSubmitted(true);
-                setSuccess(false);
-            });
+            addOrder({
+                products: selectedProductsWithQty,
+                customer: selectedCustomer,
+                address,
+                deposit
+            })
+                .then((data) => {
+                    setSuccess(true);
+                    setSubmitted(true);
+                    setPopUpMessage("Order created successfully");
+                    setAdded(true);
+                    console.log(data);
+                })
+                .catch((error) => {
+                    setPopUpMessage(error.message);
+                    setSubmitted(true);
+                    setSuccess(false);
+                });
+
             setSelectedProductsWithQty([]);
             setSelectedCustomer(null);
             setAddress("");
@@ -60,140 +81,135 @@ const FormOrder = ({setSubmitted, setSuccess, setPopUpMessage}: FormOrderProps) 
             setSubmitted(true);
             setSuccess(false);
         }
-    })
+    };
 
-    const handleOnReset = (e:  FormEvent<HTMLFormElement>) => {
+    const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         setSelectedProductsWithQty([]);
         setSelectedCustomer(null);
         setAddress("");
         setDeposit("");
         setOrderErrors({});
         setSubmitted(false);
-    }
+    };
 
-    const handleDepositChange = (
-        e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        const dep = e.target.value
-        const safeDeposit = Math.max(0, Number(dep));
-        setDeposit(safeDeposit.toString());
+    const handleDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = Math.max(0, Number(e.target.value));
+        setDeposit(value.toString());
     };
 
     useEffect(() => {
-        getCustomers(0, 100)
-            .then(data=>{
-                setCustomers(data.content);
-            });
-        getProducts(0, 100)
-            .then(data=>{
-                setProducts(data.content);
-            });
-    },[added])
+        getCustomers(0, 100).then((data) => {
+            setCustomers(data.content);
+        });
+
+        getProducts(0, 100).then((data) => {
+            setProducts(data.content);
+        });
+    }, [added]);
 
     useEffect(() => {
         setPopUpMessage("");
     }, []);
 
     return (
-            <Box
-                component="form"
-                onSubmit={handleOnSubmit}
-                onReset={handleOnReset}
-                sx={{
-                    p: 4,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 2,
-                }}
-            >
-                <ProductsAutocomplete
-                    products={products}
-                    selectedProductsWithQty={selectedProductsWithQty}
-                    setSelectedProductsWithQty={setSelectedProductsWithQty}
-                />
-                {orderErrors && (<p className="text-sm text-red-900">
-                    {orderErrors.products || orderErrors.productQuantity
-                        || orderErrors.productPrice || orderErrors.stockError}
-                </p>)}
-                <CustomersAutocomplete
-                    customers={customers}
-                    selectedCustomer={selectedCustomer}
-                    setSelectedCustomer={setSelectedCustomer}
-                />
-                {orderErrors && (<p className="text-sm text-red-900">{orderErrors.customer}</p>)}
+        <Paper
+            elevation={6}
+            sx={{
+                p: 3,
+                borderRadius: 2,
+                width: "100%",
+                maxWidth: 900,
+                margin: "0 auto"
+            }}
+        >
+            <Box component="form" onSubmit={handleOnSubmit} onReset={handleOnReset}>
 
-                <Divider sx={{ width: 300 }} />
+                <Grid container spacing={2}>
 
-                <TextField
-                    className="rounded"
-                    label="Address"
-                    variant="outlined"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    sx={{ width: 250,
-                          backgroundColor: "white",
-                          color: "black",
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px",
-                        }
+                    {/* Title section */}
+                    <Grid size={{ xs: 12 }}>
+                        <Box sx={{ fontSize: 18, fontWeight: 600 }}>
+                            Create Order
+                        </Box>
+                    </Grid>
 
-                    }}
-                />
-                {orderErrors && (<p className="text-sm text-red-900">{orderErrors.address}</p>)}
-                <TextField
-                    className="rounded"
-                    label="Deposit"
-                    type="number"
-                    variant="outlined"
-                    value={deposit}
-                    onChange={(e) => handleDepositChange(e)}
-                    sx={{ width: 250,
-                        backgroundColor: "white",
-                        color: "black",
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px",
-                        }
+                    {/* PRODUCTS */}
+                    <Grid size={{ xs: 12 }}>
+                        <ProductsAutocomplete
+                            products={products}
+                            selectedProductsWithQty={selectedProductsWithQty}
+                            setSelectedProductsWithQty={setSelectedProductsWithQty}
+                        />
+                        {orderErrors && (
+                            <Typography color="error" fontSize={12}>
+                                {orderErrors.products || orderErrors.productQuantity
+                                    || orderErrors.productPrice || orderErrors.stockError}
+                            </Typography>
+                        )}
+                    </Grid>
 
-                    }}
-                />
-                {orderErrors && (<p className="text-sm text-red-900">{orderErrors.deposit}</p>)}
+                    {/* CUSTOMER */}
+                    <Grid size={{ xs: 12 }}>
+                        <CustomersAutocomplete
+                            customers={customers}
+                            selectedCustomer={selectedCustomer}
+                            setSelectedCustomer={setSelectedCustomer}
+                        />
+                        {orderErrors?.customer && (
+                            <Typography color="error" fontSize={12}>
+                                {orderErrors.customer}
+                            </Typography>
+                        )}
+                    </Grid>
 
-                <Stack direction="row" spacing={2}>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                    >
-                        Create
-                    </Button>
+                    <Grid size={{ xs: 12 }}>
+                        <Divider />
+                    </Grid>
 
-                    <Button
-                        type="reset"
-                        variant="contained"
-                        color="error"
-                    >
-                        Reset
-                    </Button>
-                </Stack>
+                    {/* ADDRESS */}
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            fullWidth
+                            label="Address"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            error={Boolean(orderErrors?.address)}
+                            helperText={orderErrors?.address}
+                        />
+                    </Grid>
+
+                    {/* DEPOSIT */}
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            fullWidth
+                            label="Deposit"
+                            type="number"
+                            value={deposit}
+                            onChange={handleDepositChange}
+                            error={Boolean(orderErrors?.deposit)}
+                            helperText={orderErrors?.deposit}
+                        />
+                    </Grid>
+
+                    {/* BUTTONS */}
+                    <Grid size={{ xs: 12 }}>
+                        <Stack direction="row" spacing={2} justifyContent="flex-end">
+                            <Button type="reset" variant="outlined" color="error">
+                                Reset
+                            </Button>
+
+                            <Button type="submit" variant="contained">
+                                Create
+                            </Button>
+                        </Stack>
+                    </Grid>
+
+                </Grid>
             </Box>
+        </Paper>
     );
-}
+};
 
 export default FormOrder;

@@ -11,9 +11,9 @@ interface PopUpDeniedProps {
 const PopUpDenied = ({setSubmitted, title, popUpMessage}: PopUpDeniedProps)=>{
     let popUpTitle;
 
-    if (title.includes("Product")){
+    if (title.includes("product")){
         popUpTitle = "Product"
-    } else if (title.includes("Customer")){
+    } else if (title.includes("customer")){
         popUpTitle = "Customer"
     } else {
         popUpTitle = "Order"

@@ -1,10 +1,8 @@
-import MyButton from "./ui/MyButton.tsx";
-import MyCollapse from "./MyCollapse.tsx";
 import {useState} from "react";
 import PopUp from "./popup/PopUp.tsx";
+import MyTabs from "./MyTabs.tsx";
 
 const QuickAdd = () => {
-    const [open, setOpen] = useState(false);
     const [activeValue, setActiveValue] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -13,25 +11,12 @@ const QuickAdd = () => {
 
     return (
             <div className="mt-5 text-center">
-                <MyButton value="Add Order"
-                          activeValue={activeValue}
-                          submitted={submitted}
-                          setOpen={setOpen}
-                          setActiveValue={setActiveValue}
-                          open={open} />
-                <MyButton value="Add Product"
-                          activeValue={activeValue}
-                          submitted={submitted}
-                          setOpen={setOpen}
-                          setActiveValue={setActiveValue}
-                          open={open}
-                />
-                <MyButton value="Add Customer" activeValue={activeValue} submitted={submitted} setOpen={setOpen} setActiveValue={setActiveValue} open={open} />
                 <div className="flex justify-center mt-2 relative">
-                    <MyCollapse isOpen={open} value={activeValue ?? ""}
-                                setSubmitted={setSubmitted}
-                                setSuccess={setSuccess}
-                                setPopUpMessage={setPopUpMessage}
+                    <MyTabs
+                        setSubmitted={setSubmitted}
+                        setSuccess={setSuccess}
+                        setPopUpMessage={setPopUpMessage}
+                        setActiveValue={setActiveValue}
                     />
                 </div>
 

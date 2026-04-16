@@ -1,10 +1,10 @@
-import {Autocomplete, Box, Stack, TextField} from "@mui/material"
-import type {Product, SelectedProduct} from "../../types/Types.ts";
-import {useEffect, useState} from "react";
+import { Autocomplete, Box, Divider, Stack, TextField, Typography } from "@mui/material";
+import type { Product, SelectedProduct } from "../../types/Types.ts";
+import { useEffect, useMemo, useState } from "react";
 
 interface ProductsAutocompleteProps {
     selectedProductsWithQty: SelectedProduct[];
-    setSelectedProductsWithQty: React.Dispatch<React.SetStateAction<SelectedProduct[]>>
+    setSelectedProductsWithQty: React.Dispatch<React.SetStateAction<SelectedProduct[]>>;
     products: Product[];
 }
 
@@ -16,164 +16,175 @@ interface Option {
 const ProductsAutocomplete = ({
                                   selectedProductsWithQty,
                                   setSelectedProductsWithQty,
-                                  products} : ProductsAutocompleteProps) => {
+                                  products
+                              }: ProductsAutocompleteProps) => {
 
-    const [productOptions, setProductOptions] = useState<Option[]>([]);
-    const [quantityValue, setQuantityValue] = useState<{id: number, quantity: string}>();
-    const [priceValue, setPriceValue] = useState<{id: number, price: string}>();
+    const [totalAmount, setTotalAmount] = useState(0);
 
-    const handleQuantityChange = (index: number, quantity: number, id: number) => {
-        setQuantityValue({id:id, quantity: quantity.toString()});
-        if (!setSelectedProductsWithQty) return;
-        const safeQuantity = Math.max(1, quantity);
-        setSelectedProductsWithQty((prev: SelectedProduct[]) => {
+    // -----------------------------
+    // OPTIONS (memoized = faster + cleaner)
+    // -----------------------------
+    const productOptions: Option[] = useMemo(() => {
+        return (products ?? [])
+            .filter((p) => p.quantity > 0)
+            .map((p) => ({
+                value: p.id,
+                label: p.name
+            }));
+    }, [products]);
+
+    const availableOptions = useMemo(() => {
+        return productOptions.filter(
+            (p) => !selectedProductsWithQty.some(sel => sel.product.id === p.value)
+        );
+    }, [productOptions, selectedProductsWithQty]);
+
+    const selectedOptions = useMemo(() => {
+        return selectedProductsWithQty.map((p) => ({
+            value: p.product.id,
+            label: p.product.name
+        }));
+    }, [selectedProductsWithQty]);
+
+    // -----------------------------
+    // HANDLERS
+    // -----------------------------
+    const handleQuantityChange = (index: number, value: string) => {
+        setSelectedProductsWithQty(prev => {
             const copy = [...prev];
-            copy[index] = { ...copy[index], quantity: safeQuantity };
+
+            copy[index] = {
+                ...copy[index],
+                quantity: value === "" ? "" : Number(value)
+            } as any;
+
             return copy;
         });
-
     };
 
-
-    const handlePriceChange = (
-                                e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-                                index: number,
-                                id: number) => {
-        const price = e.target.value
-        setPriceValue({id:id, price: price.toString()});
-        if (!setSelectedProductsWithQty) return;
-        const safePrice = Math.max(0, Number(price));
-        setSelectedProductsWithQty((prev: SelectedProduct[]) => {
+    const handlePriceChange = (index: number, value: string) => {
+        setSelectedProductsWithQty(prev => {
             const copy = [...prev];
-            copy[index] = { ...copy[index], price: safePrice};
+
+            copy[index] = {
+                ...copy[index],
+                price: value === "" ? "" : Number(value)
+            } as any;
+
             return copy;
-        })
+        });
     };
 
-    const handleChange = (
-        _: React.SyntheticEvent,
-        selected: Option[]
-    ) => {
-            const selectedArray = Array.isArray(selected) ? selected : [];
-            setSelectedProductsWithQty?.(
-                selectedArray.map((s) => {
-                    const existing = selectedProductsWithQty?.find(
-                        (p) => p.product.id === s.value
-                    );
-                    const product = products?.find((p) => p.id === s.value);
-                    return existing || { product: product!, quantity: 1, price: product!.price };
-                })
-            );
+    const handleChange = (_: React.SyntheticEvent, selected: Option[]) => {
+        const arr = Array.isArray(selected) ? selected : [];
+
+        setSelectedProductsWithQty(
+            arr.map((s) => {
+                const existing = selectedProductsWithQty.find(
+                    (p) => p.product.id === s.value
+                );
+
+                const product = products.find((p) => p.id === s.value);
+
+                return (
+                    existing ?? {
+                        product: product!,
+                        quantity: 1,
+                        price: product!.price
+                    }
+                );
+            })
+        );
     };
 
-    const getOptions = (): Option[] => {
-            return (productOptions || []).filter(
-                (p) =>
-                    !selectedProductsWithQty?.some(
-                        (sel) => sel.product.id === p.value
-                    )
-            );
-
-    };
-
-    const getSelectedValue = (): Option[] => {
-        return (selectedProductsWithQty ?? []).map((p) => ({
-            value: p.product.id,
-            label: p.product.name,
-        }));
-    };
-
-
+    // -----------------------------
+    // TOTAL CALCULATION
+    // -----------------------------
     useEffect(() => {
-        if (products){
-            const productsWithValidQuantity = products.filter((p: Product)=> p.quantity > 0);
-            const finalOptions = productsWithValidQuantity.map((p: Product) => ({
-                value: p.id,
-                label: p.name,
-            }))
-            setProductOptions(finalOptions);
-        }
-    },[products])
+        const total = selectedProductsWithQty.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+        );
 
+        setTotalAmount(total);
+    }, [selectedProductsWithQty]);
 
-
+    // -----------------------------
+    // UI
+    // -----------------------------
     return (
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, width: "100%"}}>
-                {/* Autocomplete Select */}
-                <Autocomplete<Option, true>
-                    fullWidth
-                    multiple
-                    options={getOptions()}
-                    getOptionLabel={(option: Option) => option.label}
-                    value={getSelectedValue()}
-                    onChange={handleChange}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label={"Products"}
-                            placeholder={`Search Products...`}
-                            sx={{
-                                width: "100%",
-                                backgroundColor: "white",
-                                borderRadius: 2,
-                                '& .MuiInputLabel-root': {
-                                    backgroundColor: 'white',
-                                    borderRadius: 2,
-                                    padding: "2px"
-                                },
-                                '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'gray',
-                                    backgroundColor: 'white',
-                                    borderRadius: 2,
-                                    padding: "2px",
-                                }
-                            }}
-                        />
-                    )}
-                />
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
 
-                {/* Quantity inputs for Products */}
-                {selectedProductsWithQty &&
-                    selectedProductsWithQty.map((item, index) => (
-                        <Stack direction="row" spacing={1} alignItems="end" key={item.product.id}>
-                            <Box sx={{ width: 120, textAlign: "center" }}>{item.product.name}:</Box>
-                            <TextField
-                                type="number"
-                                label={"Quantity"}
-                                value={quantityValue?.id === item.product.id ? quantityValue.quantity : item.quantity}
-                                onChange={(e) => handleQuantityChange(index, Number(e.target.value), item.product.id)}
-                                inputProps={{ min: 1 }}
-                                sx={{
-                                    width: 100,
-                                    backgroundColor: "white",
-                                    borderRadius: 2,
-                                    '.MuiInputLabel-root':{
-                                        backgroundColor: 'white',
-                                        padding: '0.25rem',
-                                        borderRadius: 2
-                                    }
-                                }}
-                            />
-                            <TextField
-                                type="number"
-                                label={"Price"}
-                                value={priceValue?.id === item.product.id ? priceValue.price : item.price}
-                                onChange={(e) => handlePriceChange(e, index, item.product.id)}
-                                sx={{
-                                    width: 100,
-                                    backgroundColor: "white",
-                                    borderRadius: 2,
-                                    '.MuiInputLabel-root':{
-                                        backgroundColor: 'white',
-                                        padding: '0.25rem',
-                                        borderRadius: 2
-                                    }
-                                }}
-                            />
-                        </Stack>
-                    ))}
-            </Box>
-    )
-}
+            {/* Autocomplete */}
+            <Autocomplete<Option, true>
+                multiple
+                fullWidth
+                options={availableOptions}
+                value={selectedOptions}
+                getOptionLabel={(o) => o.label}
+                onChange={handleChange}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Products"
+                        placeholder="Search products..."
+                        sx={{
+                            backgroundColor: "white",
+                            borderRadius: 2
+                        }}
+                    />
+                )}
+            />
+
+            {/* Selected Products */}
+            {selectedProductsWithQty.map((item, index) => (
+                <Stack
+                    key={item.product.id}
+                    direction="row"
+                    spacing={2}
+                    alignItems="center"
+                >
+                    <Typography sx={{ width: 140 }}>
+                        {item.product.name}
+                    </Typography>
+
+                    <TextField
+                        size="medium"
+                        type="number"
+                        label="Qty"
+                        value={item.quantity}
+                        onChange={(e) =>
+                            handleQuantityChange(index, e.target.value)
+                        }
+                        inputProps={{ min: 1 }}
+                        sx={{ width: 90, backgroundColor: "white" }}
+                    />
+
+                    <TextField
+                        size="medium"
+                        type="number"
+                        label="Price"
+                        value={item.price}
+                        onChange={(e) =>
+                            handlePriceChange(index, e.target.value)
+                        }
+                        inputProps={{ min: 0 }}
+                        sx={{ width: 120, backgroundColor: "white" }}
+                    />
+                </Stack>
+            ))}
+
+            {/* Total */}
+            {selectedProductsWithQty.length > 0 && (
+                <>
+                    <Divider sx={{ width: "100%" }} />
+                    <Typography sx={{ textAlign: "right", fontWeight: 600 }}>
+                        Total: {totalAmount} €
+                    </Typography>
+                </>
+            )}
+        </Box>
+    );
+};
 
 export default ProductsAutocomplete;

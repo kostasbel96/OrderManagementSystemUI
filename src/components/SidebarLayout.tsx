@@ -14,8 +14,9 @@ import { type ReactNode, useState } from "react";
 import {NavLink } from "react-router";
 
 export default function SidebarLayout({ children }: { children: ReactNode }) {
+    const loc = location.pathname.split("/")[1].charAt(0).toUpperCase() + location.pathname.split("/")[1].slice(1)
     const [open, setOpen] = useState(false);
-    const [label, setLabel] = useState(location.pathname.split("/")[1].charAt(0).toUpperCase() + location.pathname.split("/")[1].slice(1));
+    const [label, setLabel] = useState(loc === "" ? "Dashboard" : loc);
 
     return (
         <div className="flex h-screen bg-gray-100">

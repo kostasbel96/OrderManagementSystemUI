@@ -1,29 +1,47 @@
-import { Box, TextField, Button, Stack } from "@mui/material"
-import {type FormEvent, useEffect, useState} from "react";
-import {addCustomer} from "../../services/customerService.ts";
-import useCustomerFormValidation, {type FormValues} from "../../hooks/useCustomerFormValidation.ts";
+import {
+    TextField,
+    Button,
+    Paper,
+    Stack,
+    Grid, Box
+} from "@mui/material";
+import { type FormEvent, useEffect, useState } from "react";
+import { addCustomer } from "../../services/customerService.ts";
+import useCustomerFormValidation, {
+    type FormValues
+} from "../../hooks/useCustomerFormValidation.ts";
 
 interface FormCustomerProps {
-    value: string;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
     setPopUpMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const initialValues = {
+const initialValues: FormValues = {
     name: "",
     lastName: "",
     phoneNumber1: "",
     phoneNumber2: "",
     email: ""
-}
+};
 
-const FormCustomer = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormCustomerProps) => {
+const FormCustomer = ({
+                          setSubmitted,
+                          setSuccess,
+                          setPopUpMessage
+                      }: FormCustomerProps) => {
+
     const [values, setValues] = useState<FormValues>(initialValues);
-    const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(values);
+
+    const {
+        validateCustomerForm,
+        customerErrors,
+        setCustomerErrors
+    } = useCustomerFormValidation(values);
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (validateCustomerForm()) {
             addCustomer({
                 name: values.name,
@@ -32,196 +50,146 @@ const FormCustomer = ({value, setSubmitted, setSuccess, setPopUpMessage}: FormCu
                 phoneNumber2: values.phoneNumber2,
                 email: values.email,
                 balance: 0
-            }).then((data) => {
-                setSuccess(true);
-                setSubmitted(true);
-                setPopUpMessage("Customer added successfully.")
-                console.log(data);
-            }).catch((error)=>{
-                console.log(error.message);
-                setPopUpMessage(error.message);
-                setSubmitted(true);
-                setSuccess(false);
             })
-            setValues(initialValues);
+                .then(() => {
+                    setSuccess(true);
+                    setSubmitted(true);
+                    setPopUpMessage("Customer added successfully.");
+                    setValues(initialValues);
+                })
+                .catch((error) => {
+                    setPopUpMessage(error.message);
+                    setSubmitted(true);
+                    setSuccess(false);
+                });
         } else {
             setSubmitted(true);
             setSuccess(false);
         }
-
-    }
+    };
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setValues(initialValues);
         setSubmitted(false);
         setCustomerErrors({});
-    }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        const {name, value} = e.target;
-        setValues(prev=> ({
+        const { name, value } = e.target;
+
+        setValues((prev) => ({
             ...prev,
             [name]: value
         }));
-        setCustomerErrors(prev=>({
+
+        setCustomerErrors((prev) => ({
             ...prev,
             [name]: ""
-        }))
-    }
+        }));
+    };
 
     useEffect(() => {
         setPopUpMessage("");
     }, []);
 
     return (
-            <Box
-                component="form"
-                onSubmit={handleOnSubmit}
-                onReset={handleOnReset}
-                sx={{
-                    p: 5,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 2,
-                    width: "100%",
-                }}
-            >
-                {/* Name */}
-                <TextField
-                    label="Name"
-                    name="name"
-                    placeholder={value.split(" ")[1]}
-                    value={values.name}
-                    onChange={handleChange}
-                    variant="outlined"
-                    error={Boolean(customerErrors?.name)}
-                    helperText={customerErrors?.name}
-                    sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px",
-                        }}}
-                />
-                {/* Last Name */}
-                <TextField
-                    label="Last Name"
-                    name="lastName"
-                    placeholder="Last Name"
-                    value={values.lastName}
-                    onChange={handleChange}
-                    variant="outlined"
-                    error={Boolean(customerErrors?.lastName)}
-                    helperText={customerErrors?.lastName}
-                    sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px",
-                        }}}
-                />
-                {/* Phone */}
-                <TextField
-                    label="Phone 1"
-                    type="tel"
-                    name="phoneNumber1"
-                    placeholder="Phone 1"
-                    value={values.phoneNumber1}
-                    onChange={handleChange}
-                    variant="outlined"
-                    error={Boolean(customerErrors?.phoneNumber1)}
-                    helperText={customerErrors?.phoneNumber1}
-                    sx={{ width: 300, backgroundColor: "white", borderRadius: 2 ,
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px",
-                        }}}
-                />
-                <TextField
-                    label="Phone 2"
-                    type="tel"
-                    name="phoneNumber2"
-                    placeholder="Phone 2"
-                    value={values.phoneNumber2}
-                    onChange={handleChange}
-                    variant="outlined"
-                    error={Boolean(customerErrors?.phoneNumber2)}
-                    helperText={customerErrors?.phoneNumber2}
-                    sx={{ width: 300, backgroundColor: "white", borderRadius: 2 ,
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px",
-                        }}}
-                />
-                {/* Email */}
-                <TextField
-                    label="Email"
-                    type="text"
-                    name="email"
-                    placeholder="example@example.com"
-                    value={values.email}
-                    onChange={handleChange}
-                    variant="outlined"
-                    error={Boolean(customerErrors?.email)}
-                    helperText={customerErrors?.email}
-                    sx={{ width: 300, backgroundColor: "white", borderRadius: 2,
-                        '& .MuiInputLabel-root': {
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px"
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'gray',
-                            backgroundColor: 'white',
-                            borderRadius: 2,
-                            padding: "5px",
-                        }
-                }}
-                />
-                {/* Buttons πάνω */}
-                <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-                    <Button type="submit"
-                            variant="contained"
-                            color="primary">
-                        Create
-                    </Button>
-                    <Button type="reset"
-                            variant="contained"
-                            color="error">
-                        Reset
-                    </Button>
-                </Stack>
-            </Box>
-    )
-}
+        <Paper
+            elevation={6}
+            sx={{
+                p: 3,
+                borderRadius: 2,
+                width: "100%",
+                maxWidth: 800,
+                margin: "0 auto"
+            }}
+        >
+            <form onSubmit={handleOnSubmit} onReset={handleOnReset}>
+
+                <Grid container spacing={2}>
+
+                    {/* Title section */}
+                    <Grid size={{ xs: 12 }}>
+                        <Box sx={{ fontSize: 18, fontWeight: 600 }}>
+                            Create Customer
+                        </Box>
+                    </Grid>
+
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            fullWidth
+                            label="Name"
+                            name="name"
+                            value={values.name}
+                            onChange={handleChange}
+                            error={Boolean(customerErrors?.name)}
+                            helperText={customerErrors?.name}
+                        />
+                    </Grid>
+
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            fullWidth
+                            label="Last Name"
+                            name="lastName"
+                            value={values.lastName}
+                            onChange={handleChange}
+                            error={Boolean(customerErrors?.lastName)}
+                            helperText={customerErrors?.lastName}
+                        />
+                    </Grid>
+
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            fullWidth
+                            label="Phone 1"
+                            name="phoneNumber1"
+                            value={values.phoneNumber1}
+                            onChange={handleChange}
+                            error={Boolean(customerErrors?.phoneNumber1)}
+                            helperText={customerErrors?.phoneNumber1}
+                        />
+                    </Grid>
+
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            fullWidth
+                            label="Phone 2"
+                            name="phoneNumber2"
+                            value={values.phoneNumber2}
+                            onChange={handleChange}
+                            error={Boolean(customerErrors?.phoneNumber2)}
+                            helperText={customerErrors?.phoneNumber2}
+                        />
+                    </Grid>
+
+                    <Grid size={{ xs: 12 }}>
+                        <TextField
+                            fullWidth
+                            label="Email"
+                            name="email"
+                            value={values.email}
+                            onChange={handleChange}
+                            error={Boolean(customerErrors?.email)}
+                            helperText={customerErrors?.email}
+                        />
+                    </Grid>
+
+                    <Grid size={{ xs: 12 }}>
+                        <Stack direction="row" spacing={2} justifyContent="flex-end">
+                            <Button type="reset" variant="outlined" color="error">
+                                Reset
+                            </Button>
+                            <Button type="submit" variant="contained">
+                                Create
+                            </Button>
+                        </Stack>
+                    </Grid>
+
+                </Grid>
+            </form>
+        </Paper>
+    );
+};
 
 export default FormCustomer;
