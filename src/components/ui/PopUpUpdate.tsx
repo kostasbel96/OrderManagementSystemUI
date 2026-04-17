@@ -195,7 +195,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                     id="price"
                     name="price"
                     label="Product price"
-                    type="number"
+                    type="numeric"
                     fullWidth
                     variant="standard"
                     error={Boolean(productErrors?.price)}

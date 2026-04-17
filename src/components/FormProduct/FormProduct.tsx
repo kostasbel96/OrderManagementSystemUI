@@ -159,7 +159,7 @@ const FormProduct = ({
                         <TextField
                             fullWidth
                             label="Price"
-                            type="number"
+                            type="numeric"
                             inputProps={{ min: 0 }}
                             name="price"
                             value={values.price}
