@@ -168,7 +168,7 @@ const ProductsAutocomplete = ({
                         onChange={(e) =>
                             handlePriceChange(index, e.target.value)
                         }
-                        inputProps={{ min: 0 }}
+                        inputProps={{ min: 0, step: "0.01"}}
                         sx={{ width: 120, backgroundColor: "white" }}
                     />
                 </Stack>

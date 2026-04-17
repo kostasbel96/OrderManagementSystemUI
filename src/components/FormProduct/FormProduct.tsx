@@ -159,8 +159,8 @@ const FormProduct = ({
                         <TextField
                             fullWidth
                             label="Price"
-                            type="numeric"
-                            inputProps={{ min: 0 }}
+                            type="number"
+                            inputProps={{ min: 0, step: "0.01"}}
                             name="price"
                             value={values.price}
                             onChange={handleChange}
