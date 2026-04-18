@@ -13,9 +13,9 @@ interface FormPopUpProps {
 const PopUpSuccess = ({setSubmitted, title}: FormPopUpProps) => {
     let popUpTitle;
 
-    if (title.includes("Product")){
+    if (title.includes("product")){
         popUpTitle = "Product"
-    } else if (title.includes("Customer")){
+    } else if (title.includes("customer")){
         popUpTitle = "Customer"
     } else {
         popUpTitle = "Order"
