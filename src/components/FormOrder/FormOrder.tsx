@@ -10,10 +10,8 @@ import {
 } from "@mui/material";
 import ProductsAutocomplete from "./ProductsAutocomplete.tsx";
 import { type FormEvent, useEffect, useState } from "react";
-import type { Customer, Product, SelectedProduct } from "../../types/Types.ts";
+import type { Customer, SelectedProduct } from "../../types/Types.ts";
 import { addOrder } from "../../services/orderService.ts";
-import { getCustomers } from "../../services/customerService.ts";
-import { getProducts } from "../../services/productService.ts";
 import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
 import CustomersAutocomplete from "./CustomersAutocomplete.tsx";
 
@@ -33,11 +31,6 @@ const FormOrder = ({
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
     const [address, setAddress] = useState("");
     const [deposit, setDeposit] = useState<string>("");
-
-    const [customers, setCustomers] = useState<Customer[]>([]);
-    const [products, setProducts] = useState<Product[]>([]);
-
-    const [added, setAdded] = useState(false);
 
     const {
         validateOrderForm,
@@ -64,7 +57,6 @@ const FormOrder = ({
                     setSuccess(true);
                     setSubmitted(true);
                     setPopUpMessage("Order created successfully");
-                    setAdded(true);
                     console.log(data);
                 })
                 .catch((error) => {
@@ -100,16 +92,6 @@ const FormOrder = ({
     };
 
     useEffect(() => {
-        getCustomers(0, 100).then((data) => {
-            setCustomers(data.content);
-        });
-
-        getProducts(0, 100).then((data) => {
-            setProducts(data.content);
-        });
-    }, [added]);
-
-    useEffect(() => {
         setPopUpMessage("");
     }, []);
 
@@ -138,7 +120,6 @@ const FormOrder = ({
                     {/* PRODUCTS */}
                     <Grid size={{ xs: 12 }}>
                         <ProductsAutocomplete
-                            products={products}
                             selectedProductsWithQty={selectedProductsWithQty}
                             setSelectedProductsWithQty={setSelectedProductsWithQty}
                         />
@@ -153,7 +134,6 @@ const FormOrder = ({
                     {/* CUSTOMER */}
                     <Grid size={{ xs: 12 }}>
                         <CustomersAutocomplete
-                            customers={customers}
                             selectedCustomer={selectedCustomer}
                             setSelectedCustomer={setSelectedCustomer}
                         />

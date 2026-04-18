@@ -1,20 +1,49 @@
 import {Autocomplete, TextField} from "@mui/material";
 import type {Customer} from "../../types/Types.ts";
+import {useEffect, useState} from "react";
+import {searchCustomerByName} from "../../services/customerService.ts";
 
 interface CustomersAutocompleteProps {
-    customers: Customer[];
     selectedCustomer: Customer | null;
     setSelectedCustomer: React.Dispatch<React.SetStateAction<Customer | null>>,
 }
 
-const CustomersAutocomplete = ({customers, selectedCustomer, setSelectedCustomer}: CustomersAutocompleteProps) => {
+const CustomersAutocomplete = ({selectedCustomer, setSelectedCustomer}: CustomersAutocompleteProps) => {
+
+    const [inputValue, setInputValue] = useState("");
+    const [options, setOptions] = useState<Customer[]>([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (!inputValue.trim()) {
+            setOptions([]);
+            return;
+        }
+
+        const timeout = setTimeout(() => {
+            setLoading(true);
+
+            searchCustomerByName(inputValue, 0, 1000)
+                .then((data) => {
+                    setOptions(data.content);
+                })
+                .catch(console.error)
+                .finally(() => setLoading(false));
+
+        }, 300);
+
+        return () => clearTimeout(timeout);
+    }, [inputValue]);
 
     return (
             <Autocomplete<Customer>
                 fullWidth
-                options={customers}
-                getOptionLabel={(c) => `${c.name} ${c.lastName} (#${c.id})`}
+                options={options}
+                getOptionLabel={(c) => `${c.name} ${c.lastName}`}
                 value={selectedCustomer}
+                loading={loading}
+                inputValue={inputValue}
+                onInputChange={(_, value) => setInputValue(value)}
                 onChange={(_, value) => setSelectedCustomer(value)}
                 isOptionEqualToValue={(option, value) => option.id === value?.id}
                 renderInput={(params) => (

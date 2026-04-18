@@ -1,11 +1,11 @@
 import { Autocomplete, Box, Divider, Stack, TextField, Typography } from "@mui/material";
-import type { Product, SelectedProduct } from "../../types/Types.ts";
+import type {Product, SelectedProduct} from "../../types/Types.ts";
 import { useEffect, useMemo, useState } from "react";
+import {searchProductByName} from "../../services/productService.ts";
 
 interface ProductsAutocompleteProps {
     selectedProductsWithQty: SelectedProduct[];
     setSelectedProductsWithQty: React.Dispatch<React.SetStateAction<SelectedProduct[]>>;
-    products: Product[];
 }
 
 interface Option {
@@ -16,22 +16,24 @@ interface Option {
 const ProductsAutocomplete = ({
                                   selectedProductsWithQty,
                                   setSelectedProductsWithQty,
-                                  products
                               }: ProductsAutocompleteProps) => {
 
     const [totalAmount, setTotalAmount] = useState(0);
+    const [inputValue, setInputValue] = useState("");
+    const [options, setOptions] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(false);
 
     // -----------------------------
     // OPTIONS (memoized = faster + cleaner)
     // -----------------------------
     const productOptions: Option[] = useMemo(() => {
-        return (products ?? [])
+        return (options ?? [])
             .filter((p) => p.quantity > 0)
             .map((p) => ({
                 value: p.id,
                 label: p.name
             }));
-    }, [products]);
+    }, [options]);
 
     const availableOptions = useMemo(() => {
         return productOptions.filter(
@@ -84,7 +86,7 @@ const ProductsAutocomplete = ({
                     (p) => p.product.id === s.value
                 );
 
-                const product = products.find((p) => p.id === s.value);
+                const product = options.find((p) => p.id === s.value);
 
                 return (
                     existing ?? {
@@ -106,8 +108,32 @@ const ProductsAutocomplete = ({
             0
         );
 
-        setTotalAmount(total);
+        setTotalAmount(Number(total.toFixed(2)));
     }, [selectedProductsWithQty]);
+
+    // -----------------------------
+    // fetch
+    // -----------------------------
+    useEffect(() => {
+        if (!inputValue.trim()) {
+            setOptions([]);
+            return;
+        }
+
+        const timeout = setTimeout(() => {
+            setLoading(true);
+
+            searchProductByName(inputValue, 0, 1000)
+                .then((data) => {
+                    setOptions(data.content);
+                })
+                .catch(console.error)
+                .finally(() => setLoading(false));
+
+        }, 300);
+
+        return () => clearTimeout(timeout);
+    }, [inputValue]);
 
     // -----------------------------
     // UI
@@ -122,6 +148,9 @@ const ProductsAutocomplete = ({
                 options={availableOptions}
                 value={selectedOptions}
                 getOptionLabel={(o) => o.label}
+                loading={loading}
+                inputValue={inputValue}
+                onInputChange={(_, value) => setInputValue(value)}
                 onChange={handleChange}
                 renderInput={(params) => (
                     <TextField

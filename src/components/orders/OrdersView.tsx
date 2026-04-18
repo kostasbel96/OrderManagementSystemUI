@@ -224,7 +224,7 @@ const OrdersView = () => {
                         customer: `${order.customer?.name} ${order.customer?.lastName}`,
                         products: order.items,
                         address: order.address,
-                        total: Number(order.total),
+                        total: Number(Number(order.total).toFixed(2)),
                         deposit: Number(order.deposit),
                         date: order.date ? new Date(order.date) : undefined
                     });

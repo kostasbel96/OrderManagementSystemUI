@@ -23,13 +23,9 @@ export async function getCustomers(page: number = 0, pageSize: number = 5, sortB
 }
 
 export async function searchCustomerByName(name: string, page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc") :Promise<CustomerResponseDto> {
-    let firstName = "";
-    let lastName = "";
-    if(name.includes(" ")){
-        [firstName, lastName] = name.split(" ");
-    } else {
-        [firstName, lastName] = [name, name];
-    }
+    const parts = name.trim().split(/\s+/);
+    const firstName = parts[0];
+    const lastName = parts.slice(1).join(" ") || parts[0];
     const res = await fetch(`${API_URL}/customers/search?name=${firstName}&lastName=${lastName}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`);
     if (!res.ok) throw new Error("Failed to search customers");
     const data = await res.json();
