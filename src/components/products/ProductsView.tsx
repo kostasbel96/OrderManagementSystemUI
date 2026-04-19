@@ -130,7 +130,7 @@ const ProductsView = () => {
                             handleClickOpen(params.row);
                         }}
                     >
-                        <EditIcon />
+                        <EditIcon size={18}/>
                     </IconButton>
                     <IconButton
                         color="error"
@@ -139,7 +139,7 @@ const ProductsView = () => {
                             handleOnDelete(params.row);
                         }}
                     >
-                        <DeleteIcon/>
+                        <DeleteIcon sx={{ fontSize: 18 }}/>
                     </IconButton>
                 </>
 

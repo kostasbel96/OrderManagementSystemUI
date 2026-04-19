@@ -10,6 +10,8 @@ import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ProductsCell from "./ProductsCell.tsx";
+import {Chip} from "@mui/material";
+import { PaymentStatus } from "../../types/enums/PaymentStatus.ts";
 
 
 const OrdersView = () => {
@@ -86,7 +88,7 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'customer', headerName: 'Customer', width: 240, renderCell: (params) => (
+        { field: 'customer', headerName: 'Customer', width: 200, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -117,7 +119,7 @@ const OrdersView = () => {
                 </div>
             ),
         },
-        {field: 'address', headerName: 'Address', width: 180, renderCell: (params) => (
+        {field: 'address', headerName: 'Address', width: 160, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -130,7 +132,7 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             )},
-        { field: 'total', headerName: 'Total', width: 100, renderCell: (params) => (
+        { field: 'total', headerName: 'Total', width: 80, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -142,7 +144,7 @@ const OrdersView = () => {
                     {params.value ? params.value + " €" : ""}
                 </div>
             ) },
-        { field: 'deposit', headerName: 'Deposit', width: 100, renderCell: (params) => (
+        { field: 'deposit', headerName: 'Deposit', width: 80, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -169,6 +171,48 @@ const OrdersView = () => {
                 </div>
             )},
         {
+            field: 'payment', headerName: 'Payment', width: 90, renderCell: (params) => {
+                const deposit = params.row.deposit;
+                const total = params.row.total;
+
+                let status: PaymentStatus;
+                if (deposit === 0) status = PaymentStatus.UNPAID;
+                else if (deposit < total) status = PaymentStatus.PARTIAL;
+                else status = PaymentStatus.PAID;
+                return (
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                    }}>
+                        <Chip
+                            label={status}
+                            color={
+                                status === PaymentStatus.PAID
+                                    ? "success"
+                                    : status === PaymentStatus.PARTIAL
+                                        ? "warning"
+                                        : "error"
+                            }
+                            size="small"
+                            sx={{
+                                height: 20,
+                                fontSize: "0.7rem",
+                                width: "fit-content",
+                                margin: "0 auto",
+                                '& .MuiChip-label': {
+                                    px: 1
+                                }
+                            }}
+                        />
+                    </div>
+                    )
+            }
+        },
+        {
             field: 'actions',
             headerName: 'Actions',
             width: 130,
@@ -191,7 +235,7 @@ const OrdersView = () => {
                             handleClickOpen(params.row);
                         }}
                     >
-                        <EditIcon />
+                        <EditIcon size={18}/>
                     </IconButton>
                     <IconButton
                         color="error"
@@ -200,7 +244,7 @@ const OrdersView = () => {
                             handleOnDelete(params.row);
                         }}
                     >
-                        <DeleteIcon/>
+                        <DeleteIcon sx={{ fontSize: 18 }}/>
                     </IconButton>
                 </div>
             ),
@@ -216,9 +260,6 @@ const OrdersView = () => {
             .then(data => {
                 const orders: OrderRow[] = [];
                 data.content.forEach(order => {
-                    // Calculate total
-                    // const orderTotal = order.items
-                    //     .reduce((sum, item) => sum + (item.quantity * item.price), 0);
                     orders.push({
                         id: order.id,
                         customer: `${order.customer?.name} ${order.customer?.lastName}`,
