@@ -122,7 +122,15 @@ const ProductsView = () => {
             sortable: false,
             filterable: false,
             renderCell: (params) => (
-                <>
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'start'
+                    }}
+                >
                     <IconButton
                         color="primary"
                         onClick={(event) => {
@@ -141,7 +149,7 @@ const ProductsView = () => {
                     >
                         <DeleteIcon sx={{ fontSize: 18 }}/>
                     </IconButton>
-                </>
+                </div>
 
             ),
         },

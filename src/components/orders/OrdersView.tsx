@@ -1,5 +1,10 @@
 import {useEffect, useState} from "react";
-import {type GridColDef, GridFilterInputValue, type GridFilterOperator, type GridSortModel} from "@mui/x-data-grid";
+import {
+    type GridColDef,
+    GridFilterInputValue,
+    type GridFilterOperator,
+    type GridSortModel,
+} from "@mui/x-data-grid";
 import {getOrder, getOrders, searchOrderByCustomerName} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
 import type {Customer, OrderItem, OrderRow, Product, ResponseDTO, SelectedProduct} from "../../types/Types.ts";
@@ -70,6 +75,12 @@ const OrdersView = () => {
             };
         },
         InputComponent: GridFilterInputValue,
+    };
+
+    const getPaymentStatus = (deposit: number, total: number) => {
+        if (deposit === 0) return PaymentStatus.UNPAID;
+        if (deposit < total) return PaymentStatus.PARTIAL;
+        return PaymentStatus.PAID;
     };
 
     const columns: GridColDef[] = [
@@ -174,16 +185,21 @@ const OrdersView = () => {
             field: 'payment',
             headerName: 'Payment',
             width: 90,
+            sortable: false,
+            type: "singleSelect",
+            valueOptions: [
+                PaymentStatus.UNPAID,
+                PaymentStatus.PARTIAL,
+                PaymentStatus.PAID
+            ],
+            valueGetter: (_, row) =>
+                getPaymentStatus(row.deposit, row.total),
             renderCell: (params) => {
                 const deposit = params.row.deposit;
                 const total = params.row.total;
 
                 let status: PaymentStatus;
-
-                if (deposit === 0) status = PaymentStatus.UNPAID;
-                else if (deposit < total) status = PaymentStatus.PARTIAL;
-                else status = PaymentStatus.PAID;
-
+                status = getPaymentStatus(deposit, total);
                 const remaining = total - deposit;
 
                 return (
