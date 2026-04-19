@@ -10,7 +10,7 @@ import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ProductsCell from "./ProductsCell.tsx";
-import {Chip} from "@mui/material";
+import {Chip, Tooltip} from "@mui/material";
 import { PaymentStatus } from "../../types/enums/PaymentStatus.ts";
 
 
@@ -171,45 +171,94 @@ const OrdersView = () => {
                 </div>
             )},
         {
-            field: 'payment', headerName: 'Payment', width: 90, renderCell: (params) => {
+            field: 'payment',
+            headerName: 'Payment',
+            width: 90,
+            renderCell: (params) => {
                 const deposit = params.row.deposit;
                 const total = params.row.total;
 
                 let status: PaymentStatus;
+
                 if (deposit === 0) status = PaymentStatus.UNPAID;
                 else if (deposit < total) status = PaymentStatus.PARTIAL;
                 else status = PaymentStatus.PAID;
+
+                const remaining = total - deposit;
+
                 return (
                     <div style={{
                         display: 'flex',
-                        alignItems: 'center',   // vertical centering
-                        justifyContent: 'start', // horizontal centering
-                        whiteSpace: 'pre-line',
-                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '100%',
                         width: '100%',
                     }}>
-                        <Chip
-                            label={status}
-                            color={
-                                status === PaymentStatus.PAID
-                                    ? "success"
-                                    : status === PaymentStatus.PARTIAL
-                                        ? "warning"
-                                        : "error"
-                            }
-                            size="small"
-                            sx={{
-                                height: 20,
-                                fontSize: "0.7rem",
-                                width: "fit-content",
-                                margin: "0 auto",
-                                '& .MuiChip-label': {
-                                    px: 1
+                        <Tooltip
+                            arrow
+                            placement="top"
+                            componentsProps={{
+                                tooltip: {
+                                    sx: {
+                                        backgroundColor: "#1e1e1e",
+                                        color: "#fff",
+                                        fontSize: "0.75rem",
+                                        padding: "10px 12px",
+                                        borderRadius: "10px",
+                                        boxShadow: "0 6px 20px rgba(0,0,0,0.25)"
+                                    }
+                                },
+                                arrow: {
+                                    sx: {
+                                        color: "#1e1e1e"
+                                    }
                                 }
                             }}
-                        />
+                            title={
+                                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                                    <div style={{ fontWeight: 600 }}>
+                                        Order Breakdown
+                                    </div>
+
+                                    <div style={{ opacity: 0.9 }}>
+                                        Total: <b>{total}€</b>
+                                    </div>
+                                    <div style={{ opacity: 0.9 }}>
+                                        Deposit: <b>{deposit}€</b>
+                                    </div>
+                                    <div style={{ opacity: 0.9 }}>
+                                        Remaining: <b>{remaining.toFixed(2)}€</b>
+                                    </div>
+                                </div>
+                            }
+                        >
+                            <Chip
+                                label={status}
+                                color={
+                                    status === PaymentStatus.PAID
+                                        ? "success"
+                                        : status === PaymentStatus.PARTIAL
+                                            ? "warning"
+                                            : "error"
+                                }
+                                size="small"
+                                sx={{
+                                    height: 20,
+                                    fontSize: "0.7rem",
+                                    width: "fit-content",
+                                    cursor: "pointer",
+                                    transition: "all 0.2s ease",
+                                    '&:hover': {
+                                        transform: "scale(1.05)",
+                                    },
+                                    '& .MuiChip-label': {
+                                        px: 1
+                                    }
+                                }}
+                            />
+                        </Tooltip>
                     </div>
-                    )
+                );
             }
         },
         {
