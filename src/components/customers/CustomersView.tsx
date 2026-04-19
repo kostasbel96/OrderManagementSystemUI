@@ -134,7 +134,7 @@ const CustomersView = () => {
                 </div>
             ) },
         {
-            field: 'balance', headerName: 'Balance', sortable: false, type: "number", width: 150, renderCell: (params) => (
+            field: 'balance', headerName: 'Balance', type: "number", width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
