@@ -1,7 +1,7 @@
 import { Autocomplete, Box, Divider, Stack, TextField, Typography } from "@mui/material";
 import type {Product, SelectedProduct} from "../../types/Types.ts";
 import { useEffect, useMemo, useState } from "react";
-import {searchProductByName} from "../../services/productService.ts";
+import { searchProducts } from "../../services/productService.ts";
 
 interface ProductsAutocompleteProps {
     selectedProductsWithQty: SelectedProduct[];
@@ -123,7 +123,14 @@ const ProductsAutocomplete = ({
         const timeout = setTimeout(() => {
             setLoading(true);
 
-            searchProductByName(inputValue, 0, 1000)
+            searchProducts({
+                page: 0,
+                pageSize: 1000,
+                globalSearch: inputValue,
+                sortBy: "name",
+                sortDirection: "asc",
+                filters: []
+            })
                 .then((data) => {
                     setOptions(data.content);
                 })

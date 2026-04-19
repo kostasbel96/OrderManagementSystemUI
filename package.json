@@ -17,6 +17,7 @@
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.10",
     "@mui/x-data-grid": "^8.25.0",
+    "@mui/x-data-grid-pro": "^9.0.2",
     "@tailwindcss/vite": "^4.1.18",
     "bootstrap": "^5.3.8",
     "framer-motion": "^12.38.0",

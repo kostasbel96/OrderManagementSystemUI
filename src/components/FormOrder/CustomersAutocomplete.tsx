@@ -1,7 +1,7 @@
 import {Autocomplete, TextField} from "@mui/material";
 import type {Customer} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
-import {searchCustomerByName} from "../../services/customerService.ts";
+import { searchCustomers } from "../../services/customerService.ts";
 
 interface CustomersAutocompleteProps {
     selectedCustomer: Customer | null;
@@ -23,7 +23,14 @@ const CustomersAutocomplete = ({selectedCustomer, setSelectedCustomer}: Customer
         const timeout = setTimeout(() => {
             setLoading(true);
 
-            searchCustomerByName(inputValue, 0, 1000)
+            searchCustomers({
+                page: 0,
+                pageSize: 1000,
+                globalSearch: inputValue,
+                sortBy: "name",
+                sortDirection: "asc",
+                filters: []
+            })
                 .then((data) => {
                     setOptions(data.content);
                 })

@@ -3,7 +3,7 @@ import type {
     OrderItem,
     OrderRequest,
     OrderResponseDto,
-    SelectedProduct, ResponseDTO,
+    SelectedProduct, ResponseDTO, SearchRequest,
 } from "../types/Types.ts";
 
 interface OrderProps{
@@ -16,7 +16,6 @@ interface OrderProps{
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const orders: OrderItem[] = [];
 
 export async function addOrder({products, customer, address, deposit}: OrderProps): Promise<OrderItem>{
     const orderRequest: OrderRequest = {
@@ -47,18 +46,34 @@ export async function getOrders(page: number = 0, pageSize: number = 5, sortBy: 
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export async function searchOrderByCustomerName(name: string, page: number = 0, pageSize: number = 5, sortBy: string = "date", sortDirection: string = "desc") :Promise<OrderResponseDto> {
-    let firstName = "";
-    let lastName = "";
-    if(name.includes(" ")){
-        [firstName, lastName] = name.split(" ");
-    } else {
-        [firstName, lastName] = [name, name];
-    }
-    const res = await fetch(`${API_URL}/orders/search?name=${firstName}&lastName=${lastName}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`);
-    if (!res.ok) throw new Error("Failed to search orders.");
+export async function searchOrders(request: SearchRequest): Promise<OrderResponseDto> {
+    const res = await fetch(`${API_URL}/orders/search`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            page: request.page,
+            pageSize: request.pageSize,
+            globalSearch: request.globalSearch ?? "",
+            filters: request.filters ?? [],
+            sort: {
+                field: request.sortBy ?? "date",
+                sort: request.sortDirection ?? "asc"
+            }
+        })
+    });
+
+    if (!res.ok) throw new Error("Failed to search orders");
+
     const data = await res.json();
-    return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
+
+    return {
+        content: data.content,
+        totalElements: data.totalElements,
+        pageNumber: data.pageNumber,
+        pageSize: data.pageSize
+    };
 }
 
 export async function getOrder(id: number): Promise<ResponseDTO> {

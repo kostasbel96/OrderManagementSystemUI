@@ -1,4 +1,4 @@
-import type {Product, ProductResponseDto, ResponseDTO} from "../types/Types.ts";
+import type {Product, ProductResponseDto, ResponseDTO, SearchRequest} from "../types/Types.ts";
 
 export let products: Product[];
 // products = [
@@ -35,11 +35,35 @@ export async function addProduct(newProduct: Omit<Product, "id">): Promise<Respo
     return data?.productDto;
 }
 
-export async function searchProductByName(name: string, page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc") :Promise<ProductResponseDto> {
-    const res = await fetch(`${API_URL}/products/search?name=${name}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`);
-    if (!res.ok) throw new Error("Failed to search product");
+export async function searchProducts(request: SearchRequest): Promise<ProductResponseDto> {
+
+    const res = await fetch(`${API_URL}/products/search`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            page: request.page,
+            pageSize: request.pageSize,
+            globalSearch: request.globalSearch ?? "",
+            filters: request.filters ?? [],
+            sort: {
+                field: request.sortBy ?? "name",
+                sort: request.sortDirection ?? "asc"
+            }
+        })
+    });
+
+    if (!res.ok) throw new Error("Failed to search products");
+
     const data = await res.json();
-    return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
+
+    return {
+        content: data.content,
+        totalElements: data.totalElements,
+        pageNumber: data.pageNumber,
+        pageSize: data.pageSize
+    };
 }
 
 export async function getProducts(page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc"): Promise<ProductResponseDto> {

@@ -1,8 +1,8 @@
-import {type GridColDef, type GridSortModel} from '@mui/x-data-grid';
+import {type GridColDef, type GridFilterModel, type GridSortModel} from '@mui/x-data-grid';
 import {useEffect, useMemo, useState} from "react";
 import type {Customer, OrderItem, OrderRow, Product} from "../../types/Types.ts";
 import MyTable from "../ui/MyTable.tsx";
-import {getProducts, searchProductByName} from "../../services/productService.ts";
+import { searchProducts } from "../../services/productService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
@@ -25,6 +25,9 @@ const ProductsView = () => {
     const [searchName, setSearchName] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "name", sort: "asc"}]);
+    const [filterModel, setFilterModel] = useState<GridFilterModel>({
+        items: []
+    });
 
     const handleClickOpen = (row: Product) => {
         setOpenEdit(true);
@@ -85,12 +88,12 @@ const ProductsView = () => {
                     {params.value}
                 </div>
             )  },
-        {field: 'quantity', headerName: 'Quantity', width: 80, renderCell: (params) => (
+        {field: 'quantity', headerName: 'Quantity', type:"number", width: 100, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
                         alignItems: 'center',   // vertical centering
-                        justifyContent: 'start', // horizontal centering
+                        justifyContent: 'end', // horizontal centering
                         whiteSpace: 'pre-line',
                         height: '100%',          // σημαντικό για να γεμίζει το cell
                         width: '100%',
@@ -100,12 +103,12 @@ const ProductsView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'price', headerName: 'Price', width: 80, renderCell: (params) => (
+        {field: 'price', headerName: 'Price', width: 100, type:"number", renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
                         alignItems: 'center',   // vertical centering
-                        justifyContent: 'start', // horizontal centering
+                        justifyContent: 'end', // horizontal centering
                         whiteSpace: 'pre-line',
                         height: '100%',          // σημαντικό για να γεμίζει το cell
                         width: '100%',
@@ -157,17 +160,18 @@ const ProductsView = () => {
 
     useEffect(() => {
         setLoading(true);
-        const fetchData = isSearching
-            ? searchProductByName(searchName, page, pageSize, sortModel[0]?.field, sortModel[0]?.sort ?? "asc")
-            : getProducts(page, pageSize, sortModel[0]?.field, sortModel[0]?.sort ?? "asc");
-
-        fetchData
-            .then((data) => {
+        searchProducts({
+            page,
+            pageSize,
+            globalSearch: isSearching ? searchName : "",
+            sortBy: sortModel[0]?.field,
+            sortDirection: sortModel[0]?.sort ?? "asc",
+            filters: filterModel.items ?? []
+        }).then((data) => {
                 setRows(data.content);
                 setRowCount(data.totalElements);
-            })
-            .finally(() => setLoading(false));
-    }, [page, pageSize, searchName, isSearching, openEdit, openDeletePopUp, sortModel]);
+        }).finally(() => setLoading(false));
+    }, [page, pageSize, searchName, isSearching, openEdit, openDeletePopUp, sortModel, filterModel]);
 
     return (
         <>
@@ -185,6 +189,8 @@ const ProductsView = () => {
                 setIsSearching={setIsSearching}
                 setSortModel={setSortModel}
                 sortModel={sortModel}
+                filterModel={filterModel}
+                setFilterModel={setFilterModel}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}

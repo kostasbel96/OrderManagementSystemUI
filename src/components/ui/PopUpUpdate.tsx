@@ -2,7 +2,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogT
 import type {Customer, OrderItem, Product, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import ProductsAutocomplete from "../FormOrder/ProductsAutocomplete.tsx";
-import {getProducts, updateProduct} from "../../services/productService.ts";
+import {updateProduct} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
 import useCustomerFormValidation from "../../hooks/useCustomerFormValidation.ts";
 import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
@@ -42,7 +42,6 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
         items: [],
         deposit: ""
     })
-    const [products, setProducts] = useState<Product[]>([]);
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [initialItems, setInitialItems] = useState<SelectedProduct[]>([]);
     const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(productValues);
@@ -357,7 +356,6 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                 />
                 <div className="mt-2">
                     <ProductsAutocomplete
-                        products={products}
                         selectedProductsWithQty={selectedProductsWithQty}
                         setSelectedProductsWithQty={setSelectedProductsWithQty}
                     />
@@ -381,13 +379,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                 const order = rowToEdit as OrderItem;
                 setOrderValues(order);
                 setInitialItems([...order.items]);
-                getProducts(0, 100)
-                    .then(data=>{
-                        setProducts(data.content);
-                        setSelectedProductsWithQty([
-                            ...(rowToEdit as OrderItem).items
-                        ]);
-                    });
+                setSelectedProductsWithQty([
+                    ...(rowToEdit as OrderItem).items
+                ]);
 
                 break;
             }

@@ -1,4 +1,4 @@
-import type {Customer, CustomerResponseDto, ResponseDTO} from "../types/Types.ts";
+import type {Customer, CustomerResponseDto, ResponseDTO, SearchRequest} from "../types/Types.ts";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -22,14 +22,34 @@ export async function getCustomers(page: number = 0, pageSize: number = 5, sortB
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
-export async function searchCustomerByName(name: string, page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc") :Promise<CustomerResponseDto> {
-    const parts = name.trim().split(/\s+/);
-    const firstName = parts[0];
-    const lastName = parts.slice(1).join(" ") || parts[0];
-    const res = await fetch(`${API_URL}/customers/search?name=${firstName}&lastName=${lastName}&page=${page}&pageSize=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`);
+export async function searchCustomers(request: SearchRequest): Promise<CustomerResponseDto> {
+    const res = await fetch(`${API_URL}/customers/search`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            page: request.page,
+            pageSize: request.pageSize,
+            globalSearch: request.globalSearch ?? "",
+            filters: request.filters ?? [],
+            sort: {
+                field: request.sortBy ?? "name",
+                sort: request.sortDirection ?? "asc"
+            }
+        })
+    });
+
     if (!res.ok) throw new Error("Failed to search customers");
+
     const data = await res.json();
-    return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
+
+    return {
+        content: data.content,
+        totalElements: data.totalElements,
+        pageNumber: data.pageNumber,
+        pageSize: data.pageSize
+    };
 }
 
 export async function getCustomer(id: number): Promise<Customer> {

@@ -1,4 +1,4 @@
-import {DataGrid, type GridColDef, type GridSortModel} from "@mui/x-data-grid";
+import {DataGrid, type GridColDef, type GridFilterModel, type GridSortModel} from "@mui/x-data-grid";
 import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import Search from "../Search.tsx";
 import {Paper} from "@mui/material";
@@ -17,10 +17,26 @@ type TableProps = {
     setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
     setSortModel: React.Dispatch<React.SetStateAction<GridSortModel>>;
     sortModel: GridSortModel;
+    filterModel: GridFilterModel;
+    setFilterModel: React.Dispatch<React.SetStateAction<GridFilterModel>>;
 }
 
 
-const MyTable = ({columns, typeOf, rows, setSortModel, sortModel, loading, rowCount, setPage, setPageSize, page, pageSize, setSearchName, setIsSearching}: TableProps)=>{
+const MyTable = ({columns,
+                                                  typeOf,
+                                                  rows,
+                                                  setSortModel,
+                                                  sortModel,
+                                                  loading,
+                                                  rowCount,
+                                                  setPage,
+                                                  setPageSize,
+                                                  page,
+                                                  pageSize,
+                                                  setSearchName,
+                                                  setIsSearching,
+                                                  filterModel,
+                                                  setFilterModel}: TableProps)=>{
 
     return (
             <div className="mt-5 flex flex-col space-y-2 justify-center items-center px-4">
@@ -46,6 +62,9 @@ const MyTable = ({columns, typeOf, rows, setSortModel, sortModel, loading, rowCo
                         getRowId={(row) => row.id}
                         rowCount={rowCount}
                         loading={loading}
+                        filterMode="server"
+                        filterModel={filterModel}
+                        onFilterModelChange={(model) => setFilterModel(model)}
                         paginationMode="server"
                         sortingMode="server"
                         sortModel={sortModel}

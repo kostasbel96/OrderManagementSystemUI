@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
 import {
+    getGridSingleSelectOperators,
     type GridColDef,
-    GridFilterInputValue,
-    type GridFilterOperator,
+    GridFilterInputValue, type GridFilterModel,
     type GridSortModel,
 } from "@mui/x-data-grid";
-import {getOrder, getOrders, searchOrderByCustomerName} from "../../services/orderService.ts"
+import {getOrder, searchOrders} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
-import type {Customer, OrderItem, OrderRow, Product, ResponseDTO, SelectedProduct} from "../../types/Types.ts";
+import type {Customer, OrderItem, OrderRow, Product, ResponseDTO} from "../../types/Types.ts";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
@@ -36,6 +36,9 @@ const OrdersView = () => {
     const [operation, setOperation] = useState("");
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
     const [openRows, setOpenRows] = useState<{[key: string]: boolean}>({});
+    const [filterModel, setFilterModel] = useState<GridFilterModel>({
+        items: []
+    });
 
     const toggleRow = (id: string) => {
         setOpenRows(prev => ({ ...prev, [id]: !prev[id] }));
@@ -56,31 +59,20 @@ const OrdersView = () => {
         }).finally(()=>setOpenDeletePopUp(true));
     }
 
-    const productsFilterOperator: GridFilterOperator = {
+    const productsFilterOperator = {
         label: 'contains',
         value: 'containsProduct',
-        getApplyFilterFn: (filterItem) => {
-            if (!filterItem.value) return null;
-
-            return (row) => {
-                const products = row as SelectedProduct[];
-
-                if (!products || products.length === 0) return false;
-
-                return products.some(p =>
-                    p.product.name
-                        .toLowerCase()
-                        .includes(String(filterItem.value).toLowerCase())
-                );
-            };
-        },
         InputComponent: GridFilterInputValue,
-    };
+    } as any;
+
+    const singleOperators = getGridSingleSelectOperators().filter(
+        (op) => op.value !== 'isAnyOf'
+    );
 
     const getPaymentStatus = (deposit: number, total: number) => {
-        if (deposit === 0) return PaymentStatus.UNPAID;
-        if (deposit < total) return PaymentStatus.PARTIAL;
-        return PaymentStatus.PAID;
+        if (deposit <= 0) return PaymentStatus.UNPAID
+        if (deposit < total) return PaymentStatus.PARTIAL
+        if (deposit >= total) return PaymentStatus.PAID
     };
 
     const columns: GridColDef[] = [
@@ -99,7 +91,9 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'customer', headerName: 'Customer', width: 200, renderCell: (params) => (
+        { field: 'customer', headerName: 'Customer', width: 200,
+            valueGetter: (_, row) =>
+                `${row.customer?.name ?? ''} ${row.customer?.lastName ?? ''}`,renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -143,24 +137,24 @@ const OrdersView = () => {
                     {params.value}
                 </div>
             )},
-        { field: 'total', headerName: 'Total', width: 80, renderCell: (params) => (
+        { field: 'total', headerName: 'Total', width: 80, type: "number", renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'start',
+                        justifyContent: 'end',
                         height: '100%',
                     }}
                 >
                     {params.value ? params.value + " €" : ""}
                 </div>
             ) },
-        { field: 'deposit', headerName: 'Deposit', width: 80, renderCell: (params) => (
+        { field: 'deposit', headerName: 'Deposit', type: "number", width: 80, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'start',
+                        justifyContent: 'end',
                         height: '100%',
                     }}
                 >
@@ -187,6 +181,7 @@ const OrdersView = () => {
             width: 90,
             sortable: false,
             type: "singleSelect",
+            filterOperators: singleOperators,
             valueOptions: [
                 PaymentStatus.UNPAID,
                 PaymentStatus.PARTIAL,
@@ -198,7 +193,7 @@ const OrdersView = () => {
                 const deposit = params.row.deposit;
                 const total = params.row.total;
 
-                let status: PaymentStatus;
+                let status: PaymentStatus | undefined;
                 status = getPaymentStatus(deposit, total);
                 const remaining = total - deposit;
 
@@ -318,16 +313,19 @@ const OrdersView = () => {
 
     useEffect(() => {
         setLoading(true);
-        const fetcher = isSearching
-            ? searchOrderByCustomerName(searchName, page, pageSize, sortModel[0]?.field, sortModel[0]?.sort ?? "asc" )
-            : getOrders(page, pageSize, sortModel[0]?.field, sortModel[0]?.sort ?? "asc");
-        fetcher
-            .then(data => {
+        searchOrders({
+            page: page,
+            pageSize: pageSize,
+            globalSearch: isSearching ? searchName : "",
+            sortBy: sortModel[0]?.field,
+            sortDirection: sortModel[0]?.sort ?? "asc",
+            filters: filterModel.items ?? []
+        }).then(data => {
                 const orders: OrderRow[] = [];
                 data.content.forEach(order => {
                     orders.push({
                         id: order.id,
-                        customer: `${order.customer?.name} ${order.customer?.lastName}`,
+                        customer: order.customer,
                         products: order.items,
                         address: order.address,
                         total: Number(Number(order.total).toFixed(2)),
@@ -337,12 +335,10 @@ const OrdersView = () => {
                 });
                 setRows(orders);
                 setRowCount(data.totalElements);
-                setPage(data.pageNumber);
-                setPageSize(data.pageSize);
             })
             .catch(() => console.log("error fetching orders"))
             .finally(() => setLoading(false));
-    }, [page, pageSize, isSearching, searchName, openEdit, openDeletePopUp, sortModel])
+    }, [page, pageSize, isSearching, searchName, openEdit, openDeletePopUp, sortModel, filterModel])
 
     return (
         <>
@@ -360,6 +356,8 @@ const OrdersView = () => {
                 setIsSearching={setIsSearching}
                 setSortModel={setSortModel}
                 sortModel={sortModel}
+                filterModel={filterModel}
+                setFilterModel={setFilterModel}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}

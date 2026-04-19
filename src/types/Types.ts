@@ -44,9 +44,18 @@ export interface SelectedProduct {
     price: number;
 }
 
+export interface SearchRequest {
+    page: number;
+    pageSize: number;
+    globalSearch?: string;
+    filters?: any[];
+    sortBy?: string;
+    sortDirection?: string;
+}
+
 export interface OrderRow {
     id?: number;
-    customer: string;
+    customer?: Customer;
     products: SelectedProduct[];
     address: string;
     total: number;

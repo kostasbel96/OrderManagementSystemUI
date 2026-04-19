@@ -42,14 +42,14 @@ const Search = ({typeOf, setIsSearching, setSearchName, setPage}: SearchProps) =
                 onSubmit={handleSubmit}
                 sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: {
                         xs: '100%',
-                        sm: 300,
-                        md: 400
+                        sm: 500,
+                        md: 500
                     },
                     maxWidth: '100%' }}
             >
                 <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder={`Search ${typeOf === "Orders" ? "by customer name" : typeOf}`}
+                    placeholder={`Search ${typeOf === "Orders" ? " customer by address, id, name, phone " : typeOf}`}
                     inputProps={{ 'aria-label': 'search google maps' }}
                     value={text}
                     onChange={(e)=>handleChange(e.target.value)}
