@@ -11,6 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/android": "^8.3.1",
+    "@capacitor/cli": "^8.3.1",
+    "@capacitor/core": "^8.3.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@material-tailwind/react": "^2.1.10",
