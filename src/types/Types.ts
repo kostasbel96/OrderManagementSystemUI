@@ -11,7 +11,7 @@ export interface Customer {
     name: string;
     lastName: string;
     phoneNumber1: string;
-    phoneNumber2: string | undefined | null;
+    phoneNumber2?: string;
     email?: string;
     balance: number | undefined | null;
 }
