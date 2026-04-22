@@ -18,10 +18,17 @@ const formSchema = z.object(
             .refine(val => val.replaceAll(/\D/g, '').length >= 10, {
                 message: "Phone number must have at least 10 digits",
             }),
-        phoneNumber2: z.string().regex(/^\+?\d+$/, "Invalid phone number. Only digits are allowed")
-            .refine(val => val.replaceAll(/\D/g, '').length >= 10, {
-                message: "Phone number must have at least 10 digits",
-            }).optional().nullable(),
+        phoneNumber2: z
+            .string()
+            .trim()
+            .transform(val => val === "" ? undefined : val)
+            .optional()
+            .refine(val => {
+                if (!val) return true;
+                return /^\+?\d+$/.test(val) && val.replace(/\D/g, '').length >= 10;
+            }, {
+                message: "Invalid phone number",
+            }),
         email: z.string()
             .trim()
             .optional()
