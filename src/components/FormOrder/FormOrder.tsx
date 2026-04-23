@@ -2,18 +2,17 @@ import {
     Box,
     Button,
     TextField,
-    Divider,
     Stack,
     Paper,
     Grid,
-    Typography
+    Typography,
 } from "@mui/material";
-import ProductsAutocomplete from "./ProductsAutocomplete.tsx";
 import { type FormEvent, useEffect, useState } from "react";
-import type { Customer, SelectedProduct } from "../../types/Types.ts";
+import type {Customer, SelectedProduct} from "../../types/Types.ts";
 import { addOrder } from "../../services/orderService.ts";
 import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
 import CustomersAutocomplete from "./CustomersAutocomplete.tsx";
+import ProductsTableInsert from "./ProductsTableInsert.tsx";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -95,6 +94,10 @@ const FormOrder = ({
         setPopUpMessage("");
     }, []);
 
+    useEffect(() => {
+        console.log(orderErrors);
+    }, [orderErrors]);
+
     return (
         <Paper
             elevation={6}
@@ -102,7 +105,6 @@ const FormOrder = ({
                 p: 3,
                 borderRadius: 2,
                 width: "100%",
-                maxWidth: 900,
                 margin: "0 auto"
             }}
         >
@@ -117,20 +119,6 @@ const FormOrder = ({
                         </Box>
                     </Grid>
 
-                    {/* PRODUCTS */}
-                    <Grid size={{ xs: 12 }}>
-                        <ProductsAutocomplete
-                            selectedProductsWithQty={selectedProductsWithQty}
-                            setSelectedProductsWithQty={setSelectedProductsWithQty}
-                        />
-                        {orderErrors && (
-                            <Typography color="error" fontSize={12}>
-                                {orderErrors.products || orderErrors.productQuantity
-                                    || orderErrors.productPrice || orderErrors.stockError}
-                            </Typography>
-                        )}
-                    </Grid>
-
                     {/* CUSTOMER */}
                     <Grid size={{ xs: 12 }}>
                         <CustomersAutocomplete
@@ -142,10 +130,6 @@ const FormOrder = ({
                                 {orderErrors.customer}
                             </Typography>
                         )}
-                    </Grid>
-
-                    <Grid size={{ xs: 12 }}>
-                        <Divider />
                     </Grid>
 
                     {/* ADDRESS */}
@@ -171,6 +155,21 @@ const FormOrder = ({
                             error={Boolean(orderErrors?.deposit)}
                             helperText={orderErrors?.deposit}
                         />
+                    </Grid>
+
+                    <Grid size={{ xs: 12 }}>
+                        <Stack spacing={2}>
+                            <ProductsTableInsert
+                                selectedProductsWithQty={selectedProductsWithQty}
+                                setSelectedProductsWithQty={setSelectedProductsWithQty}
+                            />
+                        </Stack>
+                        {orderErrors && (
+                            <Typography color="error" fontSize={12}>
+                                {orderErrors.products || orderErrors.productQuantity
+                                    || orderErrors.productPrice || orderErrors.stockError}
+                            </Typography>
+                        )}
                     </Grid>
 
                     {/* BUTTONS */}

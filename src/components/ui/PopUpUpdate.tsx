@@ -1,13 +1,13 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
 import type {Customer, OrderItem, Product, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
-import ProductsAutocomplete from "../FormOrder/ProductsAutocomplete.tsx";
 import {updateProduct} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
 import useCustomerFormValidation from "../../hooks/useCustomerFormValidation.ts";
 import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
 import {updateCustomer} from "../../services/customerService.ts";
 import {updateOrder} from "../../services/orderService.ts";
+import ProductsTableInsert from "../FormOrder/ProductsTableInsert.tsx";
 
 interface PopUpUpdateProps{
     open: boolean;
@@ -355,7 +355,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                     helperText={orderErrors?.deposit}
                 />
                 <div className="mt-2">
-                    <ProductsAutocomplete
+                    <ProductsTableInsert
                         selectedProductsWithQty={selectedProductsWithQty}
                         setSelectedProductsWithQty={setSelectedProductsWithQty}
                     />

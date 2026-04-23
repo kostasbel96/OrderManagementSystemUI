@@ -31,7 +31,7 @@ const ProductsCell = ({products, open, onToggle}: ProductsCellProps) => {
                 <div style={{ marginTop: "6px" }}>
                     {products.map((item, index) => (
                         <div
-                            key={item.product.id + "-" + index}
+                            key={item.product?.id + "-" + index}
                             style={{
                                 display: "grid",
                                 gridTemplateColumns: "1fr auto auto",
@@ -42,7 +42,7 @@ const ProductsCell = ({products, open, onToggle}: ProductsCellProps) => {
                             }}
                         >
                             <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                                {item.product.name}
+                                {item.product?.name}
                             </div>
                             <div style={{ textAlign: "center", color: "#555" }}>{item.quantity > 1 ? item.quantity + " pcs" : item.quantity + " pc"} X {item.price} €</div>
                         </div>

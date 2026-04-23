@@ -39,7 +39,8 @@ export interface OrderItem {
 }
 
 export interface SelectedProduct {
-    product: Product;
+    id?: number;
+    product: Product | null;
     quantity: number;
     price: number;
 }
@@ -89,7 +90,7 @@ export interface TableRowsType {
 }
 
 export interface Item{
-    productId: number;
+    productId?: number;
     quantity: number;
     price: string;
 }

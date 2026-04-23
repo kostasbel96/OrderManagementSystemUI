@@ -72,7 +72,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                     <h1 className="font-semibold text-gray-700">{label}</h1>
                 </header>
 
-                <main className="overflow-y-auto h-[calc(100vh-7.5rem)]">{children}</main>
+                <main className="overflow-y-auto">{children}</main>
             </div>
         </div>
     );

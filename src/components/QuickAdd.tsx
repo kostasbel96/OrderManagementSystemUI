@@ -10,8 +10,8 @@ const QuickAdd = () => {
 
 
     return (
-            <div className="mt-5 text-center">
-                <div className="flex justify-center mt-2 relative">
+            <div className="mt-2 text-center">
+                <div className="flex justify-center relative">
                     <MyTabs
                         setSubmitted={setSubmitted}
                         setSuccess={setSuccess}

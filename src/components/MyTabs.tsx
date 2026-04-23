@@ -29,8 +29,10 @@ const MyTabs = ({ setSubmitted, setSuccess, setPopUpMessage, setActiveValue }: P
         <Paper
             elevation={6}
             sx={{
-                maxWidth: 400,
-                minWidth: 400,
+                width: "100%",
+                marginTop: 0,
+                marginBottom: 0,
+                mx: 2,
                 borderRadius: 2,
                 bgcolor: "primary.main",
                 color: "white",
@@ -51,7 +53,7 @@ const MyTabs = ({ setSubmitted, setSuccess, setPopUpMessage, setActiveValue }: P
             </Tabs>
 
             {/* Content */}
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 1 }}>
                 {tab === "product" && (
                     <FormProduct
                         setSubmitted={setSubmitted}

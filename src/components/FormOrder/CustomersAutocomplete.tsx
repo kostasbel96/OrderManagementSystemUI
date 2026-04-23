@@ -59,19 +59,16 @@ const CustomersAutocomplete = ({selectedCustomer, setSelectedCustomer}: Customer
                         label={"Customer"}
                         placeholder={`Search Customers...`}
                         sx={{
-                            width: "100%",
                             backgroundColor: "white",
                             borderRadius: 2,
                             '& .MuiInputLabel-root': {
                                 backgroundColor: 'white',
                                 borderRadius: 2,
-                                padding: "2px"
                             },
                             '& .MuiInputLabel-root.Mui-focused': {
                                 color: 'gray',
                                 backgroundColor: 'white',
                                 borderRadius: 2,
-                                padding: "2px",
                             }
                         }}
                     />

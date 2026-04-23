@@ -60,9 +60,9 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
 
     const validQuantity = (): {notValidProducts: SelectedProduct[], isValid: boolean} => {
         const notValidProducts = selectedProductsWithQty.filter(sp => {
-            const original = (initialItems ?? []).find(i => i.product.id === sp.product.id);
+            const original = (initialItems ?? []).find(i => i.product?.id === sp.product?.id);
             const originalQuantity = original ? original.quantity : 0;
-            const availableStock = sp.product.quantity + originalQuantity;
+            const availableStock = sp.product?.quantity ? sp.product.quantity + originalQuantity : originalQuantity;
             return sp.quantity > availableStock;
         });
 
@@ -82,7 +82,7 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
         });
         const {notValidProducts, isValid} = validQuantity();
         const productNames = notValidProducts
-            .map(sp => sp.product.name)
+            .map(sp => sp.product?.name)
             .join(", ")
             .toUpperCase();
 
@@ -99,7 +99,6 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
                     if (field === "price") {
                         newErrors.productPrice = error.message;
                     }
-
                 } else {
                     const fieldName = error.path[0] as keyof FormErrors;
                     newErrors[fieldName] = error.message;

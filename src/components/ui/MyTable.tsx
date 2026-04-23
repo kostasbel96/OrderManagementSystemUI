@@ -47,7 +47,7 @@ const MyTable = ({columns,
                     setPage={setPage}
                 />
                 <Paper sx={{
-                    maxHeight: 'calc(100vh - 300px)',
+                    maxHeight: 'calc(100vh - 165px)',
                     maxWidth: 1250,
                     width: '100%',
                     marginBottom: 2,

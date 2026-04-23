@@ -24,7 +24,7 @@ export async function addOrder({products, customer, address, deposit}: OrderProp
         deposit: deposit,
         items: products
             .map(p=>(
-                {productId: p.product.id, quantity: p.quantity, price: p.price.toString()}
+                {productId: p.product?.id, quantity: p.quantity, price: p.price.toString()}
             ))
     }
     const res = await fetch(`${API_URL}/orders/save`,{
