@@ -29,7 +29,7 @@ const ProductsTableInsert = ({
         <TableContainer
             component={Paper}
             sx={{
-                maxHeight: "calc(100vh - 63vh)",
+                maxHeight: "calc(100vh - 68vh)",
                 overflowY: "scroll",
                 width: "100%",
             }}
