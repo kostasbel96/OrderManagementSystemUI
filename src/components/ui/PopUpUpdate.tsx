@@ -1,4 +1,13 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField,
+    Typography
+} from "@mui/material";
 import type {Customer, OrderItem, Product, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import {updateProduct} from "../../services/productService.ts";
@@ -359,7 +368,12 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                         selectedProductsWithQty={selectedProductsWithQty}
                         setSelectedProductsWithQty={setSelectedProductsWithQty}
                     />
-                    {orderErrors && (<p className="text-sm text-red-600">{orderErrors.products || orderErrors.stockError}</p>)}
+                    {orderErrors && (
+                        <Typography color="error" fontSize={12}>
+                            {orderErrors.products || orderErrors.productQuantity
+                                || orderErrors.productPrice || orderErrors.stockError}
+                        </Typography>
+                    )}
                 </div>
 
             </>
