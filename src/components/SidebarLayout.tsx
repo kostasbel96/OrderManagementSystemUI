@@ -27,7 +27,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                     ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static`}
             >
                 {/* Header in Sidebar for mobile */}
-                <div className="flex items-center justify-between border-b md:hidden p-2">
+                <div className="flex items-center justify-between md:hidden p-2">
                     <span className="font-bold text-lg">Admin Panel</span>
                     <button onClick={() => setOpen(false)}>
                         <X />
@@ -63,9 +63,9 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
             {open && <div className="fixed inset-0 bg-black/30 md:hidden" onClick={() => setOpen(false)} />}
 
             {/* Main content */}
-            <div className="w-full">
+            <div className="w-full bg-[#f5f5f5]">
                 {/* Header with mobile menu button */}
-                <header className="h-16 flex items-center justify-between px-4 bg-white border-b md:px-8">
+                <header className="h-16 flex items-center justify-between px-4 bg-white md:px-8">
                     <button className="md:hidden" onClick={() => setOpen(true)}>
                         <Menu />
                     </button>
