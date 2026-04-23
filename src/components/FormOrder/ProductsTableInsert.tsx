@@ -89,6 +89,9 @@ const ProductsTableInsert = ({
                                         updated[index].quantity = Number(e.target.value);
                                         setSelectedProductsWithQty(updated);
                                     }}
+                                    inputProps={{
+                                        min: 1
+                                    }}
                                     sx={{
                                         width: 70,
                                         "& .MuiInputBase-root": {
@@ -113,6 +116,10 @@ const ProductsTableInsert = ({
                                         updated[index].price = Number(e.target.value);
                                         setSelectedProductsWithQty(updated);
                                     }}
+                                    inputProps={{
+                                        min: 0,
+                                        step: "0.01"
+                                    }}
                                     sx={{
                                         width: 90,
                                         "& .MuiInputBase-root": {
@@ -128,7 +135,7 @@ const ProductsTableInsert = ({
                             </TableCell>
 
                             <TableCell align="center">
-                                {item.price * item.quantity}
+                                {(item.price * item.quantity).toFixed(2)}
                             </TableCell>
 
                             <TableCell align="center">
