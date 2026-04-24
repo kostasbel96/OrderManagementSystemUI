@@ -110,7 +110,7 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
                     newErrors[fieldName] = error.message;
                 }
             });
-            selectedProductsWithQty.find(p => p.product === null || p.product === undefined) && setOrderErrors(prevState => ({...prevState, products: "You must select at least 1 product"}))
+            selectedProductsWithQty.find(p => p.product === null || p.product === undefined) && setOrderErrors(prevState => ({...prevState, products: "You cannot have empty product row"}))
             if (selectedProductsWithQty.length === 0) setOrderErrors(prevState => ({...prevState, products: "You must select at least 1 product"}))
             setOrderErrors(prevState => ({...prevState, ...newErrors}));
             return false;

@@ -82,9 +82,10 @@ const ProductsTableInsert = ({
                     const col = {
                         index: 50,
                         product: 300,
-                        qty: 100,
-                        price: 120,
-                        total: 120,
+                        description: 260,
+                        qty: 70,
+                        price: 80,
+                        total: 80,
                         action: 60,
                     };
 
@@ -102,6 +103,10 @@ const ProductsTableInsert = ({
 
                                     <TableCell sx={{ ...cellStyle, width: col.product }}>
                                         Product
+                                    </TableCell>
+
+                                    <TableCell sx={{ ...cellStyle, width: col.description }}>
+                                        Description
                                     </TableCell>
 
                                     <TableCell sx={{ ...cellStyle, width: col.qty }}>
@@ -150,6 +155,32 @@ const ProductsTableInsert = ({
                                                                 : row
                                                         )
                                                     );
+                                                }}
+                                            />
+                                        </TableCell>
+
+                                        {/* DESCRIPTION */}
+                                        <TableCell sx={{ ...cellStyle, width: col.description }}>
+                                            <TextField
+                                                multiline
+                                                value={item.product?.description ?? ""}
+                                                InputProps={{
+                                                    readOnly: true
+                                                }}
+                                                sx={{
+                                                    width: "100%",
+                                                    minWidth: 260,
+                                                    "& .MuiInputBase-root": {
+                                                        fontSize: 11,
+                                                    },
+                                                    "& textarea": {
+                                                        textAlign: "center",
+                                                        whiteSpace: "pre-wrap",
+                                                        wordBreak: "break-word",
+                                                    },
+                                                    "& .MuiOutlinedInput-root fieldset": {
+                                                        border: "none",
+                                                    },
                                                 }}
                                             />
                                         </TableCell>
@@ -237,7 +268,7 @@ const ProductsTableInsert = ({
                             <TableFooter>
                                 <TableRow>
                                     <TableCell
-                                        colSpan={4}
+                                        colSpan={3}
                                         sx={{
                                             border: "1px solid #e0e0e0",
                                             textAlign: "center",
@@ -261,7 +292,7 @@ const ProductsTableInsert = ({
                                         </Button>
                                     </TableCell>
                                     <TableCell
-                                        colSpan={2}
+                                        colSpan={4}
                                         sx={{
                                             border: "1px solid #e0e0e0",
                                             textAlign: "center",
