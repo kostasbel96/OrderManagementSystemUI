@@ -9,7 +9,9 @@ const productSchema = z.object({
 });
 
 const selectedProductSchema = z.object({
-    product: productSchema,
+    product: productSchema.nullable().refine(val => val !== null, {
+        message: "Product is required"
+    }),
     quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
     price: z.coerce.number().min(0, "Price must be at least 0")
 });
@@ -60,9 +62,13 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
 
     const validQuantity = (): {notValidProducts: SelectedProduct[], isValid: boolean} => {
         const notValidProducts = selectedProductsWithQty.filter(sp => {
+            if (!sp.product){
+                return false;
+            }
             const original = (initialItems ?? []).find(i => i.product?.id === sp.product?.id);
             const originalQuantity = original ? original.quantity : 0;
-            const availableStock = sp.product?.quantity ? sp.product.quantity + originalQuantity : originalQuantity;
+            const availableStock = sp.product.quantity + originalQuantity;
+
             return sp.quantity > availableStock;
         });
 
@@ -82,7 +88,7 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
         });
         const {notValidProducts, isValid} = validQuantity();
         const productNames = notValidProducts
-            .map(sp => sp.product?.name)
+            .map(sp => `${sp.product?.name}(${sp.product?.quantity})`)
             .join(", ")
             .toUpperCase();
 
@@ -104,7 +110,9 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
                     newErrors[fieldName] = error.message;
                 }
             });
-            setOrderErrors(newErrors);
+            selectedProductsWithQty.find(p => p.product === null || p.product === undefined) && setOrderErrors(prevState => ({...prevState, products: "You must select at least 1 product"}))
+            if (selectedProductsWithQty.length === 0) setOrderErrors(prevState => ({...prevState, products: "You must select at least 1 product"}))
+            setOrderErrors(prevState => ({...prevState, ...newErrors}));
             return false;
         }
 

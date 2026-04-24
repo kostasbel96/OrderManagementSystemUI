@@ -392,10 +392,12 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
             case "Orders":{
                 const order = rowToEdit as OrderItem;
                 setOrderValues(order);
-                setInitialItems([...order.items]);
-                setSelectedProductsWithQty([
-                    ...(rowToEdit as OrderItem).items
-                ]);
+                
+                // Deep copy initial items so they don't change when selectedProductsWithQty changes
+                setInitialItems(order.items.map(item => ({...item})));
+                
+                // Shallow copy is enough here since we want to edit these
+                setSelectedProductsWithQty([...order.items]);
 
                 break;
             }
