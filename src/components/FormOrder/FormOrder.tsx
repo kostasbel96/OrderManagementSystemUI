@@ -187,6 +187,10 @@ const FormOrder = ({
                             onChange={handleDepositChange}
                             error={Boolean(orderErrors?.deposit)}
                             helperText={orderErrors?.deposit}
+                            inputProps={{
+                                step: "0.01",
+                                style: { textAlign: "center" },
+                            }}
                         />
                     </Grid>
 
