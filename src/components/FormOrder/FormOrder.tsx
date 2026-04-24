@@ -197,6 +197,7 @@ const FormOrder = ({
                     <Grid size={{ xs: 12 }}>
                         <Stack spacing={2}>
                             <ProductsTableInsert
+                                deposit={deposit}
                                 selectedProductsWithQty={selectedProductsWithQty}
                                 setSelectedProductsWithQty={setSelectedProductsWithQty}
                             />

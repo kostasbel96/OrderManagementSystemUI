@@ -13,17 +13,21 @@ import {
 import { X } from "lucide-react";
 import type {Product, SelectedProduct} from "../../types/Types.ts";
 import ProductsAutocomplete from "./ProductsAutocomplete.tsx";
+import {useEffect, useState} from "react";
 
 interface ProductsTableInsertProps {
     selectedProductsWithQty: SelectedProduct[];
     setSelectedProductsWithQty: React.Dispatch<React.SetStateAction<SelectedProduct[]>>;
+    deposit?: string;
 }
 
 const ProductsTableInsert = ({
                                           selectedProductsWithQty,
                                           setSelectedProductsWithQty,
+                                          deposit
                                       }: ProductsTableInsertProps) => {
 
+    const [totalAmount, setTotalAmount] = useState<number>(0)
 
     const handleQuantityInputChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -60,6 +64,14 @@ const ProductsTableInsert = ({
         updated[index].price = Number(value);
         setSelectedProductsWithQty(updated);
     };
+
+    useEffect(() => {
+        const total = selectedProductsWithQty.reduce(
+            (sum, item) => sum + (item.price * item.quantity),
+            0
+        );
+        setTotalAmount(total);
+    }, [selectedProductsWithQty]);
 
     return (
         <TableContainer
@@ -197,6 +209,7 @@ const ProductsTableInsert = ({
                                                     style: { textAlign: "center" },
                                                 }}
                                                 sx={{
+                                                    minWidth: col.qty,
                                                     "& .MuiInputBase-root": {
                                                         fontSize: 11,
                                                         height: 35,
@@ -226,6 +239,7 @@ const ProductsTableInsert = ({
                                                     style: { textAlign: "center" },
                                                 }}
                                                 sx={{
+                                                    minWidth: col.price,
                                                     "& .MuiInputBase-root": {
                                                         fontSize: 11,
                                                         height: 30,
@@ -250,6 +264,14 @@ const ProductsTableInsert = ({
                                         <TableCell sx={{ ...cellStyle, width: col.action }}>
                                             <Button
                                                 color="error"
+                                                disableRipple
+                                                sx={{
+                                                    minWidth: 0,
+                                                    padding: 0.5,
+                                                    "&:hover": {
+                                                        backgroundColor: "transparent",
+                                                    },
+                                                }}
                                                 onClick={() => {
                                                     setSelectedProductsWithQty(prev =>
                                                         prev.filter((_, i) => i !== index)
@@ -291,18 +313,31 @@ const ProductsTableInsert = ({
                                             Add Product
                                         </Button>
                                     </TableCell>
-                                    <TableCell
-                                        colSpan={4}
-                                        sx={{
-                                            border: "1px solid #e0e0e0",
-                                            textAlign: "center",
-                                            fontSize: "0.8rem"
-                                        }}
-                                    >
-                                        {`Total Amount: ${selectedProductsWithQty
-                                            .reduce((sum, item) => sum + (item.price * item.quantity), 0)
-                                            .toFixed(2)}`}
-                                    </TableCell>
+                                    {selectedProductsWithQty.length > 0 && (
+                                        <>
+                                            <TableCell
+                                                colSpan={2}
+                                                sx={{
+                                                    border: "1px solid #e0e0e0",
+                                                    textAlign: "center",
+                                                    fontSize: "0.8rem"
+                                                }}
+                                            >
+                                                {`Total Amount: ${totalAmount.toFixed(2)}`}
+                                            </TableCell>
+                                            <TableCell
+                                                colSpan={2}
+                                                sx={{
+                                                    border: "1px solid #e0e0e0",
+                                                    textAlign: "center",
+                                                    fontSize: "0.8rem"
+                                                }}
+                                            >
+                                                {`Balance: ${(totalAmount - Number(deposit ?? 0)).toFixed(2)}`}
+                                            </TableCell>
+                                        </>
+                                    )}
+
                                 </TableRow>
                             </TableFooter>
 

@@ -367,6 +367,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                     <ProductsTableInsert
                         selectedProductsWithQty={selectedProductsWithQty}
                         setSelectedProductsWithQty={setSelectedProductsWithQty}
+                        deposit={orderValues.deposit ?? "0"}
                     />
                     {orderErrors && (
                         <Typography color="error" fontSize={12}>
