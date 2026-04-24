@@ -68,6 +68,9 @@ const ProductsAutocomplete = ({selectedProduct, setSelectedProduct}: ProductsAut
                         placeholder="Search products..."
                         size="small"
                         sx={{
+                            minWidth: 240,
+                            mr: 4,
+                            height: "100%",
                             backgroundColor: "white",
                             borderRadius: 2,
                             "& .MuiInputBase-root": {

@@ -25,13 +25,49 @@ const ProductsTableInsert = ({
                                       }: ProductsTableInsertProps) => {
 
 
+    const handleQuantityInputChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        index: number
+    ) => {
+        const value = e.target.value;
+
+        const updated = [...selectedProductsWithQty];
+
+        if (value === "") {
+            updated[index].quantity = 0; // προσωρινό state
+            setSelectedProductsWithQty(updated);
+            return;
+        }
+
+        updated[index].quantity = Math.max(1, Number(value));
+        setSelectedProductsWithQty(updated);
+    };
+
+    const handlePriceInputChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        index: number
+    ) => {
+        const value = e.target.value;
+
+        const updated = [...selectedProductsWithQty];
+
+        if (value === "") {
+            updated[index].price = 0;
+            setSelectedProductsWithQty(updated);
+            return;
+        }
+
+        updated[index].price = Number(value);
+        setSelectedProductsWithQty(updated);
+    };
+
     return (
         <TableContainer
             component={Paper}
             sx={{
-                maxHeight: "calc(100vh - 68vh)",
-                overflowY: "scroll",
-                width: "100%",
+                maxHeight: "calc(100vh - 69vh)",
+                overflowX: "auto",
+                overflowY: "auto",
             }}
         >
             <Table
@@ -39,146 +75,209 @@ const ProductsTableInsert = ({
                 stickyHeader
                 sx={{
                     tableLayout: "fixed",
-                    width: "100%",
+                    minWidth: 900,
                 }}
             >
-                {/* HEADER */}
-                <TableHead>
-                    <TableRow>
-                        <TableCell align="center" />
-                        <TableCell align="center">Product</TableCell>
-                        <TableCell align="center">Qty</TableCell>
-                        <TableCell align="center">Price</TableCell>
-                        <TableCell align="center">Total</TableCell>
-                        <TableCell align="center" />
-                    </TableRow>
-                </TableHead>
+                {(() => {
+                    const col = {
+                        index: 50,
+                        product: 300,
+                        qty: 100,
+                        price: 120,
+                        total: 120,
+                        action: 60,
+                    };
 
-                {/* BODY */}
-                <TableBody>
-                    {selectedProductsWithQty.map((item: SelectedProduct, index: number) => (
-                        <TableRow key={item.id}>
+                    const cellStyle = {
+                        border: "1px solid #e0e0e0",
+                        textAlign: "center",
+                    };
 
-                            <TableCell align="center">{index + 1}</TableCell>
+                    return (
+                        <>
+                            {/* HEADER */}
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell sx={{ ...cellStyle, width: col.index }} />
 
-                            <TableCell align="center">
-                                <ProductsAutocomplete
-                                    selectedProduct={item.product}
-                                    setSelectedProduct={(product: Product | null) => {
-                                        setSelectedProductsWithQty(prev =>
-                                            prev.map((row, i) =>
-                                                i === index
-                                                    ? { ...row,
-                                                        product: product,
-                                                        price: product?.price ?? row.price,
-                                                    }
-                                                    : row
-                                            )
-                                        );
-                                    }}
-                                />
-                            </TableCell>
+                                    <TableCell sx={{ ...cellStyle, width: col.product }}>
+                                        Product
+                                    </TableCell>
 
-                            <TableCell align="center">
-                                <TextField
-                                    type="number"
-                                    size="small"
-                                    value={item.quantity}
-                                    onChange={(e) => {
-                                        const updated = [...selectedProductsWithQty];
-                                        updated[index].quantity = Number(e.target.value);
-                                        setSelectedProductsWithQty(updated);
-                                    }}
-                                    inputProps={{
-                                        min: 1
-                                    }}
-                                    sx={{
-                                        width: 70,
-                                        "& .MuiInputBase-root": {
-                                            fontSize: 11,
-                                            height: 30,
-                                        },
-                                        "& input": {
-                                            padding: "4px 6px",
-                                            fontSize: 11,
-                                        },
-                                    }}
-                                />
-                            </TableCell>
+                                    <TableCell sx={{ ...cellStyle, width: col.qty }}>
+                                        Qty
+                                    </TableCell>
 
-                            <TableCell align="center">
-                                <TextField
-                                    type="number"
-                                    size="small"
-                                    value={item.price}
-                                    onChange={(e) => {
-                                        const updated = [...selectedProductsWithQty];
-                                        updated[index].price = Number(e.target.value);
-                                        setSelectedProductsWithQty(updated);
-                                    }}
-                                    inputProps={{
-                                        min: 0,
-                                        step: "0.01"
-                                    }}
-                                    sx={{
-                                        width: 90,
-                                        "& .MuiInputBase-root": {
-                                            fontSize: 11,
-                                            height: 30,
-                                        },
-                                        "& input": {
-                                            padding: "4px 6px",
-                                            fontSize: 11,
-                                        },
-                                    }}
-                                />
-                            </TableCell>
+                                    <TableCell sx={{ ...cellStyle, width: col.price }}>
+                                        Price
+                                    </TableCell>
 
-                            <TableCell align="center">
-                                {(item.price * item.quantity).toFixed(2)}
-                            </TableCell>
+                                    <TableCell sx={{ ...cellStyle, width: col.total }}>
+                                        Total
+                                    </TableCell>
 
-                            <TableCell align="center">
-                                <Button
-                                    color="error"
-                                    onClick={() => {
-                                        setSelectedProductsWithQty((prev: SelectedProduct[]) =>
-                                            prev.filter((_, i) => i !== index)
-                                        );
-                                    }}
-                                >
-                                    <X size={16} />
-                                </Button>
-                            </TableCell>
+                                    <TableCell sx={{ ...cellStyle, width: col.action }} />
+                                </TableRow>
+                            </TableHead>
 
-                        </TableRow>
-                    ))}
-                </TableBody>
+                            {/* BODY */}
+                            <TableBody>
+                                {selectedProductsWithQty.map((item, index) => (
+                                    <TableRow
+                                        key={item.id}
+                                        sx={{
+                                            "&:hover": {
+                                                backgroundColor: "#fafafa",
+                                            },
+                                        }}
+                                    >
+                                        <TableCell sx={{ ...cellStyle, width: col.index }}>
+                                            {index + 1}
+                                        </TableCell>
 
-                {/* FOOTER */}
-                <TableFooter>
-                    <TableRow>
-                        <TableCell colSpan={6} align="center">
-                            <Button
-                                variant="outlined"
-                                onClick={() => {
-                                    setSelectedProductsWithQty((prev: SelectedProduct[]) => [
-                                        ...prev,
-                                        {
-                                            id: Date.now(),
-                                            product: null,
-                                            quantity: 1,
-                                            price: 0,
-                                        },
-                                    ]);
-                                }}
-                            >
-                                Add Product
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                </TableFooter>
+                                        <TableCell sx={{ ...cellStyle, width: col.product }}>
+                                            <ProductsAutocomplete
+                                                selectedProduct={item.product}
+                                                setSelectedProduct={(product: Product | null) => {
+                                                    setSelectedProductsWithQty(prev =>
+                                                        prev.map((row, i) =>
+                                                            i === index
+                                                                ? {
+                                                                    ...row,
+                                                                    product: product,
+                                                                    price: product?.price ?? row.price,
+                                                                }
+                                                                : row
+                                                        )
+                                                    );
+                                                }}
+                                            />
+                                        </TableCell>
 
+                                        {/* QTY */}
+                                        <TableCell sx={{ ...cellStyle, width: col.qty }}>
+                                            <TextField
+                                                type="number"
+                                                size="small"
+                                                value={item.quantity === 0 ? "" : String(item.quantity)}
+                                                onChange={(e:  React.ChangeEvent<HTMLInputElement>) => handleQuantityInputChange(e, index)}
+                                                inputProps={{
+                                                    min: 1,
+                                                    style: { textAlign: "center" },
+                                                }}
+                                                sx={{
+                                                    "& .MuiInputBase-root": {
+                                                        fontSize: 11,
+                                                        height: 35,
+                                                    },
+                                                    "& input": {
+                                                        textAlign: "center",
+                                                        padding: "4px 6px",
+                                                    },
+                                                    "& .MuiOutlinedInput-root fieldset": {
+                                                        border: "none",
+                                                    },
+                                                }}
+                                            />
+                                        </TableCell>
+
+                                        {/* PRICE */}
+                                        <TableCell sx={{ ...cellStyle, width: col.price }}>
+                                            <TextField
+                                                type="number"
+                                                size="small"
+                                                value={item.price === null || item.price === undefined ? "" : String(item.price)}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                    handlePriceInputChange(e, index);
+                                                }}
+                                                inputProps={{
+                                                    step: "0.01",
+                                                    style: { textAlign: "center" },
+                                                }}
+                                                sx={{
+                                                    "& .MuiInputBase-root": {
+                                                        fontSize: 11,
+                                                        height: 30,
+                                                    },
+                                                    "& input": {
+                                                        textAlign: "center",
+                                                        padding: "4px 6px",
+                                                    },
+                                                    "& .MuiOutlinedInput-root fieldset": {
+                                                        border: "none",
+                                                    },
+                                                }}
+                                            />
+                                        </TableCell>
+
+                                        {/* TOTAL */}
+                                        <TableCell sx={{ ...cellStyle, width: col.total }}>
+                                            {(item.price * item.quantity).toFixed(2)}
+                                        </TableCell>
+
+                                        {/* ACTION */}
+                                        <TableCell sx={{ ...cellStyle, width: col.action }}>
+                                            <Button
+                                                color="error"
+                                                onClick={() => {
+                                                    setSelectedProductsWithQty(prev =>
+                                                        prev.filter((_, i) => i !== index)
+                                                    );
+                                                }}
+                                            >
+                                                <X size={16} />
+                                            </Button>
+                                        </TableCell>
+
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+
+                            {/* FOOTER */}
+                            <TableFooter>
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={4}
+                                        sx={{
+                                            border: "1px solid #e0e0e0",
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => {
+                                                setSelectedProductsWithQty(prev => [
+                                                    ...prev,
+                                                    {
+                                                        id: Date.now(),
+                                                        product: null,
+                                                        quantity: 1,
+                                                        price: 0,
+                                                    },
+                                                ]);
+                                            }}
+                                        >
+                                            Add Product
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell
+                                        colSpan={2}
+                                        sx={{
+                                            border: "1px solid #e0e0e0",
+                                            textAlign: "center",
+                                            fontSize: "0.8rem"
+                                        }}
+                                    >
+                                        {`Total Amount: ${selectedProductsWithQty
+                                            .reduce((sum, item) => sum + (item.price * item.quantity), 0)
+                                            .toFixed(2)}`}
+                                    </TableCell>
+                                </TableRow>
+                            </TableFooter>
+
+                        </>
+                    );
+                })()}
             </Table>
         </TableContainer>
     );
