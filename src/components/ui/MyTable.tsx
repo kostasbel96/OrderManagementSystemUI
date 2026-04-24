@@ -2,6 +2,7 @@ import {DataGrid, type GridColDef, type GridFilterModel, type GridSortModel} fro
 import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import Search from "../Search.tsx";
 import {Paper} from "@mui/material";
+import {useUIStore} from "../../store/useUIStore.ts";
 
 type TableProps = {
     columns: GridColDef[];
@@ -38,6 +39,8 @@ const MyTable = ({columns,
                                                   filterModel,
                                                   setFilterModel}: TableProps)=>{
 
+    const collapsed = useUIStore((s) => s.sidebarCollapsed);
+
     return (
             <div className="mt-5 flex flex-col space-y-2 justify-center items-center px-4">
                 <Search
@@ -48,8 +51,9 @@ const MyTable = ({columns,
                 />
                 <Paper sx={{
                     maxHeight: 'calc(100vh - 165px)',
-                    maxWidth: 1250,
-                    width: '100%',
+                    maxWidth: collapsed ? 1650 : 1200,
+                    transition: "max-width 0.3s ease",
+                    width: "100%",
                     marginBottom: 2,
                     display: 'flex',
                     flexDirection: 'column'

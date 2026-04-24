@@ -14,6 +14,9 @@ interface PopUpItemDeletedProps {
 
 const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemDeletedProps) => {
     const [operationItem, setOperationItem] = useState<Product | Customer | OrderItem>();
+    const [progress, setProgress] = useState(100);
+    const [isPaused, setIsPaused] = useState(false);
+    const duration = 3000;
 
     useEffect(() => {
         if (typeOf === "product"){
@@ -23,22 +26,48 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
         } else if (typeOf === "order") {
             setOperationItem(item as OrderItem);
         }
-        setTimeout(()=>{
-            setSubmitted(false);
-        }, 2000);
     }, []);
+
+
+
+    useEffect(() => {
+        if (isPaused) return;
+
+        const interval = 30;
+        const step = 100 / (duration / interval);
+
+        const timer = setInterval(() => {
+            setProgress((prev) => {
+                const next = prev - step;
+
+                if (next <= 0) {
+                    clearInterval(timer);
+                    setSubmitted(false);
+                    return 0;
+                }
+
+                return next;
+            });
+        }, interval);
+
+        return () => clearInterval(timer);
+    }, [isPaused]);
 
     return (
         <motion.div
-            className="backdrop mt-1 shadow-lg mr-1 absolute top-0 right-0"
-            initial={{ y: -80, opacity: 0, scale: 0.9 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -80, opacity: 0, scale: 0.9 }}
-            transition={{
-                type: "spring",
-                stiffness: 500,
-                damping: 20,
-            }}>
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 100, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            style={{
+                position: "fixed",
+                bottom: 20,
+                right: 20,
+                zIndex: 9999,
+            }}
+        >
             <Alert
                 severity="success"
                 variant="filled"
@@ -63,7 +92,26 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
                 { (typeOf === "customer" && operationItem) &&
                     (`Customer ${(operationItem as Customer).name} ${(operationItem as Customer).lastName} ${operation} successfully!` ) }
                 { (typeOf === "order" && operationItem) && (`Order ${(operationItem as OrderItem).id} ${operation} successfully!` ) }
+                <div
+                    style={{
+                        height: 4,
+                        background: "#ddd",
+                        marginTop: 10,
+                        borderRadius: 4,
+                        overflow: "hidden",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${progress}%`,
+                            height: "100%",
+                            background: "green",
+                            transition: "width 0.03s linear",
+                        }}
+                    />
+                </div>
             </Alert>
+
         </motion.div>
 
             )

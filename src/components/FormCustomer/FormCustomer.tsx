@@ -74,6 +74,7 @@ const FormCustomer = ({
             setSubmitted(true);
             setSuccess(false);
         }
+        setPopUpMessage("");
     };
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
@@ -81,6 +82,7 @@ const FormCustomer = ({
         setValues(initialValues);
         setSubmitted(false);
         setCustomerErrors({});
+        setPopUpMessage("");
         localStorage.removeItem("customerDraft");
     };
 
@@ -109,7 +111,8 @@ const FormCustomer = ({
                 p: 3,
                 borderRadius: 2,
                 width: "100%",
-                margin: "0 auto"
+                margin: "0 auto",
+                minHeight: "84vh"
             }}
         >
             <form onSubmit={handleOnSubmit} onReset={handleOnReset}>
@@ -131,7 +134,7 @@ const FormCustomer = ({
                             value={values.name}
                             onChange={handleChange}
                             error={Boolean(customerErrors?.name)}
-                            helperText={customerErrors?.name}
+                            helperText={customerErrors?.name ?? " "}
                         />
                     </Grid>
 
@@ -143,7 +146,7 @@ const FormCustomer = ({
                             value={values.lastName}
                             onChange={handleChange}
                             error={Boolean(customerErrors?.lastName)}
-                            helperText={customerErrors?.lastName}
+                            helperText={customerErrors?.lastName ?? " "}
                         />
                     </Grid>
 
@@ -155,7 +158,7 @@ const FormCustomer = ({
                             value={values.phoneNumber1}
                             onChange={handleChange}
                             error={Boolean(customerErrors?.phoneNumber1)}
-                            helperText={customerErrors?.phoneNumber1}
+                            helperText={customerErrors?.phoneNumber1 ?? " "}
                         />
                     </Grid>
 
@@ -167,7 +170,7 @@ const FormCustomer = ({
                             value={values.phoneNumber2}
                             onChange={handleChange}
                             error={Boolean(customerErrors?.phoneNumber2)}
-                            helperText={customerErrors?.phoneNumber2}
+                            helperText={customerErrors?.phoneNumber2 ?? " "}
                         />
                     </Grid>
 
@@ -179,7 +182,7 @@ const FormCustomer = ({
                             value={values.email}
                             onChange={handleChange}
                             error={Boolean(customerErrors?.email)}
-                            helperText={customerErrors?.email}
+                            helperText={customerErrors?.email ?? " "}
                         />
                     </Grid>
 

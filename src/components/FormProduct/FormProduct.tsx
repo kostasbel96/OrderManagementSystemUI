@@ -68,6 +68,7 @@ const FormProduct = ({
             setSubmitted(true);
             setSuccess(false);
         }
+        setPopUpMessage("");
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,6 +90,7 @@ const FormProduct = ({
         localStorage.removeItem("productDraft");
         setValues(initialValues);
         setProductErrors({});
+        setPopUpMessage("");
         setSubmitted(false);
     };
 
@@ -103,7 +105,8 @@ const FormProduct = ({
                 p: 3,
                 borderRadius: 2,
                 width: "100%",
-                margin: "0 auto"
+                margin: "0 auto",
+                minHeight: "84vh"
             }}
         >
             <Box
@@ -129,7 +132,7 @@ const FormProduct = ({
                             value={values.name}
                             onChange={handleChange}
                             error={Boolean(productErrors?.name)}
-                            helperText={productErrors?.name}
+                            helperText={productErrors?.name ?? " "}
                         />
                     </Grid>
 
@@ -142,7 +145,7 @@ const FormProduct = ({
                             value={values.description}
                             onChange={handleChange}
                             error={Boolean(productErrors?.description)}
-                            helperText={productErrors?.description}
+                            helperText={productErrors?.description ?? " "}
                             multiline
                             rows={3}
                         />
@@ -159,7 +162,7 @@ const FormProduct = ({
                             value={values.quantity}
                             onChange={handleChange}
                             error={Boolean(productErrors?.quantity)}
-                            helperText={productErrors?.quantity}
+                            helperText={productErrors?.quantity ?? " "}
                         />
                     </Grid>
 
@@ -173,7 +176,7 @@ const FormProduct = ({
                             value={values.price}
                             onChange={handleChange}
                             error={Boolean(productErrors?.price)}
-                            helperText={productErrors?.price}
+                            helperText={productErrors?.price ?? " "}
                         />
                     </Grid>
 

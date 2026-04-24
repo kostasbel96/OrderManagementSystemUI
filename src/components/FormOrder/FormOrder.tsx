@@ -77,6 +77,7 @@ const FormOrder = ({
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setPopUpMessage("");
 
         if (validateOrderForm()) {
             addOrder({
@@ -115,6 +116,7 @@ const FormOrder = ({
         setAddress("");
         setDeposit("");
         setOrderErrors({});
+        setPopUpMessage("");
         setSubmitted(false);
     };
 
@@ -133,21 +135,22 @@ const FormOrder = ({
 
     return (
         <Paper
-            elevation={6}
+            elevation={2}
             sx={{
-                p: 3,
-                borderRadius: 2,
+                p: 2,
+                borderRadius: 1,
                 width: "100%",
-                margin: "0 auto"
+                minHeight: "76vh",
+                mx: "auto",
+                backgroundColor: "#fafafa",
             }}
         >
             <Box component="form" onSubmit={handleOnSubmit} onReset={handleOnReset}>
+                <Grid container spacing={1.5}>
 
-                <Grid container spacing={2}>
-
-                    {/* Title section */}
+                    {/* HEADER */}
                     <Grid size={{ xs: 12 }}>
-                        <Box sx={{ fontSize: 18, fontWeight: 600 }}>
+                        <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
                             Create Order
                         </Box>
                     </Grid>
@@ -158,22 +161,31 @@ const FormOrder = ({
                             selectedCustomer={selectedCustomer}
                             setSelectedCustomer={setSelectedCustomer}
                         />
-                        {orderErrors?.customer && (
-                            <Typography color="error" fontSize={12}>
-                                {orderErrors.customer}
-                            </Typography>
-                        )}
+                        <Box sx={{ minHeight: 16 }}>
+                            {orderErrors?.customer && (
+                                <Typography color="error" fontSize={11}>
+                                    {orderErrors.customer}
+                                </Typography>
+                            )}
+                        </Box>
                     </Grid>
 
                     {/* ADDRESS */}
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <TextField
                             fullWidth
+                            size="small"
                             label="Address"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             error={Boolean(orderErrors?.address)}
-                            helperText={orderErrors?.address}
+                            helperText={orderErrors?.address ?? " "}
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    fontSize: 12,
+                                    height: 36,
+                                },
+                            }}
                         />
                     </Grid>
 
@@ -181,43 +193,57 @@ const FormOrder = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <TextField
                             fullWidth
+                            size="small"
                             label="Deposit"
                             type="number"
                             value={deposit}
                             onChange={handleDepositChange}
                             error={Boolean(orderErrors?.deposit)}
-                            helperText={orderErrors?.deposit}
+                            helperText={orderErrors?.deposit ?? " "}
                             inputProps={{
-                                step: "0.01",
-                                style: { textAlign: "center" },
+                                step: 0.01,
+                                style: { textAlign: "right" },
+                            }}
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    fontSize: 12,
+                                    height: 36,
+                                },
                             }}
                         />
                     </Grid>
 
+                    {/* TABLE */}
                     <Grid size={{ xs: 12 }}>
-                        <Stack spacing={2}>
-                            <ProductsTableInsert
-                                deposit={deposit}
-                                selectedProductsWithQty={selectedProductsWithQty}
-                                setSelectedProductsWithQty={setSelectedProductsWithQty}
-                            />
-                        </Stack>
-                        {orderErrors && (
-                            <Typography color="error" fontSize={12}>
-                                {orderErrors.products || orderErrors.productQuantity
-                                    || orderErrors.productPrice || orderErrors.stockError}
-                            </Typography>
-                        )}
+                        <ProductsTableInsert
+                            deposit={deposit}
+                            selectedProductsWithQty={selectedProductsWithQty}
+                            setSelectedProductsWithQty={setSelectedProductsWithQty}
+                        />
+
+                        <Box sx={{ minHeight: 18 }}>
+                            {(orderErrors?.products ||
+                                orderErrors?.productQuantity ||
+                                orderErrors?.productPrice ||
+                                orderErrors?.stockError) && (
+                                <Typography color="error" fontSize={11}>
+                                    {orderErrors.products ||
+                                        orderErrors.productQuantity ||
+                                        orderErrors.productPrice ||
+                                        orderErrors.stockError}
+                                </Typography>
+                            )}
+                        </Box>
                     </Grid>
 
-                    {/* BUTTONS */}
+                    {/* ACTIONS */}
                     <Grid size={{ xs: 12 }}>
-                        <Stack direction="row" spacing={2} justifyContent="flex-end">
-                            <Button type="reset" variant="outlined" color="error">
+                        <Stack direction="row" spacing={1} justifyContent="flex-end">
+                            <Button type="reset" variant="outlined" color="error" size="small">
                                 Reset
                             </Button>
 
-                            <Button type="submit" variant="contained">
+                            <Button type="submit" variant="contained" size="small">
                                 Create
                             </Button>
                         </Stack>

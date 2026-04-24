@@ -26,15 +26,12 @@ const QuickAdd = () => {
                 >
                     {
                         submitted && (
-                            <div className="flex justify-center mt-1 mr-1 shadow-lg absolute top-0 right-0">
-                                <PopUp
-                                    popUpMessage={popUpMessage}
-                                    title={activeValue ?? ""}
-                                    setSubmitted={setSubmitted}
-                                    success={success}
-                                />
-                            </div>
-
+                            <PopUp
+                                popUpMessage={popUpMessage}
+                                title={activeValue ?? ""}
+                                setSubmitted={setSubmitted}
+                                success={success}
+                            />
                         )
                     }
                 </div>

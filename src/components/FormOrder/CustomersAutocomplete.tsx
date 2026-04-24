@@ -43,37 +43,54 @@ const CustomersAutocomplete = ({selectedCustomer, setSelectedCustomer}: Customer
     }, [inputValue]);
 
     return (
-            <Autocomplete<Customer>
-                fullWidth
-                options={options}
-                getOptionLabel={(c) => `${c.name} ${c.lastName}`}
-                value={selectedCustomer}
-                loading={loading}
-                inputValue={inputValue}
-                onInputChange={(_, value) => setInputValue(value)}
-                onChange={(_, value) => setSelectedCustomer(value)}
-                isOptionEqualToValue={(option, value) => option.id === value?.id}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label={"Customer"}
-                        placeholder={`Search Customers...`}
-                        sx={{
-                            backgroundColor: "white",
-                            borderRadius: 2,
-                            '& .MuiInputLabel-root': {
-                                backgroundColor: 'white',
-                                borderRadius: 2,
+        <Autocomplete<Customer>
+            popupIcon={null}
+            fullWidth
+            options={options}
+            getOptionLabel={(c) => `${c.name} ${c.lastName}`}
+            value={selectedCustomer}
+            loading={loading}
+            inputValue={inputValue}
+            onInputChange={(_, value) => setInputValue(value)}
+            onChange={(_, value) => setSelectedCustomer(value)}
+            isOptionEqualToValue={(option, value) => option.id === value?.id}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    placeholder="Search customer..."
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                        backgroundColor: "white",
+                        borderRadius: 1,
+
+                        "& .MuiOutlinedInput-root": {
+                            fontSize: 12,
+                            height: 36,
+                            paddingRight: "6px",
+
+                            "& fieldset": {
+                                border: "1px solid #e0e0e0",
                             },
-                            '& .MuiInputLabel-root.Mui-focused': {
-                                color: 'gray',
-                                backgroundColor: 'white',
-                                borderRadius: 2,
-                            }
-                        }}
-                    />
-                )}
-            />
+
+                            "&:hover fieldset": {
+                                borderColor: "#bdbdbd",
+                            },
+
+                            "&.Mui-focused fieldset": {
+                                borderColor: "#1976d2",
+                                borderWidth: "1px",
+                            },
+                        },
+
+                        "& input": {
+                            padding: "6px 8px",
+                            fontSize: 12,
+                        },
+                    }}
+                />
+            )}
+        />
     )
 }
 

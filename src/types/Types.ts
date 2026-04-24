@@ -40,7 +40,7 @@ export interface OrderItem {
 
 export interface SelectedProduct {
     id?: number;
-    product: Product | null;
+    product?: Product;
     quantity: number;
     price: number;
 }

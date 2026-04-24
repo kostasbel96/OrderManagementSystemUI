@@ -6,11 +6,13 @@ import CheckIcon from "@mui/icons-material/Check";
 interface FormPopUpProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     title: string;
+    progress: number;
+    success: boolean;
 }
 
 
 
-const PopUpSuccess = ({setSubmitted, title}: FormPopUpProps) => {
+const PopUpSuccess = ({setSubmitted, title, progress, success}: FormPopUpProps) => {
     let popUpTitle;
 
     if (title.includes("product")){
@@ -42,6 +44,24 @@ const PopUpSuccess = ({setSubmitted, title}: FormPopUpProps) => {
             }
         >
             {`${popUpTitle} added successfully!`}
+            <div
+                style={{
+                    height: 4,
+                    background: "#ddd",
+                    marginTop: 10,
+                    borderRadius: 4,
+                    overflow: "hidden",
+                }}
+            >
+                <div
+                    style={{
+                        width: `${progress}%`,
+                        height: "100%",
+                        background: success ? "green" : "red",
+                        transition: "width 0.03s linear",
+                    }}
+                />
+            </div>
         </Alert>
     )
 }

@@ -32,11 +32,9 @@ const MyTabs = ({ setSubmitted, setSuccess, setPopUpMessage, setActiveValue }: P
                 width: "100%",
                 marginTop: 0,
                 marginBottom: 0,
-                mx: 2,
                 borderRadius: 2,
                 bgcolor: "primary.main",
                 color: "white",
-                p: 2,
             }}
         >
             {/* Tabs */}
