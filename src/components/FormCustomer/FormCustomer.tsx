@@ -31,7 +31,14 @@ const FormCustomer = ({
                           setPopUpMessage
                       }: FormCustomerProps) => {
 
-    const [values, setValues] = useState<FormValues>(initialValues);
+    const [values, setValues] = useState<FormValues>(() => {
+        const saved = localStorage.getItem("customerDraft");
+        return saved ? JSON.parse(saved) : initialValues;
+    });
+
+    useEffect(() => {
+        localStorage.setItem("customerDraft", JSON.stringify(values));
+    }, [values]);
 
     const {
         validateCustomerForm,
@@ -56,6 +63,7 @@ const FormCustomer = ({
                     setSubmitted(true);
                     setPopUpMessage("Customer added successfully.");
                     setValues(initialValues);
+                    localStorage.removeItem("customerDraft");
                 })
                 .catch((error) => {
                     setPopUpMessage(error.message);
@@ -73,6 +81,7 @@ const FormCustomer = ({
         setValues(initialValues);
         setSubmitted(false);
         setCustomerErrors({});
+        localStorage.removeItem("customerDraft");
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +109,6 @@ const FormCustomer = ({
                 p: 3,
                 borderRadius: 2,
                 width: "100%",
-                maxWidth: 800,
                 margin: "0 auto"
             }}
         >

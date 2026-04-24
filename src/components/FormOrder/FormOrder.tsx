@@ -26,10 +26,43 @@ const FormOrder = ({
                        setPopUpMessage
                    }: FormOrderProps) => {
 
-    const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
-    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-    const [address, setAddress] = useState("");
-    const [deposit, setDeposit] = useState<string>("");
+    const [selectedProductsWithQty, setSelectedProductsWithQty] =
+        useState<SelectedProduct[]>(() => {
+            const saved = localStorage.getItem("selectedProductsWithQty");
+            return saved ? JSON.parse(saved) : [];
+        });
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(() => {
+        const saved = localStorage.getItem("orderDraft");
+        return saved ? JSON.parse(saved).selectedCustomer : null;
+    });
+
+    const [address, setAddress] = useState<string>(() => {
+        const saved = localStorage.getItem("orderDraft");
+        return saved ? JSON.parse(saved).address : "";
+    });
+
+    const [deposit, setDeposit] = useState<string>(() => {
+        const saved = localStorage.getItem("orderDraft");
+        return saved ? JSON.parse(saved).deposit : "";
+    });
+
+    useEffect(() => {
+        localStorage.setItem(
+            "orderDraft",
+            JSON.stringify({
+                selectedCustomer,
+                address,
+                deposit,
+            })
+        );
+    }, [selectedCustomer, address, deposit]);
+
+    useEffect(() => {
+        localStorage.setItem(
+            "selectedProductsWithQty",
+            JSON.stringify(selectedProductsWithQty)
+        );
+    }, [selectedProductsWithQty]);
 
     const {
         validateOrderForm,

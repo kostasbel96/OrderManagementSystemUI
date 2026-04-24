@@ -24,7 +24,14 @@ const FormProduct = ({
                          setPopUpMessage
                      }: FormProductProps) => {
 
-    const [values, setValues] = useState<FormValues>(initialValues);
+    const [values, setValues] = useState<FormValues>(() => {
+        const saved = localStorage.getItem("productDraft");
+        return saved ? JSON.parse(saved) : initialValues;
+    });
+
+    useEffect(() => {
+        localStorage.setItem("productDraft", JSON.stringify(values));
+    }, [values]);
 
     const {
         validateProductForm,
@@ -54,6 +61,7 @@ const FormProduct = ({
                     setSuccess(false);
                 });
 
+            localStorage.removeItem("productDraft");
             setValues(initialValues);
             setProductErrors({});
         } else {
@@ -78,6 +86,7 @@ const FormProduct = ({
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        localStorage.removeItem("productDraft");
         setValues(initialValues);
         setProductErrors({});
         setSubmitted(false);
@@ -94,7 +103,6 @@ const FormProduct = ({
                 p: 3,
                 borderRadius: 2,
                 width: "100%",
-                maxWidth: 700,
                 margin: "0 auto"
             }}
         >
