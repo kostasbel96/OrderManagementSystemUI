@@ -11,9 +11,7 @@ import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 
 const ProductsView = () => {
-    const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>(
-        localStorage.getItem("products") ? JSON.parse(localStorage.getItem("products") as string) : []
-    );
+    const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>([]);
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(5);
     const [rowCount, setRowCount] = useState(0);
@@ -170,7 +168,6 @@ const ProductsView = () => {
             sortDirection: sortModel[0]?.sort ?? "asc",
             filters: filterModel.items ?? []
         }).then((data) => {
-                localStorage.setItem("products", JSON.stringify(data.content));
                 setRows(data.content);
                 setRowCount(data.totalElements);
         }).finally(() => setLoading(false));

@@ -21,7 +21,7 @@ const Workspaces: React.FC = () => {
         setActiveTab(tabs[nextIndex].id);
     };
 
-    // Χειροκίνητο scroll μόνο στη μπάρα των tabs για να αποφύγουμε το scroll όλης της σελίδας
+    // Χειροκίνητο scroll στη μπάρα των tabs
     useEffect(() => {
         if (activeTabRef.current && scrollRef.current) {
             const container = scrollRef.current;
@@ -31,7 +31,6 @@ const Workspaces: React.FC = () => {
             const tabOffsetLeft = tab.offsetLeft;
             const tabWidth = tab.offsetWidth;
 
-            // Υπολογισμός θέσης ώστε το tab να έρθει στο ορατό πεδίο της μπάρας
             const targetScroll = tabOffsetLeft - (containerWidth / 2) + (tabWidth / 2);
 
             container.scrollTo({
@@ -39,15 +38,21 @@ const Workspaces: React.FC = () => {
                 behavior: 'smooth'
             });
         }
+
+        // Στέλνουμε ένα resize event για σιγουριά
+        setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+        }, 50);
+
     }, [activeTabId]);
 
     if (tabs.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center h-full text-gray-400 p-20 bg-gray-50">
                 <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center max-w-sm">
-                    <p className="text-xl font-semibold text-gray-600 mb-2">OMS Workspace</p>
-                    <p className="text-sm">There are no active workspaces.</p>
-                    <p className="text-sm mt-1">Select a section from the menu on the left to get started.</p>
+                    <p className="text-xl font-semibold text-gray-600 mb-2">ERP Workspace</p>
+                    <p className="text-sm">Δεν υπάρχουν ενεργές επιφάνειες εργασίας.</p>
+                    <p className="text-sm mt-1">Επιλέξτε μια ενότητα από το μενού αριστερά για να ξεκινήσετε.</p>
                 </div>
             </div>
         );
@@ -58,7 +63,7 @@ const Workspaces: React.FC = () => {
             {/* Tab Bar Header */}
             <div className="relative h-[49px] bg-white border-b border-gray-200 flex-none w-full">
                 
-                {/* 1. FIXED NAVIGATOR - Absolute position to prevent layout shifts */}
+                {/* Fixed Navigator */}
                 <div className="absolute left-0 top-0 bottom-0 z-30 flex items-center bg-white px-2 border-r border-gray-100 shadow-[4px_0_8px_rgba(0,0,0,0.05)] gap-1">
                     <button 
                         onClick={() => navigateTab('prev')}
@@ -74,7 +79,7 @@ const Workspaces: React.FC = () => {
                     </button>
                 </div>
 
-                {/* 2. SCROLLABLE TABS AREA */}
+                {/* Scrollable Tabs Area */}
                 <div 
                     ref={scrollRef}
                     className="h-full w-full overflow-x-auto overflow-y-hidden whitespace-nowrap scrollbar-hide select-none flex items-end pl-[85px] pr-4 touch-pan-x"
@@ -112,18 +117,27 @@ const Workspaces: React.FC = () => {
                 </div>
             </div>
 
-            {/* Tab Content */}
-            <div className="flex-1 relative w-full">
-                {tabs.map((tab) => (
-                    <div
-                        key={tab.id}
-                        className={`absolute inset-0 w-full h-full overflow-y-auto ${activeTabId === tab.id ? "block" : "hidden"}`}
-                    >
-                        <div className="min-w-full inline-block p-4">
-                            {tab.component}
+            {/* Tab Content Area */}
+            <div className="flex-1 relative w-full overflow-hidden">
+                {tabs.map((tab) => {
+                    const isActive = activeTabId === tab.id;
+                    return (
+                        <div
+                            key={tab.id}
+                            // Διορθωμένο: Χρήση visibility/opacity αντί για display: none
+                            // Αυτό διατηρεί τις διαστάσεις του πίνακα στο παρασκήνιο
+                            className={`absolute inset-0 w-full h-full overflow-x-auto overflow-y-auto transition-opacity duration-75 ${
+                                isActive 
+                                ? "opacity-100 z-10 visible" 
+                                : "opacity-0 z-0 invisible pointer-events-none"
+                            }`}
+                        >
+                            <div className="min-w-full inline-block p-4">
+                                {tab.component}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             <style>{`

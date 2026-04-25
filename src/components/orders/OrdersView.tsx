@@ -21,17 +21,7 @@ import { PaymentStatus } from "../../types/enums/PaymentStatus.ts";
 
 const OrdersView = () => {
 
-    const [rows, setRows] = useState<(Customer | Product | OrderRow)[]>(() => {
-        const stored = localStorage.getItem("orders");
-        if (!stored) return [];
-
-        const parsed = JSON.parse(stored);
-
-        return parsed.map((order: any) => ({
-            ...order,
-            date: order.date ? new Date(order.date) : undefined,
-        }));
-    });
+    const [rows, setRows] = useState<(Customer | Product | OrderRow)[]>([]);
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(5);
     const [rowCount, setRowCount] = useState(0);
@@ -344,7 +334,6 @@ const OrdersView = () => {
                     });
                 });
                 setRows(orders);
-                localStorage.setItem("orders", JSON.stringify(orders));
                 setRowCount(data.totalElements);
             })
             .catch(() => console.log("error fetching orders"))
