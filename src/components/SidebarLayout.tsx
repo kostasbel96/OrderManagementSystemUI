@@ -10,33 +10,49 @@ import {
     Linkedin,
     Github
 } from "lucide-react";
-import { type ReactNode, useState } from "react";
-import { NavLink } from "react-router";
+import { type ReactNode, useState, useEffect } from "react";
 import {Tooltip} from "@mui/material";
 import {useUIStore} from "../store/useUIStore.ts";
+import {useTabs} from "../contexts/TabContext.tsx";
+import ProductsView from "./products/ProductsView.tsx";
+import OrdersView from "./orders/OrdersView.tsx";
+import CustomersView from "./customers/CustomersView.tsx";
+import Dashboard from "./Dashboard.tsx";
+import QuickAdd from "./QuickAdd.tsx";
 
 export default function SidebarLayout({ children }: { children: ReactNode }) {
     const [open, setOpen] = useState(false);
+    const { addTab } = useTabs();
 
     const collapsed = useUIStore((s) => s.sidebarCollapsed);
     const toggleSidebar = useUIStore((s) => s.toggleSidebar);
 
+    // Αρχικοποίηση με το Dashboard tab
+    useEffect(() => {
+        addTab({
+            id: 'dashboard',
+            label: 'Dashboard',
+            component: <Dashboard />,
+            path: '/'
+        });
+    }, []);
+
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex h-screen bg-gray-100 overflow-hidden">
 
             {/* SIDEBAR */}
             <aside
                 className={`
-                    fixed top-0 left-0 z-50 h-full bg-white border-r
+                    fixed top-0 left-0 z-50 h-full bg-white border-r border-gray-200
                     transition-all duration-300
                     ${collapsed ? "w-16" : "w-64"}
                 `}
             >
                 {/* HEADER */}
-                <div className="flex items-center justify-between p-2 border-b">
+                <div className="flex items-center justify-between p-2 border-b border-gray-200">
 
                     {!collapsed && (
-                        <span className="font-bold text-lg">Admin</span>
+                        <span className="font-bold text-lg text-blue-600 ml-2">OMS Admin</span>
                     )}
 
                     <div className="flex items-center justify-center gap-2">
@@ -53,78 +69,82 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                 <nav className="flex flex-col p-2 gap-1 text-gray-700">
 
                     <NavItem
-                        to="/"
+                        id="dashboard"
                         icon={<LayoutDashboard size={18} />}
                         label="Dashboard"
                         collapsed={collapsed}
                         setOpen={setOpen}
+                        component={<Dashboard />}
                     />
 
                     <NavItem
-                        to="/add"
+                        id="add"
                         icon={<PlusIcon size={18} />}
                         label="Add"
                         collapsed={collapsed}
                         setOpen={setOpen}
+                        component={<QuickAdd />}
                     />
 
                     <NavItem
-                        to="/products"
+                        id="products"
                         icon={<Package size={18} />}
                         label="Products"
                         collapsed={collapsed}
                         setOpen={setOpen}
+                        component={<ProductsView />}
                     />
 
                     <NavItem
-                        to="/orders"
+                        id="orders"
                         icon={<ShoppingCart size={18} />}
                         label="Orders"
                         collapsed={collapsed}
                         setOpen={setOpen}
+                        component={<OrdersView />}
                     />
 
                     <NavItem
-                        to="/customers"
+                        id="customers"
                         icon={<Users size={18} />}
                         label="Customers"
                         collapsed={collapsed}
                         setOpen={setOpen}
+                        component={<CustomersView />}
                     />
 
                     <NavItem
-                        to="/settings"
+                        id="settings"
                         icon={<Settings size={18} />}
                         label="Settings"
                         collapsed={collapsed}
                         setOpen={setOpen}
+                        component={<div className="p-10">Settings Workspace</div>}
                     />
                 </nav>
 
                 {/* SOCIAL */}
-                <div className="absolute bottom-0 w-full p-3 flex justify-center gap-3 text-xs">
-                    <a href="https://www.linkedin.com" target="_blank">
+                <div className="absolute bottom-0 w-full p-3 flex justify-center gap-3 text-xs border-t border-gray-200">
+                    <a href="https://www.linkedin.com" target="_blank" className="text-gray-400 hover:text-blue-600 transition-colors">
                         <Linkedin size={18} />
                     </a>
-                    <a href="https://github.com" target="_blank">
+                    <a href="https://github.com" target="_blank" className="text-gray-400 hover:text-black transition-colors">
                         <Github size={18} />
                     </a>
                 </div>
             </aside>
 
-            {/* OVERLAY */}
+            {/* OVERLAY for mobile (optional) */}
             {open && (
-                <div
-                    className="fixed inset-0 bg-black/30"
+                <button
+                    className="fixed inset-0 bg-black/30 z-40"
                     onClick={() => setOpen(false)}
                 />
             )}
 
-            {/* MAIN */}
-            <div className={`flex-1 w-full ml-16 ${collapsed ? "md:ml-16" : "md:ml-64"}`}>
-
-                {/* CONTENT */}
-                <main className="overflow-y-auto p-2">
+            {/* MAIN CONTENT AREA */}
+            <div className={`flex-1 flex flex-col h-full transition-all duration-300 ${collapsed ? "ml-16" : "ml-64"}`}>
+                <main className="flex-1 max-h-[100vh] max-w-[100vw] overflow-hidden relative">
                     {children}
                 </main>
             </div>
@@ -135,39 +155,46 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
 /* ---------------- NAV ITEM ---------------- */
 
 type NavItemProps = {
-    to: string;
+    id: string;
     icon: ReactNode;
     label: string;
     collapsed: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    component: ReactNode;
 };
 
 function NavItem({
-                     to,
+                     id,
                      icon,
                      label,
                      collapsed,
-                     setOpen
+                     setOpen,
+                     component
                  }: Readonly<NavItemProps>) {
+    const { addTab, activeTabId } = useTabs();
+    const isActive = activeTabId === id;
+
     return (
-        <NavLink
-            to={to}
-            className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg transition
-                ${collapsed ? "justify-center" : ""}
-                ${isActive ? "bg-blue-100 text-blue-600" : "hover:bg-gray-100"}`
-            }
+        <button
             onClick={() => {
+                addTab({ id, label, component, path: id });
                 setOpen(false);
             }}
+            className={`
+                flex items-center gap-3 px-3 py-2 rounded-lg transition w-full text-left
+                ${collapsed ? "justify-center" : ""}
+                ${isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "hover:bg-gray-100 text-gray-600"}
+            `}
         >
             <Tooltip
                 title={collapsed ? label : ""}
                 placement="right"
                 arrow
             >
-                <div className="flex items-center gap-3 w-full">
-                    {icon}
+                <div className={`flex items-center gap-3 w-full ${collapsed ? "justify-center" : ""}`}>
+                    <span className={isActive ? "text-blue-600" : "text-gray-400"}>
+                        {icon}
+                    </span>
 
                     {!collapsed && (
                         <span className="text-sm font-medium">
@@ -176,6 +203,6 @@ function NavItem({
                     )}
                 </div>
             </Tooltip>
-        </NavLink>
+        </button>
     );
 }

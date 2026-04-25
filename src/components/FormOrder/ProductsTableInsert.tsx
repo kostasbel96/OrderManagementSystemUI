@@ -152,7 +152,7 @@ const ProductsTableInsert = ({
             <TableContainer
                 component={Paper}
                 sx={{
-                    height: "38vh",
+                    height: "33vh",
                     display: "flex",
                     flexDirection: "column",
                     overflow: "hidden",

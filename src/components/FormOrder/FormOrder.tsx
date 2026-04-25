@@ -133,6 +133,17 @@ const FormOrder = ({
         console.log(orderErrors);
     }, [orderErrors]);
 
+    const labelSx = {
+        width: "auto",
+        padding: "6px",
+        border: "1px solid #bdbdbd",
+        borderRadius: "8px 0px 0px 8px",
+        height: "100%",
+        fontSize: 12,
+        textAlign: "right",
+        bgcolor: "#f5f5f5",
+    };
+
     return (
         <Paper
             elevation={2}
@@ -157,60 +168,107 @@ const FormOrder = ({
 
                     {/* CUSTOMER */}
                     <Grid size={{ xs: 12 }}>
-                        <CustomersAutocomplete
-                            selectedCustomer={selectedCustomer}
-                            setSelectedCustomer={setSelectedCustomer}
-                        />
-                        <Box sx={{ minHeight: 16 }}>
-                            {orderErrors?.customer && (
-                                <Typography color="error" fontSize={11}>
-                                    {orderErrors.customer}
-                                </Typography>
-                            )}
-                        </Box>
+                        <Stack direction="row"
+                               alignItems="stretch"
+                               spacing={0}>
+                            <Box sx={labelSx}>
+                                Customer<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span>
+                            </Box>
+
+                            <Box sx={{ flex: 1 }}>
+                                <CustomersAutocomplete
+                                    selectedCustomer={selectedCustomer}
+                                    setSelectedCustomer={setSelectedCustomer}
+                                    errorMessage={orderErrors.customer}
+                                />
+                            </Box>
+                        </Stack>
                     </Grid>
 
                     {/* ADDRESS */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            fullWidth
-                            size="small"
-                            label="Address"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            error={Boolean(orderErrors?.address)}
-                            helperText={orderErrors?.address ?? " "}
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    fontSize: 12,
-                                    height: 36,
-                                },
-                            }}
-                        />
+                        <Stack
+                            direction="row"
+                            alignItems="stretch"
+                            spacing={0}
+                        >
+                            <Box sx={labelSx}>
+                                Address<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span>
+                            </Box>
+
+                            <TextField
+                                fullWidth
+                                size="small"
+                                placeholder="Enter address..."
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                error={Boolean(orderErrors?.address)}
+                                helperText={orderErrors?.address ?? " "}
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        fontSize: 12,
+                                        height: 32,
+                                        borderRadius: "0 8px 8px 0", // ✅ εδώ σωστά
+
+                                        "& fieldset": {
+                                            borderColor: "#e0e0e0",
+                                        },
+
+                                        "&:hover fieldset": {
+                                            borderColor: "#bdbdbd",
+                                        },
+
+                                        "&.Mui-focused fieldset": {
+                                            borderColor: "#1976d2",
+                                        },
+                                    },
+                                }}
+                            />
+                        </Stack>
                     </Grid>
 
                     {/* DEPOSIT */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            fullWidth
-                            size="small"
-                            label="Deposit"
-                            type="number"
-                            value={deposit}
-                            onChange={handleDepositChange}
-                            error={Boolean(orderErrors?.deposit)}
-                            helperText={orderErrors?.deposit ?? " "}
-                            inputProps={{
-                                step: 0.01,
-                                style: { textAlign: "right" },
-                            }}
-                            sx={{
-                                "& .MuiInputBase-root": {
-                                    fontSize: 12,
-                                    height: 36,
-                                },
-                            }}
-                        />
+                        <Stack direction="row"
+                               alignItems="stretch"
+                               spacing={0}>
+                            <Box sx={labelSx}>
+                                Deposit
+                            </Box>
+
+                            <TextField
+                                fullWidth
+                                size="small"
+                                type="number"
+                                placeholder="Enter deposit..."
+                                value={deposit}
+                                onChange={handleDepositChange}
+                                error={Boolean(orderErrors?.deposit)}
+                                helperText={orderErrors?.deposit ?? " "}
+                                inputProps={{
+                                    step: 0.01,
+                                }}
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        fontSize: 12,
+                                        height: 32,
+                                        borderRadius: "0 8px 8px 0",
+
+                                        "& fieldset": {
+                                            borderColor: "#e0e0e0",
+                                        },
+
+                                        "&:hover fieldset": {
+                                            borderColor: "#bdbdbd",
+                                        },
+
+                                        "&.Mui-focused fieldset": {
+                                            borderColor: "#1976d2",
+                                        },
+                                    },
+                                }}
+                            />
+                        </Stack>
                     </Grid>
 
                     {/* TABLE */}

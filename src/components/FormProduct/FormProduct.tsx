@@ -94,6 +94,67 @@ const FormProduct = ({
         setSubmitted(false);
     };
 
+    const OMSLabel = ({text, required = false}: { text: string, required?: boolean} ) => {
+        return (
+            <Box
+                sx={{
+                    width: "fit-content",
+                    padding: "6px",
+                    border: "1px solid #bdbdbd",
+                    borderRadius: "8px 0px 0px 8px",
+                    height: "32px",
+                    fontSize: 12,
+                    textAlign: "right",
+                    bgcolor: "#f5f5f5",
+                    whiteSpace: "nowrap"
+                }}
+            >
+                {text}
+
+                {required && (
+                    <Box
+                        component="span"
+                        sx={{
+                            color: "#d32f2f",
+                            marginLeft: 0.5,
+                            fontSize: 12,
+                        }}
+                    >
+                        *
+                    </Box>
+                )}
+            </Box>
+        );
+    };
+
+    const inputSx = {
+        "& .MuiOutlinedInput-root": {
+            fontSize: 12,
+            height: 32,
+            borderRadius: "0 8px 8px 0", // ✅ εδώ σωστά
+            alignItems: "center",
+
+            "& fieldset": {
+                borderColor: "#e0e0e0",
+            },
+
+            "&:hover fieldset": {
+                borderColor: "#bdbdbd",
+            },
+
+            "&.Mui-focused fieldset": {
+                borderColor: "#1976d2",
+            },
+            "& .MuiInputBase-input": {
+                padding: "0 8px",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+            },
+        }
+    };
+
+
     useEffect(() => {
         setPopUpMessage("");
     }, []);
@@ -106,99 +167,106 @@ const FormProduct = ({
                 borderRadius: 2,
                 width: "100%",
                 margin: "0 auto",
-                minHeight: "84vh"
+                minHeight: "79vh",
+                backgroundColor: "#fafafa",
             }}
         >
-            <Box
-                component="form"
-                onSubmit={handleOnSubmit}
-                onReset={handleOnReset}
-            >
+            <Box component="form" onSubmit={handleOnSubmit} onReset={handleOnReset}>
                 <Grid container spacing={2}>
 
-                    {/* Title section */}
+                    {/* TITLE */}
                     <Grid size={{ xs: 12 }}>
-                        <Box sx={{ fontSize: 18, fontWeight: 600 }}>
+                        <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
                             Create Product
                         </Box>
                     </Grid>
 
-                    {/* Name */}
-                    <Grid size={{ xs: 12}}>
-                        <TextField
-                            fullWidth
-                            label="Product Name"
-                            name="name"
-                            value={values.name}
-                            onChange={handleChange}
-                            error={Boolean(productErrors?.name)}
-                            helperText={productErrors?.name ?? " "}
-                        />
-                    </Grid>
-
-                    {/* Description */}
-                    <Grid size={{ xs: 12}}>
-                        <TextField
-                            fullWidth
-                            label="Description"
-                            name="description"
-                            value={values.description}
-                            onChange={handleChange}
-                            error={Boolean(productErrors?.description)}
-                            helperText={productErrors?.description ?? " "}
-                            multiline
-                            rows={3}
-                        />
-                    </Grid>
-
-                    {/* Quantity + Price */}
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            fullWidth
-                            label="Quantity"
-                            type="number"
-                            inputProps={{ min: 1 }}
-                            name="quantity"
-                            value={values.quantity}
-                            onChange={handleChange}
-                            error={Boolean(productErrors?.quantity)}
-                            helperText={productErrors?.quantity ?? " "}
-                        />
-                    </Grid>
-
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            fullWidth
-                            label="Price"
-                            type="number"
-                            inputProps={{ min: 0, step: "0.01"}}
-                            name="price"
-                            value={values.price}
-                            onChange={handleChange}
-                            error={Boolean(productErrors?.price)}
-                            helperText={productErrors?.price ?? " "}
-                        />
-                    </Grid>
-
-                    {/* Buttons */}
+                    {/* NAME */}
                     <Grid size={{ xs: 12 }}>
-                        <Stack
-                            direction="row"
-                            spacing={2}
-                            justifyContent="flex-end"
-                        >
-                            <Button
-                                type="reset"
-                                variant="outlined"
-                                color="error"
-                            >
+                        <Stack direction="row" alignItems="stretch" spacing={0}>
+                            <OMSLabel text="Product Name" required />
+
+                            <TextField
+                                fullWidth
+                                size="small"
+                                name="name"
+                                value={values.name}
+                                onChange={handleChange}
+                                error={Boolean(productErrors?.name)}
+                                helperText={productErrors?.name || " "}
+                                placeholder="Enter product name..."
+                                sx={inputSx}
+                            />
+                        </Stack>
+                    </Grid>
+
+                    {/* DESCRIPTION */}
+                    <Grid size={{ xs: 12 }}>
+                        <Stack direction="row" alignItems="stretch" spacing={0}>
+                            <OMSLabel text="Description" required />
+
+                            <TextField
+                                fullWidth
+                                size="small"
+                                name="description"
+                                placeholder="Enter product description..."
+                                value={values.description}
+                                onChange={handleChange}
+                                error={Boolean(productErrors?.description)}
+                                helperText={productErrors?.description || " "}
+                                sx={inputSx}
+                            />
+                        </Stack>
+                    </Grid>
+
+                    {/* QUANTITY */}
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <Stack direction="row" alignItems="stretch" spacing={0}>
+                            <OMSLabel text="Quantity"/>
+
+                            <TextField
+                                fullWidth
+                                size="small"
+                                type="number"
+                                inputProps={{ min: 1 }}
+                                name="quantity"
+                                value={values.quantity}
+                                onChange={handleChange}
+                                error={Boolean(productErrors?.quantity)}
+                                helperText={productErrors?.quantity || " "}
+                                sx={inputSx}
+                            />
+                        </Stack>
+                    </Grid>
+
+                    {/* PRICE */}
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <Stack direction="row" alignItems="stretch" spacing={0}>
+                            <OMSLabel text="Price"/>
+
+                            <TextField
+                                fullWidth
+                                size="small"
+                                type="number"
+                                inputProps={{ min: 0, step: "0.01" }}
+                                name="price"
+                                value={values.price}
+                                onChange={handleChange}
+                                error={Boolean(productErrors?.price)}
+                                helperText={productErrors?.price || " "}
+                                sx={inputSx}
+                            />
+                        </Stack>
+                    </Grid>
+
+                    {/* ACTIONS */}
+                    <Grid size={{ xs: 12 }}>
+                        <Stack direction="row" spacing={1} justifyContent="flex-end">
+                            <Button type="reset" variant="outlined" color="error" size="small">
                                 Reset
                             </Button>
 
-                            <Button
-                                type="submit"
-                                variant="contained"
-                            >
+                            <Button type="submit" variant="contained" size="small">
                                 Create
                             </Button>
                         </Stack>

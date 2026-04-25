@@ -104,6 +104,45 @@ const FormCustomer = ({
         setPopUpMessage("");
     }, []);
 
+    const labelSx = {
+        width: "fit-content",
+        padding: "6px",
+        border: "1px solid #bdbdbd",
+        borderRadius: "8px 0px 0px 8px",
+        height: "32px",
+        fontSize: 12,
+        textAlign: "right",
+        bgcolor: "#f5f5f5",
+        whiteSpace: "nowrap"
+    };
+
+    const inputSx = {
+        "& .MuiOutlinedInput-root": {
+            fontSize: 12,
+            height: 32,
+            borderRadius: "0 8px 8px 0", // ✅ εδώ σωστά
+            alignItems: "center",
+
+            "& fieldset": {
+                borderColor: "#e0e0e0",
+            },
+
+            "&:hover fieldset": {
+                borderColor: "#bdbdbd",
+            },
+
+            "&.Mui-focused fieldset": {
+                borderColor: "#1976d2",
+            },
+            "& .MuiInputBase-input": {
+                padding: "0 8px",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+            },
+        }
+    };
+
     return (
         <Paper
             elevation={6}
@@ -112,86 +151,126 @@ const FormCustomer = ({
                 borderRadius: 2,
                 width: "100%",
                 margin: "0 auto",
-                minHeight: "84vh"
+                minHeight: "79vh",
+                backgroundColor: "#fafafa",
             }}
         >
             <form onSubmit={handleOnSubmit} onReset={handleOnReset}>
 
                 <Grid container spacing={2}>
 
-                    {/* Title section */}
+                    {/* TITLE */}
                     <Grid size={{ xs: 12 }}>
-                        <Box sx={{ fontSize: 18, fontWeight: 600 }}>
+                        <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
                             Create Customer
                         </Box>
                     </Grid>
 
+                    {/* NAME */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            fullWidth
-                            label="Name"
-                            name="name"
-                            value={values.name}
-                            onChange={handleChange}
-                            error={Boolean(customerErrors?.name)}
-                            helperText={customerErrors?.name ?? " "}
-                        />
+                        <Stack direction="row"
+                               alignItems="stretch"
+                               spacing={0}>
+                            <Box sx={labelSx}>Name<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span></Box>
+
+                            <TextField
+                                fullWidth
+                                placeholder="Enter name..."
+                                size="small"
+                                name="name"
+                                value={values.name}
+                                onChange={handleChange}
+                                error={Boolean(customerErrors?.name)}
+                                helperText={customerErrors?.name ?? " "}
+                                sx={inputSx}
+                            />
+                        </Stack>
+
                     </Grid>
 
+                    {/* LAST NAME */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            fullWidth
-                            label="Last Name"
-                            name="lastName"
-                            value={values.lastName}
-                            onChange={handleChange}
-                            error={Boolean(customerErrors?.lastName)}
-                            helperText={customerErrors?.lastName ?? " "}
-                        />
+                        <Stack direction="row" alignItems="stretch" spacing={0}>
+                            <Box sx={labelSx}>Last Name<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span></Box>
+
+                            <TextField
+                                fullWidth
+                                placeholder="Enter Last name..."
+                                size="small"
+                                name="lastName"
+                                value={values.lastName}
+                                onChange={handleChange}
+                                error={Boolean(customerErrors?.lastName)}
+                                helperText={customerErrors?.lastName ?? " "}
+                                sx={inputSx}
+                            />
+                        </Stack>
                     </Grid>
 
+                    {/* PHONE 1 */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            fullWidth
-                            label="Phone 1"
-                            name="phoneNumber1"
-                            value={values.phoneNumber1}
-                            onChange={handleChange}
-                            error={Boolean(customerErrors?.phoneNumber1)}
-                            helperText={customerErrors?.phoneNumber1 ?? " "}
-                        />
+                        <Stack direction="row" alignItems="stretch" spacing={0}>
+                            <Box sx={labelSx}>Phone 1<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span></Box>
+
+                            <TextField
+                                placeholder="Enter phone number..."
+                                fullWidth
+                                size="small"
+                                name="phoneNumber1"
+                                value={values.phoneNumber1}
+                                onChange={handleChange}
+                                error={Boolean(customerErrors?.phoneNumber1)}
+                                helperText={customerErrors?.phoneNumber1 ?? " "}
+                                sx={inputSx}
+                            />
+                        </Stack>
                     </Grid>
 
+                    {/* PHONE 2 */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            fullWidth
-                            label="Phone 2"
-                            name="phoneNumber2"
-                            value={values.phoneNumber2}
-                            onChange={handleChange}
-                            error={Boolean(customerErrors?.phoneNumber2)}
-                            helperText={customerErrors?.phoneNumber2 ?? " "}
-                        />
+                        <Stack direction="row" alignItems="stretch" spacing={0}>
+                            <Box sx={labelSx}>Phone 2</Box>
+
+                            <TextField
+                                fullWidth
+                                placeholder="Enter phone number..."
+                                size="small"
+                                name="phoneNumber2"
+                                value={values.phoneNumber2}
+                                onChange={handleChange}
+                                error={Boolean(customerErrors?.phoneNumber2)}
+                                helperText={customerErrors?.phoneNumber2 ?? " "}
+                                sx={inputSx}
+                            />
+                        </Stack>
                     </Grid>
 
+                    {/* EMAIL */}
                     <Grid size={{ xs: 12 }}>
-                        <TextField
-                            fullWidth
-                            label="Email"
-                            name="email"
-                            value={values.email}
-                            onChange={handleChange}
-                            error={Boolean(customerErrors?.email)}
-                            helperText={customerErrors?.email ?? " "}
-                        />
+                        <Stack direction="row" alignItems="stretch" spacing={0}>
+                            <Box sx={labelSx}>Email</Box>
+
+                            <TextField
+                                placeholder="Enter email..."
+                                fullWidth
+                                size="small"
+                                name="email"
+                                value={values.email}
+                                onChange={handleChange}
+                                error={Boolean(customerErrors?.email)}
+                                helperText={customerErrors?.email ?? " "}
+                                sx={inputSx}
+                            />
+                        </Stack>
                     </Grid>
 
+                    {/* ACTIONS */}
                     <Grid size={{ xs: 12 }}>
-                        <Stack direction="row" spacing={2} justifyContent="flex-end">
-                            <Button type="reset" variant="outlined" color="error">
+                        <Stack direction="row" spacing={1} justifyContent="flex-end">
+                            <Button type="reset" variant="outlined" color="error" size="small">
                                 Reset
                             </Button>
-                            <Button type="submit" variant="contained">
+                            <Button type="submit" variant="contained" size="small">
                                 Create
                             </Button>
                         </Stack>

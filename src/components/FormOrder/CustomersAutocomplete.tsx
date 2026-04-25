@@ -6,9 +6,10 @@ import { searchCustomers } from "../../services/customerService.ts";
 interface CustomersAutocompleteProps {
     selectedCustomer: Customer | null;
     setSelectedCustomer: React.Dispatch<React.SetStateAction<Customer | null>>,
+    errorMessage?: string;
 }
 
-const CustomersAutocomplete = ({selectedCustomer, setSelectedCustomer}: CustomersAutocompleteProps) => {
+const CustomersAutocomplete = ({selectedCustomer, setSelectedCustomer, errorMessage}: CustomersAutocompleteProps) => {
 
     const [inputValue, setInputValue] = useState("");
     const [options, setOptions] = useState<Customer[]>([]);
@@ -60,14 +61,17 @@ const CustomersAutocomplete = ({selectedCustomer, setSelectedCustomer}: Customer
                     placeholder="Search customer..."
                     variant="outlined"
                     size="small"
+                    error={Boolean(errorMessage)}
+                    helperText={errorMessage ?? " "}
                     sx={{
-                        backgroundColor: "white",
-                        borderRadius: 1,
+                        backgroundColor: "#fafafa",
 
                         "& .MuiOutlinedInput-root": {
                             fontSize: 12,
-                            height: 36,
+                            height: 32,
                             paddingRight: "6px",
+
+                            borderRadius: "0 8px 8px 0", // ✅ εδώ
 
                             "& fieldset": {
                                 border: "1px solid #e0e0e0",
@@ -79,12 +83,10 @@ const CustomersAutocomplete = ({selectedCustomer, setSelectedCustomer}: Customer
 
                             "&.Mui-focused fieldset": {
                                 borderColor: "#1976d2",
-                                borderWidth: "1px",
-                            },
+                            }
                         },
 
                         "& input": {
-                            padding: "6px 8px",
                             fontSize: 12,
                         },
                     }}

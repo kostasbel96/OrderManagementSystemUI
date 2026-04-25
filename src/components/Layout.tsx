@@ -1,18 +1,15 @@
-import Main from "./Main.tsx";
 import SidebarLayout from "./SidebarLayout.tsx";
+import Workspaces from "./Workspaces.tsx";
+import { TabProvider } from "../contexts/TabContext.tsx";
 
 
 const Layout = () => {
     return (
-        <>
-            {/* Sidebar */}
+        <TabProvider>
             <SidebarLayout>
-                {/* Right side */}
-                <Main />
+                <Workspaces />
             </SidebarLayout>
-        </>
-
-
+        </TabProvider>
     );
 };
 
