@@ -23,21 +23,17 @@ const PopUp = ({title, setSubmitted, success, popUpMessage}: PopupProps)=>{
         const step = 100 / (duration / interval);
 
         const timer = setInterval(() => {
-            setProgress((prev) => {
-                const next = prev - step;
-
-                if (next <= 0) {
-                    clearInterval(timer);
-                    setSubmitted(false);
-                    return 0;
-                }
-
-                return next;
-            });
+            setProgress(prev => Math.max(prev - step, 0));
         }, interval);
 
         return () => clearInterval(timer);
-    }, [isPaused]);
+    }, [isPaused, duration]);
+
+    useEffect(() => {
+        if (progress === 0) {
+            setSubmitted(false);
+        }
+    }, [progress, setSubmitted]);
 
 
     return (

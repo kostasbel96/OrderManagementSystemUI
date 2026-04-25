@@ -12,7 +12,9 @@ import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 
 const CustomersView = () => {
 
-    const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>([]);
+    const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>(
+        localStorage.getItem("customers") ? JSON.parse(localStorage.getItem("customers") as string) : []
+    );
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(5);
     const [rowCount, setRowCount] = useState(0);
@@ -200,6 +202,7 @@ const CustomersView = () => {
             sortDirection: sortModel[0]?.sort ?? "asc",
             filters: filterModel.items ?? []
         }).then((data) => {
+                localStorage.setItem("customers", JSON.stringify(data.content));
                 setRows(data.content);
                 setRowCount(data.totalElements);
             })

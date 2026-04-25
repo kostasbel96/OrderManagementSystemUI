@@ -21,7 +21,9 @@ import { PaymentStatus } from "../../types/enums/PaymentStatus.ts";
 
 const OrdersView = () => {
 
-    const [rows, setRows] = useState<(Customer | Product | OrderRow)[]>([]);
+    const [rows, setRows] = useState<(Customer | Product | OrderRow)[]>(
+        localStorage.getItem("orders") ? JSON.parse(localStorage.getItem("orders") as string) : []
+    );
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(5);
     const [rowCount, setRowCount] = useState(0);
@@ -334,6 +336,7 @@ const OrdersView = () => {
                     });
                 });
                 setRows(orders);
+                localStorage.setItem("orders", JSON.stringify(orders));
                 setRowCount(data.totalElements);
             })
             .catch(() => console.log("error fetching orders"))
