@@ -37,7 +37,7 @@ export async function addOrder({products, customer, address, deposit}: OrderProp
 }
 
 
-export async function getOrders(page: number = 0, pageSize: number = 5, sortBy: string = "date", sortDirection: string = "desc"): Promise<OrderResponseDto> {
+export async function getOrders(page: number = 0, pageSize: number = 10, sortBy: string = "date", sortDirection: string = "desc"): Promise<OrderResponseDto> {
     const url = `${API_URL}/orders?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
 
     const res = await fetch(url);

@@ -14,7 +14,7 @@ const CustomersView = () => {
 
     const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>([]);
     const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
@@ -43,7 +43,7 @@ const CustomersView = () => {
     }
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 120, renderCell: (params) => (
+        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -153,7 +153,7 @@ const CustomersView = () => {
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 150,
+            width: 100,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -225,6 +225,7 @@ const CustomersView = () => {
                 sortModel={sortModel}
                 filterModel={filterModel}
                 setFilterModel={setFilterModel}
+                selection={false}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}

@@ -3,8 +3,9 @@ import {useEffect, useState} from "react";
 import FormProduct from "./FormProduct/FormProduct";
 import FormOrder from "./FormOrder/FormOrder";
 import FormCustomer from "./FormCustomer/FormCustomer";
+import CreateRoute from "./routes/CreateRoute.tsx";
 
-type FormType = "product" | "order" | "customer";
+type FormType = "product" | "order" | "customer" | "route";
 
 interface Props {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,6 +49,7 @@ const MyTabs = ({ setSubmitted, setSuccess, setPopUpMessage, setActiveValue }: P
                 <Tab label="Product" value="product" />
                 <Tab label="Order" value="order" />
                 <Tab label="Customer" value="customer" />
+                <Tab label="Route" value="route"/>
             </Tabs>
 
             {/* Content */}
@@ -74,6 +76,9 @@ const MyTabs = ({ setSubmitted, setSuccess, setPopUpMessage, setActiveValue }: P
                         setSuccess={setSuccess}
                         setPopUpMessage={setPopUpMessage}
                     />
+                )}
+                {tab === "route" && (
+                    <CreateRoute/>
                 )}
             </Box>
         </Paper>

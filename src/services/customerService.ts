@@ -13,7 +13,7 @@ export async function addCustomer(newCustomer: Omit<Customer, "id">): Promise<Re
     return data.customer;
 }
 
-export async function getCustomers(page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc"): Promise<CustomerResponseDto> {
+export async function getCustomers(page: number = 0, pageSize: number = 10, sortBy: string = "name", sortDirection: string = "desc"): Promise<CustomerResponseDto> {
     const url = `${API_URL}/customers?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
 
     const res = await fetch(url);

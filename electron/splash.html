@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            background: #111;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .bar {
+            width: 80%;
+            height: 6px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0%;
+            background: #4ade80;
+            transition: width 0.2s;
+        }
+    </style>
+</head>
+
+<body>
+<h3>Loading Order Management System...</h3>
+
+<div class="bar">
+    <div id="progress" class="progress"></div>
+</div>
+
+<script>
+    let width = 0;
+    const bar = document.getElementById("progress");
+
+    const interval = setInterval(() => {
+        if (width < 90) {
+            width += 5;
+            bar.style.width = width + "%";
+        }
+    }, 100);
+</script>
+</body>
+</html>

@@ -101,7 +101,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                         label="Orders"
                         collapsed={collapsed}
                         setOpen={setOpen}
-                        component={<OrdersView />}
+                        component={<OrdersView selection={false}/>}
                     />
 
                     <NavItem

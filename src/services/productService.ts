@@ -66,7 +66,7 @@ export async function searchProducts(request: SearchRequest): Promise<ProductRes
     };
 }
 
-export async function getProducts(page: number = 0, pageSize: number = 5, sortBy: string = "name", sortDirection: string = "desc"): Promise<ProductResponseDto> {
+export async function getProducts(page: number = 0, pageSize: number = 10, sortBy: string = "name", sortDirection: string = "desc"): Promise<ProductResponseDto> {
     const url = `${API_URL}/products?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
 
     const res = await fetch(url);

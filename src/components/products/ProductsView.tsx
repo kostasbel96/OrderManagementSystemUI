@@ -13,7 +13,7 @@ import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 const ProductsView = () => {
     const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>([]);
     const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
@@ -43,7 +43,7 @@ const ProductsView = () => {
 
 
     const columns = useMemo<GridColDef[]>(() => [
-        { field: 'id', headerName: 'ID', width: 120, renderCell: (params) => (
+        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -191,6 +191,7 @@ const ProductsView = () => {
                 sortModel={sortModel}
                 filterModel={filterModel}
                 setFilterModel={setFilterModel}
+                selection={false}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}

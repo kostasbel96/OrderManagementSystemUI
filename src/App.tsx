@@ -33,7 +33,7 @@ function App() {
               <Routes>
                   <Route element={<Layout/>}>
                       <Route path="products" element={<ProductsView/>}/>
-                      <Route path="orders" element={<OrdersView/>}/>
+                      <Route path="orders" element={<OrdersView selection={false}/>}/>
                       <Route path="customers" element={<CustomersView/>}/>
                       <Route path="add" element={<QuickAdd/>}/>
                       <Route index element={<Dashboard/>}/>

@@ -50,9 +50,9 @@ const Workspaces: React.FC = () => {
         return (
             <div className="flex flex-col items-center justify-center h-full text-gray-400 p-20 bg-gray-50">
                 <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center max-w-sm">
-                    <p className="text-xl font-semibold text-gray-600 mb-2">ERP Workspace</p>
-                    <p className="text-sm">Δεν υπάρχουν ενεργές επιφάνειες εργασίας.</p>
-                    <p className="text-sm mt-1">Επιλέξτε μια ενότητα από το μενού αριστερά για να ξεκινήσετε.</p>
+                    <p className="text-xl font-semibold text-gray-600 mb-2">OMS Workspace</p>
+                    <p className="text-sm">There are no active workspaces.</p>
+                    <p className="text-sm mt-1">Select a section from the menu on the left to get started.</p>
                 </div>
             </div>
         );

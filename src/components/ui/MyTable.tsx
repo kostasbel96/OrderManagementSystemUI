@@ -1,8 +1,15 @@
-import {DataGrid, type GridColDef, type GridFilterModel, type GridSortModel} from "@mui/x-data-grid";
+import {
+    DataGrid,
+    type GridColDef,
+    type GridFilterModel,
+    type GridRowSelectionModel,
+    type GridSortModel
+} from "@mui/x-data-grid";
 import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import Search from "../Search.tsx";
 import {Paper} from "@mui/material";
 import {useUIStore} from "../../store/useUIStore.ts";
+import React from "react";
 
 type TableProps = {
     columns: GridColDef[];
@@ -20,85 +27,122 @@ type TableProps = {
     sortModel: GridSortModel;
     filterModel: GridFilterModel;
     setFilterModel: React.Dispatch<React.SetStateAction<GridFilterModel>>;
+    columnVisibility?: Record<string, boolean>;
+    setColumnVisibility?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+    selectionModel?: GridRowSelectionModel;
+    setSelectionModel?: React.Dispatch<
+        React.SetStateAction<GridRowSelectionModel>
+    >;
+    selection: boolean;
+    height?: string;
+    width?: number;
 }
 
 
 const MyTable = ({columns,
-                                                  typeOf,
-                                                  rows,
-                                                  setSortModel,
-                                                  sortModel,
-                                                  loading,
-                                                  rowCount,
-                                                  setPage,
-                                                  setPageSize,
-                                                  page,
-                                                  pageSize,
-                                                  setSearchName,
-                                                  setIsSearching,
-                                                  filterModel,
-                                                  setFilterModel}: TableProps)=>{
+                      typeOf,
+                      rows,
+                      setSortModel,
+                      sortModel,
+                      loading,
+                      rowCount,
+                      setPage,
+                      setPageSize,
+                      page,
+                      pageSize,
+                      setSearchName,
+                      setIsSearching,
+                      filterModel,
+                      setFilterModel,
+                      columnVisibility,
+                      setColumnVisibility,
+                      selectionModel,
+                      setSelectionModel,
+                      selection,
+                     height,
+                     width}: TableProps)=>{
 
     const collapsed = useUIStore((s) => s.sidebarCollapsed);
 
     return (
-            <div className="mt-5 flex flex-col space-y-2 justify-center items-center px-4">
-                <Search
-                    typeOf={typeOf}
-                    setIsSearching={setIsSearching}
-                    setSearchName={setSearchName}
-                    setPage={setPage}
+        <div className="mt-5 flex flex-col space-y-2 justify-center items-center px-4">
+            <Search
+                typeOf={typeOf}
+                setIsSearching={setIsSearching}
+                setSearchName={setSearchName}
+                setPage={setPage}
+            />
+            <Paper sx={{
+                maxHeight: height ?? "calc(100vh - 200px)",
+                maxWidth: collapsed ? 1650 : 1200 - (width ?? 0),
+                transition: "max-width 0.3s ease",
+                width: "100%",
+                marginBottom: 2,
+                display: 'flex',
+                flexDirection: 'column'
+            }}
+            >
+                <DataGrid
+                    getRowHeight={() => 'auto'}
+                    rows={rows}
+                    isRowSelectable={() => !loading}
+                    columns={columns}
+                    getRowId={(row) => row.id}
+                    rowCount={rowCount}
+                    loading={loading}
+
+                    rowSelectionModel={selectionModel}
+                    onRowSelectionModelChange={(newSelection) => {
+                        setSelectionModel?.(newSelection)}}
+
+                    filterMode="server"
+                    filterModel={filterModel}
+                    onFilterModelChange={(model) => setFilterModel(model)}
+
+                    paginationMode="server"
+                    sortingMode="server"
+
+                    sortModel={sortModel}
+                    onSortModelChange={(model) => setSortModel(model)}
+
+                    paginationModel={{ page, pageSize }}
+                    onPaginationModelChange={(model) => {
+                        setPage(model.page);
+                        setPageSize(model.pageSize);
+                    }}
+
+                    columnVisibilityModel={columnVisibility}
+                    onColumnVisibilityModelChange={setColumnVisibility}
+
+                    pageSizeOptions={[5, 10, 20, 50, 100]}
+                    checkboxSelection={selection}
+                    disableRowSelectionOnClick
+                    // keepNonExistentRowsSelected
+
+                    density="compact"
+
+                    sx={{
+                        height: '100%',
+                        border: 0,
+                        fontSize: '0.7rem',
+                        '& .MuiDataGrid-columnHeaders': {
+                            backgroundColor: '#f9fafb',
+                            borderBottom: '1px solid #e5e7eb',
+                            fontWeight: 600,
+                        },
+                        '& .MuiDataGrid-cell': {
+                            alignItems: 'flex-start',
+                            lineHeight: '1rem',
+                            borderBottom: '1px solid #f1f5f9',
+                        },
+                        "& .MuiDataGrid-cellCheckbox, & .MuiDataGrid-columnHeaderCheckbox": {
+                            justifyContent: "center",
+                            alignItems: "center",
+                        },
+                    }}
                 />
-                <Paper sx={{
-                    maxHeight: 'calc(100vh - 165px)',
-                    maxWidth: collapsed ? 1650 : 1200,
-                    transition: "max-width 0.3s ease",
-                    width: "100%",
-                    marginBottom: 2,
-                    display: 'flex',
-                    flexDirection: 'column'
-                }}
-                >
-                    <DataGrid
-                        getRowHeight={() => 'auto'}
-                        rows={rows}
-                        columns={columns}
-                        getRowId={(row) => row.id}
-                        rowCount={rowCount}
-                        loading={loading}
-                        filterMode="server"
-                        filterModel={filterModel}
-                        onFilterModelChange={(model) => setFilterModel(model)}
-                        paginationMode="server"
-                        sortingMode="server"
-                        sortModel={sortModel}
-                        onSortModelChange={(model) => {
-                            setSortModel(model);
-                        }}
-                        paginationModel={{ page, pageSize }}
-                        onPaginationModelChange={(model) => {
-                            setPage(model.page);
-                            setPageSize(model.pageSize);
-                        }}
-                        pageSizeOptions={[5, 10, 20, 50, 100]}
-                        keepNonExistentRowsSelected
-                        checkboxSelection
-                        sx={{
-                            height: '100%',
-                            border: 0,
-                            '& .MuiDataGrid-cell': {
-                                alignItems: 'flex-start',
-                                paddingTop: '8px',
-                                paddingBottom: '8px',
-                            },
-                            "& .MuiDataGrid-cellCheckbox, & .MuiDataGrid-columnHeaderCheckbox": {
-                                justifyContent: "start",  // οριζόντια
-                                alignItems: "center",      // κάθετα
-                            }
-                        }}
-                    />
-                </Paper>
-            </div>
+            </Paper>
+        </div>
     );
 }
 

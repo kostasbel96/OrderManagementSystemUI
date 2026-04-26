@@ -29,7 +29,7 @@ export interface ErrorResponse{
 }
 
 export interface OrderItem {
-    id?: number;
+    id: number;
     items: SelectedProduct[];
     customer?: Customer;
     address: string;
@@ -55,7 +55,7 @@ export interface SearchRequest {
 }
 
 export interface OrderRow {
-    id?: number;
+    id: number;
     customer?: Customer;
     products: SelectedProduct[];
     address: string;

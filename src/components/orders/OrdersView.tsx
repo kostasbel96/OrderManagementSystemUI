@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {
     getGridSingleSelectOperators,
     type GridColDef,
-    GridFilterInputValue, type GridFilterModel,
+    GridFilterInputValue, type GridFilterModel, type GridRowSelectionModel,
     type GridSortModel,
 } from "@mui/x-data-grid";
 import {getOrder, searchOrders} from "../../services/orderService.ts"
@@ -18,12 +18,32 @@ import ProductsCell from "./ProductsCell.tsx";
 import {Chip, Tooltip} from "@mui/material";
 import { PaymentStatus } from "../../types/enums/PaymentStatus.ts";
 
-
-const OrdersView = () => {
+interface OrdersViewProps {
+    columnVisibility?: Record<string, boolean>;
+    setColumnVisibility?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+    importedPageSize?: number;
+    selectionModel?: GridRowSelectionModel;
+    setSelectionModel?: React.Dispatch<
+        React.SetStateAction<GridRowSelectionModel>
+    >;
+    setOrdersRow?: React.Dispatch<React.SetStateAction<OrderRow[]>>;
+    selection: boolean;
+    height?: string;
+    width?: number;
+}
+const OrdersView = ({columnVisibility,
+                        setColumnVisibility,
+                        importedPageSize,
+                        setSelectionModel,
+                        selection,
+                        selectionModel,
+                        setOrdersRow,
+                        height,
+                        width}: OrdersViewProps) => {
 
     const [rows, setRows] = useState<(Customer | Product | OrderRow)[]>([]);
     const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(importedPageSize ?? 10);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [searchName, setSearchName] = useState("");
@@ -76,7 +96,7 @@ const OrdersView = () => {
     };
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 60, renderCell: (params) => (
+        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -255,7 +275,7 @@ const OrdersView = () => {
                                 size="small"
                                 sx={{
                                     height: 20,
-                                    fontSize: "0.7rem",
+                                    fontSize: "0.6rem",
                                     width: "fit-content",
                                     cursor: "pointer",
                                     transition: "all 0.2s ease",
@@ -275,7 +295,7 @@ const OrdersView = () => {
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 130,
+            width: 100,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -335,6 +355,7 @@ const OrdersView = () => {
                 });
                 setRows(orders);
                 setRowCount(data.totalElements);
+                setOrdersRow?.(orders);
             })
             .catch(() => console.log("error fetching orders"))
             .finally(() => setLoading(false));
@@ -358,6 +379,13 @@ const OrdersView = () => {
                 sortModel={sortModel}
                 filterModel={filterModel}
                 setFilterModel={setFilterModel}
+                columnVisibility={columnVisibility}
+                setColumnVisibility={setColumnVisibility}
+                selectionModel={selectionModel}
+                setSelectionModel={setSelectionModel}
+                selection={selection}
+                height={height}
+                width={width}
             ></MyTable>
             <PopUpUpdate
                 open={openEdit}

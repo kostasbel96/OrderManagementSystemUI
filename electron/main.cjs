@@ -1,26 +1,57 @@
-const { app, BrowserWindow, Menu, ipcMain } = require("electron");
+const { app, BrowserWindow, Menu } = require("electron");
 const path = require("path");
 
-function createWindow() {
-  const win = new BrowserWindow({
+let mainWindow;
+let splash;
+
+function createSplash() {
+  splash = new BrowserWindow({
+    width: 420,
+    height: 260,
+    frame: false,
+    alwaysOnTop: true,
+    transparent: true,
+    resizable: false,
+    center: true
+  });
+
+  splash.loadFile(path.join(__dirname, "splash.html"));
+}
+
+function createMainWindow() {
+  mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    show: false,
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: true
+      contextIsolation: true,
+      preload: __dirname + "/preload.js"
     }
   });
 
-  // DEV
+  // remove menu completely
+  mainWindow.setMenu(null);
+
+  // DEV / PROD
   if (!app.isPackaged) {
-    win.loadURL("http://localhost:5173");
+    mainWindow.loadURL("http://localhost:5173");
   } else {
-    win.loadFile(path.join(__dirname, "../dist/index.html"));
+    mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
   }
 
-  // 👉 RIGHT CLICK MENU (native)
-  win.webContents.on("context-menu", (e, params) => {
-    const contextMenu = Menu.buildFromTemplate([
+  // show when fully loaded
+  mainWindow.webContents.on("did-finish-load", () => {
+    setTimeout(() => {
+      if (splash) splash.destroy();
+      mainWindow.show();
+    }, 200);
+  });
+
+  // RIGHT CLICK MENU (dev tool style)
+  mainWindow.webContents.on("context-menu", (e, params) => {
+    const menu = Menu.buildFromTemplate([
       { role: "cut" },
       { role: "copy" },
       { role: "paste" },
@@ -30,16 +61,26 @@ function createWindow() {
       {
         label: "Inspect Element",
         click: () => {
-          win.webContents.inspectElement(params.x, params.y);
+          mainWindow.webContents.inspectElement(params.x, params.y);
         }
       }
     ]);
 
-    contextMenu.popup();
+    menu.popup();
   });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createSplash();
+  createMainWindow();
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createSplash();
+      createMainWindow();
+    }
+  });
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
