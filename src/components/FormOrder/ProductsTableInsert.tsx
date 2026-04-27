@@ -17,13 +17,11 @@ import {useEffect, useRef, useState} from "react";
 interface ProductsTableInsertProps {
     selectedProductsWithQty: SelectedProduct[];
     setSelectedProductsWithQty: React.Dispatch<React.SetStateAction<SelectedProduct[]>>;
-    deposit?: string;
 }
 
 const ProductsTableInsert = ({
                                           selectedProductsWithQty,
-                                          setSelectedProductsWithQty,
-                                          deposit
+                                          setSelectedProductsWithQty
                                       }: ProductsTableInsertProps) => {
 
     const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -370,29 +368,6 @@ const ProductsTableInsert = ({
                     <Box sx={{ color: "#666", fontSize: 10 }}>Total</Box>
                     <Box sx={{ fontWeight: 700, color: "#111" }}>
                         {totalAmount.toFixed(2)}
-                    </Box>
-                </Box>
-
-                {/* BALANCE */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-end",
-                        minWidth: 120,
-                    }}
-                >
-                    <Box sx={{ color: "#666", fontSize: 10 }}>Balance</Box>
-                    <Box
-                        sx={{
-                            fontWeight: 700,
-                            color:
-                                totalAmount - Number(deposit ?? 0) > 0
-                                    ? "#d32f2f"
-                                    : "#2e7d32",
-                        }}
-                    >
-                        {(totalAmount - Number(deposit ?? 0)).toFixed(2)}
                     </Box>
                 </Box>
             </Box>

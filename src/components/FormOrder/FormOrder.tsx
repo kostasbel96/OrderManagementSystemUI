@@ -46,21 +46,15 @@ const FormOrder = ({
         return saved ? JSON.parse(saved).address : "";
     });
 
-    const [deposit, setDeposit] = useState<string>(() => {
-        const saved = localStorage.getItem("orderDraft");
-        return saved ? JSON.parse(saved).deposit : "";
-    });
-
     useEffect(() => {
         localStorage.setItem(
             "orderDraft",
             JSON.stringify({
                 selectedCustomer,
                 address,
-                deposit,
             })
         );
-    }, [selectedCustomer, address, deposit]);
+    }, [selectedCustomer, address]);
 
     useEffect(() => {
         localStorage.setItem(
@@ -76,8 +70,7 @@ const FormOrder = ({
     } = useOrderFormValidation({
         selectedProductsWithQty,
         selectedCustomer,
-        address,
-        deposit
+        address
     });
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -88,8 +81,7 @@ const FormOrder = ({
             addOrder({
                 products: selectedProductsWithQty,
                 customer: selectedCustomer,
-                address,
-                deposit
+                address
             })
                 .then((data) => {
                     setSuccess(true);
@@ -106,7 +98,6 @@ const FormOrder = ({
             setSelectedProductsWithQty([]);
             setSelectedCustomer(null);
             setAddress("");
-            setDeposit("");
         } else {
             setSubmitted(true);
             setSuccess(false);
@@ -119,15 +110,9 @@ const FormOrder = ({
         setSelectedProductsWithQty([]);
         setSelectedCustomer(null);
         setAddress("");
-        setDeposit("");
         setOrderErrors({});
         setPopUpMessage("");
         setSubmitted(false);
-    };
-
-    const handleDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Math.max(0, Number(e.target.value));
-        setDeposit(value.toString());
     };
 
     useEffect(() => {
@@ -237,54 +222,9 @@ const FormOrder = ({
                         </Stack>
                     </Grid>
 
-                    {/* DEPOSIT */}
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <Stack direction="row"
-                               alignItems="stretch"
-                               spacing={0}>
-                            <Box sx={labelSx}>
-                                Deposit
-                            </Box>
-
-                            <TextField
-                                fullWidth
-                                size="small"
-                                type="number"
-                                placeholder="Enter deposit..."
-                                value={deposit}
-                                onChange={handleDepositChange}
-                                error={Boolean(orderErrors?.deposit)}
-                                helperText={orderErrors?.deposit ?? " "}
-                                inputProps={{
-                                    step: 0.01,
-                                }}
-                                sx={{
-                                    "& .MuiOutlinedInput-root": {
-                                        fontSize: 12,
-                                        height: 32,
-                                        borderRadius: "0 8px 8px 0",
-
-                                        "& fieldset": {
-                                            borderColor: "#e0e0e0",
-                                        },
-
-                                        "&:hover fieldset": {
-                                            borderColor: "#bdbdbd",
-                                        },
-
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#1976d2",
-                                        },
-                                    },
-                                }}
-                            />
-                        </Stack>
-                    </Grid>
-
                     {/* TABLE */}
                     <Grid size={{ xs: 12 }}>
                         <ProductsTableInsert
-                            deposit={deposit}
                             selectedProductsWithQty={selectedProductsWithQty}
                             setSelectedProductsWithQty={setSelectedProductsWithQty}
                         />

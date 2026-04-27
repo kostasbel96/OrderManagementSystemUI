@@ -12,17 +12,15 @@ interface OrderProps{
     customer: Customer | null;
     address: string;
     date?: string;
-    deposit: string;
 }
 
 const API_URL = getApiUrl();
 
 
-export async function addOrder({products, customer, address, deposit}: OrderProps): Promise<OrderItem>{
+export async function addOrder({products, customer, address}: OrderProps): Promise<OrderItem>{
     const orderRequest: OrderRequest = {
         address: address,
         customerId: customer?.id,
-        deposit: deposit,
         items: products
             .map(p=>(
                 {productId: p.product?.id, quantity: p.quantity, price: p.price.toString()}

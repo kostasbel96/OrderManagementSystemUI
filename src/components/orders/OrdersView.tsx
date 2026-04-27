@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import {
-    getGridSingleSelectOperators,
     type GridColDef,
     GridFilterInputValue, type GridFilterModel, type GridPaginationModel, type GridRowSelectionModel,
     type GridSortModel,
@@ -15,8 +14,6 @@ import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ProductsCell from "./ProductsCell.tsx";
-import {Chip, Tooltip} from "@mui/material";
-import { PaymentStatus } from "../../types/enums/PaymentStatus.ts";
 
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -77,15 +74,10 @@ const OrdersView = ({columnVisibility,
         InputComponent: GridFilterInputValue,
     } as any;
 
-    const singleOperators = getGridSingleSelectOperators().filter(
-        (op) => op.value !== 'isAnyOf'
-    );
+    // const singleOperators = getGridSingleSelectOperators().filter(
+    //     (op) => op.value !== 'isAnyOf'
+    // );
 
-    const getPaymentStatus = (deposit: number, total: number) => {
-        if (deposit <= 0) return PaymentStatus.UNPAID
-        if (deposit < total) return PaymentStatus.PARTIAL
-        if (deposit >= total) return PaymentStatus.PAID
-    };
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
@@ -159,18 +151,6 @@ const OrdersView = ({columnVisibility,
                     {params.value ? params.value + " €" : ""}
                 </div>
             ) },
-        { field: 'deposit', headerName: 'Deposit', type: "number", width: 80, renderCell: (params) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'end',
-                        height: '100%',
-                    }}
-                >
-                    {params.value ? params.value + " €" : ""}
-                </div>
-            ) },
         {field: 'date', headerName: 'Date', type: 'date', width: 80, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
@@ -185,103 +165,6 @@ const OrdersView = ({columnVisibility,
                         : ''}
                 </div>
             )},
-        {
-            field: 'payment',
-            headerName: 'Payment',
-            width: 90,
-            sortable: false,
-            type: "singleSelect",
-            filterOperators: singleOperators,
-            valueOptions: [
-                PaymentStatus.UNPAID,
-                PaymentStatus.PARTIAL,
-                PaymentStatus.PAID
-            ],
-            valueGetter: (_, row) =>
-                getPaymentStatus(row.deposit, row.total),
-            renderCell: (params) => {
-                const deposit = params.row.deposit;
-                const total = params.row.total;
-
-                let status: PaymentStatus | undefined;
-                status = getPaymentStatus(deposit, total);
-                const remaining = total - deposit;
-
-                return (
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: '100%',
-                        width: '100%',
-                    }}>
-                        <Tooltip
-                            arrow
-                            placement="top"
-                            componentsProps={{
-                                tooltip: {
-                                    sx: {
-                                        backgroundColor: "#1e1e1e",
-                                        color: "#fff",
-                                        fontSize: "0.75rem",
-                                        padding: "10px 12px",
-                                        borderRadius: "10px",
-                                        boxShadow: "0 6px 20px rgba(0,0,0,0.25)"
-                                    }
-                                },
-                                arrow: {
-                                    sx: {
-                                        color: "#1e1e1e"
-                                    }
-                                }
-                            }}
-                            title={
-                                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                                    <div style={{ fontWeight: 600 }}>
-                                        Order Breakdown
-                                    </div>
-
-                                    <div style={{ opacity: 0.9 }}>
-                                        Total: <b>{total}€</b>
-                                    </div>
-                                    <div style={{ opacity: 0.9 }}>
-                                        Deposit: <b>{deposit}€</b>
-                                    </div>
-                                    <div style={{ opacity: 0.9 }}>
-                                        Remaining: <b>{remaining.toFixed(2)}€</b>
-                                    </div>
-                                </div>
-                            }
-                        >
-                            <Chip
-                                label={status}
-                                color={
-                                    status === PaymentStatus.PAID
-                                        ? "success"
-                                        : status === PaymentStatus.PARTIAL
-                                            ? "warning"
-                                            : "error"
-                                }
-                                size="small"
-                                sx={{
-                                    height: 20,
-                                    fontSize: "0.6rem",
-                                    width: "fit-content",
-                                    cursor: "pointer",
-                                    transition: "all 0.2s ease",
-                                    '&:hover': {
-                                        transform: "scale(1.05)",
-                                    },
-                                    '& .MuiChip-label': {
-                                        px: 1
-                                    }
-                                }}
-                            />
-                        </Tooltip>
-                    </div>
-                );
-            }
-        },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -356,7 +239,6 @@ const OrdersView = ({columnVisibility,
                         products: order.items,
                         address: order.address,
                         total: Number(Number(order.total).toFixed(2)),
-                        deposit: Number(order.deposit),
                         date: order.date ? new Date(order.date) : undefined
                     });
                 });

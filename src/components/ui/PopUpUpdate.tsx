@@ -50,7 +50,6 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         date: "",
         customer: undefined,
         items: [],
-        deposit: ""
     })
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [initialItems, setInitialItems] = useState<SelectedProduct[]>([]);
@@ -60,7 +59,6 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         selectedProductsWithQty: selectedProductsWithQty,
         selectedCustomer: orderValues.customer as Customer,
         address: orderValues.address,
-        deposit: orderValues.deposit,
         initialItems
     });
 
@@ -98,7 +96,6 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                             products: data.orderItem.items,
                             address: data.orderItem.address,
                             total: Number(data.orderItem.total ?? 0),
-                            deposit: Number(data.orderItem.deposit ?? 0),
                             date: data.orderItem.date ? new Date(data.orderItem.date) : undefined
                             });
                             setSubmitted(true);})
@@ -361,24 +358,10 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     error={Boolean(orderErrors?.address)}
                     helperText={orderErrors?.address}
                 />
-                <TextField
-                    onChange={handleChange}
-                    value={orderValues.deposit}
-                    margin="dense"
-                    id="deposit"
-                    name="deposit"
-                    label="Deposit"
-                    type="number"
-                    fullWidth
-                    variant="standard"
-                    error={Boolean(orderErrors?.deposit)}
-                    helperText={orderErrors?.deposit}
-                />
                 <div className="mt-2">
                     <ProductsTableInsert
                         selectedProductsWithQty={selectedProductsWithQty}
                         setSelectedProductsWithQty={setSelectedProductsWithQty}
-                        deposit={orderValues.deposit ?? "0"}
                     />
                     {orderErrors && (
                         <Typography color="error" fontSize={12}>

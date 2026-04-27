@@ -34,16 +34,14 @@ const orderSchema = z.object({
     address: z
         .string()
         .trim()
-        .min(2, "Address is required"),
+        .min(2, "Address is required")
 
-    deposit: z.coerce.number().min(0, "Deposit must be at least 0").optional()
 })
 
 type FormErrors = {
     products?: string;
     customer?: string;
     address?: string;
-    deposit?: string;
     productQuantity?: string;
     productPrice?: string;
     stockError?: string;
@@ -53,11 +51,10 @@ type UseOrderFormValidationProps = {
     selectedProductsWithQty: SelectedProduct[];
     selectedCustomer: Customer | null;
     address: string;
-    deposit?: string;
     initialItems?: SelectedProduct[];
 }
 
-const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, address, initialItems, deposit}: UseOrderFormValidationProps) => {
+const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, address, initialItems}: UseOrderFormValidationProps) => {
     const [orderErrors, setOrderErrors] = useState<FormErrors>({});
 
     const validQuantity = (): {notValidProducts: SelectedProduct[], isValid: boolean} => {
@@ -83,8 +80,7 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
         const result = orderSchema.safeParse({
             customer: selectedCustomer,
             products: selectedProductsWithQty,
-            address: address,
-            deposit: deposit
+            address: address
         });
         const {notValidProducts, isValid} = validQuantity();
         const productNames = notValidProducts

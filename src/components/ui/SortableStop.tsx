@@ -120,7 +120,7 @@ export function SortableStop({
 
                     {/* BALANCE */}
                     <Box sx={{ fontSize: 10 }}>
-                        Balance: {(order.total ?? 0) - (order.deposit ?? 0)}€
+                        Balance: {(order.total ?? 0)}€
                     </Box>
                 </Box>
             </Box>
