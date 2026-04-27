@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {
     getGridSingleSelectOperators,
     type GridColDef,
-    GridFilterInputValue, type GridFilterModel, type GridRowSelectionModel,
+    GridFilterInputValue, type GridFilterModel, type GridPaginationModel, type GridRowSelectionModel,
     type GridSortModel,
 } from "@mui/x-data-grid";
 import {getOrder, searchOrders} from "../../services/orderService.ts"
@@ -21,7 +21,6 @@ import { PaymentStatus } from "../../types/enums/PaymentStatus.ts";
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
     setColumnVisibility?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
-    importedPageSize?: number;
     selectionModel?: GridRowSelectionModel;
     setSelectionModel?: React.Dispatch<
         React.SetStateAction<GridRowSelectionModel>
@@ -33,7 +32,6 @@ interface OrdersViewProps {
 }
 const OrdersView = ({columnVisibility,
                         setColumnVisibility,
-                        importedPageSize,
                         setSelectionModel,
                         selection,
                         selectionModel,
@@ -42,8 +40,6 @@ const OrdersView = ({columnVisibility,
                         width}: OrdersViewProps) => {
 
     const [rows, setRows] = useState<(Customer | Product | OrderRow)[]>([]);
-    const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(importedPageSize ?? 10);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [searchName, setSearchName] = useState("");
@@ -55,14 +51,10 @@ const OrdersView = ({columnVisibility,
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
-    const [openRows, setOpenRows] = useState<{[key: string]: boolean}>({});
     const [filterModel, setFilterModel] = useState<GridFilterModel>({
         items: []
     });
-
-    const toggleRow = (id: string) => {
-        setOpenRows(prev => ({ ...prev, [id]: !prev[id] }));
-    };
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
 
     const handleClickOpen = (row: OrderRow) => {
         if (row.id) getOrder(row.id).then((data: ResponseDTO)=> {
@@ -131,15 +123,13 @@ const OrdersView = ({columnVisibility,
         {
             field: 'products',
             headerName: 'Products',
-            width: 300,
+            width: 150,
             filterOperators: [productsFilterOperator],
             sortable: false,
             renderCell: (params) => (
                 <div className="flex items-center justify-start h-full">
                     <ProductsCell
                         products={params.row.products}
-                        open={openRows[params.row.id]}
-                        onToggle={() => toggleRow(params.row.id)}
                     />
                 </div>
             ),
@@ -331,11 +321,28 @@ const OrdersView = ({columnVisibility,
         },
     ];
 
+    const handleUpdateOrder = (updated: OrderRow | Product | Customer) => {
+        setRows(prev => {
+            const index = prev.findIndex(r => r.id === updated.id);
+
+            if (index === -1) return prev;
+
+            const newRows = [...prev];
+            newRows[index] = { ...updated }; // IMPORTANT spread
+
+            return newRows;
+        });
+    };
+
+    const handleDeleteOrder = (id: number) => {
+        setRows(prev => prev.filter(row => row.id !== id));
+    };
+
     useEffect(() => {
         setLoading(true);
         searchOrders({
-            page: page,
-            pageSize: pageSize,
+            page: paginationModel.page,
+            pageSize: paginationModel.pageSize,
             globalSearch: isSearching ? searchName : "",
             sortBy: sortModel[0]?.field,
             sortDirection: sortModel[0]?.sort ?? "asc",
@@ -359,7 +366,7 @@ const OrdersView = ({columnVisibility,
             })
             .catch(() => console.log("error fetching orders"))
             .finally(() => setLoading(false));
-    }, [page, pageSize, isSearching, searchName, openEdit, openDeletePopUp, sortModel, filterModel])
+    }, [paginationModel, isSearching, searchName, sortModel, filterModel])
 
     return (
         <>
@@ -368,18 +375,16 @@ const OrdersView = ({columnVisibility,
                 typeOf={"Orders"}
                 rows={rows}
                 loading={loading}
-                setPage={setPage}
                 rowCount={rowCount}
-                setPageSize={setPageSize}
-                page={page}
-                pageSize={pageSize}
+                paginationModel={paginationModel}
+                setPaginationModel={setPaginationModel}
                 setSearchName={setSearchName}
                 setIsSearching={setIsSearching}
                 setSortModel={setSortModel}
                 sortModel={sortModel}
                 filterModel={filterModel}
                 setFilterModel={setFilterModel}
-                columnVisibility={columnVisibility}
+                columnVisibility={columnVisibility ?? {}}
                 setColumnVisibility={setColumnVisibility}
                 selectionModel={selectionModel}
                 setSelectionModel={setSelectionModel}
@@ -393,6 +398,7 @@ const OrdersView = ({columnVisibility,
                 rowToEdit={rowToEdit}
                 typeOf={"Orders"}
                 setSubmitted={setSubmitted}
+                handleUpdate={handleUpdateOrder}
             />
             <PopUpDelete
                 setRowToEdit={setRowToEdit}
@@ -400,6 +406,7 @@ const OrdersView = ({columnVisibility,
                 rowToEdit={onDeleteContent}
                 typeOf={"Orders"}
                 setOpen={setOpenDeletePopUp}
+                handleDelete={handleDeleteOrder}
                 setSubmitted={setSubmitted}
             />
             <div className="flex justify-center items-center mt-2 w-full mx-auto">

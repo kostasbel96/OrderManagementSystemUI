@@ -11,10 +11,11 @@ interface PopUpDeleteProps{
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | undefined>>;
+    handleDelete: (id: number) => void;
 }
 
 const PopUpDelete = ({open, rowToEdit,
-                     typeOf, setOpen, setSubmitted, setRowToEdit}: PopUpDeleteProps) => {
+                     typeOf, setOpen, setSubmitted, setRowToEdit, handleDelete}: PopUpDeleteProps) => {
 
     const handleClose = () => {
         setOpen(false);
@@ -26,7 +27,7 @@ const PopUpDelete = ({open, rowToEdit,
             case "Products":
                 deleteProduct(rowToEdit as Product)
                     .then((data: ResponseDTO) => {
-                        console.log(data);
+                        handleDelete(data.productDto.id)
                         setRowToEdit(data.productDto);
                         setSubmitted(true);
                     })
@@ -38,7 +39,7 @@ const PopUpDelete = ({open, rowToEdit,
             case "Customers":
                 deleteCustomer(rowToEdit as Customer)
                     .then((data: ResponseDTO) => {
-                        console.log(data);
+                        handleDelete(data.customer.id ?? -1);
                         setRowToEdit(data.customer);
                         setSubmitted(true);
                     })
@@ -52,6 +53,7 @@ const PopUpDelete = ({open, rowToEdit,
                     .then((data: ResponseDTO) => {
                         console.log(data);
                         setRowToEdit(data.orderItem);
+                        handleDelete(data.orderItem.id);
                         setSubmitted(true);
                     })
                     .catch(err => {

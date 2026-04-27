@@ -1,4 +1,5 @@
 import type {Product, ProductResponseDto, ResponseDTO, SearchRequest} from "../types/Types.ts";
+import {getApiUrl} from "../helper/IpHelper.ts";
 
 export let products: Product[];
 // products = [
@@ -12,7 +13,7 @@ export let products: Product[];
 //     {id: 8, name: "Laptop1", description: "test", quantity: 19 },
 // ]
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = getApiUrl();
 
 export async function addProduct(newProduct: Omit<Product, "id">): Promise<ResponseDTO> {
     const res = await fetch(`${API_URL}/products/save`,{

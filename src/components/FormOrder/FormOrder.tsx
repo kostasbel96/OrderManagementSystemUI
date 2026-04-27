@@ -11,8 +11,9 @@ import { type FormEvent, useEffect, useState } from "react";
 import type {Customer, SelectedProduct} from "../../types/Types.ts";
 import { addOrder } from "../../services/orderService.ts";
 import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
-import CustomersAutocomplete from "./CustomersAutocomplete.tsx";
 import ProductsTableInsert from "./ProductsTableInsert.tsx";
+import {useCustomerSearch} from "../../hooks/useCustomerSearch.ts";
+import {AppAutocomplete} from "../ui/AppAutocomplete.tsx";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,6 +26,10 @@ const FormOrder = ({
                        setSuccess,
                        setPopUpMessage
                    }: FormOrderProps) => {
+
+    const [inputValue, setInputValue] = useState("");
+
+    const { customers, loading } = useCustomerSearch(inputValue);
 
     const [selectedProductsWithQty, setSelectedProductsWithQty] =
         useState<SelectedProduct[]>(() => {
@@ -176,10 +181,15 @@ const FormOrder = ({
                             </Box>
 
                             <Box sx={{ flex: 1 }}>
-                                <CustomersAutocomplete
-                                    selectedCustomer={selectedCustomer}
-                                    setSelectedCustomer={setSelectedCustomer}
-                                    errorMessage={orderErrors.customer}
+                                <AppAutocomplete<Customer>
+                                    options={customers}
+                                    value={selectedCustomer}
+                                    inputValue={inputValue}
+                                    loading={loading}
+                                    placeholder="Search customer..."
+                                    getOptionLabel={(c) => `${c.name} ${c.lastName}`}
+                                    onChange={setSelectedCustomer}
+                                    onInputChange={setInputValue}
                                 />
                             </Box>
                         </Stack>

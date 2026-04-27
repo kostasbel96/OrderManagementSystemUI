@@ -12,13 +12,14 @@ import {
 } from "lucide-react";
 import { type ReactNode, useState, useEffect } from "react";
 import {Tooltip} from "@mui/material";
-import {useUIStore} from "../store/useUIStore.ts";
+import {useUIStore} from "../hooks/store/useUIStore.ts";
 import {useTabs} from "../contexts/TabContext.tsx";
 import ProductsView from "./products/ProductsView.tsx";
 import OrdersView from "./orders/OrdersView.tsx";
 import CustomersView from "./customers/CustomersView.tsx";
 import Dashboard from "./Dashboard.tsx";
 import QuickAdd from "./QuickAdd.tsx";
+import MySettings from "./Settings.tsx";
 
 export default function SidebarLayout({ children }: { children: ReactNode }) {
     const [open, setOpen] = useState(false);
@@ -119,7 +120,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                         label="Settings"
                         collapsed={collapsed}
                         setOpen={setOpen}
-                        component={<div className="p-10">Settings Workspace</div>}
+                        component={<MySettings />}
                     />
                 </nav>
 

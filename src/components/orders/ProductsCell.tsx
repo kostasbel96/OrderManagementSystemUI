@@ -1,18 +1,31 @@
-import type {SelectedProduct} from "../../types/Types.ts";
-import {Collapse} from "@mui/material";
+import type { SelectedProduct } from "../../types/Types.ts";
+import { Popover } from "@mui/material";
+import { useState } from "react";
+import {Eye, EyeOff} from "lucide-react";
 
-interface ProductsCellProps{
+interface ProductsCellProps {
     products: SelectedProduct[];
-    open: boolean;
-    onToggle: () => void;
 }
 
-const ProductsCell = ({products, open, onToggle}: ProductsCellProps) => {
+const ProductsCell = ({ products }: ProductsCellProps) => {
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+    const open = Boolean(anchorEl);
+
+    const handleOpen = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        setAnchorEl(e.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
-        <div style={{ width: "100%" }}>
+        <>
+            {/* Trigger */}
             <div
-                onClick={(e) => { e.stopPropagation(); onToggle(); }}
+                onClick={handleOpen}
                 style={{
                     cursor: "pointer",
                     display: "flex",
@@ -20,37 +33,63 @@ const ProductsCell = ({products, open, onToggle}: ProductsCellProps) => {
                     alignItems: "center",
                     padding: "6px 8px",
                     background: "#f7f7f7",
-                    borderRadius: "6px"
+                    borderRadius: "6px",
+                    width: "100%"
                 }}
             >
-                <span style={{ fontWeight: 500 }}>Products ({products.length})</span>
-                <span style={{ fontSize: "12px" }}>{open ? "▲" : "▼"}</span>
+                <span style={{ fontWeight: 500 }}>
+                    Products ({products.length})
+                </span>
+                {open ? <EyeOff size={12}/> : <Eye size={12} color={"#555"} />}
             </div>
 
-            <Collapse in={open}>
-                <div style={{ marginTop: "6px" }}>
+            {/* Overlay */}
+            <Popover
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                }}
+            >
+                <div style={{
+                    padding: "8px",
+                    overflowY: "auto"
+                }}>
                     {products.map((item, index) => (
                         <div
                             key={item.product?.id + "-" + index}
                             style={{
                                 display: "grid",
-                                gridTemplateColumns: "1fr auto auto",
+                                gridTemplateColumns: "1fr auto",
                                 gap: "8px",
-                                padding: "6px 8px",
+                                padding: "6px 4px",
                                 borderBottom: "1px solid #eee",
-                                alignItems: "center"
+                                fontSize: "0.75rem"
                             }}
                         >
-                            <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            <div style={{
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap"
+                            }}>
                                 {item.product?.name}
                             </div>
-                            <div style={{ textAlign: "center", color: "#555" }}>{item.quantity > 1 ? item.quantity + " pcs" : item.quantity + " pc"} X {item.price} €</div>
+
+                            <div style={{ color: "#555" }}>
+                                {item.quantity} x {item.price}€
+                            </div>
                         </div>
                     ))}
                 </div>
-            </Collapse>
-        </div>
+            </Popover>
+        </>
     );
-}
+};
 
 export default ProductsCell;

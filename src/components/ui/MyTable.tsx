@@ -1,14 +1,14 @@
 import {
     DataGrid,
     type GridColDef,
-    type GridFilterModel,
+    type GridFilterModel, type GridPaginationModel,
     type GridRowSelectionModel,
     type GridSortModel
 } from "@mui/x-data-grid";
 import type {Customer, OrderRow, Product} from "../../types/Types.ts";
 import Search from "../Search.tsx";
 import {Paper} from "@mui/material";
-import {useUIStore} from "../../store/useUIStore.ts";
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
 import React from "react";
 
 type TableProps = {
@@ -17,10 +17,8 @@ type TableProps = {
     rows: (Product | Customer | OrderRow)[];
     loading: boolean;
     rowCount: number;
-    setPage: React.Dispatch<React.SetStateAction<number>>;
-    setPageSize: React.Dispatch<React.SetStateAction<number>>;
-    page: number;
-    pageSize: number;
+    paginationModel: GridPaginationModel;
+    setPaginationModel: React.Dispatch<React.SetStateAction<GridPaginationModel>>;
     setSearchName: React.Dispatch<React.SetStateAction<string>>;
     setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
     setSortModel: React.Dispatch<React.SetStateAction<GridSortModel>>;
@@ -44,12 +42,10 @@ const MyTable = ({columns,
                       rows,
                       setSortModel,
                       sortModel,
+                      paginationModel,
+                      setPaginationModel,
                       loading,
                       rowCount,
-                      setPage,
-                      setPageSize,
-                      page,
-                      pageSize,
                       setSearchName,
                       setIsSearching,
                       filterModel,
@@ -63,14 +59,13 @@ const MyTable = ({columns,
                      width}: TableProps)=>{
 
     const collapsed = useUIStore((s) => s.sidebarCollapsed);
-
     return (
         <div className="mt-5 flex flex-col space-y-2 justify-center items-center px-4">
             <Search
                 typeOf={typeOf}
                 setIsSearching={setIsSearching}
                 setSearchName={setSearchName}
-                setPage={setPage}
+                setPaginationModel={setPaginationModel}
             />
             <Paper sx={{
                 maxHeight: height ?? "calc(100vh - 200px)",
@@ -83,17 +78,16 @@ const MyTable = ({columns,
             }}
             >
                 <DataGrid
-                    getRowHeight={() => 'auto'}
                     rows={rows}
                     isRowSelectable={() => !loading}
                     columns={columns}
-                    getRowId={(row) => row.id}
+                    getRowId={(row) => Number(row.id)}
                     rowCount={rowCount}
                     loading={loading}
 
                     rowSelectionModel={selectionModel}
-                    onRowSelectionModelChange={(newSelection) => {
-                        setSelectionModel?.(newSelection)}}
+                    onRowSelectionModelChange={(newModel: GridRowSelectionModel) => {
+                        setSelectionModel?.(newModel)}}
 
                     filterMode="server"
                     filterModel={filterModel}
@@ -105,11 +99,8 @@ const MyTable = ({columns,
                     sortModel={sortModel}
                     onSortModelChange={(model) => setSortModel(model)}
 
-                    paginationModel={{ page, pageSize }}
-                    onPaginationModelChange={(model) => {
-                        setPage(model.page);
-                        setPageSize(model.pageSize);
-                    }}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
 
                     columnVisibilityModel={columnVisibility}
                     onColumnVisibilityModelChange={setColumnVisibility}

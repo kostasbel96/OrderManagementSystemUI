@@ -2,35 +2,36 @@ import {Fade, InputBase, Paper} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {SearchIcon, XIcon} from "lucide-react";
 import {useState} from "react";
+import type {GridPaginationModel} from "@mui/x-data-grid";
 
 interface SearchProps {
     typeOf: string;
     setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
     setSearchName: React.Dispatch<React.SetStateAction<string>>;
-    setPage: React.Dispatch<React.SetStateAction<number>>;
+    setPaginationModel: React.Dispatch<React.SetStateAction<GridPaginationModel>>
 }
 
-const Search = ({typeOf, setIsSearching, setSearchName, setPage}: SearchProps) => {
+const Search = ({typeOf, setIsSearching, setSearchName, setPaginationModel}: SearchProps) => {
     const [text, setText] = useState("");
 
     const handleChange = (value: string) => {
         setText(value);
         if (value === "") {
             setIsSearching(false);
-            setPage(0);
+            setPaginationModel((prev) => ({...prev, page: 0}))
         }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setPage(0);
+        setPaginationModel((prev) => ({...prev, page: 0}))
         setIsSearching(true);
         setSearchName(text);
     }
 
     const handleReset = (e: React.FormEvent) => {
         e.preventDefault();
-        setPage(0);
+        setPaginationModel((prev) => ({...prev, page: 0}))
         setIsSearching(false);
         setSearchName("");
         setText("");

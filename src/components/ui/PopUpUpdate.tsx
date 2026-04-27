@@ -8,7 +8,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import type {Customer, OrderItem, Product, SelectedProduct} from "../../types/Types.ts";
+import type {Customer, OrderItem, OrderRow, Product, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import {updateProduct} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
@@ -24,9 +24,10 @@ interface PopUpUpdateProps{
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+    handleUpdate: (updated: OrderRow | Product | Customer) => void;
 }
 
-const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpdateProps) => {
+const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpdate}: PopUpUpdateProps) => {
     const [productValues, setProductValues] = useState<Product>({
         id: -1,
         name: "",
@@ -69,8 +70,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
             case "Products":
                 if (validateProductForm()){
                     updateProduct(productValues)
-                        .then(data=>{console.log(data);
-                                            setSubmitted(true);})
+                        .then(data=>{
+                            handleUpdate(data.productDto);
+                            setSubmitted(true);})
                         .catch(err=>console.log(err))
                         .finally(()=>setOpen(false));
                 }
@@ -79,7 +81,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
                 if (validateCustomerForm()){
                     updateCustomer(customerValues)
                         .then(data => {
-                            console.log(data);
+                            handleUpdate(data.customer);
                             setSubmitted(true);
                         })
                         .catch(err=>console.log(err))
@@ -89,8 +91,17 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted}: PopUpUpda
             case "Orders":
                 if (validateOrderForm()) {
                     updateOrder(orderValues)
-                        .then(data => {console.log(data);
-                                                setSubmitted(true);})
+                        .then(data => {
+                            handleUpdate({
+                            id: data.orderItem.id,
+                            customer: data.orderItem.customer,
+                            products: data.orderItem.items,
+                            address: data.orderItem.address,
+                            total: Number(data.orderItem.total ?? 0),
+                            deposit: Number(data.orderItem.deposit ?? 0),
+                            date: data.orderItem.date ? new Date(data.orderItem.date) : undefined
+                            });
+                            setSubmitted(true);})
                         .catch(err => console.log(err))
                         .finally(() => setOpen(false));
                 }

@@ -6,15 +6,20 @@ export interface Product {
     price: number;
 }
 
-export interface Customer {
+export interface Customer extends Person {
+    balance: number | undefined | null;
+}
+
+interface Person {
     id: number | undefined | null;
     name: string;
     lastName: string;
     phoneNumber1: string;
     phoneNumber2?: string;
     email?: string;
-    balance: number | undefined | null;
 }
+
+export interface Driver extends Person{}
 
 export interface ResponseDTO {
     orderItems: OrderItem[];
@@ -80,6 +85,14 @@ export interface OrderResponseDto {
 
 export interface CustomerResponseDto {
     content: Customer[];
+    totalElements: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+
+export interface DriverResponseDto {
+    content: Driver[];
     totalElements: number;
     pageNumber: number;
     pageSize: number;

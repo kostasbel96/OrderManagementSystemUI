@@ -1,4 +1,4 @@
-import type {GridColDef, GridFilterModel, GridSortModel} from "@mui/x-data-grid";
+import type {GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
 import {useEffect, useState} from "react";
 import type {Customer, OrderItem, OrderRow, Product} from "../../types/Types.ts";
@@ -13,8 +13,7 @@ import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
 const CustomersView = () => {
 
     const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>([]);
-    const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(10);
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
@@ -190,11 +189,28 @@ const CustomersView = () => {
         },
     ];
 
+    const handleUpdateCustomer = (updated: Product | Customer | OrderRow) => {
+        setRows(prev => {
+            const index = prev.findIndex(r => r.id === updated.id);
+
+            if (index === -1) return prev;
+
+            const newRows = [...prev];
+            newRows[index] = { ...updated }; // IMPORTANT spread
+
+            return newRows;
+        });
+    };
+
+    const handleDeleteCustomer = (id: number) => {
+        setRows(prev => prev.filter(row => row.id !== id));
+    };
+
     useEffect(() => {
         setLoading(true);
         searchCustomers({
-            page,
-            pageSize,
+            page: paginationModel.page,
+            pageSize: paginationModel.pageSize,
             globalSearch: isSearching ? searchName : "",
             sortBy: sortModel[0]?.field,
             sortDirection: sortModel[0]?.sort ?? "asc",
@@ -204,7 +220,7 @@ const CustomersView = () => {
                 setRowCount(data.totalElements);
             })
             .finally(() => setLoading(false));
-    }, [page, pageSize, searchName, isSearching, openEdit, openDeletePopUp, sortModel, filterModel]);
+    }, [paginationModel, searchName, isSearching, sortModel, filterModel]);
 
 
     return (
@@ -214,11 +230,9 @@ const CustomersView = () => {
                 typeOf={"Customers"}
                 rows={rows}
                 loading={loading}
-                setPage={setPage}
                 rowCount={rowCount}
-                setPageSize={setPageSize}
-                page={page}
-                pageSize={pageSize}
+                paginationModel={paginationModel}
+                setPaginationModel={setPaginationModel}
                 setSearchName={setSearchName}
                 setIsSearching={setIsSearching}
                 setSortModel={setSortModel}
@@ -228,6 +242,7 @@ const CustomersView = () => {
                 selection={false}
             ></MyTable>
             <PopUpUpdate
+                handleUpdate={handleUpdateCustomer}
                 open={openEdit}
                 setOpen={setOpenEdit}
                 rowToEdit={rowToEdit}
@@ -235,6 +250,7 @@ const CustomersView = () => {
                 setSubmitted={setSubmitted}
             />
             <PopUpDelete
+                handleDelete={handleDeleteCustomer}
                 setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}

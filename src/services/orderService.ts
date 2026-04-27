@@ -5,6 +5,7 @@ import type {
     OrderResponseDto,
     SelectedProduct, ResponseDTO, SearchRequest,
 } from "../types/Types.ts";
+import {getApiUrl} from "../helper/IpHelper.ts";
 
 interface OrderProps{
     products: SelectedProduct[];
@@ -14,7 +15,7 @@ interface OrderProps{
     deposit: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = getApiUrl();
 
 
 export async function addOrder({products, customer, address, deposit}: OrderProps): Promise<OrderItem>{

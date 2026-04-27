@@ -1,4 +1,4 @@
-import {type GridColDef, type GridFilterModel, type GridSortModel} from '@mui/x-data-grid';
+import {type GridColDef, type GridFilterModel, type GridPaginationModel, type GridSortModel} from '@mui/x-data-grid';
 import {useEffect, useMemo, useState} from "react";
 import type {Customer, OrderItem, OrderRow, Product} from "../../types/Types.ts";
 import MyTable from "../ui/MyTable.tsx";
@@ -9,11 +9,11 @@ import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import DeleteIcon from '@mui/icons-material/Delete';
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
+import {Tooltip} from "@mui/material";
 
 const ProductsView = () => {
     const [rows, setRows] = useState<(Product | Customer | OrderRow)[]>([]);
-    const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(10);
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
@@ -73,21 +73,39 @@ const ProductsView = () => {
                     {params.value}
                 </div>
             )  },
-        { field: 'description', headerName: 'Description', width: 300, renderCell: (params) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',   // vertical centering
-                        justifyContent: 'start', // horizontal centering
-                        whiteSpace: 'pre-line',
-                        height: '100%',          // σημαντικό για να γεμίζει το cell
-                        width: '100%',
-                        marginBottom: '24px'
-                    }}
-                >
-                    {params.value}
-                </div>
-            )  },
+        {
+            field: 'description',
+            headerName: 'Description',
+            width: 200,
+            renderCell: (params) => {
+                const value = params.value || "";
+
+                return (
+                    <Tooltip title={value} arrow placement="top-start">
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',   // ✅ vertical center
+                                height: '100%',
+                                width: '100%',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <div
+                                style={{
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    width: '100%'
+                                }}
+                            >
+                                {value}
+                            </div>
+                        </div>
+                    </Tooltip>
+                );
+            }
+        },
         {field: 'quantity', headerName: 'Quantity', type:"number", width: 100, renderCell: (params) => (
                 <div
                     style={{
@@ -158,11 +176,28 @@ const ProductsView = () => {
         },
     ], []);
 
+    const handleUpdateProduct = (updated: Product | Customer | OrderRow) => {
+        setRows(prev => {
+            const index = prev.findIndex(r => r.id === updated.id);
+
+            if (index === -1) return prev;
+
+            const newRows = [...prev];
+            newRows[index] = { ...updated }; // IMPORTANT spread
+
+            return newRows;
+        });
+    };
+
+    const handleDeleteProduct = (id: number) => {
+        setRows(prev => prev.filter(row => row.id !== id));
+    };
+
     useEffect(() => {
         setLoading(true);
         searchProducts({
-            page,
-            pageSize,
+            page: paginationModel.page,
+            pageSize: paginationModel.pageSize,
             globalSearch: isSearching ? searchName : "",
             sortBy: sortModel[0]?.field,
             sortDirection: sortModel[0]?.sort ?? "asc",
@@ -171,7 +206,7 @@ const ProductsView = () => {
                 setRows(data.content);
                 setRowCount(data.totalElements);
         }).finally(() => setLoading(false));
-    }, [page, pageSize, searchName, isSearching, openEdit, openDeletePopUp, sortModel, filterModel]);
+    }, [paginationModel, searchName, isSearching, sortModel, filterModel]);
 
     return (
         <>
@@ -180,11 +215,9 @@ const ProductsView = () => {
                 typeOf={"Products"}
                 rows={rows}
                 loading={loading}
-                setPage={setPage}
                 rowCount={rowCount}
-                setPageSize={setPageSize}
-                page={page}
-                pageSize={pageSize}
+                setPaginationModel={setPaginationModel}
+                paginationModel={paginationModel}
                 setSearchName={setSearchName}
                 setIsSearching={setIsSearching}
                 setSortModel={setSortModel}
@@ -194,6 +227,7 @@ const ProductsView = () => {
                 selection={false}
             ></MyTable>
             <PopUpUpdate
+                handleUpdate={handleUpdateProduct}
                 open={openEdit}
                 rowToEdit={rowToEdit}
                 typeOf={"Products"}
@@ -201,6 +235,7 @@ const ProductsView = () => {
                 setSubmitted={setSubmitted}
             />
             <PopUpDelete
+                handleDelete={handleDeleteProduct}
                 setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
