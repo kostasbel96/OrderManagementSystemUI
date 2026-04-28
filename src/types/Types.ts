@@ -58,6 +58,13 @@ export interface SearchRequest {
     sortDirection?: string;
 }
 
+export interface Route {
+    id: number;
+    orders: OrderItem[];
+    driver: Driver;
+    routeName: string;
+}
+
 export interface OrderRow {
     id: number;
     customer?: Customer;

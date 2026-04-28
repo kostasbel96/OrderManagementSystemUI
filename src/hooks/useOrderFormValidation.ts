@@ -2,13 +2,13 @@ import {z} from "zod";
 import {useState} from "react";
 import type {SelectedProduct, Customer} from '../types/Types.ts';
 
-const productSchema = z.object({
+export const productSchema = z.object({
     id: z.number(),
     name: z.string(),
     quantity: z.number()
 });
 
-const selectedProductSchema = z.object({
+export const selectedProductSchema = z.object({
     product: productSchema.nullable().refine(val => val !== null, {
         message: "Product is required"
     }),
@@ -16,7 +16,7 @@ const selectedProductSchema = z.object({
     price: z.coerce.number().min(0, "Price must be at least 0")
 });
 
-const orderSchema = z.object({
+export const orderSchema = z.object({
     customer: z
         .object({
             id: z.number(),
@@ -38,7 +38,7 @@ const orderSchema = z.object({
 
 })
 
-type FormErrors = {
+interface FormErrors {
     products?: string;
     customer?: string;
     address?: string;
