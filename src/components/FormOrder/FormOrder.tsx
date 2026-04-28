@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    TextField,
     Stack,
     Paper,
     Grid,
@@ -14,6 +13,8 @@ import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
 import ProductsTableInsert from "./ProductsTableInsert.tsx";
 import {useCustomerSearch} from "../../hooks/useCustomerSearch.ts";
 import {AppAutocomplete} from "../ui/AppAutocomplete.tsx";
+import LabeledField from "../ui/LabeledField.tsx";
+import OMSLabel from "../ui/OMSLabel.tsx";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -123,17 +124,6 @@ const FormOrder = ({
         console.log(orderErrors);
     }, [orderErrors]);
 
-    const labelSx = {
-        width: "auto",
-        padding: "6px",
-        border: "1px solid #bdbdbd",
-        borderRadius: "8px 0px 0px 8px",
-        height: "100%",
-        fontSize: 12,
-        textAlign: "right",
-        bgcolor: "#f5f5f5",
-    };
-
     return (
         <Paper
             elevation={2}
@@ -161,10 +151,10 @@ const FormOrder = ({
                         <Stack direction="row"
                                alignItems="stretch"
                                spacing={0}>
-                            <Box sx={labelSx}>
-                                Customer<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span>
-                            </Box>
-
+                            <OMSLabel
+                                required
+                                label="Customer"
+                            />
                             <Box sx={{ flex: 1 }}>
                                 <AppAutocomplete<Customer>
                                     options={customers}
@@ -175,6 +165,8 @@ const FormOrder = ({
                                     getOptionLabel={(c) => `${c.name} ${c.lastName}`}
                                     onChange={setSelectedCustomer}
                                     onInputChange={setInputValue}
+                                    helperText={orderErrors?.customer}
+                                    error={Boolean(orderErrors?.customer)}
                                 />
                             </Box>
                         </Stack>
@@ -182,44 +174,14 @@ const FormOrder = ({
 
                     {/* ADDRESS */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <Stack
-                            direction="row"
-                            alignItems="stretch"
-                            spacing={0}
-                        >
-                            <Box sx={labelSx}>
-                                Address<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span>
-                            </Box>
-
-                            <TextField
-                                fullWidth
-                                size="small"
-                                placeholder="Enter address..."
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                                error={Boolean(orderErrors?.address)}
-                                helperText={orderErrors?.address ?? " "}
-                                sx={{
-                                    "& .MuiOutlinedInput-root": {
-                                        fontSize: 12,
-                                        height: 32,
-                                        borderRadius: "0 8px 8px 0", // ✅ εδώ σωστά
-
-                                        "& fieldset": {
-                                            borderColor: "#e0e0e0",
-                                        },
-
-                                        "&:hover fieldset": {
-                                            borderColor: "#bdbdbd",
-                                        },
-
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#1976d2",
-                                        },
-                                    },
-                                }}
-                            />
-                        </Stack>
+                        <LabeledField
+                            label="Address"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            error={Boolean(orderErrors?.address)}
+                            helperText={orderErrors?.address ?? " "}
+                            required
+                        />
                     </Grid>
 
                     {/* TABLE */}

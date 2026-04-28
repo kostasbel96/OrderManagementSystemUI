@@ -1,6 +1,6 @@
 import OrdersView from "../orders/OrdersView.tsx";
-import {Box, Button, Chip, Divider, Grid, Paper, Stack, TextField, Typography} from "@mui/material";
-import {useState} from "react";
+import {Box, Button, Chip, Divider, Grid, Paper, Stack, Typography} from "@mui/material";
+import {useCallback, useMemo, useState} from "react";
 import type {Driver, OrderRow} from "../../types/Types.ts";
 import {arrayMove, SortableContext} from "@dnd-kit/sortable";
 import {DndContext} from "@dnd-kit/core";
@@ -8,6 +8,8 @@ import {SortableStop} from "../ui/SortableStop.tsx";
 import type {GridRowSelectionModel} from "@mui/x-data-grid";
 import {AppAutocomplete} from "../ui/AppAutocomplete.tsx";
 import {useDriverSearch} from "../../hooks/useDriverSearch.ts";
+import OMSLabel from "../ui/OMSLabel.tsx";
+import LabeledField from "../ui/LabeledField.tsx";
 
 const CreateRoute = () => {
     const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
@@ -36,23 +38,25 @@ const CreateRoute = () => {
             return [];
         }
     });
-    const stopIds = stops.map(s => s.id);
+    const stopIds = useMemo(() => stops.map(s => s.id), [stops]);
 
-    const handleDragEnd = (event: any) => {
+    const [routeName, setRouteName] = useState<string>("")
+
+    const handleDragEnd = useCallback((event: any) => {
         const { active, over } = event;
         if (!over || active.id === over.id) return;
         const oldIndex = stops.findIndex(s => s.id === active.id);
         const newIndex = stops.findIndex(s => s.id === over.id);
         setStops(prev => arrayMove(prev, oldIndex, newIndex));
-    };
+    }, [stops]);
 
-    const handleDeleteStop = (id: number) => {
+    const handleDeleteStop = useCallback((id: number) => {
         const newStops = stops.filter(s => Number(s.id) !== Number(id))
         setStops(newStops);
         localStorage.setItem("stops", JSON.stringify(newStops));
-    };
+    }, [stops]);
 
-    const handleClickAddtoRoute = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClickAddtoRoute = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         const ids = selectionModel?.ids;
@@ -74,12 +78,9 @@ const CreateRoute = () => {
             }
         }
 
-        console.log("selected ids:", idArray);
-        console.log("matched stops:", newStops);
-
         setStops(newStops);
         localStorage.setItem("stops", JSON.stringify(newStops));
-    };
+    }, [stops, ordersRow, selectionModel]);
 
     const handleClickClearSelection = (e: React.MouseEvent<HTMLButtonElement>) =>{
         e.preventDefault();
@@ -94,19 +95,6 @@ const CreateRoute = () => {
         localStorage.removeItem("stops");
         setStops([]);
     }
-
-
-    const labelSx = {
-        width: "fit-content",
-        padding: "6px",
-        border: "1px solid #bdbdbd",
-        borderRadius: "8px 0px 0px 8px",
-        height: "32px",
-        fontSize: 12,
-        textAlign: "right",
-        bgcolor: "#f5f5f5",
-        whiteSpace: "nowrap"
-    };
 
     return (
         <Paper
@@ -212,36 +200,25 @@ const CreateRoute = () => {
 
                     {/* ROUTE NAME */}
                     <Grid size={{xs: 12}} >
-                        <Stack direction="row" alignItems="stretch" spacing={0}>
-                            <Box sx={labelSx}>
-                                Route name<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span>
-                            </Box>
-
-                            <TextField
-                                fullWidth
-                                size="small"
-                                placeholder="Enter route name..."
-                                sx={{
-                                    "& .MuiOutlinedInput-root": {
-                                        fontSize: 12,
-                                        height: 32,
-                                        borderRadius: "0 8px 8px 0",
-                                        "& fieldset": { borderColor: "#e0e0e0" },
-                                        "&:hover fieldset": { borderColor: "#bdbdbd" },
-                                        "&.Mui-focused fieldset": { borderColor: "#1976d2" },
-                                    },
-                                }}
-                            />
-                        </Stack>
+                        <LabeledField
+                            label="Route name"
+                            required
+                            placeholder={"Enter route name..."}
+                            value={routeName}
+                            name={"routeName"}
+                            onChange={(e) => setRouteName(e.target.value)}
+                            // error={Boolean(routeNameError)}
+                            // helperText={routeNameError}
+                        />
                     </Grid>
 
                     {/* DRIVER */}
                     <Grid size={{xs: 12}}>
                         <Stack direction="row" alignItems="stretch" spacing={0}>
-                            <Box sx={labelSx}>
-                                Driver<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span>
-                            </Box>
-
+                            <OMSLabel
+                                required
+                                label="Driver"
+                            />
                             <Box sx={{ flex: 1 }}>
                                 <AppAutocomplete<Driver>
                                     options={drivers}

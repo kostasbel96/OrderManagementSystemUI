@@ -1,5 +1,4 @@
 import {
-    TextField,
     Button,
     Paper,
     Stack,
@@ -10,6 +9,7 @@ import { addCustomer } from "../../services/customerService.ts";
 import useCustomerFormValidation, {
     type FormValues
 } from "../../hooks/useCustomerFormValidation.ts";
+import LabeledField from "../ui/LabeledField.tsx";
 
 interface FormCustomerProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -104,45 +104,6 @@ const FormCustomer = ({
         setPopUpMessage("");
     }, []);
 
-    const labelSx = {
-        width: "fit-content",
-        padding: "6px",
-        border: "1px solid #bdbdbd",
-        borderRadius: "8px 0px 0px 8px",
-        height: "32px",
-        fontSize: 12,
-        textAlign: "right",
-        bgcolor: "#f5f5f5",
-        whiteSpace: "nowrap"
-    };
-
-    const inputSx = {
-        "& .MuiOutlinedInput-root": {
-            fontSize: 12,
-            height: 32,
-            borderRadius: "0 8px 8px 0", // ✅ εδώ σωστά
-            alignItems: "center",
-
-            "& fieldset": {
-                borderColor: "#e0e0e0",
-            },
-
-            "&:hover fieldset": {
-                borderColor: "#bdbdbd",
-            },
-
-            "&.Mui-focused fieldset": {
-                borderColor: "#1976d2",
-            },
-            "& .MuiInputBase-input": {
-                padding: "0 8px",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-            },
-        }
-    };
-
     return (
         <Paper
             elevation={6}
@@ -168,100 +129,65 @@ const FormCustomer = ({
 
                     {/* NAME */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <Stack direction="row"
-                               alignItems="stretch"
-                               spacing={0}>
-                            <Box sx={labelSx}>Name<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span></Box>
-
-                            <TextField
-                                fullWidth
-                                placeholder="Enter name..."
-                                size="small"
-                                name="name"
-                                value={values.name}
-                                onChange={handleChange}
-                                error={Boolean(customerErrors?.name)}
-                                helperText={customerErrors?.name ?? " "}
-                                sx={inputSx}
-                            />
-                        </Stack>
-
+                        <LabeledField
+                            name="name"
+                            label="Name"
+                            value={values.name}
+                            onChange={handleChange}
+                            error={Boolean(customerErrors?.name)}
+                            helperText={customerErrors?.name}
+                            required
+                        />
                     </Grid>
 
                     {/* LAST NAME */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <Stack direction="row" alignItems="stretch" spacing={0}>
-                            <Box sx={labelSx}>Last Name<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span></Box>
-
-                            <TextField
-                                fullWidth
-                                placeholder="Enter Last name..."
-                                size="small"
-                                name="lastName"
-                                value={values.lastName}
-                                onChange={handleChange}
-                                error={Boolean(customerErrors?.lastName)}
-                                helperText={customerErrors?.lastName ?? " "}
-                                sx={inputSx}
-                            />
-                        </Stack>
+                        <LabeledField
+                            name={"lastName"}
+                            label="Last Name"
+                            value={values.lastName}
+                            onChange={handleChange}
+                            error={Boolean(customerErrors?.lastName)}
+                            helperText={customerErrors?.lastName}
+                            required
+                        />
                     </Grid>
 
                     {/* PHONE 1 */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <Stack direction="row" alignItems="stretch" spacing={0}>
-                            <Box sx={labelSx}>Phone 1<span style={{ color: "#d32f2f", marginLeft: 4 }}>*</span></Box>
-
-                            <TextField
-                                placeholder="Enter phone number..."
-                                fullWidth
-                                size="small"
-                                name="phoneNumber1"
-                                value={values.phoneNumber1}
-                                onChange={handleChange}
-                                error={Boolean(customerErrors?.phoneNumber1)}
-                                helperText={customerErrors?.phoneNumber1 ?? " "}
-                                sx={inputSx}
-                            />
-                        </Stack>
+                        <LabeledField
+                            name={"phoneNumber1"}
+                            label="Phone 1"
+                            value={values.phoneNumber1}
+                            onChange={handleChange}
+                            error={Boolean(customerErrors?.phoneNumber1)}
+                            helperText={customerErrors?.phoneNumber1}
+                            required
+                        />
                     </Grid>
 
                     {/* PHONE 2 */}
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <Stack direction="row" alignItems="stretch" spacing={0}>
-                            <Box sx={labelSx}>Phone 2</Box>
-
-                            <TextField
-                                fullWidth
-                                placeholder="Enter phone number..."
-                                size="small"
-                                name="phoneNumber2"
-                                value={values.phoneNumber2}
-                                onChange={handleChange}
-                                error={Boolean(customerErrors?.phoneNumber2)}
-                                helperText={customerErrors?.phoneNumber2 ?? " "}
-                                sx={inputSx}
-                            />
-                        </Stack>
+                        <LabeledField
+                            name={"phoneNumber2"}
+                            label="Phone 2"
+                            value={values.phoneNumber2}
+                            onChange={handleChange}
+                            error={Boolean(customerErrors?.phoneNumber2)}
+                            helperText={customerErrors?.phoneNumber2}
+                        />
                     </Grid>
 
                     {/* EMAIL */}
                     <Grid size={{ xs: 12 }}>
-                        <Stack direction="row" alignItems="stretch" spacing={0}>
-                            <Box sx={labelSx}>Email</Box>
-
-                            <TextField
-                                placeholder="Enter email..."
-                                fullWidth
-                                size="small"
-                                name="email"
-                                value={values.email}
-                                onChange={handleChange}
-                                error={Boolean(customerErrors?.email)}
-                                helperText={customerErrors?.email ?? " "}
-                                sx={inputSx}
-                            />
-                        </Stack>
+                        <LabeledField
+                            name={"email"}
+                            label="Email"
+                            value={values.email}
+                            onChange={handleChange}
+                            helperText={customerErrors?.email}
+                            error={Boolean(customerErrors?.email)}
+                        />
                     </Grid>
 
                     {/* ACTIONS */}
