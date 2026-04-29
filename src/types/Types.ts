@@ -11,6 +11,13 @@ export interface Customer extends Person {
     email?: string;
 }
 
+export interface RouteDetails {
+    name: string;
+    notes: string;
+    driver: Driver | null;
+    stops: OrderRow[];
+}
+
 interface Person {
     id: number | undefined | null;
     name: string;

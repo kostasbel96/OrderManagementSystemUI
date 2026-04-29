@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useTabs } from '../contexts/TabContext.tsx';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import {useUIStore} from "../hooks/store/useUIStore.ts";
 
 const Workspaces: React.FC = () => {
     const { tabs, activeTabId, removeTab, setActiveTab } = useTabs();
@@ -26,7 +27,7 @@ const Workspaces: React.FC = () => {
         if (activeTabRef.current && scrollRef.current) {
             const container = scrollRef.current;
             const tab = activeTabRef.current;
-            
+
             const containerWidth = container.offsetWidth;
             const tabOffsetLeft = tab.offsetLeft;
             const tabWidth = tab.offsetWidth;
@@ -39,12 +40,13 @@ const Workspaces: React.FC = () => {
             });
         }
 
-        // Στέλνουμε ένα resize event για σιγουριά
         setTimeout(() => {
             window.dispatchEvent(new Event('resize'));
         }, 50);
 
     }, [activeTabId]);
+
+    const collapsed = useUIStore((s) => s.sidebarCollapsed);
 
     if (tabs.length === 0) {
         return (
@@ -59,19 +61,19 @@ const Workspaces: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col h-full w-full bg-gray-50 overflow-hidden">
+        <div className="flex flex-col h-full w-full bg-gray-50">
             {/* Tab Bar Header */}
             <div className="relative h-[49px] bg-white border-b border-gray-200 flex-none w-full">
-                
+
                 {/* Fixed Navigator */}
                 <div className="absolute left-0 top-0 bottom-0 z-30 flex items-center bg-white px-2 border-r border-gray-100 shadow-[4px_0_8px_rgba(0,0,0,0.05)] gap-1">
-                    <button 
+                    <button
                         onClick={() => navigateTab('prev')}
                         className="w-8 h-8 rounded-md hover:bg-gray-50 text-gray-400 hover:text-blue-600 transition-all flex items-center justify-center border border-transparent hover:border-gray-200"
                     >
                         <ChevronLeft size={20} />
                     </button>
-                    <button 
+                    <button
                         onClick={() => navigateTab('next')}
                         className="w-8 h-8 rounded-md hover:bg-gray-50 text-gray-400 hover:text-blue-600 transition-all flex items-center justify-center border border-transparent hover:border-gray-200"
                     >
@@ -80,9 +82,13 @@ const Workspaces: React.FC = () => {
                 </div>
 
                 {/* Scrollable Tabs Area */}
-                <div 
+                <div
                     ref={scrollRef}
-                    className="h-full w-full overflow-x-auto overflow-y-hidden whitespace-nowrap scrollbar-hide select-none flex items-end pl-[85px] pr-4 touch-pan-x"
+                    className="tabs-scroll h-full overflow-x-auto overflow-y-hidden whitespace-nowrap select-none flex items-end pr-4 touch-pan-x"
+                    style={{
+                        width: `calc(100% - ${collapsed ? "85px" : "200px"})`,
+                        marginLeft: '85px'
+                    }}
                 >
                     {tabs.map((tab) => {
                         const isActive = activeTabId === tab.id;
@@ -118,32 +124,29 @@ const Workspaces: React.FC = () => {
             </div>
 
             {/* Tab Content Area */}
-            <div className="flex-1 relative w-full overflow-hidden">
+            <div className="flex-1 relative text-center">
                 {tabs.map((tab) => {
                     const isActive = activeTabId === tab.id;
                     return (
                         <div
                             key={tab.id}
-                            // Διορθωμένο: Χρήση visibility/opacity αντί για display: none
-                            // Αυτό διατηρεί τις διαστάσεις του πίνακα στο παρασκήνιο
-                            className={`absolute inset-0 w-full h-full overflow-x-auto overflow-y-auto transition-opacity duration-75 ${
+                            className={`absolute inset-0 w-full h-full transition-opacity duration-75 ${
                                 isActive 
                                 ? "opacity-100 z-10 visible" 
                                 : "opacity-0 z-0 invisible pointer-events-none"
-                            }`}
+                            }`
+                        }
                         >
-                            <div className="min-w-full inline-block p-4">
+                            <div className="p-4"
+                                 style={{
+                                     width: `calc(100% - ${collapsed ? "0%" : "10px"})`,
+                                 }}>
                                 {tab.component}
                             </div>
                         </div>
                     );
                 })}
             </div>
-
-            <style>{`
-                .scrollbar-hide::-webkit-scrollbar { display: none; }
-                .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-            `}</style>
         </div>
     );
 };

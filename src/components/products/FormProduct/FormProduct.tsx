@@ -1,10 +1,10 @@
 import { type FormEvent, useEffect, useState } from "react";
-import { addProduct } from "../../services/productService.ts";
+import { addProduct } from "../../../services/productService.ts";
 import { Box, Button, Stack, Paper, Grid } from "@mui/material";
 import useProductFormValidation, {
     type FormValues
-} from "../../hooks/useProductFormValidation.ts";
-import LabeledField from "../ui/LabeledField.tsx";
+} from "../../../hooks/useProductFormValidation.ts";
+import LabeledField from "../../ui/LabeledField.tsx";
 
 interface FormProductProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +22,7 @@ const initialValues: FormValues = {
 const FormProduct = ({
                          setSubmitted,
                          setSuccess,
-                         setPopUpMessage
+                         setPopUpMessage,
                      }: FormProductProps) => {
 
     const [values, setValues] = useState<FormValues>(() => {

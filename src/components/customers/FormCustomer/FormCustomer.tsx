@@ -5,11 +5,11 @@ import {
     Grid, Box
 } from "@mui/material";
 import { type FormEvent, useEffect, useState } from "react";
-import { addCustomer } from "../../services/customerService.ts";
+import { addCustomer } from "../../../services/customerService.ts";
 import useCustomerFormValidation, {
     type FormValues
-} from "../../hooks/useCustomerFormValidation.ts";
-import LabeledField from "../ui/LabeledField.tsx";
+} from "../../../hooks/useCustomerFormValidation.ts";
+import LabeledField from "../../ui/LabeledField.tsx";
 
 interface FormCustomerProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,7 +28,7 @@ const initialValues: FormValues = {
 const FormCustomer = ({
                           setSubmitted,
                           setSuccess,
-                          setPopUpMessage
+                          setPopUpMessage,
                       }: FormCustomerProps) => {
 
     const [values, setValues] = useState<FormValues>(() => {

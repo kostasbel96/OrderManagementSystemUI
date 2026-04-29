@@ -1,40 +1,46 @@
 import {Paper} from "@mui/material";
-import {useCallback, useMemo, useState} from "react";
-import type {Driver, OrderRow} from "../../types/Types.ts";
+import {useCallback, useEffect, useMemo, useState} from "react";
+import type {OrderRow, RouteDetails} from "../../types/Types.ts";
 import {arrayMove} from "@dnd-kit/sortable";
 import type {GridRowSelectionModel} from "@mui/x-data-grid";
 import RouteOrders from "./RouteOrders.tsx";
 import RoutePanel from "./RoutePanel.tsx";
 import useRouteInsertValidation from "../../hooks/useRouteInsertValidation.ts";
 
-const CreateRoute = () => {
+interface FormRouteProps {
+    setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+    setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+    setPopUpMessage: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) => {
     const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
         actions: false,
     });
 
-    const [selectedDriver, setSelectedDriver] = useState<Driver | null>(() => {
-        const saved = localStorage.getItem("routeDraft");
-        return saved ? JSON.parse(saved).selectedDriver : null;
+    const [routeDetails, setRouteDetails] = useState<RouteDetails>({
+        name: localStorage.getItem("routeName") ? JSON.parse(localStorage.getItem("routeName") as string) : "",
+        notes: "",
+        driver: localStorage.getItem("driver") ? JSON.parse(localStorage.getItem("driver") as string) : null,
+        stops: localStorage.getItem("stops") ? JSON.parse(localStorage.getItem("stops") as string) : []
     });
-    const [routeName, setRouteName] = useState<string>("");
     const [ordersRow, setOrdersRow] = useState<OrderRow[]>([]);
-    const [stops, setStops] = useState<OrderRow[]>(() => {
-        try {
-            const data = localStorage.getItem("stops");
-            return data ? JSON.parse(data) : [];
-        } catch {
-            return [];
-        }
-    });
+
+    const updateStops = (stops: OrderRow[]) => {
+        setRouteDetails((prev) => ({
+            ...prev,
+            stops: stops,
+        }));
+    }
 
     const {
         validateRouteInsert,
         routeErrors,
         setRouteErrors
     } = useRouteInsertValidation({
-        stops: stops,
-        driver: selectedDriver,
-        routeName: routeName
+        stops: routeDetails.stops,
+        driver: routeDetails.driver,
+        routeName: routeDetails.name
     });
 
     const [selectionModel, setSelectionModel] =
@@ -43,21 +49,21 @@ const CreateRoute = () => {
             ids: new Set(),
         });
 
-    const stopIds = useMemo(() => stops.map(s => s.id), [stops]);
+    const stopIds = useMemo(() => routeDetails.stops.map(s => s.id), [routeDetails.stops]);
 
     const handleDragEnd = useCallback((event: any) => {
         const { active, over } = event;
         if (!over || active.id === over.id) return;
-        const oldIndex = stops.findIndex(s => s.id === active.id);
-        const newIndex = stops.findIndex(s => s.id === over.id);
-        setStops(prev => arrayMove(prev, oldIndex, newIndex));
-    }, [stops]);
+        const oldIndex = routeDetails.stops.findIndex(s => s.id === active.id);
+        const newIndex = routeDetails.stops.findIndex(s => s.id === over.id);
+        updateStops(arrayMove(routeDetails.stops, oldIndex, newIndex));
+    }, [routeDetails.stops]);
 
     const handleDeleteStop = useCallback((id: number) => {
-        const newStops = stops.filter(s => Number(s.id) !== Number(id))
-        setStops(newStops);
+        const newStops = routeDetails.stops.filter(s => Number(s.id) !== Number(id))
+        updateStops(newStops);
         localStorage.setItem("stops", JSON.stringify(newStops));
-    }, [stops]);
+    }, [routeDetails.stops]);
 
     const handleAddToRoute = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -68,9 +74,9 @@ const CreateRoute = () => {
 
         const idArray = Array.from(ids);
 
-        const stopIds = new Set(stops.map(s => Number(s.id)));
+        const stopIds = new Set(routeDetails.stops.map(s => Number(s.id)));
 
-        const newStops = [...stops];
+        const newStops = [...routeDetails.stops];
 
         for (const id of idArray) {
             const order = ordersRow.find(o => Number(o.id) === Number(id));
@@ -81,10 +87,12 @@ const CreateRoute = () => {
             }
         }
 
-        setStops(newStops);
+        updateStops(newStops);
         setRouteErrors({...routeErrors, stops: ""})
+        localStorage.setItem("driver", JSON.stringify(routeDetails.driver));
+        localStorage.setItem("routeName", JSON.stringify(routeDetails.name));
         localStorage.setItem("stops", JSON.stringify(newStops));
-    }, [stops, ordersRow, selectionModel]);
+    }, [routeDetails.stops, ordersRow, selectionModel]);
 
     const handleClearSelection = useCallback((e: React.MouseEvent<HTMLButtonElement>) =>{
         e.preventDefault();
@@ -97,16 +105,25 @@ const CreateRoute = () => {
     const handleClearStops = useCallback((e: React.MouseEvent<HTMLButtonElement>) =>{
         e.preventDefault();
         localStorage.removeItem("stops");
-        setStops([]);
+        updateStops([]);
     }, [validateRouteInsert]);
 
     const handleSaveRoute = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (validateRouteInsert()) {
             console.log("ok");
+            setSubmitted(true);
+            setSuccess(true);
             setRouteErrors({});
+            return
         }
+        setSubmitted(true);
+        setSuccess(false);
     }, [validateRouteInsert]);
+
+    useEffect(() => {
+        setPopUpMessage("");
+    }, []);
 
     return (
         <Paper
@@ -135,12 +152,9 @@ const CreateRoute = () => {
 
             {/* RIGHT SIDE - ROUTES */}
             <RoutePanel
+                routeDetails={routeDetails}
                 routeErrors={routeErrors}
-                routeName={routeName}
-                setRouteName={setRouteName}
-                selectedDriver={selectedDriver}
-                setSelectedDriver={setSelectedDriver}
-                stops={stops}
+                setRouteDetails={setRouteDetails}
                 stopIds={stopIds}
                 onDragEnd={handleDragEnd}
                 onDeleteStop={handleDeleteStop}
@@ -152,4 +166,4 @@ const CreateRoute = () => {
     );
 }
 
-export default CreateRoute;
+export default FormRoute;

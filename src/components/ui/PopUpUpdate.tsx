@@ -16,7 +16,7 @@ import useCustomerFormValidation from "../../hooks/useCustomerFormValidation.ts"
 import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
 import {updateCustomer} from "../../services/customerService.ts";
 import {updateOrder} from "../../services/orderService.ts";
-import ProductsTableInsert from "../FormOrder/ProductsTableInsert.tsx";
+import ProductsTableInsert from "../orders/FormOrder/ProductsTableInsert.tsx";
 
 interface PopUpUpdateProps{
     open: boolean;

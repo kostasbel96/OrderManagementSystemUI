@@ -1,7 +1,7 @@
 import {Box, Button, Chip, Divider, Grid, Stack, Typography} from "@mui/material";
 import LabeledField from "../ui/LabeledField";
 import {AppAutocomplete} from "../ui/AppAutocomplete.tsx";
-import type {Driver, OrderRow} from "../../types/Types.ts";
+import type {Driver, RouteDetails} from "../../types/Types.ts";
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import { SortableStop } from "../ui/SortableStop.tsx";
@@ -12,11 +12,8 @@ import type {RouteInsertErrors} from "../../hooks/useRouteInsertValidation.ts";
 
 
 interface RoutePanelProps {
-    routeName: string;
-    setRouteName: React.Dispatch<React.SetStateAction<string>>;
-    selectedDriver: Driver | null;
-    setSelectedDriver: React.Dispatch<React.SetStateAction<Driver | null>>;
-    stops: OrderRow[];
+    routeDetails: RouteDetails;
+    setRouteDetails: React.Dispatch<React.SetStateAction<RouteDetails>>;
     stopIds: (string | number)[];
     onDragEnd: (event: any) => void;
     onDeleteStop: (id: number) => void;
@@ -26,21 +23,30 @@ interface RoutePanelProps {
 }
 
 const RoutePanel = memo(({
-                        routeName,
-                        setRouteName,
-                        selectedDriver,
-                        setSelectedDriver,
-                        stops,
                         stopIds,
                         onDragEnd,
                         onDeleteStop,
                         onClearStops,
                         onSaveRoute,
-                        routeErrors
+                        routeErrors,
+                        routeDetails,
+                        setRouteDetails
                     }: RoutePanelProps) => {
 
     const [inputValue, setInputValue] = useState("");
     const { drivers, loading } = useDriverSearch(inputValue);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, element: keyof RouteDetails) => {
+        e.preventDefault();
+        setRouteDetails((prev) => ({
+            ...prev,
+            [element]: e.target.value,
+        }));
+    }
+
+    const handleDriverChange = (driver: Driver | null) => {
+        setRouteDetails(prev => ({ ...prev, driver }));
+    }
 
     return (
             <Box
@@ -55,7 +61,7 @@ const RoutePanel = memo(({
                 <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
                     Create Route
                 </Typography>
-                <Grid container spacing={1.5} sx={{ width: "100%" }}>
+                <Grid container spacing={0} sx={{ width: "100%" }}>
 
                     {/* ROUTE NAME */}
                     <Grid size={{xs: 12}} >
@@ -63,11 +69,18 @@ const RoutePanel = memo(({
                             label="Route name"
                             required
                             placeholder={"Enter route name..."}
-                            value={routeName}
+                            value={routeDetails.name}
                             name={"routeName"}
-                            onChange={(e) => setRouteName(e.target.value)}
+                            onChange={(e) => handleChange(e, "name")}
                             error={Boolean(routeErrors?.routeName)}
                             helperText={routeErrors?.routeName}
+                        />
+                        <LabeledField
+                            label="Notes"
+                            placeholder={"Enter notes..."}
+                            value={routeDetails.notes}
+                            name={"notes"}
+                            onChange={(e) => handleChange(e, "notes")}
                         />
                     </Grid>
 
@@ -81,12 +94,12 @@ const RoutePanel = memo(({
                             <Box sx={{ flex: 1 }}>
                                 <AppAutocomplete<Driver>
                                     options={drivers}
-                                    value={selectedDriver}
+                                    value={routeDetails.driver}
                                     inputValue={inputValue}
                                     loading={loading}
                                     placeholder="Search driver..."
                                     getOptionLabel={(c) => `${c.name} ${c.lastName}`}
-                                    onChange={setSelectedDriver}
+                                    onChange={handleDriverChange}
                                     onInputChange={setInputValue}
                                     error={Boolean(routeErrors?.driver)}
                                     helperText={routeErrors?.driver}
@@ -114,7 +127,7 @@ const RoutePanel = memo(({
                     <DndContext onDragEnd={onDragEnd} autoScroll={false} >
                         <SortableContext items={stopIds}>
 
-                            {stops.map((order, index) => (
+                            {routeDetails.stops.map((order, index) => (
                                 <SortableStop
                                     key={order.id}
                                     order={order}
@@ -143,7 +156,7 @@ const RoutePanel = memo(({
                         width: "100%"
                     }}
                 >
-                    <Chip label={`In route: ${stops?.length ?? 0}`} color="primary" size="small" />
+                    <Chip label={`In route: ${routeDetails.stops?.length ?? 0}`} color="primary" size="small" />
 
                     <Divider
                         orientation="vertical"

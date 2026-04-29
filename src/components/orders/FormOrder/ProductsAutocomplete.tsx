@@ -1,7 +1,7 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
-import type {Product, SelectedProduct} from "../../types/Types.ts";
+import type {Product, SelectedProduct} from "../../../types/Types.ts";
 import {useEffect, useState} from "react";
-import { searchProducts } from "../../services/productService.ts";
+import { searchProducts } from "../../../services/productService.ts";
 
 interface ProductsAutocompleteProps {
     selectedProduct: Product | undefined;

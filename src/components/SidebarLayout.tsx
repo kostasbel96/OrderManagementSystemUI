@@ -8,18 +8,22 @@ import {
     X,
     PlusIcon,
     Linkedin,
-    Github
+    Github, ChevronRight, Truck
 } from "lucide-react";
-import { type ReactNode, useState, useEffect } from "react";
-import {Tooltip} from "@mui/material";
+import {type ReactNode, useState, useEffect, useRef} from "react";
+import {MenuItem, Popover} from "@mui/material";
 import {useUIStore} from "../hooks/store/useUIStore.ts";
 import {useTabs} from "../contexts/TabContext.tsx";
-import ProductsView from "./products/ProductsView.tsx";
 import OrdersView from "./orders/OrdersView.tsx";
 import CustomersView from "./customers/CustomersView.tsx";
 import Dashboard from "./Dashboard.tsx";
 import QuickAdd from "./QuickAdd.tsx";
 import MySettings from "./Settings.tsx";
+import AddCustomerTab from "./customers/AddCustomerTab.tsx";
+import AddOrderTab from "./orders/AddOrderTab.tsx";
+import AddProductTab from "./products/AddProductTab.tsx";
+import ProductsView from "./products/ProductsView.tsx";
+import AddRouteTab from "./routes/AddRouteTab.tsx";
 
 export default function SidebarLayout({ children }: { children: ReactNode }) {
     const [open, setOpen] = useState(false);
@@ -81,38 +85,63 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                     <NavItem
                         id="add"
                         icon={<PlusIcon size={18} />}
-                        label="Add"
+                        label="Quick Add"
                         collapsed={collapsed}
                         setOpen={setOpen}
                         component={<QuickAdd />}
                     />
 
-                    <NavItem
+                    <NavItemWithSubmenu
                         id="products"
                         icon={<Package size={18} />}
                         label="Products"
                         collapsed={collapsed}
                         setOpen={setOpen}
-                        component={<ProductsView />}
-                    />
+                    >
+                        {[
+                            { id: "addProduct", label: "Add Product", component: <AddProductTab /> },
+                            { id: "products",   label: "Products", component: <ProductsView /> },
+                        ]}
+                    </NavItemWithSubmenu>
 
-                    <NavItem
+                    <NavItemWithSubmenu
                         id="orders"
                         icon={<ShoppingCart size={18} />}
                         label="Orders"
                         collapsed={collapsed}
                         setOpen={setOpen}
-                        component={<OrdersView selection={false}/>}
-                    />
+                    >
+                        {[
+                            { id: "addOrder", label: "Add Order", component: <AddOrderTab /> },
+                            { id: "orders",   label: "Orders", component: <OrdersView /> },
+                        ]}
+                    </NavItemWithSubmenu>
 
-                    <NavItem
+                    <NavItemWithSubmenu
                         id="customers"
                         icon={<Users size={18} />}
                         label="Customers"
                         collapsed={collapsed}
                         setOpen={setOpen}
-                        component={<CustomersView />}
-                    />
+                    >
+                        {[
+                            { id: "addCustomer", label: "Add Customer", component: <AddCustomerTab /> },
+                            { id: "customers",   label: "Customers", component: <CustomersView /> },
+                        ]}
+                    </NavItemWithSubmenu>
+
+                    <NavItemWithSubmenu
+                        id="routes"
+                        icon={<Truck size={18} />}
+                        label="Routes"
+                        collapsed={collapsed}
+                        setOpen={setOpen}
+                    >
+                        {[
+                            { id: "addRoute", label: "Add Route", component: <AddRouteTab /> },
+                            { id: "products",   label: "Products", component: <ProductsView /> }
+                        ]}
+                    </NavItemWithSubmenu>
 
                     <NavItem
                         id="settings"
@@ -145,7 +174,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
 
             {/* MAIN CONTENT AREA */}
             <div className={`flex-1 flex flex-col h-full transition-all duration-300 ${collapsed ? "ml-16" : "ml-64"}`}>
-                <main className="flex-1 max-h-[100vh] max-w-[100vw] overflow-hidden relative">
+                <main className="flex-1 max-h-screen max-w-screen overflow-auto relative">
                     {children}
                 </main>
             </div>
@@ -187,23 +216,120 @@ function NavItem({
                 ${isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "hover:bg-gray-100 text-gray-600"}
             `}
         >
-            <Tooltip
-                title={collapsed ? label : ""}
-                placement="right"
-                arrow
+            <div className={`flex items-center gap-3 w-full ${collapsed ? "justify-center" : ""}`}>
+                <span className={isActive ? "text-blue-600" : "text-gray-400"}>
+                    {icon}
+                </span>
+
+                {!collapsed && (
+                    <span className="text-sm font-medium">
+                        {label}
+                    </span>
+                )}
+            </div>
+        </button>
+    );
+}
+
+function NavItemWithSubmenu({
+                                icon,
+                                label,
+                                collapsed,
+                                setOpen,
+                                children
+                            }: Readonly<{
+    id: string;
+    icon: ReactNode;
+    label: string;
+    collapsed: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    children: { id: string; label: string; component: ReactNode }[];
+}>) {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const { addTab, activeTabId } = useTabs();
+    const isActive = children.some(c => c.id === activeTabId);
+    const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const openMenu = (e: React.MouseEvent<HTMLElement>) => {
+        if (leaveTimer.current) clearTimeout(leaveTimer.current);
+        setAnchorEl(e.currentTarget);
+    };
+
+    const closeMenu = () => {
+        leaveTimer.current = setTimeout(() => setAnchorEl(null), 150);
+    };
+
+    const cancelClose = () => {
+        if (leaveTimer.current) clearTimeout(leaveTimer.current);
+    };
+
+    return (
+        <>
+            <button
+                onMouseEnter={openMenu}
+                onMouseLeave={closeMenu}
+                onClick={openMenu}
+                className={`
+                    flex items-center gap-3 px-3 py-2 rounded-lg transition w-full text-left
+                    ${collapsed ? "justify-center" : ""}
+                    ${isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "hover:bg-gray-100 text-gray-600"}
+                `}
             >
                 <div className={`flex items-center gap-3 w-full ${collapsed ? "justify-center" : ""}`}>
                     <span className={isActive ? "text-blue-600" : "text-gray-400"}>
                         {icon}
                     </span>
-
                     {!collapsed && (
-                        <span className="text-sm font-medium">
-                            {label}
-                        </span>
+                        <span className="text-sm font-medium">{label}</span>
+                    )}
+                    {!collapsed && (
+                        <ChevronRight size={14} className="ml-auto text-gray-400" />
                     )}
                 </div>
-            </Tooltip>
-        </button>
+            </button>
+
+            <Popover
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={() => setAnchorEl(null)}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "left" }}
+                disableRestoreFocus
+                sx={{ pointerEvents: "none" }}
+                slotProps={{
+                    paper: {
+                        onMouseEnter: cancelClose,
+                        onMouseLeave: closeMenu,
+                        sx: {
+                            pointerEvents: "auto",
+                            borderRadius: 2,
+                            minWidth: 180,
+                            boxShadow: 3,
+                            py: 0.5
+                        }
+                    }
+                }}
+            >
+                {children.map((item) => (
+                    <MenuItem
+                        key={item.id}
+                        selected={activeTabId === item.id}
+                        onClick={() => {
+                            addTab({
+                                id: item.id,
+                                label: item.label,
+                                component: item.component,
+                                path: item.id
+                            });
+                            setOpen(false);
+                            setAnchorEl(null);
+                        }}
+                        sx={{ fontSize: 14, py: 1 }}
+                    >
+                        {item.label}
+                    </MenuItem>
+                ))}
+            </Popover>
+        </>
     );
 }

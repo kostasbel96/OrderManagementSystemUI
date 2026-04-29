@@ -1,9 +1,9 @@
 import { Tabs, Tab, Paper, Box } from "@mui/material";
 import {useEffect, useState} from "react";
-import FormProduct from "./FormProduct/FormProduct";
-import FormOrder from "./FormOrder/FormOrder";
-import FormCustomer from "./FormCustomer/FormCustomer";
-import CreateRoute from "./routes/CreateRoute.tsx";
+import FormProduct from "./products/FormProduct/FormProduct";
+import FormOrder from "./orders/FormOrder/FormOrder";
+import FormCustomer from "./customers/FormCustomer/FormCustomer";
+import FormRoute from "./routes/FormRoute.tsx";
 
 type FormType = "product" | "order" | "customer" | "route";
 
@@ -78,7 +78,11 @@ const MyTabs = ({ setSubmitted, setSuccess, setPopUpMessage, setActiveValue }: P
                     />
                 )}
                 {tab === "route" && (
-                    <CreateRoute/>
+                    <FormRoute
+                        setSubmitted={setSubmitted}
+                        setSuccess={setSuccess}
+                        setPopUpMessage={setPopUpMessage}
+                    />
                 )}
             </Box>
         </Paper>

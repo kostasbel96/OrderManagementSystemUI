@@ -1,5 +1,5 @@
 import {useState} from "react";
-import PopUp from "./popup/PopUp.tsx";
+import PopUp from "./ui/popup/PopUp.tsx";
 import MyTabs from "./MyTabs.tsx";
 
 const QuickAdd = () => {
@@ -11,7 +11,7 @@ const QuickAdd = () => {
 
     return (
             <div className="mt-2 text-center">
-                <div className="flex justify-center relative">
+                <div className="flex justify-center">
                     <MyTabs
                         setSubmitted={setSubmitted}
                         setSuccess={setSuccess}

@@ -31,7 +31,7 @@ type TableProps = {
     setSelectionModel?: React.Dispatch<
         React.SetStateAction<GridRowSelectionModel>
     >;
-    selection: boolean;
+    selection?: boolean;
     height?: string;
     width?: number;
 }

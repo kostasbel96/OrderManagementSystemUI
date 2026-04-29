@@ -1,30 +1,33 @@
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 
-interface PopUpDeniedProps {
+
+interface FormPopUpProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     title: string;
-    popUpMessage: string;
     progress: number;
     success: boolean;
 }
 
-const PopUpDenied = ({setSubmitted, title, popUpMessage,
-                     progress, success}: PopUpDeniedProps)=>{
+
+
+const PopUpSuccess = ({setSubmitted, title, progress, success}: FormPopUpProps) => {
     let popUpTitle;
 
-    if (title.includes("product")){
+    if (title.toLowerCase().includes("product")){
         popUpTitle = "Product"
-    } else if (title.includes("customer")){
+    } else if (title.toLowerCase().includes("customer")){
         popUpTitle = "Customer"
+    } else if (title.toLowerCase().includes("route")) {
+        popUpTitle = "Route"
     } else {
         popUpTitle = "Order"
     }
 
     return (
         <Alert
-            severity="error"
+            severity="success"
             variant="filled"
             sx={{
                 display: "flex",
@@ -38,11 +41,11 @@ const PopUpDenied = ({setSubmitted, title, popUpMessage,
                     onClick={() => setSubmitted(false)}
                     sx={{ mb: 1 }}
                 >
-                    <CloseIcon />
+                    <CheckIcon />
                 </IconButton>
             }
         >
-            {`${popUpMessage} ${popUpTitle} cannot be added!`}
+            {`${popUpTitle} added successfully!`}
             <div
                 style={{
                     height: 4,
@@ -65,4 +68,4 @@ const PopUpDenied = ({setSubmitted, title, popUpMessage,
     )
 }
 
-export default PopUpDenied;
+export default PopUpSuccess;

@@ -10,7 +10,7 @@ import {
     TextField, Box, Stack,
 } from "@mui/material";
 import { X } from "lucide-react";
-import type {Product, SelectedProduct} from "../../types/Types.ts";
+import type {Product, SelectedProduct} from "../../../types/Types.ts";
 import ProductsAutocomplete from "./ProductsAutocomplete.tsx";
 import {useEffect, useRef, useState} from "react";
 

@@ -1,4 +1,4 @@
-import type {Customer, OrderItem, Product} from "../../types/Types.ts";
+import type {Customer, OrderItem, Product} from "../../../types/Types.ts";
 import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
 import Alert from "@mui/material/Alert";

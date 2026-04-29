@@ -3,6 +3,25 @@
 body {
     font-family: 'Inter', sans-serif;
 }
+.tabs-scroll::-webkit-scrollbar {
+    height: 3px;
+}
+.tabs-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.tabs-scroll::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 999px;
+    transition: background 0.2s;
+}
+.tabs-scroll::-webkit-scrollbar-thumb:hover {
+    background: #93c5fd;
+}
+/* Firefox */
+.tabs-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #e2e8f0 transparent;
+}
 .nav-item{
     font-size: medium;
     box-sizing: border-box;

@@ -8,7 +8,7 @@ import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import DeleteIcon from '@mui/icons-material/Delete';
 import PopUpDelete from "../ui/PopUpDelete.tsx";
-import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
+import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import {Tooltip} from "@mui/material";
 
 const ProductsView = () => {

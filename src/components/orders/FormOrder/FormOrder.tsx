@@ -7,14 +7,14 @@ import {
     Typography,
 } from "@mui/material";
 import { type FormEvent, useEffect, useState } from "react";
-import type {Customer, SelectedProduct} from "../../types/Types.ts";
-import { addOrder } from "../../services/orderService.ts";
-import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
+import type {Customer, SelectedProduct} from "../../../types/Types.ts";
+import { addOrder } from "../../../services/orderService.ts";
+import useOrderFormValidation from "../../../hooks/useOrderFormValidation.ts";
 import ProductsTableInsert from "./ProductsTableInsert.tsx";
-import {useCustomerSearch} from "../../hooks/useCustomerSearch.ts";
-import {AppAutocomplete} from "../ui/AppAutocomplete.tsx";
-import LabeledField from "../ui/LabeledField.tsx";
-import OMSLabel from "../ui/OMSLabel.tsx";
+import {useCustomerSearch} from "../../../hooks/useCustomerSearch.ts";
+import {AppAutocomplete} from "../../ui/AppAutocomplete.tsx";
+import LabeledField from "../../ui/LabeledField.tsx";
+import OMSLabel from "../../ui/OMSLabel.tsx";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,7 +25,7 @@ interface FormOrderProps {
 const FormOrder = ({
                        setSubmitted,
                        setSuccess,
-                       setPopUpMessage
+                       setPopUpMessage,
                    }: FormOrderProps) => {
 
     const [inputValue, setInputValue] = useState("");
@@ -120,16 +120,12 @@ const FormOrder = ({
         setPopUpMessage("");
     }, []);
 
-    useEffect(() => {
-        console.log(orderErrors);
-    }, [orderErrors]);
-
     return (
         <Paper
             elevation={2}
             sx={{
                 p: 2,
-                borderRadius: 1,
+                borderRadius: 2,
                 width: "100%",
                 minHeight: "79vh",
                 mx: "auto",

@@ -11,7 +11,7 @@ import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
-import PopUpItemOperation from "../popup/PopUpItemOperation.tsx";
+import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ProductsCell from "./ProductsCell.tsx";
 
@@ -23,7 +23,7 @@ interface OrdersViewProps {
         React.SetStateAction<GridRowSelectionModel>
     >;
     setOrdersRow?: React.Dispatch<React.SetStateAction<OrderRow[]>>;
-    selection: boolean;
+    selection?: boolean;
     height?: string;
     width?: number;
 }
@@ -73,11 +73,6 @@ const OrdersView = ({columnVisibility,
         value: 'containsProduct',
         InputComponent: GridFilterInputValue,
     } as any;
-
-    // const singleOperators = getGridSingleSelectOperators().filter(
-    //     (op) => op.value !== 'isAnyOf'
-    // );
-
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
