@@ -86,7 +86,7 @@ const Workspaces: React.FC = () => {
                     ref={scrollRef}
                     className="tabs-scroll h-full overflow-x-auto overflow-y-hidden whitespace-nowrap select-none flex items-end pr-4 touch-pan-x"
                     style={{
-                        width: `calc(100% - ${collapsed ? "150px" : "200px"})`,
+                        width: `calc(100% - ${collapsed ? "130px" : "320px"})`,
                         marginLeft: '85px'
                     }}
                 >
@@ -139,7 +139,7 @@ const Workspaces: React.FC = () => {
                         >
                             <div className="p-4"
                                  style={{
-                                     width: `calc(100% - ${collapsed ? "0%" : "10px"})`,
+                                     width: `calc(100% - ${collapsed ? "70px" : "250px"})`,
                                  }}>
                                 {tab.component}
                             </div>
