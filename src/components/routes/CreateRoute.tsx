@@ -98,7 +98,6 @@ const CreateRoute = () => {
         e.preventDefault();
         localStorage.removeItem("stops");
         setStops([]);
-        setRouteErrors({...routeErrors, stops: ""});
     }, [validateRouteInsert]);
 
     const handleSaveRoute = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {

@@ -8,6 +8,7 @@ export interface Product {
 
 export interface Customer extends Person {
     balance: number | undefined | null;
+    email?: string;
 }
 
 interface Person {
@@ -16,7 +17,6 @@ interface Person {
     lastName: string;
     phoneNumber1: string;
     phoneNumber2?: string;
-    email?: string;
 }
 
 export interface Driver extends Person{}
@@ -62,6 +62,7 @@ export interface Route {
     id: number;
     orders: OrderItem[];
     driver: Driver;
+    notes: string;
     routeName: string;
 }
 
