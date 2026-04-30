@@ -32,6 +32,7 @@ export interface ResponseDTO {
     orderItems: OrderItem[];
     orderItem: OrderItem;
     productDto: Product;
+    driver: Driver;
     errorResponse: ErrorResponse;
     customer: Customer;
 }

@@ -8,7 +8,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import type {Customer, OrderItem, OrderRow, Product, SelectedProduct} from "../../types/Types.ts";
+import type {Customer, Driver, OrderItem, OrderRow, Product, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import {updateProduct} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
@@ -17,14 +17,16 @@ import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
 import {updateCustomer} from "../../services/customerService.ts";
 import {updateOrder} from "../../services/orderService.ts";
 import ProductsTableInsert from "../orders/FormOrder/ProductsTableInsert.tsx";
+import useDriverFormValidation from "../../hooks/useDriverFormValidation.ts";
+import {updateDriver} from "../../services/driverService.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderItem | undefined ;
+    rowToEdit: Product | Customer | OrderItem | Driver | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    handleUpdate: (updated: OrderRow | Product | Customer) => void;
+    handleUpdate: (updated: OrderRow | Product | Customer | Driver) => void;
 }
 
 const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpdate}: PopUpUpdateProps) => {
@@ -43,6 +45,13 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         phoneNumber2: "",
         email: "",
         balance: 0
+    });
+    const [driverValues, setDriverValues] = useState<Driver>({
+        id: -1,
+        name: "",
+        lastName: "",
+        phoneNumber1: "",
+        phoneNumber2: ""
     })
     const [orderValues, setOrderValues] = useState<OrderItem>({
         id: -1,
@@ -55,6 +64,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
     const [initialItems, setInitialItems] = useState<SelectedProduct[]>([]);
     const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(productValues);
     const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(customerValues);
+    const {validateDriverForm, driverErrors, setDriverErrors} = useDriverFormValidation(driverValues);
     const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({
         selectedProductsWithQty: selectedProductsWithQty,
         selectedCustomer: orderValues.customer as Customer,
@@ -103,6 +113,17 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         .finally(() => setOpen(false));
                 }
                 break;
+            case "Drivers":
+                if (validateDriverForm()){
+                    updateDriver(driverValues)
+                        .then(data => {
+                            handleUpdate(data.driver);
+                            setSubmitted(true);
+                        })
+                        .catch(err=>console.log(err))
+                        .finally(()=>setOpen(false));
+                }
+                break;
 
         }
     }
@@ -117,6 +138,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 break;
             case "Orders":
                 setOrderErrors({});
+                break;
+            case "Drivers":
+                setDriverErrors({});
                 break;
 
         }
@@ -143,6 +167,12 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     ...prev,
                     [name]: value,
                 }))
+                break;
+            case "Drivers":
+                setDriverValues(prev => ({
+                    ...prev,
+                    [name]: value,
+                }));
                 break;
             default:
                 break;
@@ -306,6 +336,77 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         )
     }
 
+    const renderDriverFields = () => {
+        return (
+            <>
+                <TextField
+                    onChange={handleChange}
+                    InputProps={{ readOnly: true }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Customer ID"
+                    fullWidth
+                    variant="standard"
+                    value={driverValues.id}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={driverValues.name}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Customer Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(driverErrors?.name)}
+                    helperText={driverErrors?.name}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={driverValues.lastName}
+                    margin="dense"
+                    id="lastName"
+                    name="lastName"
+                    label="Customer lastname"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(driverErrors?.lastName)}
+                    helperText={driverErrors?.lastName}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={driverValues.phoneNumber1}
+                    margin="dense"
+                    id="phoneNumber1"
+                    name="phoneNumber1"
+                    label="Phone Number 1"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(driverErrors?.phoneNumber1)}
+                    helperText={driverErrors?.phoneNumber1}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={driverValues.phoneNumber2}
+                    margin="dense"
+                    id="phoneNumber2"
+                    name="phoneNumber2"
+                    label="Phone Number 2"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(driverErrors?.phoneNumber2)}
+                    helperText={driverErrors?.phoneNumber2}
+                />
+            </>
+        )
+    }
+
     const renderOrderFields = () => {
         return (
             <>
@@ -396,6 +497,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
 
                 break;
             }
+            case "Drivers":
+                setDriverValues(rowToEdit as Driver);
+                break;
             default:
                 break;
         }
@@ -421,6 +525,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         {typeOf === "Products" ? renderProductFields() : null}
                         {typeOf === "Customers" ? renderCustomerFields() : null}
                         {typeOf === "Orders" ? renderOrderFields() : null}
+                        {typeOf === "Drivers" ? renderDriverFields() : null}
                     </form>
                 </DialogContent>
                 <DialogActions>

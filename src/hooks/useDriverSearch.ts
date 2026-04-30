@@ -1,13 +1,20 @@
 import { useSearch } from "./common/useSearch";
-import type {Driver} from "../types/Types.ts";
-import {searchDriversMOCK} from "../services/driverService";
+import type {Driver, DriverResponseDto} from "../types/Types.ts";
+import {searchDrivers} from "../services/driverService";
 import {useCallback} from "react";
 
 
 export function useDriverSearch(query: string) {
     const fetchDrivers = useCallback((search: string) => {
-        return searchDriversMOCK(search);
-    }, []);
+        return searchDrivers({
+            page: 0,
+            pageSize: 1000,
+            globalSearch: search,
+            sortBy: "name",
+            sortDirection: "asc",
+            filters: []
+        }).then((res: DriverResponseDto) => res.content);
+    },[]);
     const { data, loading } = useSearch<Driver>({
         query,
         fetcher: fetchDrivers,

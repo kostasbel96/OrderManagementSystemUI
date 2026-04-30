@@ -1,16 +1,17 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import type {Customer, OrderItem, Product, ResponseDTO} from "../../types/Types.ts";
+import type {Customer, Driver, OrderItem, Product, ResponseDTO} from "../../types/Types.ts";
 import {deleteProduct} from "../../services/productService.ts";
 import {deleteCustomer} from "../../services/customerService.ts";
 import {deleteOrder} from "../../services/orderService.ts";
+import {deleteDriver} from "../../services/driverService.ts";
 
 interface PopUpDeleteProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderItem | undefined ;
+    rowToEdit: Product | Customer | OrderItem | Driver | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | undefined>>;
+    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | Driver | undefined>>;
     handleDelete: (id: number) => void;
 }
 
@@ -61,7 +62,20 @@ const PopUpDelete = ({open, rowToEdit,
                     })
                     .finally(()=> setOpen(false));
                 break;
+            case "Drivers":
+                deleteDriver(rowToEdit as Driver)
+                    .then((data: ResponseDTO) => {
+                        handleDelete(data.driver.id ?? -1);
+                        setRowToEdit(data.driver);
+                        setSubmitted(true);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                    .finally(()=> setOpen(false));
+                break;
         }
+
         console.log(rowToEdit)
 
     }
@@ -201,6 +215,68 @@ const PopUpDelete = ({open, rowToEdit,
         )
     }
 
+    const renderDriverFields = () => {
+        return (
+            <>
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Customer ID"
+                    fullWidth
+                    variant="standard"
+                    value={(rowToEdit as Driver)?.id}
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={(rowToEdit as Driver)?.name}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Driver Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={(rowToEdit as Driver)?.lastName}
+                    margin="dense"
+                    id="lastName"
+                    name="lastName"
+                    label="Driver lastname"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={(rowToEdit as Driver)?.phoneNumber1}
+                    margin="dense"
+                    id="phoneNumber1"
+                    name="phoneNumber1"
+                    label="Phone Number 1"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={(rowToEdit as Driver)?.phoneNumber2}
+                    margin="dense"
+                    id="phoneNumber2"
+                    name="phoneNumber2"
+                    label="Phone Number 2"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+            </>
+        )
+    }
+
     const renderOrderFields = () => {
         return (
             <>
@@ -255,6 +331,7 @@ const PopUpDelete = ({open, rowToEdit,
                     {typeOf === "Products" && renderProductFields()}
                     {typeOf === "Customers" && renderCustomerFields()}
                     {typeOf === "Orders" && renderOrderFields()}
+                    {typeOf === "Drivers" && renderDriverFields()}
                 </form>
             </DialogContent>
             <DialogActions>

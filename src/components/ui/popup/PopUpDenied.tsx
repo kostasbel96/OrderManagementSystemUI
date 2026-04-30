@@ -20,6 +20,8 @@ const PopUpDenied = ({setSubmitted, title, popUpMessage,
         popUpTitle = "Customer"
     } else if (title.toLowerCase().includes("route")) {
         popUpTitle = "Route"
+    } else if (title.toLowerCase().includes("driver")) {
+        popUpTitle = "Driver"
     } else {
         popUpTitle = "Order"
     }

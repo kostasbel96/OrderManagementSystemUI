@@ -2,7 +2,7 @@ import type {GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} fr
 import MyTable from "../ui/MyTable.tsx";
 import {useEffect, useState} from "react";
 import type {Customer, Driver, OrderItem, OrderRow, Product} from "../../types/Types.ts";
-import {searchCustomers} from "../../services/customerService.ts";
+import {searchDrivers} from "../../services/driverService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
@@ -10,16 +10,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 
-const CustomersView = () => {
+const DriversView = () => {
 
-    const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver)[]>([]);
+    const [rows, setRows] = useState<(Product | Driver | OrderRow | Customer)[]>([]);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Driver | Product | Customer | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
-    const [onDeleteContent, setOnDeleteContent] = useState<Customer>();
+    const [onDeleteContent, setOnDeleteContent] = useState<Driver>();
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
     const [searchName, setSearchName] = useState("");
@@ -29,13 +29,13 @@ const CustomersView = () => {
         items: []
     });
 
-    const handleClickOpen = (row: Customer) => {
+    const handleClickOpen = (row: Driver) => {
         setOpenEdit(true);
         setRowToEdit(row);
         setOperation("updated");
     };
 
-    const handleOnDelete = (row: Customer) =>{
+    const handleOnDelete = (row: Driver) =>{
         setOpenDeletePopUp(true);
         setOnDeleteContent(row);
         setOperation("deleted");
@@ -87,21 +87,6 @@ const CustomersView = () => {
                     {params.value}
                 </div>
             )  },
-        {field: 'email', headerName: 'Email', width: 150, renderCell: (params) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',   // vertical centering
-                        justifyContent: 'start', // horizontal centering
-                        whiteSpace: 'pre-line',
-                        height: '100%',          // σημαντικό για να γεμίζει το cell
-                        width: '100%',
-                        marginBottom: '24px'
-                    }}
-                >
-                    {params.value}
-                </div>
-            ) },
         {field: 'phoneNumber1', headerName: 'Phone Number 1', width: 150, renderCell: (params) => (
                 <div
                     style={{
@@ -132,23 +117,6 @@ const CustomersView = () => {
                     {params.value}
                 </div>
             ) },
-        {
-            field: 'balance', headerName: 'Balance', type: "number", width: 150, renderCell: (params) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',   // vertical centering
-                        justifyContent: 'end', // horizontal centering
-                        whiteSpace: 'pre-line',
-                        height: '100%',          // σημαντικό για να γεμίζει το cell
-                        width: '100%',
-                        marginBottom: '24px'
-                    }}
-                >
-                    {params.value}
-                </div>
-            )
-        },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -189,7 +157,7 @@ const CustomersView = () => {
         },
     ];
 
-    const handleUpdateCustomer = (updated: Product | Customer | OrderRow | Driver) => {
+    const handleUpdateDriver = (updated: Product | Driver | OrderRow) => {
         setRows(prev => {
             const index = prev.findIndex(r => r.id === updated.id);
 
@@ -202,13 +170,13 @@ const CustomersView = () => {
         });
     };
 
-    const handleDeleteCustomer = (id: number) => {
+    const handleDeleteDriver = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
     };
 
     useEffect(() => {
         setLoading(true);
-        searchCustomers({
+        searchDrivers({
             page: paginationModel.page,
             pageSize: paginationModel.pageSize,
             globalSearch: isSearching ? searchName : "",
@@ -227,7 +195,7 @@ const CustomersView = () => {
         <>
             <MyTable
                 columns={columns}
-                typeOf={"Customers"}
+                typeOf={"Drivers"}
                 rows={rows}
                 loading={loading}
                 rowCount={rowCount}
@@ -242,19 +210,19 @@ const CustomersView = () => {
                 selection={false}
             ></MyTable>
             <PopUpUpdate
-                handleUpdate={handleUpdateCustomer}
+                handleUpdate={handleUpdateDriver}
                 open={openEdit}
                 setOpen={setOpenEdit}
                 rowToEdit={rowToEdit}
-                typeOf={"Customers"}
+                typeOf={"Drivers"}
                 setSubmitted={setSubmitted}
             />
             <PopUpDelete
-                handleDelete={handleDeleteCustomer}
+                handleDelete={handleDeleteDriver}
                 setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
-                typeOf={"Customers"}
+                typeOf={"Drivers"}
                 setOpen={setOpenDeletePopUp}
                 setSubmitted={setSubmitted}
             />
@@ -262,8 +230,8 @@ const CustomersView = () => {
                 {submitted && (
                     <PopUpItemOperation
                         setSubmitted={setSubmitted}
-                        typeOf={"customer"}
-                        item={rowToEdit as Customer}
+                        typeOf={"driver"}
+                        item={rowToEdit as Driver}
                         operation={operation}
                     />
                 )}
@@ -274,4 +242,4 @@ const CustomersView = () => {
 
 }
 
-export default CustomersView;
+export default DriversView;

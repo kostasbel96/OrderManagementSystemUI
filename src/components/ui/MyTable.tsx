@@ -5,7 +5,7 @@ import {
     type GridRowSelectionModel,
     type GridSortModel
 } from "@mui/x-data-grid";
-import type {Customer, OrderRow, Product} from "../../types/Types.ts";
+import type {Customer, Driver, OrderRow, Product} from "../../types/Types.ts";
 import Search from "../Search.tsx";
 import {Paper} from "@mui/material";
 import {useUIStore} from "../../hooks/store/useUIStore.ts";
@@ -14,7 +14,7 @@ import React from "react";
 type TableProps = {
     columns: GridColDef[];
     typeOf: string;
-    rows: (Product | Customer | OrderRow)[];
+    rows: (Product | Customer | OrderRow | Driver)[];
     loading: boolean;
     rowCount: number;
     paginationModel: GridPaginationModel;
