@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+
+        body {
+            font-family: system-ui, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px 32px;
+            width: 340px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 8px;
+        }
+
+        p {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 8px 24px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.15s;
+        }
+
+        button:hover { opacity: 0.85; }
+
+        .btn-exit {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Exit Application</h2>
+    <p>Are you sure you want to exit?</p>
+    <div class="buttons">
+        <button class="btn-cancel" onclick="send(false)">Cancel</button>
+        <button class="btn-exit" onclick="send(true)">Exit</button>
+    </div>
+</div>
+
+<script>
+    const { ipcRenderer } = require("electron");
+    function send(confirmed) {
+        ipcRenderer.send("confirm-exit", confirmed);
+    }
+</script>
+</body>
+</html>

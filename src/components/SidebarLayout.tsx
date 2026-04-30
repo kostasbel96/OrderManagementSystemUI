@@ -43,7 +43,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <div className="flex h-screen bg-gray-100 overflow-hidden">
+        <div className="flex h-screen overflow-hidden">
 
             {/* SIDEBAR */}
             <aside
@@ -174,7 +174,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
 
             {/* MAIN CONTENT AREA */}
             <div className={`flex-1 flex flex-col h-full transition-all duration-300 ${collapsed ? "ml-16" : "ml-64"}`}>
-                <main className="flex-1 max-h-screen max-w-screen overflow-auto relative">
+                <main className="flex-1 max-h-screen max-w-screen overflow-auto relative bg-gray-100">
                     {children}
                 </main>
             </div>
@@ -205,29 +205,54 @@ function NavItem({
     const isActive = activeTabId === id;
 
     return (
-        <button
-            onClick={() => {
-                addTab({ id, label, component, path: id });
-                setOpen(false);
-            }}
-            className={`
-                flex items-center gap-3 px-3 py-2 rounded-lg transition w-full text-left
-                ${collapsed ? "justify-center" : ""}
-                ${isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "hover:bg-gray-100 text-gray-600"}
-            `}
-        >
-            <div className={`flex items-center gap-3 w-full ${collapsed ? "justify-center" : ""}`}>
-                <span className={isActive ? "text-blue-600" : "text-gray-400"}>
-                    {icon}
-                </span>
-
-                {!collapsed && (
-                    <span className="text-sm font-medium">
-                        {label}
+        <div className="relative group">
+            <button
+                onClick={() => {
+                    addTab({ id, label, component, path: id });
+                    setOpen(false);
+                }}
+                className={`
+                    flex items-center gap-3 px-3 py-2 rounded-lg transition w-full text-left
+                    ${collapsed ? "justify-center" : ""}
+                    ${isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "hover:bg-gray-100 text-gray-600"}
+                `}
+            >
+                <div className={`flex items-center gap-3 w-full ${collapsed ? "justify-center" : ""}`}>
+                    <span className={isActive ? "text-blue-600" : "text-gray-400"}>
+                        {icon}
                     </span>
-                )}
-            </div>
-        </button>
+
+                    {!collapsed && (
+                        <span className="text-sm font-medium">
+                            {label}
+                        </span>
+                    )}
+                </div>
+            </button>
+
+            {/* Tooltip — εμφανίζεται μόνο όταν είναι collapsed */}
+            {collapsed && (
+                <div className="
+                    absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50
+                    pointer-events-none
+                    opacity-0 group-hover:opacity-100
+                    transition-opacity duration-150
+                ">
+                    {/* Arrow */}
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1
+                        border-4 border-transparent border-r-gray-800"
+                    />
+                    {/* Label */}
+                    <div className="
+                        bg-gray-800 text-white text-xs font-medium
+                        px-2.5 py-1.5 rounded-md whitespace-nowrap
+                        shadow-lg
+                    ">
+                        {label}
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -324,7 +349,7 @@ function NavItemWithSubmenu({
                             setOpen(false);
                             setAnchorEl(null);
                         }}
-                        sx={{ fontSize: 14, py: 1 }}
+                        sx={(theme)=>({ fontSize: 12, py: 1, borderBottom: `1px solid ${theme.palette.grey[200]}` })}
                     >
                         {item.label}
                     </MenuItem>

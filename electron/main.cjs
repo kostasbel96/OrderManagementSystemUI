@@ -67,6 +67,36 @@ function createMainWindow() {
 
     menu.popup();
   });
+
+  mainWindow.on("close", (e) => {
+    e.preventDefault();
+
+    const confirmWindow = new BrowserWindow({
+      width: 380,
+      height: 200,
+      parent: mainWindow,
+      modal: true,
+      frame: false,
+      resizable: false,
+      center: true,
+      transparent: true,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false
+      }
+    });
+
+    confirmWindow.loadFile(path.join(__dirname, "confirm.html"));
+
+    // Άκου την απόφαση από το confirm window
+    const { ipcMain } = require("electron");
+
+    ipcMain.once("confirm-exit", (_, confirmed) => {
+      confirmWindow.destroy();
+      if (confirmed) mainWindow.destroy();
+    });
+  });
+
 }
 
 app.whenReady().then(() => {
@@ -80,6 +110,7 @@ app.whenReady().then(() => {
     }
   });
 });
+
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
