@@ -6,6 +6,7 @@ import type {GridRowSelectionModel} from "@mui/x-data-grid";
 import RouteOrders from "./RouteOrders.tsx";
 import RoutePanel from "./RoutePanel.tsx";
 import useRouteInsertValidation from "../../hooks/useRouteInsertValidation.ts";
+import {addRoute} from "../../services/routeService.ts";
 
 interface FormRouteProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -111,14 +112,19 @@ const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) 
     const handleSaveRoute = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (validateRouteInsert()) {
-            console.log("ok");
-            setSubmitted(true);
-            setSuccess(true);
-            setRouteErrors({});
-            return
+            addRoute({name: routeDetails.name, notes: routeDetails.notes, driverId: routeDetails.driver?.id, orders: routeDetails.stops})
+                .then(data=> {
+                    setSubmitted(true);
+                    setSuccess(true);
+                    setRouteErrors({});
+                    setPopUpMessage("Route created successfully");
+                    console.log(data);
+                }).catch(error => {
+                    setSubmitted(true);
+                    setSuccess(false);
+                    setPopUpMessage(error.message);
+            })
         }
-        setSubmitted(true);
-        setSuccess(false);
     }, [validateRouteInsert]);
 
     useEffect(() => {

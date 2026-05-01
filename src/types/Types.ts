@@ -33,6 +33,7 @@ export interface ResponseDTO {
     orderItem: OrderItem;
     productDto: Product;
     driver: Driver;
+    routes: Route[];
     errorResponse: ErrorResponse;
     customer: Customer;
 }
@@ -71,6 +72,7 @@ export interface Route {
     orders: OrderItem[];
     driver: Driver;
     notes: string;
+    status: string;
     routeName: string;
 }
 
@@ -113,7 +115,7 @@ export interface DriverResponseDto {
 }
 
 export interface TableRowsType {
-    rows: (Product | Customer | OrderRow)[];
+    rows: (Product | Customer | OrderRow | Route | Driver)[];
 }
 
 export interface Item{
@@ -126,4 +128,11 @@ export interface OrderRequest{
     address: string;
     customerId: number | undefined | null;
     items: Item[];
+}
+
+export interface RouteRequest{
+    notes: string;
+    name: string;
+    driverId: number | undefined | null;
+    orderIds: number[];
 }
