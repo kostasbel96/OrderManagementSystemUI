@@ -133,7 +133,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                     </NavItemWithSubmenu>
 
                     <NavItemWithSubmenu
-                        id="orders"
+                        id="routes"
                         icon={<Truck size={18} />}
                         label="Routes"
                         collapsed={collapsed}
