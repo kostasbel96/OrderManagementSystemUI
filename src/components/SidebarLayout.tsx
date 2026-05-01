@@ -141,8 +141,8 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                     >
                         {[
                             { id: "addRoute", label: "Add Route", component: <AddRouteTab /> },
-                            {id: "addDriver", label: "Add Driver", component: <AddDriverTab />},
-                            { id: "products",   label: "Drivers", component: <DriversView /> }
+                            { id: "addDriver", label: "Add Driver", component: <AddDriverTab /> },
+                            { id: "drivers",   label: "Drivers", component: <DriversView /> }
                         ]}
                     </NavItemWithSubmenu>
 
