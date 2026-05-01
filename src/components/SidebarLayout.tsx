@@ -27,7 +27,7 @@ import AddRouteTab from "./routes/AddRouteTab.tsx";
 import AddDriverTab from "./drivers/AddDriverTab.tsx";
 import DriversView from "./drivers/DriversView.tsx";
 
-export default function SidebarLayout({ children }: { children: ReactNode }) {
+export default function SidebarLayout({ children }: Readonly<{ children: ReactNode }>) {
     const [open, setOpen] = useState(false);
     const { addTab } = useTabs();
 
