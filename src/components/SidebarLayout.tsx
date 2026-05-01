@@ -133,7 +133,7 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                     </NavItemWithSubmenu>
 
                     <NavItemWithSubmenu
-                        id="routes"
+                        id="orders"
                         icon={<Truck size={18} />}
                         label="Routes"
                         collapsed={collapsed}
@@ -143,7 +143,6 @@ export default function SidebarLayout({ children }: { children: ReactNode }) {
                             { id: "addRoute", label: "Add Route", component: <AddRouteTab /> },
                             { id: "addDriver", label: "Add Driver", component: <AddDriverTab /> },
                             { id: "drivers",   label: "Drivers", component: <DriversView /> },
-                            { id: "orders",   label: "Routes", component: <OrdersView /> }
                         ]}
                     </NavItemWithSubmenu>
 
