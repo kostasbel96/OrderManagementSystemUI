@@ -92,6 +92,7 @@ export async function updateRoute(route: Route): Promise<ResponseDTO> {
             id: route.id,
             name: route.name,
             notes: route.notes,
+            status: route.status,
             driverId: route.driver?.id,
             orderIds: route.orders.map(order => order.id)
         }),

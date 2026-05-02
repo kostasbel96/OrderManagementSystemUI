@@ -4,7 +4,7 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle,
+    DialogTitle, MenuItem,
     TextField,
     Typography
 } from "@mui/material";
@@ -21,6 +21,7 @@ import useDriverFormValidation from "../../hooks/useDriverFormValidation.ts";
 import {updateDriver} from "../../services/driverService.ts";
 import useRouteInsertValidation from "../../hooks/useRouteInsertValidation.ts";
 import {updateRoute} from "../../services/routeService.ts";
+import {RouteStatus} from "../../types/enums/RouteStatus.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
@@ -566,6 +567,23 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     fullWidth
                     variant="standard"
                 />
+                <TextField
+                    select
+                    onChange={handleChange}
+                    value={routeValues.status}
+                    margin="dense"
+                    id="status"
+                    name="status"
+                    label="Status"
+                    fullWidth
+                    variant="standard"
+                >
+                    {Object.values(RouteStatus).map((status) => (
+                        <MenuItem key={status} value={status}>
+                            {status}
+                        </MenuItem>
+                    ))}
+                </TextField>
                 <TextField
                     onChange={handleChange}
                     value={routeValues.notes}

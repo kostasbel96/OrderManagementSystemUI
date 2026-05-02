@@ -13,6 +13,7 @@ import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {getRoute, searchRoutes} from "../../services/routeService.ts";
+import {RouteStatus, type RouteStatusValue, statusConfig} from "../../types/enums/RouteStatus.ts";
 
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -133,6 +134,37 @@ const OrdersView = ({columnVisibility,
                     {params.value.length}
                 </div>
             )
+        },
+        {
+            field: 'status', headerName:'Status', type: 'singleSelect', width: 140,
+            valueOptions: Object.values(RouteStatus),
+            renderCell: (params) => {
+                const cfg = statusConfig[params.row.status as RouteStatusValue];
+                if (!cfg) return params.row.status;
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+                        <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 5,
+                            padding: '3px 10px',
+                            borderRadius: 4,
+                            fontSize: 12,
+                            fontWeight: 500,
+                            background: cfg.bg,
+                            color: cfg.color,
+                            border: `0.5px solid ${cfg.border}`,
+                            whiteSpace: 'nowrap',
+                        }}>
+                          <span style={{
+                              width: 6, height: 6, borderRadius: '50%',
+                              background: cfg.dot, flexShrink: 0,
+                          }} />
+                            {params.row.status}
+                        </span>
+                    </div>
+                );
+            }
         },
         {
             field: 'actions',

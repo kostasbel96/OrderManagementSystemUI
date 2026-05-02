@@ -35,7 +35,7 @@ export function useSearch<T>({
         }, delay);
 
         return () => clearTimeout(timeout);
-    }, [query, delay]); // Αφαιρέθηκε το fetcher από τις εξαρτήσεις
+    }, [query, delay]);
 
     return { data, loading };
 }
