@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 type UseSearchOptions<T> = {
     query: string;
@@ -13,6 +13,11 @@ export function useSearch<T>({
                              }: UseSearchOptions<T>) {
     const [data, setData] = useState<T[]>([]);
     const [loading, setLoading] = useState(false);
+    const fetcherRef = useRef(fetcher);
+
+    useEffect(() => {
+        fetcherRef.current = fetcher;
+    }, [fetcher]);
 
     useEffect(() => {
         if (!query.trim()) {
@@ -23,14 +28,14 @@ export function useSearch<T>({
         const timeout = setTimeout(() => {
             setLoading(true);
 
-            fetcher(query)
+            fetcherRef.current(query)
                 .then(setData)
                 .catch(console.error)
                 .finally(() => setLoading(false));
         }, delay);
 
         return () => clearTimeout(timeout);
-    }, [query, fetcher, delay]);
+    }, [query, delay]); // Αφαιρέθηκε το fetcher από τις εξαρτήσεις
 
     return { data, loading };
 }
