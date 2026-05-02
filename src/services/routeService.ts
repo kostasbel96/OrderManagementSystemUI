@@ -1,5 +1,5 @@
 import {getApiUrl} from "../helper/IpHelper.ts";
-import type {OrderRow, ResponseDTO, Route, RouteRequest, SearchRequest} from "../types/Types.ts";
+import type {OrderRow, ResponseDTO, Route, RouteRequest, RouteResponseDto, SearchRequest} from "../types/Types.ts";
 
 const API_URL = getApiUrl();
 
@@ -45,7 +45,7 @@ export async function addRoute({
 
 export async function searchRoutes(
     request: SearchRequest
-): Promise<ResponseDTO> {
+): Promise<RouteResponseDto> {
 
     const payload = {
         page: request.page,
@@ -71,9 +71,14 @@ export async function searchRoutes(
         throw new Error(errorText || "Failed to search routes");
     }
 
-    const data: ResponseDTO = await res.json();
+    const data = await res.json();
 
-    return data;
+    return {
+        content: data.content,
+        totalElements: data.totalElements,
+        pageNumber: data.pageNumber,
+        pageSize: data.pageSize
+    };
 }
 
 export async function updateRoute(route: Route): Promise<ResponseDTO> {
@@ -83,7 +88,13 @@ export async function updateRoute(route: Route): Promise<ResponseDTO> {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(route),
+        body: JSON.stringify({
+            id: route.id,
+            name: route.name,
+            notes: route.notes,
+            driverId: route.driver?.id,
+            orderIds: route.orders.map(order => order.id)
+        }),
     });
 
     if (!res.ok) {
@@ -91,6 +102,13 @@ export async function updateRoute(route: Route): Promise<ResponseDTO> {
         throw new Error(errorText || "Failed to update route.");
     }
 
+    return await res.json();
+}
+
+export async function getRoute(id: number): Promise<ResponseDTO> {
+    const url = `${API_URL}/routes/${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch route with id: " + id);
     return await res.json();
 }
 

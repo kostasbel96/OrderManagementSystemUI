@@ -8,7 +8,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import type {Customer, Driver, OrderItem, OrderRow, Product, SelectedProduct} from "../../types/Types.ts";
+import type {Customer, Driver, OrderItem, OrderRow, Product, Route, SelectedProduct} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import {updateProduct} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
@@ -19,14 +19,16 @@ import {updateOrder} from "../../services/orderService.ts";
 import ProductsTableInsert from "../orders/FormOrder/ProductsTableInsert.tsx";
 import useDriverFormValidation from "../../hooks/useDriverFormValidation.ts";
 import {updateDriver} from "../../services/driverService.ts";
+import useRouteInsertValidation from "../../hooks/useRouteInsertValidation.ts";
+import {updateRoute} from "../../services/routeService.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderItem | Driver | undefined ;
+    rowToEdit: Product | Customer | OrderItem | Driver | Route | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    handleUpdate: (updated: OrderRow | Product | Customer | Driver) => void;
+    handleUpdate: (updated: OrderRow | Product | Customer | Driver | Route) => void;
 }
 
 const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpdate}: PopUpUpdateProps) => {
@@ -60,6 +62,15 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         customer: undefined,
         items: [],
     })
+    const [routeValues, setRouteValues] = useState<Route>({
+        id: -1,
+        name: "",
+        date: "",
+        orders: [],
+        driver: null,
+        notes: "",
+        status: ""
+    })
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [initialItems, setInitialItems] = useState<SelectedProduct[]>([]);
     const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(productValues);
@@ -70,6 +81,18 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         selectedCustomer: orderValues.customer as Customer,
         address: orderValues.address,
         initialItems
+    });
+    const {validateRouteInsert, routeErrors, setRouteErrors} = useRouteInsertValidation({
+            stops: routeValues.orders.map(order => ({
+                id: order.id,
+                customer: order.customer,
+                products: order.items,
+                address: order.address,
+                total: order.total ? Number(order.total) : 0,
+                date: order.date ? new Date(order.date) : undefined
+            } as OrderRow)),
+        driver: routeValues.driver as Driver,
+        routeName: routeValues.name
     });
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -124,6 +147,25 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         .finally(()=>setOpen(false));
                 }
                 break;
+            case "Routes":
+                if (validateRouteInsert()){
+                    updateRoute(routeValues)
+                        .then(data => {
+                            handleUpdate({
+                                id: data.route.id,
+                                name: data.route.name,
+                                date: data.route.date ? new Date(data.route.date) : undefined,
+                                orders: data.route.orders,
+                                driver: data.route.driver,
+                                notes: data.route.notes,
+                                status: data.route.status
+                            });
+                            setSubmitted(true);
+                        })
+                        .catch(err=>console.log(err))
+                        .finally(()=>setOpen(false));
+                }
+                break;
 
         }
     }
@@ -141,6 +183,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 break;
             case "Drivers":
                 setDriverErrors({});
+                break;
+            case "Routes":
+                setRouteErrors({});
                 break;
 
         }
@@ -170,6 +215,12 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 break;
             case "Drivers":
                 setDriverValues(prev => ({
+                    ...prev,
+                    [name]: value,
+                }));
+                break;
+            case "Routes":
+                setRouteValues(prev => ({
                     ...prev,
                     [name]: value,
                 }));
@@ -476,6 +527,85 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         )
     }
 
+    const renderRouteFields = () => {
+        return (
+            <>
+                <TextField
+                    onChange={handleChange}
+                    InputProps={{ readOnly: true }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Route ID"
+                    fullWidth
+                    variant="standard"
+                    value={routeValues.id}
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    onChange={handleChange}
+                    value={routeValues.driver?.name}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Driver Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    onChange={handleChange}
+                    value={routeValues.driver?.lastName}
+                    margin="dense"
+                    id="lastName"
+                    name="lastName"
+                    label="Driver lastname"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={routeValues.notes}
+                    margin="dense"
+                    id="notes"
+                    name="notes"
+                    label="Notes"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={routeValues.orders.length}
+                    margin="dense"
+                    id="stops"
+                    name="stops"
+                    label="Orders"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    InputProps={{ readOnly: true }}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={routeValues.name}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Route Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(routeErrors?.routeName)}
+                    helperText={routeErrors?.routeName}
+                />
+            </>
+        )
+    }
+
     useEffect(() => {
         if (!rowToEdit) return;
         switch (typeOf) {
@@ -499,6 +629,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
             }
             case "Drivers":
                 setDriverValues(rowToEdit as Driver);
+                break;
+            case "Routes":
+                setRouteValues(rowToEdit as Route);
                 break;
             default:
                 break;
@@ -526,6 +659,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         {typeOf === "Customers" ? renderCustomerFields() : null}
                         {typeOf === "Orders" ? renderOrderFields() : null}
                         {typeOf === "Drivers" ? renderDriverFields() : null}
+                        {typeOf === "Routes" ? renderRouteFields() : null}
                     </form>
                 </DialogContent>
                 <DialogActions>

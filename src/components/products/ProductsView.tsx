@@ -1,6 +1,6 @@
 import {type GridColDef, type GridFilterModel, type GridPaginationModel, type GridSortModel} from '@mui/x-data-grid';
 import {useEffect, useMemo, useState} from "react";
-import type {Customer, Driver, OrderItem, OrderRow, Product} from "../../types/Types.ts";
+import type {Customer, Driver, OrderItem, OrderRow, Product, Route} from "../../types/Types.ts";
 import MyTable from "../ui/MyTable.tsx";
 import { searchProducts } from "../../services/productService.ts";
 import IconButton from "@mui/material/IconButton";
@@ -12,12 +12,12 @@ import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import {Tooltip} from "@mui/material";
 
 const ProductsView = () => {
-    const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver)[]>([]);
+    const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver | Route)[]>([]);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<Product | Customer | OrderItem | Driver | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<Product | Customer | OrderItem | Driver | Route | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Product>();
     const [submitted, setSubmitted] = useState(false);
@@ -176,7 +176,7 @@ const ProductsView = () => {
         },
     ], []);
 
-    const handleUpdateProduct = (updated: Product | Customer | OrderRow | Driver) => {
+    const handleUpdateProduct = (updated: Product | Customer | OrderRow | Driver | Route) => {
         setRows(prev => {
             const index = prev.findIndex(r => r.id === updated.id);
 

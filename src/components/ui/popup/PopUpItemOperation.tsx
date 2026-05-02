@@ -1,4 +1,4 @@
-import type {Customer, Driver, OrderItem, Product} from "../../../types/Types.ts";
+import type {Customer, Driver, OrderItem, Product, Route} from "../../../types/Types.ts";
 import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
 import Alert from "@mui/material/Alert";
@@ -7,13 +7,13 @@ import { motion } from "framer-motion";
 
 interface PopUpItemDeletedProps {
     typeOf: string;
-    item: Product | Customer | OrderItem | Driver;
+    item: Product | Customer | OrderItem | Driver | Route;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     operation: string;
 }
 
 const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemDeletedProps) => {
-    const [operationItem, setOperationItem] = useState<Product | Customer | OrderItem | Driver>();
+    const [operationItem, setOperationItem] = useState<Product | Customer | OrderItem | Driver | Route>();
     const [progress, setProgress] = useState(100);
     const [isPaused, setIsPaused] = useState(false);
     const duration = 3000;
@@ -27,6 +27,8 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
             setOperationItem(item as OrderItem);
         } else if (typeOf === "driver") {
             setOperationItem(item as Driver);
+        } else if (typeOf === "route") {
+            setOperationItem(item as Route);
         }
     }, []);
 
@@ -96,6 +98,8 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
                 { (typeOf === "order" && operationItem) && (`Order ${(operationItem as OrderItem).id} ${operation} successfully!` ) }
                 { (typeOf === "driver" && operationItem) &&
                     (`Driver ${(operationItem as Driver).name} ${(operationItem as Driver).lastName} ${operation} successfully!` ) }
+                { (typeOf === "route" && operationItem) &&
+                    (`Route ${(operationItem as Route).id} ${operation} successfully!` ) }
                 <div
                     style={{
                         height: 4,

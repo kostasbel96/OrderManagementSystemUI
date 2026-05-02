@@ -1,17 +1,18 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import type {Customer, Driver, OrderItem, Product, ResponseDTO} from "../../types/Types.ts";
+import type {Customer, Driver, OrderItem, Product, ResponseDTO, Route} from "../../types/Types.ts";
 import {deleteProduct} from "../../services/productService.ts";
 import {deleteCustomer} from "../../services/customerService.ts";
 import {deleteOrder} from "../../services/orderService.ts";
 import {deleteDriver} from "../../services/driverService.ts";
+import {deleteRoute} from "../../services/routeService.ts";
 
 interface PopUpDeleteProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderItem | Driver | undefined ;
+    rowToEdit: Product | Customer | OrderItem | Driver | Route | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | Driver | undefined>>;
+    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | Driver | Route | undefined>>;
     handleDelete: (id: number) => void;
 }
 
@@ -74,9 +75,20 @@ const PopUpDelete = ({open, rowToEdit,
                     })
                     .finally(()=> setOpen(false));
                 break;
+            case "Routes":
+                deleteRoute(rowToEdit as Route)
+                    .then((data: ResponseDTO) => {
+                        console.log(data);
+                        setRowToEdit(data.route);
+                        handleDelete(data.route.id);
+                        setSubmitted(true);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                    .finally(()=> setOpen(false));
+                break;
         }
-
-        console.log(rowToEdit)
 
     }
 
@@ -317,6 +329,46 @@ const PopUpDelete = ({open, rowToEdit,
         )
     }
 
+    const renderRouteFields = () => {
+        return (
+            <>
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Route ID"
+                    fullWidth
+                    variant="standard"
+                    value={(rowToEdit as Route)?.id}
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={`${(rowToEdit as Route)?.driver?.name} ${(rowToEdit as Route)?.driver?.lastName}`}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Driver Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={(rowToEdit as Route)?.name}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+            </>
+        )
+    }
+
 
     return (
         <Dialog open={open} onClose={handleClose}>
@@ -332,6 +384,7 @@ const PopUpDelete = ({open, rowToEdit,
                     {typeOf === "Customers" && renderCustomerFields()}
                     {typeOf === "Orders" && renderOrderFields()}
                     {typeOf === "Drivers" && renderDriverFields()}
+                    {typeOf === "Routes" && renderRouteFields()}
                 </form>
             </DialogContent>
             <DialogActions>

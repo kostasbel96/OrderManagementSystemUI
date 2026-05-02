@@ -26,6 +26,7 @@ import ProductsView from "./products/ProductsView.tsx";
 import AddRouteTab from "./routes/AddRouteTab.tsx";
 import AddDriverTab from "./drivers/AddDriverTab.tsx";
 import DriversView from "./drivers/DriversView.tsx";
+import RoutesView from "./routes/RoutesView.tsx";
 
 export default function SidebarLayout({ children }: Readonly<{ children: ReactNode }>) {
     const [open, setOpen] = useState(false);
@@ -143,6 +144,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                             { id: "addRoute", label: "Add Route", component: <AddRouteTab /> },
                             { id: "addDriver", label: "Add Driver", component: <AddDriverTab /> },
                             { id: "drivers",   label: "Drivers", component: <DriversView /> },
+                            { id: "routes",   label: "Routes", component: <RoutesView /> },
                         ]}
                     </NavItemWithSubmenu>
 

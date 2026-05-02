@@ -1,7 +1,7 @@
 import type {GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
 import {useEffect, useState} from "react";
-import type {Customer, Driver, OrderItem, OrderRow, Product} from "../../types/Types.ts";
+import type {Customer, Driver, OrderItem, OrderRow, Product, Route} from "../../types/Types.ts";
 import {searchCustomers} from "../../services/customerService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
@@ -12,12 +12,12 @@ import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 
 const CustomersView = () => {
 
-    const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver)[]>([]);
+    const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver | Route)[]>([]);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Customer>();
     const [submitted, setSubmitted] = useState(false);
@@ -189,7 +189,7 @@ const CustomersView = () => {
         },
     ];
 
-    const handleUpdateCustomer = (updated: Product | Customer | OrderRow | Driver) => {
+    const handleUpdateCustomer = (updated: Product | Customer | OrderRow | Driver | Route) => {
         setRows(prev => {
             const index = prev.findIndex(r => r.id === updated.id);
 

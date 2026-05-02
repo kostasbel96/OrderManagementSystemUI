@@ -32,6 +32,7 @@ export interface ResponseDTO {
     orderItems: OrderItem[];
     orderItem: OrderItem;
     productDto: Product;
+    route: Route;
     driver: Driver;
     routes: Route[];
     errorResponse: ErrorResponse;
@@ -69,11 +70,12 @@ export interface SearchRequest {
 
 export interface Route {
     id: number;
+    name: string;
+    date?: string | Date;
     orders: OrderItem[];
-    driver: Driver;
+    driver: Driver | null;
     notes: string;
     status: string;
-    routeName: string;
 }
 
 export interface OrderRow {
@@ -94,6 +96,13 @@ export interface ProductResponseDto {
 
 export interface OrderResponseDto {
     content: OrderItem[];
+    totalElements: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+export interface RouteResponseDto {
+    content: Route[];
     totalElements: number;
     pageNumber: number;
     pageSize: number;

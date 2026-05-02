@@ -1,10 +1,9 @@
 import {useEffect, useState} from "react";
 import {
     type GridColDef,
-    GridFilterInputValue, type GridFilterModel, type GridPaginationModel, type GridRowSelectionModel,
+    type GridFilterModel, type GridPaginationModel, type GridRowSelectionModel,
     type GridSortModel,
 } from "@mui/x-data-grid";
-import {getOrder, searchOrders} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
 import type {Customer, Driver, OrderItem, OrderRow, Product, ResponseDTO, Route} from "../../types/Types.ts";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
@@ -13,7 +12,7 @@ import {EditIcon} from "lucide-react";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ProductsCell from "./ProductsCell.tsx";
+import {getRoute, searchRoutes} from "../../services/routeService.ts";
 
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -22,7 +21,6 @@ interface OrdersViewProps {
     setSelectionModel?: React.Dispatch<
         React.SetStateAction<GridRowSelectionModel>
     >;
-    setOrdersRow?: React.Dispatch<React.SetStateAction<OrderRow[]>>;
     selection?: boolean;
     height?: string;
     width?: number;
@@ -32,7 +30,6 @@ const OrdersView = ({columnVisibility,
                         setSelectionModel,
                         selection,
                         selectionModel,
-                        setOrdersRow,
                         height,
                         width}: OrdersViewProps) => {
 
@@ -44,7 +41,7 @@ const OrdersView = ({columnVisibility,
     const [openEdit, setOpenEdit] = useState(false);
     const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
-    const [onDeleteContent, setOnDeleteContent] = useState<OrderItem>();
+    const [onDeleteContent, setOnDeleteContent] = useState<Route>();
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
@@ -54,25 +51,19 @@ const OrdersView = ({columnVisibility,
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
 
     const handleClickOpen = (row: OrderRow) => {
-        if (row.id) getOrder(row.id).then((data: ResponseDTO)=> {
-            setRowToEdit({...data.orderItem});
+        if (row.id) getRoute(row.id).then((data: ResponseDTO)=> {
+            setRowToEdit({...data.route});
             setOperation("updated");
         }).finally(()=>setOpenEdit(true));
 
     }
 
     const handleOnDelete = (row: OrderRow) =>{
-        if (row.id) getOrder(row.id).then((data: ResponseDTO)=> {
-            setOnDeleteContent({...data.orderItem});
+        if (row.id) getRoute(row.id).then((data: ResponseDTO)=> {
+            setOnDeleteContent({...data.route});
             setOperation("deleted");
         }).finally(()=>setOpenDeletePopUp(true));
     }
-
-    const productsFilterOperator = {
-        label: 'contains',
-        value: 'containsProduct',
-        InputComponent: GridFilterInputValue,
-    } as any;
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
@@ -90,38 +81,7 @@ const OrdersView = ({columnVisibility,
                     {params.value}
                 </div>
             ) },
-        { field: 'customer', headerName: 'Customer', width: 200,
-            valueGetter: (_, row) =>
-                `${row.customer?.name ?? ''} ${row.customer?.lastName ?? ''}`,renderCell: (params) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',   // vertical centering
-                        justifyContent: 'start', // horizontal centering
-                        whiteSpace: 'pre-line',
-                        height: '100%',          // σημαντικό για να γεμίζει το cell
-                        width: '100%',
-                        marginBottom: '24px'
-                    }}
-                >
-                    {params.value}
-                </div>
-            ) },
-        {
-            field: 'products',
-            headerName: 'Products',
-            width: 150,
-            filterOperators: [productsFilterOperator],
-            sortable: false,
-            renderCell: (params) => (
-                <div className="flex items-center justify-start h-full">
-                    <ProductsCell
-                        products={params.row.products}
-                    />
-                </div>
-            ),
-        },
-        {field: 'address', headerName: 'Address', width: 160, renderCell: (params) => (
+        {field: 'name', headerName: 'Name', width: 160, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -134,7 +94,7 @@ const OrdersView = ({columnVisibility,
                     {params.value}
                 </div>
             )},
-        { field: 'total', headerName: 'Total', width: 80, type: "number", renderCell: (params) => (
+        { field: 'notes', headerName: 'Notes', width: 80, type: "number", renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -160,6 +120,20 @@ const OrdersView = ({columnVisibility,
                         : ''}
                 </div>
             )},
+        {
+            field: 'orders', headerName:'Orders', width: 100, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'start',
+                        height: '100%',
+                    }}
+                >
+                    {params.value.length}
+                </div>
+            )
+        },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -199,7 +173,7 @@ const OrdersView = ({columnVisibility,
         },
     ];
 
-    const handleUpdateOrder = (updated: OrderRow | Product | Customer | Driver | Route) => {
+    const handleUpdateRoute = (updated: OrderRow | Product | Customer | Driver | Route) => {
         setRows(prev => {
             const index = prev.findIndex(r => r.id === updated.id);
 
@@ -212,13 +186,13 @@ const OrdersView = ({columnVisibility,
         });
     };
 
-    const handleDeleteOrder = (id: number) => {
+    const handleDeleteRoute = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
     };
 
     useEffect(() => {
         setLoading(true);
-        searchOrders({
+        searchRoutes({
             page: paginationModel.page,
             pageSize: paginationModel.pageSize,
             globalSearch: isSearching ? searchName : "",
@@ -226,22 +200,22 @@ const OrdersView = ({columnVisibility,
             sortDirection: sortModel[0]?.sort ?? "asc",
             filters: filterModel.items ?? []
         }).then(data => {
-                const orders: OrderRow[] = [];
-                data.content.forEach(order => {
-                    orders.push({
-                        id: order.id,
-                        customer: order.customer,
-                        products: order.items,
-                        address: order.address,
-                        total: Number(Number(order.total).toFixed(2)),
-                        date: order.date ? new Date(order.date) : undefined
+                const routes: Route[] = [];
+                data.content.forEach(route => {
+                    routes.push({
+                        id: route.id,
+                        name: route.name,
+                        date: route.date ? new Date(route.date) : undefined,
+                        orders: route.orders,
+                        driver: route.driver,
+                        notes: route.notes,
+                        status: route.status
                     });
                 });
-                setRows(orders);
+                setRows(routes);
                 setRowCount(data.totalElements);
-                setOrdersRow?.(orders);
             })
-            .catch(() => console.log("error fetching orders"))
+            .catch(() => console.log("error fetching routes"))
             .finally(() => setLoading(false));
     }, [paginationModel, isSearching, searchName, sortModel, filterModel])
 
@@ -249,7 +223,7 @@ const OrdersView = ({columnVisibility,
         <>
             <MyTable
                 columns={columns}
-                typeOf={"Orders"}
+                typeOf={"Routes"}
                 rows={rows}
                 loading={loading}
                 rowCount={rowCount}
@@ -273,24 +247,24 @@ const OrdersView = ({columnVisibility,
                 open={openEdit}
                 setOpen={setOpenEdit}
                 rowToEdit={rowToEdit}
-                typeOf={"Orders"}
+                typeOf={"Routes"}
                 setSubmitted={setSubmitted}
-                handleUpdate={handleUpdateOrder}
+                handleUpdate={handleUpdateRoute}
             />
             <PopUpDelete
                 setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
-                typeOf={"Orders"}
+                typeOf={"Routes"}
                 setOpen={setOpenDeletePopUp}
-                handleDelete={handleDeleteOrder}
+                handleDelete={handleDeleteRoute}
                 setSubmitted={setSubmitted}
             />
             <div className="flex justify-center items-center mt-2 w-full mx-auto">
                 {submitted && (
                     <PopUpItemOperation
                         setSubmitted={setSubmitted}
-                        typeOf={"order"}
+                        typeOf={"route"}
                         item={rowToEdit as OrderItem}
                         operation={operation}
                     />
