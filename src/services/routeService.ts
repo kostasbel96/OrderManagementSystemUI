@@ -1,5 +1,13 @@
 import {getApiUrl} from "../helper/IpHelper.ts";
-import type {OrderRow, ResponseDTO, Route, RouteRequest, RouteResponseDto, SearchRequest} from "../types/Types.ts";
+import type {
+    ErrorResponse,
+    OrderRow,
+    ResponseDTO,
+    Route,
+    RouteRequest,
+    RouteResponseDto,
+    SearchRequest
+} from "../types/Types.ts";
 
 const API_URL = getApiUrl();
 
@@ -34,13 +42,14 @@ export async function addRoute({
         },
         body: JSON.stringify(routeRequest),
     });
+    const data: ResponseDTO = await res.json();
 
     if (!res.ok) {
-        const errorText = await res.text().catch(() => null);
-        throw new Error(errorText || "Failed to create route");
+        const errorResponse: ErrorResponse = data.errorResponse;
+        throw new Error(errorResponse.message);
     }
 
-    return await res.json();
+    return data;
 }
 
 export async function searchRoutes(
@@ -67,8 +76,8 @@ export async function searchRoutes(
     });
 
     if (!res.ok) {
-        const errorText = await res.text().catch(() => null);
-        throw new Error(errorText || "Failed to search routes");
+        const error: ErrorResponse = await res.json();
+        throw new Error(error.message);
     }
 
     const data = await res.json();
