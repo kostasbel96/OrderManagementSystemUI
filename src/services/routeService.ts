@@ -112,12 +112,14 @@ export async function updateRoute(route: Route): Promise<ResponseDTO> {
         }),
     });
 
+    const data: ResponseDTO = await res.json();
+
     if (!res.ok) {
-        const errorText = await res.text().catch(() => null);
-        throw new Error(errorText || "Failed to update route.");
+        const errorResponse: ErrorResponse = data.errorResponse;
+        throw new Error(errorResponse.message);
     }
 
-    return await res.json();
+    return data;
 }
 
 export async function getRoute(id: number): Promise<ResponseDTO> {
