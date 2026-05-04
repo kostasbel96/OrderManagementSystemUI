@@ -36,6 +36,8 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs, {type Dayjs} from "dayjs";
+import {Edit} from "lucide-react";
+import EditRouteDialog from "../routes/EditRouteDialog.tsx";
 
 interface PopUpUpdateProps{
     open: boolean;
@@ -553,6 +555,24 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
     }
 
     const renderRouteFields = () => {
+        const [open, setOpen] = useState(false);
+        const mapRouteToRouteDetails = (route: Route): RouteDetails => ({
+            id: route.id,
+            name: route.name,
+            notes: route.notes,
+            driver: route.driver,
+            date: dayjs(route.date),
+            stops: route.orders.map(order => ({
+                id: order.id,
+                customer: order.customer,
+                products: order.items,
+                address: order.address,
+                total: Number(order.total) || 0,
+                date: order.date,
+            })),
+            status: route.status
+        });
+
         return (
             <>
                 <TextField
@@ -636,18 +656,26 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     </LocalizationProvider>
                 </Box>
 
-                <TextField
-                    onChange={handleChange}
-                    value={routeValues.orders.length}
-                    margin="dense"
-                    id="stops"
-                    name="stops"
-                    label="Orders"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    InputProps={{ readOnly: true }}
-                />
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1 }}>
+                    <TextField
+                        onChange={handleChange}
+                        value={routeValues.orders.length}
+                        margin="dense"
+                        id="stops"
+                        name="stops"
+                        label="Orders"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        InputProps={{ readOnly: true }}
+                    />
+                    <Edit
+                        size={18}
+                        style={{ marginTop: 8, cursor: "pointer" }}
+                        onClick={() => setOpen(true)}
+                    />
+                </Box>
+
                 <TextField
                     onChange={handleChange}
                     value={routeValues.name}
@@ -660,6 +688,22 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     variant="standard"
                     error={Boolean(routeErrors?.routeName)}
                     helperText={routeErrors?.routeName}
+                />
+                <EditRouteDialog
+                    setRouteValues={setRouteValues}
+                    open={open}
+                    setOpen={setOpen}
+                    orders={routeValues.orders.map((order) => {
+                        return {
+                            id: order.id,
+                            customer: order.customer,
+                            products: order.items,
+                            address: order.address,
+                            total: Number(order.total) || 0,
+                            date: order.date
+                        }
+                    })}
+                    importedRouteDetails={mapRouteToRouteDetails(routeValues)}
                 />
             </>
         )

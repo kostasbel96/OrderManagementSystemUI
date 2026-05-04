@@ -14,11 +14,13 @@ export interface Customer extends Person {
 }
 
 export interface RouteDetails {
+    id: number;
     name: string;
     notes: string;
     driver: Driver | null;
     stops: OrderRow[];
     date: Dayjs;
+    status: string;
 }
 
 interface Person {

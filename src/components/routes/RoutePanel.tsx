@@ -2,9 +2,6 @@ import {Box, Button, Chip, Divider, Grid, Stack, Typography} from "@mui/material
 import LabeledField from "../ui/LabeledField";
 import {AppAutocomplete} from "../ui/AppAutocomplete.tsx";
 import type {Driver, RouteDetails} from "../../types/Types.ts";
-import { DndContext } from "@dnd-kit/core";
-import { SortableContext } from "@dnd-kit/sortable";
-import { SortableStop } from "../ui/SortableStop.tsx";
 import {memo, useState} from "react";
 import OMSLabel from "../ui/OMSLabel.tsx";
 import {useDriverSearch} from "../../hooks/useDriverSearch.ts";
@@ -13,6 +10,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import type {Dayjs} from "dayjs";
+import RouteStops from "./RouteStops.tsx";
 
 
 interface RoutePanelProps {
@@ -68,8 +66,8 @@ const RoutePanel = memo(({
                     width: "34%",
                     display: "flex",
                     flexDirection: "column",
-                    overflow: "hidden",  // ← προσθέτεις αυτό
-                    minHeight: 0,        // ← και αυτό
+                    overflow: "hidden",
+                    minHeight: 0,
                 }}
             >
                 <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
@@ -149,32 +147,12 @@ const RoutePanel = memo(({
                 <Divider sx={{ mb: 2, mt: 2 }} />
 
                 {/* Stops */}
-                <Box
-                    sx={{
-                        flex: 1,
-                        width: "100%",
-                        minHeight: 0,
-                        overflow: "auto",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                    }}
-                >
-                    <DndContext onDragEnd={onDragEnd} autoScroll={false} >
-                        <SortableContext items={stopIds}>
-
-                            {routeDetails.stops.map((order, index) => (
-                                <SortableStop
-                                    key={order.id}
-                                    order={order}
-                                    index={index}
-                                    onDelete={onDeleteStop}
-                                />
-                            ))}
-
-                        </SortableContext>
-                    </DndContext>
-                </Box>
+                <RouteStops
+                    routeDetails={routeDetails}
+                    stopIds={stopIds}
+                    onDragEnd={onDragEnd}
+                    onDeleteStop={onDeleteStop}
+                />
                 <Box sx={{ minHeight: 18 }}>
                     {routeErrors?.stops && (
                         <Typography color="error" fontSize={11}>

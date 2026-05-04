@@ -22,11 +22,13 @@ const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) 
     });
 
     const [routeDetails, setRouteDetails] = useState<RouteDetails>({
+        id: -1,
         name: localStorage.getItem("routeName") ? JSON.parse(localStorage.getItem("routeName") as string) : "",
         notes: "",
         driver: localStorage.getItem("driver") ? JSON.parse(localStorage.getItem("driver") as string) : null,
         stops: localStorage.getItem("stops") ? JSON.parse(localStorage.getItem("stops") as string) : [],
-        date: dayjs()
+        date: dayjs(),
+        status: ""
     });
     const [ordersRow, setOrdersRow] = useState<OrderRow[]>([]);
 
