@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     Dialog,
     DialogActions,
@@ -8,7 +9,16 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import type {Customer, Driver, OrderItem, OrderRow, Product, Route, SelectedProduct} from "../../types/Types.ts";
+import type {
+    Customer,
+    Driver,
+    OrderItem,
+    OrderRow,
+    Product,
+    Route,
+    RouteDetails,
+    SelectedProduct
+} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import {updateProduct} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
@@ -22,6 +32,10 @@ import {updateDriver} from "../../services/driverService.ts";
 import useRouteInsertValidation from "../../hooks/useRouteInsertValidation.ts";
 import {updateRoute} from "../../services/routeService.ts";
 import {RouteStatus} from "../../types/enums/RouteStatus.ts";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import dayjs, {type Dayjs} from "dayjs";
 
 interface PopUpUpdateProps{
     open: boolean;
@@ -155,7 +169,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                             handleUpdate({
                                 id: data.route.id,
                                 name: data.route.name,
-                                date: data.route.date ? new Date(data.route.date) : undefined,
+                                date: data.route.date ? dayjs(data.route.date).toDate() : undefined,
                                 orders: data.route.orders,
                                 driver: data.route.driver,
                                 notes: data.route.notes,
@@ -231,6 +245,16 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         }
 
     }
+
+    const handleDateChange = (
+        value: Dayjs | null,
+        element: keyof RouteDetails
+    ) => {
+        setRouteValues((prev) => ({
+            ...prev,
+            [element]: value,
+        }));
+    };
 
     const renderProductFields = () => {
         return (
@@ -595,6 +619,23 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     fullWidth
                     variant="standard"
                 />
+                <Box className="mt-2">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            value={dayjs(routeValues.date)}
+                            label={"Date"}
+                            onChange={(value) => handleDateChange(value, "date")}
+                            format="DD/MM/YYYY"
+                            slotProps={{
+                                textField: {
+                                    size: "small",
+                                    fullWidth: true,
+                                },
+                            }}
+                        />
+                    </LocalizationProvider>
+                </Box>
+
                 <TextField
                     onChange={handleChange}
                     value={routeValues.orders.length}

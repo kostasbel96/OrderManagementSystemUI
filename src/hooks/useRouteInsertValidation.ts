@@ -10,7 +10,7 @@ const routeSchema = z.object({
                 name: z.string()
             }, { error: "You must select a driver" }),
         routeName: z.string().min(3, "You must enter a route name with at least 3 characters")
-    }
+}
 
 );
 

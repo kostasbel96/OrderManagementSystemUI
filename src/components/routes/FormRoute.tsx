@@ -7,6 +7,8 @@ import RouteOrders from "./RouteOrders.tsx";
 import RoutePanel from "./RoutePanel.tsx";
 import useRouteInsertValidation from "../../hooks/useRouteInsertValidation.ts";
 import {addRoute} from "../../services/routeService.ts";
+import dayjs from "dayjs";
+
 
 interface FormRouteProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,7 +25,8 @@ const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) 
         name: localStorage.getItem("routeName") ? JSON.parse(localStorage.getItem("routeName") as string) : "",
         notes: "",
         driver: localStorage.getItem("driver") ? JSON.parse(localStorage.getItem("driver") as string) : null,
-        stops: localStorage.getItem("stops") ? JSON.parse(localStorage.getItem("stops") as string) : []
+        stops: localStorage.getItem("stops") ? JSON.parse(localStorage.getItem("stops") as string) : [],
+        date: dayjs()
     });
     const [ordersRow, setOrdersRow] = useState<OrderRow[]>([]);
 
@@ -41,7 +44,7 @@ const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) 
     } = useRouteInsertValidation({
         stops: routeDetails.stops,
         driver: routeDetails.driver,
-        routeName: routeDetails.name
+        routeName: routeDetails.name,
     });
 
     const [selectionModel, setSelectionModel] =
@@ -112,7 +115,11 @@ const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) 
     const handleSaveRoute = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (validateRouteInsert()) {
-            addRoute({name: routeDetails.name, notes: routeDetails.notes, driverId: routeDetails.driver?.id, orders: routeDetails.stops})
+            addRoute({name: routeDetails.name,
+                notes: routeDetails.notes,
+                driverId: routeDetails.driver?.id,
+                orders: routeDetails.stops,
+                date: routeDetails.date})
                 .then(data=> {
                     setSubmitted(true);
                     setSuccess(true);

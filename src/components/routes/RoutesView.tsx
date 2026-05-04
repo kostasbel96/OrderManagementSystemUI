@@ -14,6 +14,8 @@ import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {getRoute, searchRoutes} from "../../services/routeService.ts";
 import {RouteStatus, type RouteStatusValue, statusConfig} from "../../types/enums/RouteStatus.ts";
+import { Tooltip } from "@mui/material";
+import dayjs from "dayjs";
 
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -95,18 +97,49 @@ const OrdersView = ({columnVisibility,
                     {params.value}
                 </div>
             )},
-        { field: 'notes', headerName: 'Notes', width: 80, type: "number", renderCell: (params) => (
+        { field: 'driver', headerName: 'Driver', width: 200,
+            valueGetter: (_, row) =>
+                `${row.driver?.name ?? ''} ${row.driver?.lastName ?? ''}`,renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'end',
-                        height: '100%',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
                     }}
                 >
-                    {params.value ? params.value + " €" : ""}
+                    {params.value}
                 </div>
             ) },
+        { field: 'notes', headerName: 'Notes', width: 80, renderCell: (params) => {
+                const value = params.value || "";
+                return <Tooltip title={value} arrow placement="top-start">
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',   // ✅ vertical center
+                            height: '100%',
+                            width: '100%',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: 'block', // πιο safe από flex εδώ
+                                width: '100%',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis'
+                            }}
+                        >
+                            {value}
+                        </div>
+                    </div>
+                </Tooltip>
+            } },
         {field: 'date', headerName: 'Date', type: 'date', width: 80, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
@@ -237,7 +270,7 @@ const OrdersView = ({columnVisibility,
                     routes.push({
                         id: route.id,
                         name: route.name,
-                        date: route.date ? new Date(route.date) : undefined,
+                        date: route.date ? dayjs(route.date).toDate() : undefined,
                         orders: route.orders,
                         driver: route.driver,
                         notes: route.notes,

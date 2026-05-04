@@ -8,6 +8,7 @@ import type {
     RouteResponseDto,
     SearchRequest
 } from "../types/Types.ts";
+import dayjs, {type Dayjs} from "dayjs";
 
 const API_URL = getApiUrl();
 
@@ -16,13 +17,15 @@ interface MyRouteProps {
     notes: string;
     driverId: number | undefined | null;
     orders: OrderRow[];
+    date: Dayjs
 }
 
 export async function addRoute({
                                    name,
                                    notes,
                                    driverId,
-                                   orders
+                                   orders,
+                                   date
                                }: MyRouteProps): Promise<ResponseDTO> {
 
     if (!driverId) {
@@ -33,7 +36,8 @@ export async function addRoute({
         name,
         notes,
         driverId,
-        orderIds: orders.map(order => order.id)
+        orderIds: orders.map(order => order.id),
+        date: date.format("YYYY-MM-DD")
     };
     const res = await fetch(`${API_URL}/routes/save`, {
         method: "POST",
@@ -103,7 +107,8 @@ export async function updateRoute(route: Route): Promise<ResponseDTO> {
             notes: route.notes,
             status: route.status,
             driverId: route.driver?.id,
-            orderIds: route.orders.map(order => order.id)
+            orderIds: route.orders.map(order => order.id),
+            date: route.date ? dayjs(route.date).format("YYYY-MM-DD") : null
         }),
     });
 

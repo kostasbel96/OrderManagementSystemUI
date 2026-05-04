@@ -1,3 +1,5 @@
+import type {Dayjs} from "dayjs";
+
 export interface Product {
     id: number;
     name: string;
@@ -16,6 +18,7 @@ export interface RouteDetails {
     notes: string;
     driver: Driver | null;
     stops: OrderRow[];
+    date: Dayjs;
 }
 
 interface Person {
@@ -71,7 +74,7 @@ export interface SearchRequest {
 export interface Route {
     id: number;
     name: string;
-    date?: string | Date;
+    date?: string | Date | Dayjs;
     orders: OrderItem[];
     driver: Driver | null;
     notes: string;
@@ -144,4 +147,5 @@ export interface RouteRequest{
     name: string;
     driverId: number | undefined | null;
     orderIds: number[];
+    date: string;
 }

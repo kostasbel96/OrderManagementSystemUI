@@ -9,6 +9,10 @@ import {memo, useState} from "react";
 import OMSLabel from "../ui/OMSLabel.tsx";
 import {useDriverSearch} from "../../hooks/useDriverSearch.ts";
 import type {RouteInsertErrors} from "../../hooks/useRouteInsertValidation.ts";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import type {Dayjs} from "dayjs";
 
 
 interface RoutePanelProps {
@@ -43,6 +47,16 @@ const RoutePanel = memo(({
             [element]: e.target.value,
         }));
     }
+
+    const handleDateChange = (
+        value: Dayjs | null,
+        element: keyof RouteDetails
+    ) => {
+        setRouteDetails((prev) => ({
+            ...prev,
+            [element]: value,
+        }));
+    };
 
     const handleDriverChange = (driver: Driver | null) => {
         setRouteDetails(prev => ({ ...prev, driver }));
@@ -104,6 +118,28 @@ const RoutePanel = memo(({
                                     error={Boolean(routeErrors?.driver)}
                                     helperText={routeErrors?.driver}
                                 />
+                            </Box>
+                        </Stack>
+                    </Grid>
+
+                    {/* DATE */}
+                    <Grid size={{xs: 12}}>
+                        <Stack direction="row" alignItems="stretch" spacing={0}>
+                            <Box sx={{ flex: 1 }}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        value={routeDetails.date}
+                                        label={"Date"}
+                                        onChange={(value) => handleDateChange(value, "date")}
+                                        format="DD/MM/YYYY"
+                                        slotProps={{
+                                            textField: {
+                                                size: "small",
+                                                fullWidth: true
+                                            },
+                                        }}
+                                    />
+                                </LocalizationProvider>
                             </Box>
                         </Stack>
                     </Grid>
