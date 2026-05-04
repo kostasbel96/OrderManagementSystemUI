@@ -178,9 +178,12 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                                 status: data.route.status
                             });
                             setSubmitted(true);
+                            setOpen(false);
                         })
-                        .catch(err=>console.log(err))
-                        .finally(()=>setOpen(false));
+                        .catch(err=> setRouteErrors((prev)=> ({
+                            ...prev,
+                            stops: err.message
+                        })))
                 }
                 break;
 
@@ -668,6 +671,8 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         fullWidth
                         variant="standard"
                         InputProps={{ readOnly: true }}
+                        error={Boolean(routeErrors?.stops)}
+                        helperText={routeErrors.stops ?? ""}
                     />
                     <Edit
                         size={18}
