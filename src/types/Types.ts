@@ -54,6 +54,7 @@ export interface OrderItem {
     customer?: Customer;
     address: string;
     date: string;
+    status: string;
     total?: string;
 }
 
@@ -88,6 +89,7 @@ export interface OrderRow {
     customer?: Customer;
     products: SelectedProduct[];
     address: string;
+    status: string;
     total: number;
     date?: string | Date;
 }

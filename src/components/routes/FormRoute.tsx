@@ -127,6 +127,15 @@ const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) 
                     setSuccess(true);
                     setRouteErrors({});
                     setPopUpMessage("Route created successfully");
+                    setRouteDetails({
+                        id: -1,
+                        name:  "",
+                        notes: "",
+                        driver: null,
+                        stops: [],
+                        date: dayjs(),
+                        status: ""
+                    });
                     console.log(data);
                 }).catch(error => {
                     setSubmitted(true);

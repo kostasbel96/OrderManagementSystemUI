@@ -1,17 +1,19 @@
 import {DndContext} from "@dnd-kit/core";
 import {SortableContext} from "@dnd-kit/sortable";
 import {SortableStop} from "../ui/SortableStop.tsx";
-import {Box} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import type {RouteDetails} from "../../types/Types.ts";
+import type {RouteInsertErrors} from "../../hooks/useRouteInsertValidation.ts";
 
 interface RouteStopsProps {
     routeDetails: RouteDetails;
     stopIds: (string | number)[];
     onDragEnd: (event: any) => void;
     onDeleteStop: (id: number) => void;
+    routeErrors: RouteInsertErrors;
 }
 
-const RouteStops = ({onDragEnd, stopIds, routeDetails, onDeleteStop}: RouteStopsProps) => {
+const RouteStops = ({onDragEnd, stopIds, routeDetails, onDeleteStop, routeErrors}: RouteStopsProps) => {
 
     return (
         <Box
@@ -39,6 +41,13 @@ const RouteStops = ({onDragEnd, stopIds, routeDetails, onDeleteStop}: RouteStops
 
                 </SortableContext>
             </DndContext>
+            <Box sx={{ minHeight: 18 }}>
+                {routeErrors?.stops && (
+                    <Typography color="error" fontSize={11}>
+                        {routeErrors?.stops}
+                    </Typography>
+                )}
+            </Box>
         </Box>
     )
 

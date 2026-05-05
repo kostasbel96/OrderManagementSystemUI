@@ -14,6 +14,8 @@ import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ProductsCell from "./ProductsCell.tsx";
+import {type OrderStatusValue, orderStatusConfig} from "../../types/enums/OrderStatus.ts";
+import {OrderStatus} from "../../types/enums/OrderStatus.ts";
 
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -161,6 +163,37 @@ const OrdersView = ({columnVisibility,
                 </div>
             )},
         {
+            field: 'status', headerName:'Status', type: 'singleSelect', width: 140,
+            valueOptions: Object.values(OrderStatus),
+            renderCell: (params) => {
+                const cfg = orderStatusConfig[params.row.status as OrderStatusValue];
+                if (!cfg) return params.row.status;
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+                        <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 5,
+                            padding: '3px 10px',
+                            borderRadius: 4,
+                            fontSize: 12,
+                            fontWeight: 500,
+                            background: cfg.bg,
+                            color: cfg.color,
+                            border: `0.5px solid ${cfg.border}`,
+                            whiteSpace: 'nowrap',
+                        }}>
+                          <span style={{
+                              width: 6, height: 6, borderRadius: '50%',
+                              background: cfg.dot, flexShrink: 0,
+                          }} />
+                            {params.row.status}
+                        </span>
+                    </div>
+                );
+            }
+        },
+        {
             field: 'actions',
             headerName: 'Actions',
             width: 100,
@@ -233,6 +266,7 @@ const OrdersView = ({columnVisibility,
                         customer: order.customer,
                         products: order.items,
                         address: order.address,
+                        status: order.status,
                         total: Number(Number(order.total).toFixed(2)),
                         date: order.date ? new Date(order.date) : undefined
                     });

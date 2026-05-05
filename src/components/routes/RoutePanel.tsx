@@ -148,18 +148,12 @@ const RoutePanel = memo(({
 
                 {/* Stops */}
                 <RouteStops
+                    routeErrors={routeErrors}
                     routeDetails={routeDetails}
                     stopIds={stopIds}
                     onDragEnd={onDragEnd}
                     onDeleteStop={onDeleteStop}
                 />
-                <Box sx={{ minHeight: 18 }}>
-                    {routeErrors?.stops && (
-                        <Typography color="error" fontSize={11}>
-                            {routeErrors?.stops}
-                        </Typography>
-                    )}
-                </Box>
 
                 <Box
                     sx={{

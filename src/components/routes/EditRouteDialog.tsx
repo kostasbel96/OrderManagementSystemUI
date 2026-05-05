@@ -103,6 +103,7 @@ const EditRouteDialog = ({
                     customer: stop.customer,
                     items: stop.products,      // OrderRow.products → OrderItem.items
                     address: stop.address,
+                    status: stop.status,
                     total: String(stop.total), // number → string
                     date: stop.date as string,
                 }))
@@ -161,6 +162,7 @@ const EditRouteDialog = ({
                         }}
                     >
                         <RouteStops
+                            routeErrors={routeErrors}
                             routeDetails={routeDetails}
                             stopIds={stopIds}
                             onDragEnd={handleDragEnd}

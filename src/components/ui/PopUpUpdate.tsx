@@ -38,6 +38,7 @@ import {LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs, {type Dayjs} from "dayjs";
 import {Edit} from "lucide-react";
 import EditRouteDialog from "../routes/EditRouteDialog.tsx";
+import {OrderStatus} from "../../types/enums/OrderStatus.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
@@ -78,6 +79,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         date: "",
         customer: undefined,
         items: [],
+        status: ""
     })
     const [routeValues, setRouteValues] = useState<Route>({
         id: -1,
@@ -145,6 +147,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                             customer: data.orderItem.customer,
                             products: data.orderItem.items,
                             address: data.orderItem.address,
+                            status: data.orderItem.status,
                             total: Number(data.orderItem.total ?? 0),
                             date: data.orderItem.date ? new Date(data.orderItem.date) : undefined
                             });
@@ -540,6 +543,23 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     error={Boolean(orderErrors?.address)}
                     helperText={orderErrors?.address}
                 />
+                <TextField
+                    select
+                    onChange={handleChange}
+                    value={orderValues.status}
+                    margin="dense"
+                    id="status"
+                    name="status"
+                    label="Status"
+                    fullWidth
+                    variant="standard"
+                >
+                    {Object.values(OrderStatus).map((status) => (
+                        <MenuItem key={status} value={status}>
+                            {status}
+                        </MenuItem>
+                    ))}
+                </TextField>
                 <div className="mt-2">
                     <ProductsTableInsert
                         selectedProductsWithQty={selectedProductsWithQty}
@@ -570,6 +590,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 customer: order.customer,
                 products: order.items,
                 address: order.address,
+                status: order.status,
                 total: Number(order.total) || 0,
                 date: order.date,
             })),
@@ -704,6 +725,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                             customer: order.customer,
                             products: order.items,
                             address: order.address,
+                            status: order.status,
                             total: Number(order.total) || 0,
                             date: order.date
                         }
