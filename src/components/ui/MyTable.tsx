@@ -34,6 +34,7 @@ type TableProps = {
     selection?: boolean;
     height?: string;
     width?: number;
+    showSearchBar?: boolean;
 }
 
 
@@ -55,18 +56,20 @@ const MyTable = ({columns,
                       selectionModel,
                       setSelectionModel,
                       selection,
-                     height,
-                     width}: TableProps)=>{
+                      height,
+                      width,
+                      showSearchBar}: TableProps)=>{
 
     const collapsed = useUIStore((s) => s.sidebarCollapsed);
     return (
         <div className="mt-5 flex flex-col space-y-2 justify-center items-center px-4">
-            <Search
+            {showSearchBar ?? <Search
                 typeOf={typeOf}
                 setIsSearching={setIsSearching}
                 setSearchName={setSearchName}
                 setPaginationModel={setPaginationModel}
-            />
+            />}
+
             <Paper sx={{
                 maxHeight: height ?? "calc(100vh - 200px)",
                 maxWidth: collapsed ? 1650 : 1200 - (width ?? 0),

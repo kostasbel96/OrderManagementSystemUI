@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ProductsCell from "./ProductsCell.tsx";
 import {type OrderStatusValue, orderStatusConfig} from "../../types/enums/OrderStatus.ts";
 import {OrderStatus} from "../../types/enums/OrderStatus.ts";
+import {PaymentStatus, paymentStatusConfig, type PaymentStatusValue} from "../../types/enums/PaymentStatus.ts";
 
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -28,6 +29,9 @@ interface OrdersViewProps {
     selection?: boolean;
     height?: string;
     width?: number;
+    showSearchBar?: boolean;
+    searchTerm?: string;
+    filters?: GridFilterModel;
 }
 const OrdersView = ({columnVisibility,
                         setColumnVisibility,
@@ -36,13 +40,16 @@ const OrdersView = ({columnVisibility,
                         selectionModel,
                         setOrdersRow,
                         height,
-                        width}: OrdersViewProps) => {
+                        width,
+                        showSearchBar,
+                    searchTerm,
+                    filters}: OrdersViewProps) => {
 
     const [rows, setRows] = useState<(Customer | Product | OrderRow | Driver | Route)[]>([]);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [searchName, setSearchName] = useState("");
-    const [isSearching, setIsSearching] = useState(false);
+    const [searchName, setSearchName] = useState(searchTerm ?? "");
+    const [isSearching, setIsSearching] = useState(searchTerm ? true : false);
     const [openEdit, setOpenEdit] = useState(false);
     const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
@@ -50,7 +57,7 @@ const OrdersView = ({columnVisibility,
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
-    const [filterModel, setFilterModel] = useState<GridFilterModel>({
+    const [filterModel, setFilterModel] = useState<GridFilterModel>(filters ?? {
         items: []
     });
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
@@ -148,6 +155,18 @@ const OrdersView = ({columnVisibility,
                     {params.value ? params.value + " €" : ""}
                 </div>
             ) },
+        { field: 'paidAmount', headerName: 'Paid', width: 80, type: "number", renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'end',
+                        height: '100%',
+                    }}
+                >
+                    {params.value ?? ""}
+                </div>
+            ) },
         {field: 'date', headerName: 'Date', type: 'date', width: 80, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
@@ -162,6 +181,37 @@ const OrdersView = ({columnVisibility,
                         : ''}
                 </div>
             )},
+        {
+            field: 'paymentStatus', headerName: 'Payment Status', type: 'singleSelect', width: 150,
+            valueOptions: Object.values(PaymentStatus),
+            renderCell: (params) => {
+                const cfg = paymentStatusConfig[params.row.paymentStatus as PaymentStatusValue];
+                if (!cfg) return params.row.paymentStatus;
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+                <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 5,
+                    padding: '3px 10px',
+                    borderRadius: 4,
+                    fontSize: 12,
+                    fontWeight: 500,
+                    background: cfg.bg,
+                    color: cfg.color,
+                    border: `0.5px solid ${cfg.border}`,
+                    whiteSpace: 'nowrap',
+                }}>
+                    <span style={{
+                        width: 6, height: 6, borderRadius: '50%',
+                        background: cfg.dot, flexShrink: 0,
+                    }} />
+                    {params.row.paymentStatus}
+                </span>
+                    </div>
+                );
+            }
+        },
         {
             field: 'status', headerName:'Status', type: 'singleSelect', width: 140,
             valueOptions: Object.values(OrderStatus),
@@ -254,7 +304,7 @@ const OrdersView = ({columnVisibility,
         searchOrders({
             page: paginationModel.page,
             pageSize: paginationModel.pageSize,
-            globalSearch: isSearching ? searchName : "",
+            globalSearch: isSearching ? (searchTerm ?? searchName) : "",
             sortBy: sortModel[0]?.field,
             sortDirection: sortModel[0]?.sort ?? "asc",
             filters: filterModel.items ?? []
@@ -268,7 +318,9 @@ const OrdersView = ({columnVisibility,
                         address: order.address,
                         status: order.status,
                         total: Number(Number(order.total).toFixed(2)),
-                        date: order.date ? new Date(order.date) : undefined
+                        paidAmount: Number(Number(order.paidAmount).toFixed(2)),
+                        date: order.date ? new Date(order.date) : undefined,
+                        paymentStatus: order.paymentStatus ?? ""
                     });
                 });
                 setRows(orders);
@@ -277,11 +329,12 @@ const OrdersView = ({columnVisibility,
             })
             .catch(() => console.log("error fetching orders"))
             .finally(() => setLoading(false));
-    }, [paginationModel, isSearching, searchName, sortModel, filterModel])
+    }, [paginationModel, isSearching, searchName, sortModel, filterModel, searchTerm])
 
     return (
         <>
             <MyTable
+                showSearchBar={showSearchBar}
                 columns={columns}
                 typeOf={"Orders"}
                 rows={rows}

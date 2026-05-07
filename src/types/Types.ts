@@ -40,8 +40,17 @@ export interface ResponseDTO {
     route: Route;
     driver: Driver;
     routes: Route[];
+    receipt: Receipt;
     errorResponse: ErrorResponse;
     customer: Customer;
+}
+
+export interface Receipt {
+    id: number;
+    amount: string;
+    customer: Customer;
+    notes: string;
+    date: string | Date | Dayjs;
 }
 
 export interface ErrorResponse{
@@ -56,6 +65,8 @@ export interface OrderItem {
     date: string;
     status: string;
     total?: string;
+    paidAmount?: string;
+    paymentStatus?: string;
 }
 
 export interface SelectedProduct {
@@ -63,6 +74,13 @@ export interface SelectedProduct {
     product?: Product;
     quantity: number;
     price: number;
+}
+
+export interface ReceiptRequest {
+    customerId: number | null;
+    orderIds: number[] | null;
+    notes: string;
+    amount: string;
 }
 
 export interface SearchRequest {
@@ -91,6 +109,8 @@ export interface OrderRow {
     address: string;
     status: string;
     total: number;
+    paidAmount?: number;
+    paymentStatus?: string;
     date?: string | Date;
 }
 

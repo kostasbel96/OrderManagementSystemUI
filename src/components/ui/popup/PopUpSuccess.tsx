@@ -16,15 +16,17 @@ const PopUpSuccess = ({setSubmitted, title, progress, success}: FormPopUpProps) 
     let popUpTitle;
 
     if (title.toLowerCase().includes("product")){
-        popUpTitle = "Product"
+        popUpTitle = "Product";
     } else if (title.toLowerCase().includes("customer")){
-        popUpTitle = "Customer"
+        popUpTitle = "Customer";
     } else if (title.toLowerCase().includes("route")) {
-        popUpTitle = "Route"
+        popUpTitle = "Route";
     }else if (title.toLowerCase().includes("driver")) {
-        popUpTitle = "Driver"
+        popUpTitle = "Driver";
+    } else if (title.toLowerCase().includes("receipt")) {
+        popUpTitle = "Receipt";
     } else {
-        popUpTitle = "Order"
+        popUpTitle = "Order";
     }
 
     return (

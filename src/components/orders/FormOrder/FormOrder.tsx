@@ -158,7 +158,7 @@ const FormOrder = ({
                                     inputValue={inputValue}
                                     loading={loading}
                                     placeholder="Search customer..."
-                                    getOptionLabel={(c) => `${c.name} ${c.lastName}`}
+                                    getOptionLabel={(c) => `${c.name} ${c.lastName} #${c.id}`}
                                     onChange={setSelectedCustomer}
                                     onInputChange={setInputValue}
                                     helperText={orderErrors?.customer}

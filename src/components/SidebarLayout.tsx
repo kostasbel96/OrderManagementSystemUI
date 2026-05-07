@@ -27,6 +27,7 @@ import AddRouteTab from "./routes/AddRouteTab.tsx";
 import AddDriverTab from "./drivers/AddDriverTab.tsx";
 import DriversView from "./drivers/DriversView.tsx";
 import RoutesView from "./routes/RoutesView.tsx";
+import AddReceiptTab from "./receipts/AddReceiptTab.tsx";
 
 export default function SidebarLayout({ children }: Readonly<{ children: ReactNode }>) {
     const [open, setOpen] = useState(false);
@@ -130,6 +131,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                         {[
                             { id: "addCustomer", label: "Add Customer", component: <AddCustomerTab /> },
                             { id: "customers",   label: "Customers", component: <CustomersView /> },
+                            { id: "addReceipt", label: "Add Receipt", component: <AddReceiptTab />}
                         ]}
                     </NavItemWithSubmenu>
 
