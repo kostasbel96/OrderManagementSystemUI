@@ -1,18 +1,19 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import type {Customer, Driver, OrderItem, Product, ResponseDTO, Route} from "../../types/Types.ts";
+import type {Customer, Driver, OrderItem, Product, Receipt, ResponseDTO, Route} from "../../types/Types.ts";
 import {deleteProduct} from "../../services/productService.ts";
 import {deleteCustomer} from "../../services/customerService.ts";
 import {deleteOrder} from "../../services/orderService.ts";
 import {deleteDriver} from "../../services/driverService.ts";
 import {deleteRoute} from "../../services/routeService.ts";
+import {deleteReceipt} from "../../services/receiptService.ts";
 
 interface PopUpDeleteProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderItem | Driver | Route | undefined ;
+    rowToEdit: Product | Customer | OrderItem | Driver | Route | Receipt | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | Driver | Route | undefined>>;
+    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | Driver | Route | Receipt | undefined>>;
     handleDelete: (id: number) => void;
 }
 
@@ -88,6 +89,20 @@ const PopUpDelete = ({open, rowToEdit,
                     })
                     .finally(()=> setOpen(false));
                 break;
+            case "Receipts":
+                deleteReceipt((rowToEdit as Receipt).id)
+                    .then((data: ResponseDTO) => {
+                        console.log(data);
+                        setRowToEdit(data.receipt);
+                        handleDelete(data.receipt.id);
+                        setSubmitted(true);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                    .finally(()=> setOpen(false));
+                break;
+
         }
 
     }
@@ -369,6 +384,57 @@ const PopUpDelete = ({open, rowToEdit,
         )
     }
 
+    const renderReceiptFields = () => {
+        return (
+            <>
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Receipt ID"
+                    fullWidth
+                    variant="standard"
+                    value={(rowToEdit as Receipt)?.id}
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={`${(rowToEdit as Receipt)?.customer?.name} ${(rowToEdit as Receipt)?.customer?.lastName}`}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Customer Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={(rowToEdit as Receipt)?.amount}
+                    margin="dense"
+                    id="amount"
+                    name="amount"
+                    label="Amount"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    value={(rowToEdit as Receipt)?.date.toString()}
+                    margin="dense"
+                    id="date"
+                    name="date"
+                    label="Date"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+            </>
+        )
+    }
+
 
     return (
         <Dialog open={open} onClose={handleClose}>
@@ -385,6 +451,7 @@ const PopUpDelete = ({open, rowToEdit,
                     {typeOf === "Orders" && renderOrderFields()}
                     {typeOf === "Drivers" && renderDriverFields()}
                     {typeOf === "Routes" && renderRouteFields()}
+                    {typeOf === "Receipts" && renderReceiptFields()}
                 </form>
             </DialogContent>
             <DialogActions>

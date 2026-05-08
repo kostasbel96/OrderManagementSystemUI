@@ -47,7 +47,7 @@ export interface ResponseDTO {
 
 export interface Receipt {
     id: number;
-    amount: string;
+    amount: number | string;
     customer: Customer;
     notes: string;
     date: string | Date | Dayjs;
@@ -130,6 +130,13 @@ export interface OrderResponseDto {
 
 export interface RouteResponseDto {
     content: Route[];
+    totalElements: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+export interface ReceiptResponseDto {
+    content: Receipt[];
     totalElements: number;
     pageNumber: number;
     pageSize: number;

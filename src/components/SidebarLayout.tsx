@@ -8,7 +8,7 @@ import {
     X,
     PlusIcon,
     Linkedin,
-    Github, ChevronRight, Truck
+    Github, ChevronRight, Truck, HandCoins
 } from "lucide-react";
 import {type ReactNode, useState, useEffect, useRef} from "react";
 import {MenuItem, Popover} from "@mui/material";
@@ -28,6 +28,7 @@ import AddDriverTab from "./drivers/AddDriverTab.tsx";
 import DriversView from "./drivers/DriversView.tsx";
 import RoutesView from "./routes/RoutesView.tsx";
 import AddReceiptTab from "./receipts/AddReceiptTab.tsx";
+import ReceiptsView from "./receipts/ReceiptsView.tsx";
 
 export default function SidebarLayout({ children }: Readonly<{ children: ReactNode }>) {
     const [open, setOpen] = useState(false);
@@ -131,6 +132,18 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                         {[
                             { id: "addCustomer", label: "Add Customer", component: <AddCustomerTab /> },
                             { id: "customers",   label: "Customers", component: <CustomersView /> },
+                        ]}
+                    </NavItemWithSubmenu>
+
+                    <NavItemWithSubmenu
+                        id="receipts"
+                        icon={<HandCoins size={18} />}
+                        label="Receipts"
+                        collapsed={collapsed}
+                        setOpen={setOpen}
+                    >
+                        {[
+                            { id: "receipts",   label: "Receipts", component: <ReceiptsView /> },
                             { id: "addReceipt", label: "Add Receipt", component: <AddReceiptTab />}
                         ]}
                     </NavItemWithSubmenu>

@@ -1,4 +1,4 @@
-import type {Customer, Driver, OrderItem, Product, Route} from "../../../types/Types.ts";
+import type {Customer, Driver, OrderItem, Product, Receipt, Route} from "../../../types/Types.ts";
 import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
 import Alert from "@mui/material/Alert";
@@ -7,13 +7,13 @@ import { motion } from "framer-motion";
 
 interface PopUpItemDeletedProps {
     typeOf: string;
-    item: Product | Customer | OrderItem | Driver | Route;
+    item: Product | Customer | OrderItem | Driver | Route | Receipt;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     operation: string;
 }
 
 const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemDeletedProps) => {
-    const [operationItem, setOperationItem] = useState<Product | Customer | OrderItem | Driver | Route>();
+    const [operationItem, setOperationItem] = useState<Product | Customer | OrderItem | Driver | Route | Receipt>();
     const [progress, setProgress] = useState(100);
     const [isPaused, setIsPaused] = useState(false);
     const duration = 3000;
@@ -27,6 +27,8 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
             setOperationItem(item as OrderItem);
         } else if (typeOf === "driver") {
             setOperationItem(item as Driver);
+        } else if (typeOf === "receipt") {
+            setOperationItem(item as Receipt);
         } else if (typeOf === "route") {
             setOperationItem(item as Route);
         }
@@ -100,6 +102,8 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
                     (`Driver ${(operationItem as Driver).name} ${(operationItem as Driver).lastName} ${operation} successfully!` ) }
                 { (typeOf === "route" && operationItem) &&
                     (`Route ${(operationItem as Route).id} ${operation} successfully!` ) }
+                { (typeOf === "receipt" && operationItem) &&
+                    (`Receipt ${(operationItem as Receipt).id} ${operation} successfully!` ) }
                 <div
                     style={{
                         height: 4,

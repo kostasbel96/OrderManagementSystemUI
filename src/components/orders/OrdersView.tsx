@@ -6,7 +6,7 @@ import {
 } from "@mui/x-data-grid";
 import {getOrder, searchOrders} from "../../services/orderService.ts"
 import MyTable from "../ui/MyTable.tsx";
-import type {Customer, Driver, OrderItem, OrderRow, Product, ResponseDTO, Route} from "../../types/Types.ts";
+import type {Customer, Driver, OrderItem, OrderRow, Product, Receipt, ResponseDTO, Route} from "../../types/Types.ts";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
@@ -45,13 +45,13 @@ const OrdersView = ({columnVisibility,
                     searchTerm,
                     filters}: OrdersViewProps) => {
 
-    const [rows, setRows] = useState<(Customer | Product | OrderRow | Driver | Route)[]>([]);
+    const [rows, setRows] = useState<(Customer | Product | OrderRow | Driver | Route | Receipt)[]>([]);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [searchName, setSearchName] = useState(searchTerm ?? "");
     const [isSearching, setIsSearching] = useState(searchTerm ? true : false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<OrderItem>();
     const [submitted, setSubmitted] = useState(false);
@@ -282,7 +282,7 @@ const OrdersView = ({columnVisibility,
         },
     ];
 
-    const handleUpdateOrder = (updated: OrderRow | Product | Customer | Driver | Route) => {
+    const handleUpdateOrder = (updated: OrderRow | Product | Customer | Driver | Route | Receipt) => {
         setRows(prev => {
             const index = prev.findIndex(r => r.id === updated.id);
 
