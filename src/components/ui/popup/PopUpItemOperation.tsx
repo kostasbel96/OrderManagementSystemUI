@@ -1,4 +1,4 @@
-import type {Customer, Driver, OrderItem, Product, Receipt, Route} from "../../../types/Types.ts";
+import type {Customer, Driver, OrderItem, Product, Receipt, Route, Supplier} from "../../../types/Types.ts";
 import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
 import Alert from "@mui/material/Alert";
@@ -7,13 +7,13 @@ import { motion } from "framer-motion";
 
 interface PopUpItemDeletedProps {
     typeOf: string;
-    item: Product | Customer | OrderItem | Driver | Route | Receipt;
+    item: Product | Customer | OrderItem | Driver | Route | Receipt | Supplier;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     operation: string;
 }
 
 const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemDeletedProps) => {
-    const [operationItem, setOperationItem] = useState<Product | Customer | OrderItem | Driver | Route | Receipt>();
+    const [operationItem, setOperationItem] = useState<Product | Customer | OrderItem | Driver | Route | Receipt | Supplier>();
     const [progress, setProgress] = useState(100);
     const [isPaused, setIsPaused] = useState(false);
     const duration = 3000;
@@ -31,6 +31,8 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
             setOperationItem(item as Receipt);
         } else if (typeOf === "route") {
             setOperationItem(item as Route);
+        } else if (typeOf === "supplier") {
+            setOperationItem(item as Supplier);
         }
     }, []);
 

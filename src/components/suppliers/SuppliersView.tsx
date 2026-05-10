@@ -239,7 +239,7 @@ const SuppliersView = () => {
                 setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
-                typeOf={"Customers"}
+                typeOf={"Suppliers"}
                 setOpen={setOpenDeletePopUp}
                 setSubmitted={setSubmitted}
             />
@@ -247,8 +247,8 @@ const SuppliersView = () => {
                 {submitted && (
                     <PopUpItemOperation
                         setSubmitted={setSubmitted}
-                        typeOf={"customer"}
-                        item={rowToEdit as Customer}
+                        typeOf={"supplier"}
+                        item={rowToEdit as Supplier}
                         operation={operation}
                     />
                 )}
