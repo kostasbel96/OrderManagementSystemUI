@@ -147,6 +147,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                             customer: data.orderItem.customer,
                             products: data.orderItem.items,
                             address: data.orderItem.address,
+                            paymentStatus: data.orderItem.paymentStatus,
                             status: data.orderItem.status,
                             total: Number(data.orderItem.total ?? 0),
                             date: data.orderItem.date ? new Date(data.orderItem.date) : undefined
