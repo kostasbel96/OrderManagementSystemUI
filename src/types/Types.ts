@@ -23,6 +23,17 @@ export interface RouteDetails {
     status: string;
 }
 
+export interface Supplier {
+    id: number | undefined | null;
+    name: string;
+    email?: string;
+    phoneNumber1: string;
+    phoneNumber2?: string;
+    address?: string;
+    vat: string;
+    balance: number | undefined | null;
+}
+
 interface Person {
     id: number | undefined | null;
     name: string;

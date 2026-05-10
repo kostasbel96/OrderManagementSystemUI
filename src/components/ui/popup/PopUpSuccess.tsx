@@ -25,6 +25,8 @@ const PopUpSuccess = ({setSubmitted, title, progress, success}: FormPopUpProps) 
         popUpTitle = "Driver";
     } else if (title.toLowerCase().includes("receipt")) {
         popUpTitle = "Receipt";
+    } else if (title.toLowerCase().includes("supplier")) {
+        popUpTitle = "Supplier";
     } else {
         popUpTitle = "Order";
     }
