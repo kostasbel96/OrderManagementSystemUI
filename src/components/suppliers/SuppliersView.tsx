@@ -2,15 +2,15 @@ import type {GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} fr
 import MyTable from "../ui/MyTable.tsx";
 import {useEffect, useState} from "react";
 import type {Customer, Driver, OrderItem, OrderRow, Product, Receipt, Route, Supplier} from "../../types/Types.ts";
-import {searchCustomers} from "../../services/customerService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
+import {searchSuppliers} from "../../services/supplierService.ts";
 
-const CustomersView = () => {
+const SuppliersView = () => {
 
     const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver | Route | Receipt | Supplier)[]>([]);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
@@ -72,21 +72,6 @@ const CustomersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'lastName', headerName: 'Last Name', width: 150, renderCell: (params) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',   // vertical centering
-                        justifyContent: 'start', // horizontal centering
-                        whiteSpace: 'pre-line',
-                        height: '100%',          // σημαντικό για να γεμίζει το cell
-                        width: '100%',
-                        marginBottom: '24px'
-                    }}
-                >
-                    {params.value}
-                </div>
-            )  },
         {field: 'email', headerName: 'Email', width: 150, renderCell: (params) => (
                 <div
                     style={{
@@ -189,7 +174,7 @@ const CustomersView = () => {
         },
     ];
 
-    const handleUpdateCustomer = (updated: Product | Customer | OrderRow | Driver | Route | Receipt | Supplier) => {
+    const handleUpdateSupplier = (updated: Product | Customer | OrderRow | Driver | Route | Receipt | Supplier) => {
         setRows(prev => {
             const index = prev.findIndex(r => r.id === updated.id);
 
@@ -202,13 +187,13 @@ const CustomersView = () => {
         });
     };
 
-    const handleDeleteCustomer = (id: number) => {
+    const handleDeleteSupplier = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
     };
 
     useEffect(() => {
         setLoading(true);
-        searchCustomers({
+        searchSuppliers({
             page: paginationModel.page,
             pageSize: paginationModel.pageSize,
             globalSearch: isSearching ? searchName : "",
@@ -242,15 +227,15 @@ const CustomersView = () => {
                 selection={false}
             ></MyTable>
             <PopUpUpdate
-                handleUpdate={handleUpdateCustomer}
+                handleUpdate={handleUpdateSupplier}
                 open={openEdit}
                 setOpen={setOpenEdit}
                 rowToEdit={rowToEdit}
-                typeOf={"Customers"}
+                typeOf={"Suppliers"}
                 setSubmitted={setSubmitted}
             />
             <PopUpDelete
-                handleDelete={handleDeleteCustomer}
+                handleDelete={handleDeleteSupplier}
                 setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
@@ -274,4 +259,4 @@ const CustomersView = () => {
 
 }
 
-export default CustomersView;
+export default SuppliersView;

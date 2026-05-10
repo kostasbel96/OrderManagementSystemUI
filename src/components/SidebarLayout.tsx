@@ -30,6 +30,7 @@ import RoutesView from "./routes/RoutesView.tsx";
 import AddReceiptTab from "./receipts/AddReceiptTab.tsx";
 import ReceiptsView from "./receipts/ReceiptsView.tsx";
 import AddSupplierTab from "./suppliers/AddSupplierTab.tsx";
+import SuppliersView from "./suppliers/SuppliersView.tsx";
 
 export default function SidebarLayout({ children }: Readonly<{ children: ReactNode }>) {
     const [open, setOpen] = useState(false);
@@ -173,6 +174,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                     >
                         {[
                             { id: "addSupplier",   label: "Add Supplier", component: <AddSupplierTab /> },
+                            { id: "suppliers",   label: "Suppliers", component: <SuppliersView /> },
                         ]}
                     </NavItemWithSubmenu>
 

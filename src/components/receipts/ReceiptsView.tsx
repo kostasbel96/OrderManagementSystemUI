@@ -5,7 +5,17 @@ import {
     type GridSortModel,
 } from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
-import type {Customer, Driver, OrderItem, OrderRow, Product, Receipt, ResponseDTO, Route} from "../../types/Types.ts";
+import type {
+    Customer,
+    Driver,
+    OrderItem,
+    OrderRow,
+    Product,
+    Receipt,
+    ResponseDTO,
+    Route,
+    Supplier
+} from "../../types/Types.ts";
 import IconButton from "@mui/material/IconButton";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
@@ -20,7 +30,7 @@ const OrdersView = () => {
     const [loading, setLoading] = useState(false);
     const [searchName, setSearchName] = useState("");
     const [isSearching, setIsSearching] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Receipt>();
     const [submitted, setSubmitted] = useState(false);

@@ -1,5 +1,5 @@
 import {getApiUrl} from "../helper/IpHelper.ts";
-import type {ResponseDTO, Supplier} from "../types/Types.ts";
+import type {ResponseDTO, SearchRequest, Supplier, SupplierResponseDto} from "../types/Types.ts";
 
 const API_URL = getApiUrl();
 
@@ -12,4 +12,34 @@ export async function addSupplier(newSupplier: Omit<Supplier, "id">): Promise<Re
     const data = await res.json();
     if (!res.ok) throw new Error(data.errorResponse.message);
     return data.customer;
+}
+
+export async function searchSuppliers(request: SearchRequest): Promise<SupplierResponseDto> {
+    const res = await fetch(`${API_URL}/suppliers/search`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            page: request.page,
+            pageSize: request.pageSize,
+            globalSearch: request.globalSearch ?? "",
+            filters: request.filters ?? [],
+            sort: {
+                field: request.sortBy ?? "name",
+                sort: request.sortDirection ?? "asc"
+            }
+        })
+    });
+
+    if (!res.ok) throw new Error("Failed to search suppliers");
+
+    const data = await res.json();
+
+    return {
+        content: data.content,
+        totalElements: data.totalElements,
+        pageNumber: data.pageNumber,
+        pageSize: data.pageSize
+    };
 }

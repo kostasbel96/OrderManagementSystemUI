@@ -160,6 +160,13 @@ export interface CustomerResponseDto {
     pageSize: number;
 }
 
+export interface SupplierResponseDto {
+    content: Supplier[];
+    totalElements: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
 
 export interface DriverResponseDto {
     content: Driver[];

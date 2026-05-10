@@ -17,7 +17,7 @@ import type {
     Product, Receipt,
     Route,
     RouteDetails,
-    SelectedProduct
+    SelectedProduct, Supplier
 } from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import {updateProduct} from "../../services/productService.ts";
@@ -42,11 +42,11 @@ import {OrderStatus} from "../../types/enums/OrderStatus.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderItem | Driver | Route | Receipt | undefined ;
+    rowToEdit: Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    handleUpdate: (updated: OrderRow | Product | Customer | Driver | Route | Receipt ) => void;
+    handleUpdate: (updated: OrderRow | Product | Customer | Driver | Route | Receipt | Supplier ) => void;
 }
 
 const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpdate}: PopUpUpdateProps) => {
