@@ -49,6 +49,7 @@ export interface ResponseDTO {
     orderItem: OrderItem;
     productDto: Product;
     route: Route;
+    supplier: Supplier;
     driver: Driver;
     routes: Route[];
     receipt: Receipt;

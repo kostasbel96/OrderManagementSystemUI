@@ -87,7 +87,7 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'phoneNumber1', headerName: 'Phone Number 1', width: 150, renderCell: (params) => (
+        {field: 'phoneNumber1', headerName: 'Phone Number 1', width: 120, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -102,7 +102,22 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'phoneNumber2', headerName: 'Phone Number 2', width: 150, renderCell: (params) => (
+        {field: 'phoneNumber2', headerName: 'Phone Number 2', width: 120, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value}
+                </div>
+            ) },
+        { field: 'address', headerName: 'Address', width: 120, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -118,7 +133,7 @@ const SuppliersView = () => {
                 </div>
             ) },
         {
-            field: 'balance', headerName: 'Balance', type: "number", width: 150, renderCell: (params) => (
+            field: 'balance', headerName: 'Balance', type: "number", width: 100, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',

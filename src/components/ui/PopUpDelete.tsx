@@ -6,6 +6,7 @@ import {deleteOrder} from "../../services/orderService.ts";
 import {deleteDriver} from "../../services/driverService.ts";
 import {deleteRoute} from "../../services/routeService.ts";
 import {deleteReceipt} from "../../services/receiptService.ts";
+import {deleteSupplier} from "../../services/supplierService.ts";
 
 interface PopUpDeleteProps{
     open: boolean;
@@ -18,7 +19,7 @@ interface PopUpDeleteProps{
 }
 
 const PopUpDelete = ({open, rowToEdit,
-                     typeOf, setOpen, setSubmitted, setRowToEdit, handleDelete}: PopUpDeleteProps) => {
+                         typeOf, setOpen, setSubmitted, setRowToEdit, handleDelete}: PopUpDeleteProps) => {
 
     const handleClose = () => {
         setOpen(false);
@@ -102,6 +103,19 @@ const PopUpDelete = ({open, rowToEdit,
                     })
                     .finally(()=> setOpen(false));
                 break;
+            case "Suppliers":
+                deleteSupplier((rowToEdit as Supplier))
+                    .then((data: ResponseDTO) => {
+                        console.log(data);
+                        setRowToEdit(data.supplier);
+                        handleDelete(data.supplier.id ?? -1);
+                        setSubmitted(true);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                    .finally(()=> setOpen(false));
+                break;
 
         }
 
@@ -111,7 +125,7 @@ const PopUpDelete = ({open, rowToEdit,
         return (
             <>
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     margin="dense"
                     id="id"
                     name="id"
@@ -122,7 +136,7 @@ const PopUpDelete = ({open, rowToEdit,
                     value={(rowToEdit as Product)?.id}
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Product)?.name}
                     margin="dense"
                     id="name"
@@ -133,7 +147,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Product)?.description}
                     margin="dense"
                     id="description"
@@ -144,7 +158,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Product)?.quantity}
                     margin="dense"
                     id="quantity"
@@ -155,7 +169,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Product)?.price}
                     margin="dense"
                     id="price"
@@ -173,7 +187,7 @@ const PopUpDelete = ({open, rowToEdit,
         return (
             <>
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     margin="dense"
                     id="id"
                     name="id"
@@ -184,7 +198,7 @@ const PopUpDelete = ({open, rowToEdit,
                     value={(rowToEdit as Customer)?.id}
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Customer)?.name}
                     margin="dense"
                     id="name"
@@ -195,7 +209,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Customer)?.lastName}
                     margin="dense"
                     id="lastName"
@@ -206,7 +220,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Customer)?.phoneNumber1}
                     margin="dense"
                     id="phoneNumber1"
@@ -217,7 +231,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Customer)?.phoneNumber2}
                     margin="dense"
                     id="phoneNumber2"
@@ -228,7 +242,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Customer)?.email}
                     margin="dense"
                     id="email"
@@ -246,18 +260,18 @@ const PopUpDelete = ({open, rowToEdit,
         return (
             <>
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     margin="dense"
                     id="id"
                     name="id"
                     type="text"
-                    label="Customer ID"
+                    label="Driver ID"
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as Driver)?.id}
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Driver)?.name}
                     margin="dense"
                     id="name"
@@ -268,7 +282,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Driver)?.lastName}
                     margin="dense"
                     id="lastName"
@@ -279,7 +293,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Driver)?.phoneNumber1}
                     margin="dense"
                     id="phoneNumber1"
@@ -290,7 +304,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Driver)?.phoneNumber2}
                     margin="dense"
                     id="phoneNumber2"
@@ -308,7 +322,7 @@ const PopUpDelete = ({open, rowToEdit,
         return (
             <>
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     margin="dense"
                     id="id"
                     name="id"
@@ -319,7 +333,7 @@ const PopUpDelete = ({open, rowToEdit,
                     value={(rowToEdit as OrderItem)?.id}
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={`${(rowToEdit as OrderItem)?.customer?.name} ${(rowToEdit as OrderItem)?.customer?.lastName}`}
                     margin="dense"
                     id="name"
@@ -330,7 +344,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as OrderItem)?.address}
                     margin="dense"
                     id="address"
@@ -348,7 +362,7 @@ const PopUpDelete = ({open, rowToEdit,
         return (
             <>
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     margin="dense"
                     id="id"
                     name="id"
@@ -359,23 +373,23 @@ const PopUpDelete = ({open, rowToEdit,
                     value={(rowToEdit as Route)?.id}
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={`${(rowToEdit as Route)?.driver?.name} ${(rowToEdit as Route)?.driver?.lastName}`}
                     margin="dense"
-                    id="name"
-                    name="name"
+                    id="driverName"
+                    name="driverName"
                     label="Driver Name"
                     type="text"
                     fullWidth
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Route)?.name}
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Name"
+                    label="Route Name"
                     type="text"
                     fullWidth
                     variant="standard"
@@ -388,7 +402,7 @@ const PopUpDelete = ({open, rowToEdit,
         return (
             <>
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     margin="dense"
                     id="id"
                     name="id"
@@ -399,18 +413,18 @@ const PopUpDelete = ({open, rowToEdit,
                     value={(rowToEdit as Receipt)?.id}
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={`${(rowToEdit as Receipt)?.customer?.name} ${(rowToEdit as Receipt)?.customer?.lastName}`}
                     margin="dense"
-                    id="name"
-                    name="name"
+                    id="customerName"
+                    name="customerName"
                     label="Customer Name"
                     type="text"
                     fullWidth
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Receipt)?.amount}
                     margin="dense"
                     id="amount"
@@ -421,7 +435,7 @@ const PopUpDelete = ({open, rowToEdit,
                     variant="standard"
                 />
                 <TextField
-                    InputProps={{ readOnly: true }}
+                    slotProps={{ input: { readOnly: true } }}
                     value={(rowToEdit as Receipt)?.date.toString()}
                     margin="dense"
                     id="date"
@@ -435,6 +449,89 @@ const PopUpDelete = ({open, rowToEdit,
         )
     }
 
+    const renderSupplierFields = () => {
+        return (
+            <>
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Supplier ID"
+                    fullWidth
+                    variant="standard"
+                    value={(rowToEdit as Supplier)?.id}
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as Supplier)?.name}
+                    margin="dense"
+                    id="companyName"
+                    name="companyName"
+                    label="Company Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as Supplier)?.email}
+                    margin="dense"
+                    id="email"
+                    name="email"
+                    label="Email"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as Supplier)?.phoneNumber1}
+                    margin="dense"
+                    id="phoneNumber1"
+                    name="phoneNumber1"
+                    label="Phone Number 1"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as Supplier)?.phoneNumber2}
+                    margin="dense"
+                    id="phoneNumber2"
+                    name="phoneNumber2"
+                    label="Phone Number 2"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as Supplier)?.vat}
+                    margin="dense"
+                    id="vatNumber"
+                    name="vatNumber"
+                    label="VAT Number"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as Supplier)?.address}
+                    margin="dense"
+                    id="address"
+                    name="address"
+                    label="Address"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+            </>
+        )
+    }
 
     return (
         <Dialog open={open} onClose={handleClose}>
@@ -452,6 +549,7 @@ const PopUpDelete = ({open, rowToEdit,
                     {typeOf === "Drivers" && renderDriverFields()}
                     {typeOf === "Routes" && renderRouteFields()}
                     {typeOf === "Receipts" && renderReceiptFields()}
+                    {typeOf === "Suppliers" && renderSupplierFields()}
                 </form>
             </DialogContent>
             <DialogActions>

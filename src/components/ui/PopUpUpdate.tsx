@@ -39,6 +39,8 @@ import dayjs, {type Dayjs} from "dayjs";
 import {Edit} from "lucide-react";
 import EditRouteDialog from "../routes/EditRouteDialog.tsx";
 import {OrderStatus} from "../../types/enums/OrderStatus.ts";
+import useSupplierFormValidation from "../../hooks/useSupplierFormValidation.ts";
+import {updateSupplier} from "../../services/supplierService.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
@@ -90,6 +92,16 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         notes: "",
         status: ""
     })
+    const [supplierValues, setSupplierValues] = useState<Supplier>({
+        id: -1,
+        name: "",
+        email: "",
+        phoneNumber1: "",
+        phoneNumber2: "",
+        address: "",
+        balance: 0,
+        vat: ""
+    })
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [initialItems, setInitialItems] = useState<SelectedProduct[]>([]);
     const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(productValues);
@@ -113,6 +125,15 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         driver: routeValues.driver as Driver,
         routeName: routeValues.name
     });
+
+    const {validateSupplierForm, setSupplierErrors, supplierErrors} = useSupplierFormValidation({
+        name: supplierValues.name,
+        email: supplierValues.email,
+        phoneNumber1: supplierValues.phoneNumber1,
+        phoneNumber2: supplierValues.phoneNumber2,
+        address: supplierValues.address,
+        vat: supplierValues.vat
+    })
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -191,6 +212,17 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         })))
                 }
                 break;
+            case "Suppliers":
+                if (validateSupplierForm()) {
+                    updateSupplier(supplierValues)
+                        .then(data => {
+                            handleUpdate(data.supplier);
+                            setSubmitted(true);
+                            setOpen(false);
+                        })
+                        .catch(err => console.log(err))
+                }
+                break;
 
         }
     }
@@ -211,6 +243,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 break;
             case "Routes":
                 setRouteErrors({});
+                break;
+            case "Suppliers":
+                setSupplierErrors({});
                 break;
 
         }
@@ -248,6 +283,12 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 setRouteValues(prev => ({
                     ...prev,
                     [name]: value,
+                }));
+                break;
+            case "Suppliers":
+                setSupplierValues(prev => ({
+                    ...prev,
+                    [name]: value
                 }));
                 break;
             default:
@@ -738,6 +779,103 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         )
     }
 
+    const renderSupplierFields = () => {
+        return (
+            <>
+                <TextField
+                    onChange={handleChange}
+                    InputProps={{ readOnly: true }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Supplier ID"
+                    fullWidth
+                    variant="standard"
+                    value={supplierValues.id}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={supplierValues.name}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(supplierErrors?.name)}
+                    helperText={supplierErrors?.name}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={supplierValues.email}
+                    margin="dense"
+                    id="email"
+                    name="email"
+                    label="Email"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(supplierErrors?.email)}
+                    helperText={supplierErrors?.email}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={supplierValues.phoneNumber1}
+                    margin="dense"
+                    id="phoneNumber1"
+                    name="phoneNumber1"
+                    label="Phone Number 1"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(supplierErrors?.phoneNumber1)}
+                    helperText={supplierErrors?.phoneNumber1}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={supplierValues.phoneNumber2}
+                    margin="dense"
+                    id="phoneNumber2"
+                    name="phoneNumber2"
+                    label="Phone Number 2"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(supplierErrors?.phoneNumber2)}
+                    helperText={supplierErrors?.phoneNumber2}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={supplierValues.vat}
+                    margin="dense"
+                    id="vatNumber"
+                    name="vatNumber"
+                    label="VAT Number"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(supplierErrors?.vat)}
+                    helperText={supplierErrors?.vat}
+                />
+                <TextField
+                    onChange={handleChange}
+                    value={supplierValues.address}
+                    margin="dense"
+                    id="address"
+                    name="address"
+                    label="Address"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    error={Boolean(supplierErrors?.address)}
+                    helperText={supplierErrors?.address}
+                />
+            </>
+        )
+    }
+
     useEffect(() => {
         if (!rowToEdit) return;
         switch (typeOf) {
@@ -764,6 +902,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 break;
             case "Routes":
                 setRouteValues(rowToEdit as Route);
+                break;
+            case "Suppliers":
+                setSupplierValues(rowToEdit as Supplier);
                 break;
             default:
                 break;
@@ -792,6 +933,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         {typeOf === "Orders" ? renderOrderFields() : null}
                         {typeOf === "Drivers" ? renderDriverFields() : null}
                         {typeOf === "Routes" ? renderRouteFields() : null}
+                        {typeOf === "Suppliers" ? renderSupplierFields() : null}
                     </form>
                 </DialogContent>
                 <DialogActions>

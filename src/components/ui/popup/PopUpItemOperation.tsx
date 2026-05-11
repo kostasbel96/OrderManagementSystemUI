@@ -106,6 +106,8 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
                     (`Route ${(operationItem as Route).id} ${operation} successfully!` ) }
                 { (typeOf === "receipt" && operationItem) &&
                     (`Receipt ${(operationItem as Receipt).id} ${operation} successfully!` ) }
+                { (typeOf === "supplier" && operationItem) &&
+                    (`Supplier ${(operationItem as Supplier).id} ${operation} successfully!` ) }
                 <div
                     style={{
                         height: 4,
