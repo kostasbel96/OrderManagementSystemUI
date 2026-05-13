@@ -7,7 +7,7 @@ import {
     Typography,
 } from "@mui/material";
 import { type FormEvent, useEffect, useState } from "react";
-import type {Customer, SelectedProduct} from "../../../types/Types.ts";
+import type {Customer, SelectedProduct, Supplier} from "../../../types/Types.ts";
 import { addOrder } from "../../../services/orderService.ts";
 import useOrderFormValidation from "../../../hooks/useOrderFormValidation.ts";
 import ProductsTableInsert from "./ProductsTableInsert.tsx";
@@ -15,6 +15,9 @@ import {useCustomerSearch} from "../../../hooks/useCustomerSearch.ts";
 import {AppAutocomplete} from "../../ui/AppAutocomplete.tsx";
 import LabeledField from "../../ui/LabeledField.tsx";
 import OMSLabel from "../../ui/OMSLabel.tsx";
+import OMSSelect from "../../ui/OMSSelect.tsx";
+import * as React from "react";
+import {useSupplierSearch} from "../../../hooks/useSupplierSearch.ts";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,9 +31,12 @@ const FormOrder = ({
                        setPopUpMessage,
                    }: FormOrderProps) => {
 
+    const [selectValue, setSelectValue] = React.useState("orderCustomer");
+
     const [inputValue, setInputValue] = useState("");
 
-    const { customers, loading } = useCustomerSearch(inputValue);
+    const { customers, loading: customersLoading } = useCustomerSearch(inputValue);
+    const { suppliers, loading: suppliersLoading } = useSupplierSearch(inputValue);
 
     const [selectedProductsWithQty, setSelectedProductsWithQty] =
         useState<SelectedProduct[]>(() => {
@@ -38,6 +44,10 @@ const FormOrder = ({
             return saved ? JSON.parse(saved) : [];
         });
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(() => {
+        const saved = localStorage.getItem("orderDraft");
+        return saved ? JSON.parse(saved).selectedCustomer : null;
+    });
+    const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(() => {
         const saved = localStorage.getItem("orderDraft");
         return saved ? JSON.parse(saved).selectedCustomer : null;
     });
@@ -120,6 +130,87 @@ const FormOrder = ({
         setPopUpMessage("");
     }, []);
 
+    const renderCustomersFields = () => {
+        if (selectValue === "orderCustomer") {
+            return (
+                <>
+                    {/* CUSTOMER */}
+                    <Grid size={{ xs: 12 }}>
+                        <Stack direction="row"
+                               alignItems="stretch"
+                               spacing={0}>
+                            <OMSLabel
+                                required
+                                label="Customer"
+                            />
+                            <Box sx={{ flex: 1 }}>
+                                <AppAutocomplete<Customer>
+                                    options={customers}
+                                    value={selectedCustomer}
+                                    inputValue={inputValue}
+                                    loading={customersLoading}
+                                    placeholder="Search customer..."
+                                    getOptionLabel={(c) => `${c.name} ${c.lastName} #${c.id}`}
+                                    onChange={setSelectedCustomer}
+                                    onInputChange={setInputValue}
+                                    helperText={orderErrors?.customer}
+                                    error={Boolean(orderErrors?.customer)}
+                                />
+                            </Box>
+                        </Stack>
+                    </Grid>
+
+                    {/* ADDRESS */}
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <LabeledField
+                            label="Address"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            error={Boolean(orderErrors?.address)}
+                            helperText={orderErrors?.address ?? " "}
+                            required
+                        />
+                    </Grid>
+                </>
+            )
+        }
+    }
+
+    const renderSuppliersFields = () => {
+        if (selectValue === "orderSupplier") {
+            return (
+                <>
+                    {/* SUPPLIER */}
+                    <Grid size={{ xs: 12 }}>
+                        <Stack direction="row"
+                               alignItems="stretch"
+                               spacing={0}>
+                            <OMSLabel
+                                required
+                                label="Supplier"
+                            />
+                            <Box sx={{ flex: 1 }}>
+                                <AppAutocomplete<Supplier>
+                                    options={suppliers}
+                                    value={selectedSupplier}
+                                    inputValue={inputValue}
+                                    loading={suppliersLoading}
+                                    placeholder="Search supplier..."
+                                    getOptionLabel={(c) => `${c.name} #${c.id}`}
+                                    onChange={setSelectedSupplier}
+                                    onInputChange={setInputValue}
+                                    helperText={orderErrors?.customer}
+                                    error={Boolean(orderErrors?.customer)}
+                                />
+                            </Box>
+                        </Stack>
+                    </Grid>
+                </>
+            )
+        }
+    }
+
+
     return (
         <Paper
             elevation={2}
@@ -142,42 +233,31 @@ const FormOrder = ({
                         </Box>
                     </Grid>
 
-                    {/* CUSTOMER */}
+                    {/* TYPE OF ORDER */}
                     <Grid size={{ xs: 12 }}>
                         <Stack direction="row"
                                alignItems="stretch"
                                spacing={0}>
                             <OMSLabel
                                 required
-                                label="Customer"
+                                label="Type of order"
                             />
-                            <Box sx={{ flex: 1 }}>
-                                <AppAutocomplete<Customer>
-                                    options={customers}
-                                    value={selectedCustomer}
-                                    inputValue={inputValue}
-                                    loading={loading}
-                                    placeholder="Search customer..."
-                                    getOptionLabel={(c) => `${c.name} ${c.lastName} #${c.id}`}
-                                    onChange={setSelectedCustomer}
-                                    onInputChange={setInputValue}
-                                    helperText={orderErrors?.customer}
-                                    error={Boolean(orderErrors?.customer)}
-                                />
-                            </Box>
+                            <OMSSelect
+                                selectValue={selectValue}
+                                setSelectValue={setSelectValue}
+                            />
+
                         </Stack>
                     </Grid>
 
-                    {/* ADDRESS */}
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <LabeledField
-                            label="Address"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            error={Boolean(orderErrors?.address)}
-                            helperText={orderErrors?.address ?? " "}
-                            required
-                        />
+                    <Grid
+                        size={{ xs: 12 }}
+                        sx={{
+                            minHeight: 110,
+                        }}
+                    >
+                        {renderCustomersFields()}
+                        {renderSuppliersFields()}
                     </Grid>
 
                     {/* TABLE */}
