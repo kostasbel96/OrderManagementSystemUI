@@ -1,5 +1,5 @@
 import {z} from "zod";
-import {orderSchema} from "./useOrderFormValidation.ts";
+import {orderSchema} from "./useCustomerOrderFormValidation.ts";
 import type {Driver, OrderRow} from "../types/Types.ts";
 import {useState} from "react";
 

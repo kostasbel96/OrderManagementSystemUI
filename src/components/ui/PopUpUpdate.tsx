@@ -23,7 +23,7 @@ import {useEffect, useState} from "react";
 import {updateProduct} from "../../services/productService.ts";
 import useProductFormValidation from "../../hooks/useProductFormValidation.ts";
 import useCustomerFormValidation from "../../hooks/useCustomerFormValidation.ts";
-import useOrderFormValidation from "../../hooks/useOrderFormValidation.ts";
+import useCustomerOrderFormValidation from "../../hooks/useCustomerOrderFormValidation.ts";
 import {updateCustomer} from "../../services/customerService.ts";
 import {updateOrder} from "../../services/orderService.ts";
 import ProductsTableInsert from "../orders/FormOrder/ProductsTableInsert.tsx";
@@ -107,7 +107,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
     const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(productValues);
     const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(customerValues);
     const {validateDriverForm, driverErrors, setDriverErrors} = useDriverFormValidation(driverValues);
-    const {validateOrderForm, orderErrors, setOrderErrors} = useOrderFormValidation({
+    const {validateOrderForm, orderErrors, setOrderErrors} = useCustomerOrderFormValidation({
         selectedProductsWithQty: selectedProductsWithQty,
         selectedCustomer: orderValues.customer as Customer,
         address: orderValues.address,

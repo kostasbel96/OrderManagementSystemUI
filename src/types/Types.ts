@@ -81,6 +81,17 @@ export interface OrderItem {
     paymentStatus?: string;
 }
 
+export interface PurchaseOrderItem {
+    id: number;
+    items: SelectedProduct[];
+    supplier?: Supplier;
+    date: string;
+    status: string;
+    total?: string;
+    paidAmount?: string;
+    paymentStatus?: string;
+}
+
 export interface SelectedProduct {
     id?: number;
     product?: Product;
@@ -189,6 +200,11 @@ export interface Item{
 export interface OrderRequest{
     address: string;
     customerId: number | undefined | null;
+    items: Item[];
+}
+
+export interface PurchaseOrderRequest {
+    supplierId: number | undefined | null;
     items: Item[];
 }
 

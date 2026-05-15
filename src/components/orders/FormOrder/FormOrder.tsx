@@ -8,8 +8,6 @@ import {
 } from "@mui/material";
 import { type FormEvent, useEffect, useState } from "react";
 import type {Customer, SelectedProduct, Supplier} from "../../../types/Types.ts";
-import { addOrder } from "../../../services/orderService.ts";
-import useOrderFormValidation from "../../../hooks/useOrderFormValidation.ts";
 import ProductsTableInsert from "./ProductsTableInsert.tsx";
 import {useCustomerSearch} from "../../../hooks/useCustomerSearch.ts";
 import {AppAutocomplete} from "../../ui/AppAutocomplete.tsx";
@@ -18,6 +16,7 @@ import OMSLabel from "../../ui/OMSLabel.tsx";
 import OMSSelect from "../../ui/OMSSelect.tsx";
 import * as React from "react";
 import {useSupplierSearch} from "../../../hooks/useSupplierSearch.ts";
+import useAddOrder from "../../../hooks/useAddOrder.ts";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -57,6 +56,10 @@ const FormOrder = ({
         return saved ? JSON.parse(saved).address : "";
     });
 
+    const { customerOrderErrors, setCustomerOrderErrors, supplierOrderErrors, setSupplierOrderErrors, saveOrder} = useAddOrder({
+        address, customer: selectedCustomer, supplier: selectedSupplier,
+        items: selectedProductsWithQty, setSubmitted, setSuccess, setPopUpMessage});
+
     useEffect(() => {
         localStorage.setItem(
             "orderDraft",
@@ -74,45 +77,16 @@ const FormOrder = ({
         );
     }, [selectedProductsWithQty]);
 
-    const {
-        validateOrderForm,
-        orderErrors,
-        setOrderErrors
-    } = useOrderFormValidation({
-        selectedProductsWithQty,
-        selectedCustomer,
-        address
-    });
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setPopUpMessage("");
 
-        if (validateOrderForm()) {
-            addOrder({
-                products: selectedProductsWithQty,
-                customer: selectedCustomer,
-                address
-            })
-                .then((data) => {
-                    setSuccess(true);
-                    setSubmitted(true);
-                    setPopUpMessage("Order created successfully");
-                    console.log(data);
-                })
-                .catch((error) => {
-                    setPopUpMessage(error.message);
-                    setSubmitted(true);
-                    setSuccess(false);
-                });
+        saveOrder(selectValue);
+        setSelectedProductsWithQty([]);
+        setSelectedCustomer(null);
+        setAddress("");
 
-            setSelectedProductsWithQty([]);
-            setSelectedCustomer(null);
-            setAddress("");
-        } else {
-            setSubmitted(true);
-            setSuccess(false);
-        }
     };
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
@@ -121,7 +95,8 @@ const FormOrder = ({
         setSelectedProductsWithQty([]);
         setSelectedCustomer(null);
         setAddress("");
-        setOrderErrors({});
+        setCustomerOrderErrors({});
+        setSupplierOrderErrors({})
         setPopUpMessage("");
         setSubmitted(false);
     };
@@ -153,8 +128,8 @@ const FormOrder = ({
                                     getOptionLabel={(c) => `${c.name} ${c.lastName} #${c.id}`}
                                     onChange={setSelectedCustomer}
                                     onInputChange={setInputValue}
-                                    helperText={orderErrors?.customer}
-                                    error={Boolean(orderErrors?.customer)}
+                                    helperText={customerOrderErrors?.customer}
+                                    error={Boolean(customerOrderErrors?.customer)}
                                 />
                             </Box>
                         </Stack>
@@ -166,8 +141,8 @@ const FormOrder = ({
                             label="Address"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
-                            error={Boolean(orderErrors?.address)}
-                            helperText={orderErrors?.address ?? " "}
+                            error={Boolean(customerOrderErrors?.address)}
+                            helperText={customerOrderErrors?.address ?? " "}
                             required
                         />
                     </Grid>
@@ -199,8 +174,8 @@ const FormOrder = ({
                                     getOptionLabel={(c) => `${c.name} #${c.id}`}
                                     onChange={setSelectedSupplier}
                                     onInputChange={setInputValue}
-                                    helperText={orderErrors?.customer}
-                                    error={Boolean(orderErrors?.customer)}
+                                    error={Boolean(supplierOrderErrors?.supplier)}
+                                    helperText={supplierOrderErrors?.supplier ?? " "}
                                 />
                             </Box>
                         </Stack>
@@ -239,7 +214,6 @@ const FormOrder = ({
                                alignItems="stretch"
                                spacing={0}>
                             <OMSLabel
-                                required
                                 label="Type of order"
                             />
                             <OMSSelect
@@ -268,15 +242,17 @@ const FormOrder = ({
                         />
 
                         <Box sx={{ minHeight: 18 }}>
-                            {(orderErrors?.products ||
-                                orderErrors?.productQuantity ||
-                                orderErrors?.productPrice ||
-                                orderErrors?.stockError) && (
+                            {(customerOrderErrors?.products ||
+                                supplierOrderErrors?.products ||
+                                customerOrderErrors?.productQuantity ||
+                                customerOrderErrors?.productPrice ||
+                                customerOrderErrors?.stockError) && (
                                 <Typography color="error" fontSize={11}>
-                                    {orderErrors.products ||
-                                        orderErrors.productQuantity ||
-                                        orderErrors.productPrice ||
-                                        orderErrors.stockError}
+                                    {customerOrderErrors.products ||
+                                        supplierOrderErrors.products ||
+                                        customerOrderErrors.productQuantity ||
+                                        customerOrderErrors.productPrice ||
+                                        customerOrderErrors.stockError}
                                 </Typography>
                             )}
                         </Box>

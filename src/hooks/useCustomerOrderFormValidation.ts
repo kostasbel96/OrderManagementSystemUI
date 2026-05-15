@@ -54,7 +54,7 @@ type UseOrderFormValidationProps = {
     initialItems?: SelectedProduct[];
 }
 
-const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, address, initialItems}: UseOrderFormValidationProps) => {
+const useCustomerOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, address, initialItems}: UseOrderFormValidationProps) => {
     const [orderErrors, setOrderErrors] = useState<FormErrors>({});
 
     const validQuantity = (): {notValidProducts: SelectedProduct[], isValid: boolean} => {
@@ -129,4 +129,4 @@ const useOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, addr
     }
 }
 
-export default useOrderFormValidation;
+export default useCustomerOrderFormValidation;
