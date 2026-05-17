@@ -1,5 +1,15 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
-import type {Customer, Driver, OrderItem, Product, Receipt, ResponseDTO, Route, Supplier} from "../../types/Types.ts";
+import type {
+    Customer,
+    Driver,
+    OrderItem,
+    PurchaseOrderItem,
+    Product,
+    Receipt,
+    ResponseDTO,
+    Route,
+    Supplier
+} from "../../types/Types.ts";
 import {deleteProduct} from "../../services/productService.ts";
 import {deleteCustomer} from "../../services/customerService.ts";
 import {deleteOrder} from "../../services/orderService.ts";
@@ -10,11 +20,11 @@ import {deleteSupplier} from "../../services/supplierService.ts";
 
 interface PopUpDeleteProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | undefined ;
+    rowToEdit: Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | undefined>>;
+    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>>;
     handleDelete: (id: number) => void;
 }
 

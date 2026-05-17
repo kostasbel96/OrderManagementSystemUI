@@ -1,7 +1,17 @@
 import type {GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
 import {useEffect, useState} from "react";
-import type {Customer, Driver, OrderItem, OrderRow, Product, Receipt, Route, Supplier} from "../../types/Types.ts";
+import type {
+    Customer,
+    Driver,
+    OrderItem,
+    OrderRow,
+    Product,
+    PurchaseOrderItem,
+    Receipt,
+    Route,
+    Supplier
+} from "../../types/Types.ts";
 import {searchCustomers} from "../../services/customerService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
@@ -17,7 +27,7 @@ const CustomersView = () => {
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Customer>();
     const [submitted, setSubmitted] = useState(false);

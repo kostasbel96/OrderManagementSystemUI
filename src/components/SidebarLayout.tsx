@@ -120,7 +120,8 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                     >
                         {[
                             { id: "addOrder", label: "Add Order", component: <AddOrderTab /> },
-                            { id: "orders",   label: "Orders", component: <OrdersView /> },
+                            { id: "customerOrders",   label: "Customer Orders", component: <OrdersView /> },
+                            { id: "supplierOrders",   label: "Supplier Orders", component: <OrdersView orderType={"orderSupplier"} /> }
                         ]}
                     </NavItemWithSubmenu>
 

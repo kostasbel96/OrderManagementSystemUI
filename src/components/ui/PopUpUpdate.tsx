@@ -13,7 +13,7 @@ import type {
     Customer,
     Driver,
     OrderItem,
-    OrderRow,
+    OrderRow, PurchaseOrderItem,
     Product, Receipt,
     Route,
     RouteDetails,
@@ -44,7 +44,7 @@ import {updateSupplier} from "../../services/supplierService.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | undefined ;
+    rowToEdit: Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;

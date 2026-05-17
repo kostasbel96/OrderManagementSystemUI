@@ -128,8 +128,9 @@ export interface Route {
 export interface OrderRow {
     id: number;
     customer?: Customer;
+    supplier?: Supplier;
     products: SelectedProduct[];
-    address: string;
+    address?: string;
     status: string;
     total: number;
     paidAmount?: number;
@@ -146,6 +147,13 @@ export interface ProductResponseDto {
 
 export interface OrderResponseDto {
     content: OrderItem[];
+    totalElements: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+export interface PurchaseOrderItemResponseDto {
+    content: PurchaseOrderItem[];
     totalElements: number;
     pageNumber: number;
     pageSize: number;

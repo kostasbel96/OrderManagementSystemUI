@@ -10,7 +10,7 @@ import type {
     Driver,
     OrderItem,
     OrderRow,
-    Product,
+    Product, PurchaseOrderItem,
     Receipt,
     ResponseDTO,
     Route,
@@ -30,7 +30,7 @@ const OrdersView = () => {
     const [loading, setLoading] = useState(false);
     const [searchName, setSearchName] = useState("");
     const [isSearching, setIsSearching] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Receipt>();
     const [submitted, setSubmitted] = useState(false);

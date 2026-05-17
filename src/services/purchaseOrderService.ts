@@ -1,6 +1,6 @@
 import type {
-    PurchaseOrderItem,
-    PurchaseOrderRequest,
+    PurchaseOrderItem, PurchaseOrderItemResponseDto,
+    PurchaseOrderRequest, SearchRequest,
     SelectedProduct,
     Supplier
 } from "../types/Types.ts";
@@ -23,11 +23,41 @@ export async function addPurchaseOrder({products, supplier}: OrderProps): Promis
                 {productId: p.product?.id, quantity: p.quantity, price: p.price.toString()}
             ))
     }
-    const res = await fetch(`${API_URL}/purchase-orders/save`,{
+    const res = await fetch(`${API_URL}/purchaseOrders/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderRequest),
     });
     if (!res.ok) throw new Error("Failed to create purchase order");
     return await res.json();
+}
+
+export async function searchSupplierOrders(request: SearchRequest): Promise<PurchaseOrderItemResponseDto> {
+    const res = await fetch(`${API_URL}/purchaseOrders/search`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            page: request.page,
+            pageSize: request.pageSize,
+            globalSearch: request.globalSearch ?? "",
+            filters: request.filters ?? [],
+            sort: {
+                field: request.sortBy ?? "date",
+                sort: request.sortDirection ?? "asc"
+            }
+        })
+    });
+
+    if (!res.ok) throw new Error("Failed to search purchase orders");
+
+    const data = await res.json();
+
+    return {
+        content: data.content,
+        totalElements: data.totalElements,
+        pageNumber: data.pageNumber,
+        pageSize: data.pageSize
+    };
 }

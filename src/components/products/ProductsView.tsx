@@ -1,6 +1,16 @@
 import {type GridColDef, type GridFilterModel, type GridPaginationModel, type GridSortModel} from '@mui/x-data-grid';
 import {useEffect, useMemo, useState} from "react";
-import type {Customer, Driver, OrderItem, OrderRow, Product, Receipt, Route, Supplier} from "../../types/Types.ts";
+import type {
+    Customer,
+    Driver,
+    OrderItem,
+    OrderRow,
+    Product,
+    PurchaseOrderItem,
+    Receipt,
+    Route,
+    Supplier
+} from "../../types/Types.ts";
 import MyTable from "../ui/MyTable.tsx";
 import { searchProducts } from "../../services/productService.ts";
 import IconButton from "@mui/material/IconButton";
@@ -17,7 +27,7 @@ const ProductsView = () => {
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | PurchaseOrderItem |undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Product>();
     const [submitted, setSubmitted] = useState(false);

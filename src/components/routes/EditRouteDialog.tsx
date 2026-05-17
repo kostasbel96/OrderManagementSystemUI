@@ -102,10 +102,10 @@ const EditRouteDialog = ({
                     id: stop.id,
                     customer: stop.customer,
                     items: stop.products,      // OrderRow.products → OrderItem.items
-                    address: stop.address,
+                    address: stop.address ?? "",
                     status: stop.status,
                     total: String(stop.total), // number → string
-                    date: stop.date as string,
+                    date: stop.date as string
                 }))
             }));
             setOpen(false);
