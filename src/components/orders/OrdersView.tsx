@@ -122,7 +122,7 @@ const OrdersView = ({columnVisibility,
             <MyTable
                 showSearchBar={showSearchBar}
                 columns={columns}
-                typeOf={"Orders"}
+                typeOf={orderType}
                 rows={rows}
                 loading={loading}
                 rowCount={rowCount}

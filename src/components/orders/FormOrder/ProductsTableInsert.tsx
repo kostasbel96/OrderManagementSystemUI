@@ -54,13 +54,16 @@ const ProductsTableInsert = ({
 
         const updated = [...selectedProductsWithQty];
 
+        if (value !== "" && !/^\d*[.,]?\d*$/.test(value)) return;
+
         if (value === "") {
             updated[index].price = 0;
+            updated[index].priceInput = value;
             setSelectedProductsWithQty(updated);
             return;
         }
-
-        updated[index].price = Number(value);
+        updated[index].priceInput = value;
+        updated[index].price = Number.parseFloat(updated[index].priceInput.replace(",", "."));
         setSelectedProductsWithQty(updated);
     };
 
@@ -72,7 +75,7 @@ const ProductsTableInsert = ({
                     id: Date.now(),
                     product: undefined,
                     quantity: 1,
-                    price: 0,
+                    price: 0
                 },
             ];
 
@@ -119,7 +122,7 @@ const ProductsTableInsert = ({
 
         "& input": {
             padding: "2px 6px",
-            textAlign: "right",
+            textAlign: "center",
         },
 
         // 🔥 remove spinners
@@ -252,6 +255,7 @@ const ProductsTableInsert = ({
                                                                             ...row,
                                                                             product: product || undefined,
                                                                             price: product?.price ?? row.price,
+                                                                            priceInput: String(product?.price ?? row.price ?? "")
                                                                         }
                                                                         : row
                                                                 )
@@ -288,13 +292,12 @@ const ProductsTableInsert = ({
 
                                                 <TableCell>
                                                     <TextField
-                                                        type="number"
+                                                        type="text"
                                                         onFocus={(e) => e.target.select()}
-                                                        value={item.price === null || item.price === undefined ? "" : String(item.price)}
+                                                        value={item.priceInput ?? ""}
                                                         inputProps={{
-                                                            min: 0,
-                                                            inputMode: "decimal",
-                                                            pattern: "[0-9]*[.,]?[0-9]*"
+                                                            step: "0.01",
+                                                            min: 0
                                                         }}
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePriceInputChange(e, index)}
                                                         size="small"

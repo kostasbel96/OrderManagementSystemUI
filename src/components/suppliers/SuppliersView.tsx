@@ -142,6 +142,21 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             ) },
+        { field: 'vat', headerName: 'Vat', width: 120, renderCell: (params) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',   // vertical centering
+                        justifyContent: 'start', // horizontal centering
+                        whiteSpace: 'pre-line',
+                        height: '100%',          // σημαντικό για να γεμίζει το cell
+                        width: '100%',
+                        marginBottom: '24px'
+                    }}
+                >
+                    {params.value}
+                </div>
+            ) },
         {
             field: 'balance', headerName: 'Balance', type: "number", width: 100, renderCell: (params) => (
                 <div
@@ -237,7 +252,7 @@ const SuppliersView = () => {
         <>
             <MyTable
                 columns={columns}
-                typeOf={"Customers"}
+                typeOf={"Suppliers"}
                 rows={rows}
                 loading={loading}
                 rowCount={rowCount}

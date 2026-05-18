@@ -48,7 +48,7 @@ const FormOrder = ({
     });
     const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(() => {
         const saved = localStorage.getItem("orderDraft");
-        return saved ? JSON.parse(saved).selectedCustomer : null;
+        return saved ? JSON.parse(saved).selectedSupplier : null;
     });
 
     const [address, setAddress] = useState<string>(() => {
@@ -66,6 +66,7 @@ const FormOrder = ({
             JSON.stringify({
                 selectedCustomer,
                 address,
+                selectedSupplier
             })
         );
     }, [selectedCustomer, address]);
@@ -78,15 +79,15 @@ const FormOrder = ({
     }, [selectedProductsWithQty]);
 
 
-    const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setPopUpMessage("");
-
-        saveOrder(selectValue);
+        const success = await saveOrder(selectValue);
+        if (!success) return;
         setSelectedProductsWithQty([]);
         setSelectedCustomer(null);
+        setSelectedSupplier(null);
         setAddress("");
-
     };
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
@@ -97,6 +98,7 @@ const FormOrder = ({
         setAddress("");
         setCustomerOrderErrors({});
         setSupplierOrderErrors({})
+        setSelectedSupplier(null);
         setPopUpMessage("");
         setSubmitted(false);
     };

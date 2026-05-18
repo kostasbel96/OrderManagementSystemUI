@@ -97,6 +97,7 @@ export interface SelectedProduct {
     product?: Product;
     quantity: number;
     price: number;
+    priceInput?: string;
 }
 
 export interface ReceiptRequest {

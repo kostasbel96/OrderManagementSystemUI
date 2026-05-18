@@ -41,54 +41,59 @@ const useAddOrder = ({
         selectedSupplier: supplier ?? null,
     });
 
-    const saveOrder = (typeOf: string) => {
+    const saveOrder = async (typeOf: string): Promise<boolean> => {
         switch (typeOf) {
             case "orderCustomer":
                 if (validateOrderForm()) {
-                    addOrder({
-                        products: items,
-                        customer: customer ?? null,
-                        address: address ?? ""
-                    })
-                        .then((data) => {
-                            setSuccess(true);
-                            setSubmitted(true);
-                            setPopUpMessage("Order created successfully");
-                            console.log(data);
-                        })
-                        .catch((error) => {
-                            setPopUpMessage(error.message);
-                            setSubmitted(true);
-                            setSuccess(false);
+                    try {
+                        const data = await addOrder({
+                            products: items,
+                            customer: customer ?? null,
+                            address: address ?? ""
                         });
-                } else {
-                    setSubmitted(true);
-                    setSuccess(false);
+                        setSuccess(true);
+                        setSubmitted(true);
+                        setPopUpMessage("Order created successfully");
+                        console.log(data);
+                        return true;
+                    } catch (error: any) {
+                        setPopUpMessage(error.message);
+                        setSubmitted(true);
+                        setSuccess(false);
+                        return false;
+                    }
                 }
-                break;
+                setSubmitted(true);
+                setSuccess(false);
+                return false;
+
             case "orderSupplier":
                 if (validateSupplierOrderForm()) {
-                    addPurchaseOrder({
-                        products: items,
-                        supplier: supplier ?? null,
-                    })
-                        .then((data) => {
-                            setSuccess(true);
-                            setSubmitted(true);
-                            setPopUpMessage("Order created successfully");
-                            console.log(data);
-                        })
-                        .catch((error) => {
-                            setPopUpMessage(error.message);
-                            setSubmitted(true);
-                            setSuccess(false);
+                    try {
+                        const data = await addPurchaseOrder({
+                            products: items,
+                            supplier: supplier ?? null,
                         });
-                } else {
-                    setSubmitted(true);
-                    setSuccess(false);
+                        setSuccess(true);
+                        setSubmitted(true);
+                        setPopUpMessage("Order created successfully");
+                        console.log(data);
+                        return true;
+                    } catch (error: any) {
+                        setPopUpMessage(error.message);
+                        setSubmitted(true);
+                        setSuccess(false);
+                        return false;
+                    }
                 }
+                setSubmitted(true);
+                setSuccess(false);
+                return false;
+
+            default:
+                return false;
         }
-    }
+    };
 
     return { saveOrder,
         customerOrderErrors,

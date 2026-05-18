@@ -1,7 +1,7 @@
 import {Fade, InputBase, Paper} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {SearchIcon, XIcon} from "lucide-react";
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import type {GridPaginationModel} from "@mui/x-data-grid";
 
 interface SearchProps {
@@ -13,6 +13,16 @@ interface SearchProps {
 
 const Search = ({typeOf, setIsSearching, setSearchName, setPaginationModel}: SearchProps) => {
     const [text, setText] = useState("");
+
+    const getPlaceholder = useCallback(() => {
+        if (typeOf === "orderCustomer") {
+            return " customer by address, name, phone ";
+        } else if (typeOf === "orderSupplier") {
+            return " supplier by address, name, phone, vat";
+        } else {
+            return typeOf;
+        }
+    }, [typeOf])
 
     const handleChange = (value: string) => {
         setText(value);
@@ -50,7 +60,7 @@ const Search = ({typeOf, setIsSearching, setSearchName, setPaginationModel}: Sea
             >
                 <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder={`Search ${typeOf === "Orders" ? " customer by address, id, name, phone " : typeOf}`}
+                    placeholder={`Search ${getPlaceholder()}`}
                     inputProps={{ 'aria-label': 'search google maps' }}
                     value={text}
                     onChange={(e)=>handleChange(e.target.value)}
