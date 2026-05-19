@@ -41,6 +41,8 @@ import EditRouteDialog from "../routes/EditRouteDialog.tsx";
 import {OrderStatus} from "../../types/enums/OrderStatus.ts";
 import useSupplierFormValidation from "../../hooks/useSupplierFormValidation.ts";
 import {updateSupplier} from "../../services/supplierService.ts";
+import {updatePurchaseOrder} from "../../services/purchaseOrderService.ts";
+import useSupplierOrderFormValidation from "../../hooks/useSupplierOrderFormValidation.ts";
 
 interface PopUpUpdateProps{
     open: boolean;
@@ -75,11 +77,18 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         phoneNumber1: "",
         phoneNumber2: ""
     })
-    const [orderValues, setOrderValues] = useState<OrderItem>({
+    const [customerOrderValues, setCustomerOrderValues] = useState<OrderItem>({
         id: -1,
         address: "",
         date: "",
         customer: undefined,
+        items: [],
+        status: ""
+    })
+    const [supplierOrderValues, setSupplierOrderValues] = useState<PurchaseOrderItem>({
+        id: -1,
+        date: "",
+        supplier: undefined,
         items: [],
         status: ""
     })
@@ -107,10 +116,15 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
     const {validateProductForm, productErrors, setProductErrors} = useProductFormValidation(productValues);
     const {validateCustomerForm, customerErrors, setCustomerErrors} = useCustomerFormValidation(customerValues);
     const {validateDriverForm, driverErrors, setDriverErrors} = useDriverFormValidation(driverValues);
-    const {validateOrderForm, orderErrors, setOrderErrors} = useCustomerOrderFormValidation({
+    const {validateOrderForm: validateCustomerOrderForm, orderErrors: customerOrderErrors, setOrderErrors: setCustomerOrderErrors} = useCustomerOrderFormValidation({
         selectedProductsWithQty: selectedProductsWithQty,
-        selectedCustomer: orderValues.customer as Customer,
-        address: orderValues.address,
+        selectedCustomer: customerOrderValues.customer as Customer,
+        address: customerOrderValues.address,
+        initialItems
+    });
+    const {validateOrderForm: validateSupplierOrderForm, orderSupplierErrors: supplierOrderErrors, setOrderSupplierErrors: setSupplierOrderErrors} = useSupplierOrderFormValidation({
+        selectedProductsWithQty: selectedProductsWithQty,
+        selectedSupplier: supplierOrderValues.supplier as Supplier,
         initialItems
     });
     const {validateRouteInsert, routeErrors, setRouteErrors} = useRouteInsertValidation({
@@ -159,9 +173,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         .finally(()=>setOpen(false));
                 }
                 break;
-            case "Orders":
-                if (validateOrderForm()) {
-                    updateOrder(orderValues)
+            case "orderCustomer":
+                if (validateCustomerOrderForm()) {
+                    updateOrder(customerOrderValues)
                         .then(data => {
                             handleUpdate({
                             id: data.orderItem.id,
@@ -175,6 +189,27 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                             date: data.orderItem.date ? new Date(data.orderItem.date) : undefined
                             });
                             setSubmitted(true);})
+                        .catch(err => console.log(err))
+                        .finally(() => setOpen(false));
+                }
+                break;
+            case "orderSupplier":
+                if (validateSupplierOrderForm()) {
+                    updatePurchaseOrder(supplierOrderValues)
+                        .then(data => {
+                            handleUpdate({
+                                id: data.purchaseOrderItem.id,
+                                supplier: data.purchaseOrderItem.supplier,
+                                products: data.purchaseOrderItem.items,
+                                paidAmount: Number(data.purchaseOrderItem.paidAmount ?? 0),
+                                paymentStatus: data.purchaseOrderItem.paymentStatus,
+                                status: data.purchaseOrderItem.status,
+                                total: Number(data.purchaseOrderItem.total ?? 0),
+                                date: data.purchaseOrderItem.date ? new Date(data.purchaseOrderItem.date) : undefined
+                            });
+                            setSubmitted(true);
+                            setOpen(false);
+                        })
                         .catch(err => console.log(err))
                         .finally(() => setOpen(false));
                 }
@@ -235,8 +270,11 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
             case "Customers":
                 setCustomerErrors({});
                 break;
-            case "Orders":
-                setOrderErrors({});
+            case "orderCustomer":
+                setCustomerOrderErrors({});
+                break;
+            case "orderSupplier":
+                setSupplierOrderErrors({});
                 break;
             case "Drivers":
                 setDriverErrors({});
@@ -267,8 +305,14 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     [name]: value,
                 }));
                 break;
-            case "Orders":
-                setOrderValues(prev=>({
+            case "orderSupplier":
+                setSupplierOrderValues(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+                break;
+            case "orderCustomer":
+                setCustomerOrderValues(prev=>({
                     ...prev,
                     [name]: value,
                 }))
@@ -534,7 +578,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         )
     }
 
-    const renderOrderFields = () => {
+    const renderCustomerOrderFields = () => {
         return (
             <>
                 <TextField
@@ -547,12 +591,12 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     label="Order ID"
                     fullWidth
                     variant="standard"
-                    value={orderValues.id}
+                    value={customerOrderValues.id}
                 />
                 <TextField
                     InputProps={{ readOnly: true }}
                     onChange={handleChange}
-                    value={orderValues.customer?.name}
+                    value={customerOrderValues.customer?.name}
                     margin="dense"
                     id="name"
                     name="name"
@@ -564,7 +608,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 <TextField
                     InputProps={{ readOnly: true }}
                     onChange={handleChange}
-                    value={orderValues.customer?.lastName}
+                    value={customerOrderValues.customer?.lastName}
                     margin="dense"
                     id="lastName"
                     name="lastName"
@@ -575,7 +619,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 />
                 <TextField
                     onChange={handleChange}
-                    value={orderValues.address}
+                    value={customerOrderValues.address}
                     margin="dense"
                     id="address"
                     name="address"
@@ -583,13 +627,13 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     type="text"
                     fullWidth
                     variant="standard"
-                    error={Boolean(orderErrors?.address)}
-                    helperText={orderErrors?.address}
+                    error={Boolean(customerOrderErrors?.address)}
+                    helperText={customerOrderErrors?.address}
                 />
                 <TextField
                     select
                     onChange={handleChange}
-                    value={orderValues.status}
+                    value={customerOrderValues.status}
                     margin="dense"
                     id="status"
                     name="status"
@@ -608,10 +652,71 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         selectedProductsWithQty={selectedProductsWithQty}
                         setSelectedProductsWithQty={setSelectedProductsWithQty}
                     />
-                    {orderErrors && (
+                    {customerOrderErrors && (
                         <Typography color="error" fontSize={12}>
-                            {orderErrors.products || orderErrors.productQuantity
-                                || orderErrors.productPrice || orderErrors.stockError}
+                            {customerOrderErrors.products || customerOrderErrors.productQuantity
+                                || customerOrderErrors.productPrice || customerOrderErrors.stockError}
+                        </Typography>
+                    )}
+                </div>
+
+            </>
+        )
+    }
+
+    const renderSupplierOrderFields = () => {
+        return (
+            <>
+                <TextField
+                    onChange={handleChange}
+                    InputProps={{ readOnly: true }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Order ID"
+                    fullWidth
+                    variant="standard"
+                    value={supplierOrderValues.id}
+                />
+                <TextField
+                    InputProps={{ readOnly: true }}
+                    onChange={handleChange}
+                    value={supplierOrderValues.supplier?.name}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Supplier Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    select
+                    onChange={handleChange}
+                    value={supplierOrderValues.status}
+                    margin="dense"
+                    id="status"
+                    name="status"
+                    label="Status"
+                    fullWidth
+                    variant="standard"
+                >
+                    {Object.values(OrderStatus).map((status) => (
+                        <MenuItem key={status} value={status}>
+                            {status}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                <div className="mt-2">
+                    <ProductsTableInsert
+                        selectedProductsWithQty={selectedProductsWithQty}
+                        setSelectedProductsWithQty={setSelectedProductsWithQty}
+                    />
+                    {supplierOrderErrors && (
+                        <Typography color="error" fontSize={12}>
+                            {supplierOrderErrors.products || customerOrderErrors.productQuantity
+                                || supplierOrderErrors.productPrice || supplierOrderErrors.supplier}
                         </Typography>
                     )}
                 </div>
@@ -885,13 +990,25 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
             case "Customers":
                 setCustomerValues(rowToEdit as Customer);
                 break;
-            case "Orders":{
+            case "orderCustomer":{
                 const order = rowToEdit as OrderItem;
-                setOrderValues(order);
+                setCustomerOrderValues(order);
                 
                 // Deep copy initial items so they don't change when selectedProductsWithQty changes
                 setInitialItems(order.items.map(item => ({...item})));
                 
+                // Shallow copy is enough here since we want to edit these
+                setSelectedProductsWithQty([...order.items]);
+
+                break;
+            }
+            case "orderSupplier": {
+                const order = rowToEdit as PurchaseOrderItem;
+                setSupplierOrderValues(order);
+
+                // Deep copy initial items so they don't change when
+                setInitialItems(order.items.map(item => ({...item})));
+
                 // Shallow copy is enough here since we want to edit these
                 setSelectedProductsWithQty([...order.items]);
 
@@ -912,7 +1029,11 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
     }, [rowToEdit, typeOf]);
 
     useEffect(() => {
-        setOrderValues(prev => ({
+        setCustomerOrderValues(prev => ({
+            ...prev,
+            items: selectedProductsWithQty
+        }));
+        setSupplierOrderValues(prev => ({
             ...prev,
             items: selectedProductsWithQty
         }));
@@ -930,7 +1051,8 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                         id="subscription-form">
                         {typeOf === "Products" ? renderProductFields() : null}
                         {typeOf === "Customers" ? renderCustomerFields() : null}
-                        {typeOf === "Orders" ? renderOrderFields() : null}
+                        {typeOf === "orderCustomer" ? renderCustomerOrderFields() : null}
+                        {typeOf === "orderSupplier" ? renderSupplierOrderFields() : null}
                         {typeOf === "Drivers" ? renderDriverFields() : null}
                         {typeOf === "Routes" ? renderRouteFields() : null}
                         {typeOf === "Suppliers" ? renderSupplierFields() : null}

@@ -1,6 +1,6 @@
 import type {
     PurchaseOrderItem, PurchaseOrderItemResponseDto,
-    PurchaseOrderRequest, SearchRequest,
+    PurchaseOrderRequest, ResponseDTO, SearchRequest,
     SelectedProduct,
     Supplier
 } from "../types/Types.ts";
@@ -60,4 +60,33 @@ export async function searchSupplierOrders(request: SearchRequest): Promise<Purc
         pageNumber: data.pageNumber,
         pageSize: data.pageSize
     };
+}
+
+export async function getPurchaseOrder(id: number): Promise<ResponseDTO> {
+    const url = `${API_URL}/purchaseOrders/${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch purchase order with id: " + id);
+    return await res.json();
+}
+
+export async function updatePurchaseOrder(order: PurchaseOrderItem): Promise<ResponseDTO> {
+    const url = `${API_URL}/purchaseOrders/update`;
+    const res = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
+    });
+    if (!res.ok) throw new Error("Failed to update purchase order.");
+    return await res.json();
+}
+
+export async function deletePurchaseOrder(order: PurchaseOrderItem): Promise<ResponseDTO> {
+    const url = `${API_URL}/purchaseOrders/delete`;
+    const res = await fetch(url, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
+    });
+    if (!res.ok) throw new Error("Failed to delete purchase order");
+    return await res.json();
 }

@@ -48,6 +48,8 @@ export interface ResponseDTO {
     orderItems: OrderItem[];
     orderItem: OrderItem;
     productDto: Product;
+    purchaseOrderItem: PurchaseOrderItem;
+    purchaseOrderItems: PurchaseOrderItem[];
     route: Route;
     supplier: Supplier;
     driver: Driver;

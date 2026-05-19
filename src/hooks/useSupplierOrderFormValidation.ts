@@ -43,9 +43,11 @@ interface FormErrors {
 type UseOrderFormValidationProps = {
     selectedProductsWithQty: SelectedProduct[];
     selectedSupplier: Supplier | null;
+    initialItems?: SelectedProduct[];
 }
 
-const useSupplierOrderFormValidation = ({selectedProductsWithQty, selectedSupplier}: UseOrderFormValidationProps) => {
+
+const useSupplierOrderFormValidation = ({selectedProductsWithQty, selectedSupplier, initialItems}: UseOrderFormValidationProps) => {
     const [orderSupplierErrors, setOrderSupplierErrors] = useState<FormErrors>({});
 
     const validateOrderForm = (): boolean => {
@@ -73,7 +75,7 @@ const useSupplierOrderFormValidation = ({selectedProductsWithQty, selectedSuppli
                     newErrors[fieldName] = error.message;
                 }
             });
-            selectedProductsWithQty.find(p => p.product === null || p.product === undefined) && setOrderSupplierErrors(prevState => ({...prevState, products: "You cannot have empty product row"}))
+            (initialItems ?? selectedProductsWithQty).find(p => p.product === null || p.product === undefined) && setOrderSupplierErrors(prevState => ({...prevState, products: "You cannot have empty product row"}))
             if (selectedProductsWithQty.length === 0) setOrderSupplierErrors(prevState => ({...prevState, products: "You must select at least 1 product"}))
             setOrderSupplierErrors(prevState => ({...prevState, ...newErrors}));
             return false;

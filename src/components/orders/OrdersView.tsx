@@ -146,7 +146,7 @@ const OrdersView = ({columnVisibility,
                 open={openEdit}
                 setOpen={setOpenEdit}
                 rowToEdit={rowToEdit}
-                typeOf={"Orders"}
+                typeOf={orderType}
                 setSubmitted={setSubmitted}
                 handleUpdate={handleUpdateOrder}
             />
@@ -154,7 +154,7 @@ const OrdersView = ({columnVisibility,
                 setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
-                typeOf={"Orders"}
+                typeOf={orderType}
                 setOpen={setOpenDeletePopUp}
                 handleDelete={handleDeleteOrder}
                 setSubmitted={setSubmitted}

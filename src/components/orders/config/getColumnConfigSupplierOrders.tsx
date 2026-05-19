@@ -10,7 +10,6 @@ import type {
     Supplier
 } from "../../../types/Types.ts";
 import {type GridColDef, GridFilterInputValue} from "@mui/x-data-grid";
-import {getOrder} from "../../../services/orderService.ts";
 import ProductsCell from "../ProductsCell.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
@@ -18,6 +17,7 @@ import {EditIcon} from "lucide-react";
 import {PaymentStatus, paymentStatusConfig, type PaymentStatusValue} from "../../../types/enums/PaymentStatus.ts";
 import {OrderStatus, orderStatusConfig, type OrderStatusValue} from "../../../types/enums/OrderStatus.ts";
 import type {SetStateAction} from "react";
+import {getPurchaseOrder} from "../../../services/purchaseOrderService.ts";
 
 
 interface ColumnConfigCustomerOrdersProps {
@@ -229,15 +229,15 @@ const getColumnConfigSupplierOrders = ({
     ];
 
     const handleClickOpen = (row: OrderRow) => {
-        if (row.id) getOrder(row.id).then((data: ResponseDTO)=> {
-            setRowToEdit({...data.orderItem});
+        if (row.id) getPurchaseOrder(row.id).then((data: ResponseDTO)=> {
+            setRowToEdit({...data.purchaseOrderItem});
             setOperation("updated");
         }).finally(()=>setOpenEdit(true));
 
     }
 
     const handleOnDelete = (row: OrderRow) =>{
-        if (row.id) getOrder(row.id).then((data: ResponseDTO)=> {
+        if (row.id) getPurchaseOrder(row.id).then((data: ResponseDTO)=> {
             setOnDeleteContent({...data.orderItem});
             setOperation("deleted");
         }).finally(()=>setOpenDeletePopUp(true));
