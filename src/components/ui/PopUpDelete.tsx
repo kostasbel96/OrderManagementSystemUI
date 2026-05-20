@@ -17,6 +17,7 @@ import {deleteDriver} from "../../services/driverService.ts";
 import {deleteRoute} from "../../services/routeService.ts";
 import {deleteReceipt} from "../../services/receiptService.ts";
 import {deleteSupplier} from "../../services/supplierService.ts";
+import {deletePurchaseOrder} from "../../services/purchaseOrderService.ts";
 
 interface PopUpDeleteProps{
     open: boolean;
@@ -62,12 +63,25 @@ const PopUpDelete = ({open, rowToEdit,
                     })
                     .finally(()=> setOpen(false));
                 break;
-            case "Orders":
+            case "orderCustomer":
                 deleteOrder(rowToEdit as OrderItem)
                     .then((data: ResponseDTO) => {
                         console.log(data);
                         setRowToEdit(data.orderItem);
                         handleDelete(data.orderItem.id);
+                        setSubmitted(true);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                    .finally(()=> setOpen(false));
+                break;
+            case "orderSupplier":
+                deletePurchaseOrder(rowToEdit as PurchaseOrderItem)
+                    .then((data: ResponseDTO) => {
+                        console.log(data);
+                        setRowToEdit(data.purchaseOrderItem);
+                        handleDelete(data.purchaseOrderItem.id);
                         setSubmitted(true);
                     })
                     .catch(err => {
@@ -328,7 +342,7 @@ const PopUpDelete = ({open, rowToEdit,
         )
     }
 
-    const renderOrderFields = () => {
+    const renderCustomerOrderFields = () => {
         return (
             <>
                 <TextField
@@ -360,6 +374,35 @@ const PopUpDelete = ({open, rowToEdit,
                     id="address"
                     name="address"
                     label="Address"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+            </>
+        )
+    }
+
+    const renderSupplierOrderFields = () => {
+        return (
+            <>
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Order ID"
+                    fullWidth
+                    variant="standard"
+                    value={(rowToEdit as PurchaseOrderItem)?.id}
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as PurchaseOrderItem)?.supplier?.name}
+                    margin="dense"
+                    id="name"
+                    name="name"
+                    label="Supplier Name"
                     type="text"
                     fullWidth
                     variant="standard"
@@ -555,7 +598,8 @@ const PopUpDelete = ({open, rowToEdit,
                     id="subscription-form">
                     {typeOf === "Products" && renderProductFields()}
                     {typeOf === "Customers" && renderCustomerFields()}
-                    {typeOf === "Orders" && renderOrderFields()}
+                    {typeOf === "orderCustomer" && renderCustomerOrderFields()}
+                    {typeOf === "orderSupplier" && renderSupplierOrderFields()}
                     {typeOf === "Drivers" && renderDriverFields()}
                     {typeOf === "Routes" && renderRouteFields()}
                     {typeOf === "Receipts" && renderReceiptFields()}

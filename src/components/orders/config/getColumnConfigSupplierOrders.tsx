@@ -21,7 +21,7 @@ import {getPurchaseOrder} from "../../../services/purchaseOrderService.ts";
 
 
 interface ColumnConfigCustomerOrdersProps {
-    setOnDeleteContent: React.Dispatch<SetStateAction<OrderItem | undefined>>;
+    setOnDeleteContent: React.Dispatch<SetStateAction<OrderItem | PurchaseOrderItem | undefined>>;
     setOperation: React.Dispatch<SetStateAction<string>>;
     setOpenEdit: React.Dispatch<SetStateAction<boolean>>;
     setOpenDeletePopUp: React.Dispatch<SetStateAction<boolean>>;
@@ -238,7 +238,7 @@ const getColumnConfigSupplierOrders = ({
 
     const handleOnDelete = (row: OrderRow) =>{
         if (row.id) getPurchaseOrder(row.id).then((data: ResponseDTO)=> {
-            setOnDeleteContent({...data.orderItem});
+            setOnDeleteContent({...data.purchaseOrderItem});
             setOperation("deleted");
         }).finally(()=>setOpenDeletePopUp(true));
     }

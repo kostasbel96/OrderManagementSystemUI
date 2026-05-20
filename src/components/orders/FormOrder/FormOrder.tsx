@@ -219,6 +219,8 @@ const FormOrder = ({
                                 label="Type of order"
                             />
                             <OMSSelect
+                                options={[{"orderCustomer": "Order to Customer"},
+                                    {"orderSupplier": "Order to Supplier"}]}
                                 selectValue={selectValue}
                                 setSelectValue={setSelectValue}
                             />

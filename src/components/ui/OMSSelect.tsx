@@ -40,9 +40,10 @@ const fieldSx: SxProps<Theme> = {
 interface OMSSelectProps {
     setSelectValue: React.Dispatch<SetStateAction<string>>;
     selectValue: string;
+    options: {[key: string]: string}[];
 }
 
-export default function OMSSelect({setSelectValue, selectValue}: Readonly<OMSSelectProps>) {
+export default function OMSSelect({setSelectValue, selectValue, options}: Readonly<OMSSelectProps>) {
 
     return (
         <FormControl
@@ -56,13 +57,14 @@ export default function OMSSelect({setSelectValue, selectValue}: Readonly<OMSSel
                 value={selectValue}
                 onChange={(e) => setSelectValue(e.target.value)}
             >
-                <MenuItem value="orderCustomer">
-                    Order to Customer
-                </MenuItem>
-
-                <MenuItem value="orderSupplier">
-                    Order to Supplier
-                </MenuItem>
+                {options?.map((option) => {
+                    const [key, label] = Object.entries(option)[0];
+                    return (
+                        <MenuItem key={key} value={key}>
+                            {label}
+                        </MenuItem>
+                    );
+                })}
             </Select>
         </FormControl>
     );

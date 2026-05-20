@@ -57,7 +57,7 @@ const OrdersView = ({columnVisibility,
     const [openEdit, setOpenEdit] = useState(false);
     const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
-    const [onDeleteContent, setOnDeleteContent] = useState<OrderItem>();
+    const [onDeleteContent, setOnDeleteContent] = useState<OrderItem | PurchaseOrderItem>();
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
@@ -112,6 +112,18 @@ const OrdersView = ({columnVisibility,
     const handleDeleteOrder = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
     };
+
+    // OrdersView.tsx - μέσα στο useEffect
+    useEffect(() => {
+        console.log("searchTerm changed:", searchTerm);
+        if (searchTerm) {
+            setSearchName(searchTerm);
+            setIsSearching(true);
+        } else {
+            setSearchName("");
+            setIsSearching(false);
+        }
+    }, [searchTerm]);
 
     useEffect(() => {
         search();

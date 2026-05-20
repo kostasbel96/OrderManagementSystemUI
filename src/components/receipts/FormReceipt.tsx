@@ -1,7 +1,7 @@
 import {Box, Button, Grid, Paper, Stack} from "@mui/material";
 import OMSLabel from "../ui/OMSLabel.tsx";
 import {AppAutocomplete} from "../ui/AppAutocomplete.tsx";
-import type {Customer} from "../../types/Types.ts";
+import type {Customer, Supplier} from "../../types/Types.ts";
 import LabeledField from "../ui/LabeledField.tsx";
 import {type FormEvent, useEffect, useState} from "react";
 import {useCustomerSearch} from "../../hooks/useCustomerSearch.ts";
@@ -9,6 +9,9 @@ import useReceiptFormValidation from "../../hooks/useReceiptFormValidation.ts";
 import {addReceipt} from "../../services/receiptService.ts";
 import OrdersView from "../orders/OrdersView.tsx";
 import type {GridRowSelectionModel} from "@mui/x-data-grid";
+import {useSupplierSearch} from "../../hooks/useSupplierSearch.ts";
+import OMSSelect from "../ui/OMSSelect.tsx";
+import * as React from "react";
 
 interface FormReceiptProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,13 +20,15 @@ interface FormReceiptProps {
 }
 
 const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptProps) => {
+    const [selectValue, setSelectValue] = useState<string>("orderCustomer");
     const [inputValue, setInputValue] = useState("");
     const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
         actions: false,
     });
-
-    const { customers, loading } = useCustomerSearch(inputValue);
+    const { customers, loading: loadingCustomer } = useCustomerSearch(inputValue);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+    const { suppliers, loading: loadingSupplier } = useSupplierSearch(inputValue);
+    const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
     const [notes, setNotes] = useState("");
     const [amount, setAmount] = useState("");
     const [showOrders, setShowOrders] = useState(false);
@@ -41,7 +46,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
         receiptErrors,
         setReceiptErrors
     } = useReceiptFormValidation({
-        customer: selectedCustomer,
+        person: selectValue === "orderCustomer" ? selectedCustomer : selectedSupplier,
         amount
     });
 
@@ -92,8 +97,72 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
     }, []);
 
     useEffect(() => {
-        setSearchTerm(String(selectedCustomer?.id));
-    }, [selectedCustomer]);
+        if (selectValue === "orderCustomer") {
+            setSearchTerm(selectedCustomer?.id ? String(selectedCustomer.id) : "");
+        } else if (selectValue === "orderSupplier") {
+            setSearchTerm(selectedSupplier?.id ? String(selectedSupplier.id) : "");
+        }
+    }, [selectedCustomer, selectedSupplier, selectValue]);
+
+    const renderCustomer = () => {
+        if (selectValue === "orderCustomer")
+            return (
+                <Grid size={{ xs: 12 }}>
+                    <Stack direction="row"
+                           alignItems="stretch"
+                           spacing={0}>
+                        <OMSLabel
+                            required
+                            label="Customer"
+                        />
+                        <Box sx={{ flex: 1 }}>
+                            <AppAutocomplete<Customer>
+                                options={customers}
+                                value={selectedCustomer}
+                                inputValue={inputValue}
+                                loading={loadingCustomer}
+                                placeholder="Search customer..."
+                                getOptionLabel={(c) => `${c.name} ${c.lastName} #${c.id}`}
+                                onChange={setSelectedCustomer}
+                                onInputChange={setInputValue}
+                                helperText={receiptErrors?.person}
+                                error={Boolean(receiptErrors?.person)}
+                            />
+                        </Box>
+                    </Stack>
+                </Grid>
+            )
+    }
+
+    const renderSupplier = () => {
+        if (selectValue === "orderSupplier")
+            return (
+                <Grid size={{ xs: 12 }}>
+                    <Stack direction="row"
+                           alignItems="stretch"
+                           spacing={0}>
+                        <OMSLabel
+                            required
+                            label="Supplier"
+                        />
+                        <Box sx={{ flex: 1 }}>
+                            <AppAutocomplete<Supplier>
+                                options={suppliers}
+                                value={selectedSupplier}
+                                inputValue={inputValue}
+                                loading={loadingSupplier}
+                                placeholder="Search supplier..."
+                                getOptionLabel={(c) => `${c.name} #${c.id}`}
+                                onChange={setSelectedSupplier}
+                                onInputChange={setInputValue}
+                                helperText={receiptErrors?.person}
+                                error={Boolean(receiptErrors?.person)}
+                            />
+                        </Box>
+                    </Stack>
+                </Grid>
+            )
+    }
 
     return (
         <Paper
@@ -113,35 +182,30 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                     {/* HEADER */}
                     <Grid size={{ xs: 12 }}>
                         <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
-                            Create Receipt
+                            Create Payment
                         </Box>
                     </Grid>
 
-                    {/* CUSTOMER */}
+                    {/* TYPE OF PAYMENT */}
                     <Grid size={{ xs: 12 }}>
                         <Stack direction="row"
                                alignItems="stretch"
                                spacing={0}>
                             <OMSLabel
-                                required
-                                label="Customer"
+                                label="Type of payment"
                             />
-                            <Box sx={{ flex: 1 }}>
-                                <AppAutocomplete<Customer>
-                                    options={customers}
-                                    value={selectedCustomer}
-                                    inputValue={inputValue}
-                                    loading={loading}
-                                    placeholder="Search customer..."
-                                    getOptionLabel={(c) => `${c.name} ${c.lastName} #${c.id}`}
-                                    onChange={setSelectedCustomer}
-                                    onInputChange={setInputValue}
-                                    helperText={receiptErrors?.customer}
-                                    error={Boolean(receiptErrors?.customer)}
-                                />
-                            </Box>
+                            <OMSSelect
+                                options={[{"orderCustomer": "Payment from Customer"},
+                                    {"orderSupplier": "Payment to Supplier"}]}
+                                selectValue={selectValue}
+                                setSelectValue={setSelectValue}
+                            />
+
                         </Stack>
                     </Grid>
+
+                    {renderCustomer()}
+                    {renderSupplier()}
 
                     {/* NOTES */}
                     <Grid size={{ xs: 12, sm: 6 }}>
@@ -199,6 +263,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                                 selectionModel={selectionModel}
                                 setSelectionModel={setSelectionModel}
                                 filters={filters}
+                                orderType={selectValue as "orderCustomer" | "orderSupplier"}
                             />
                         </Grid>
                     )}

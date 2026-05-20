@@ -139,15 +139,15 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                     </NavItemWithSubmenu>
 
                     <NavItemWithSubmenu
-                        id="receipts"
+                        id="payments"
                         icon={<HandCoins size={18} />}
-                        label="Receipts"
+                        label="Payments"
                         collapsed={collapsed}
                         setOpen={setOpen}
                     >
                         {[
-                            { id: "receipts",   label: "Receipts", component: <ReceiptsView /> },
-                            { id: "addReceipt", label: "Add Receipt", component: <AddReceiptTab />}
+                            { id: "payments",   label: "Customer Payments", component: <ReceiptsView /> },
+                            { id: "addPayment", label: "Add Payment", component: <AddReceiptTab />}
                         ]}
                     </NavItemWithSubmenu>
 

@@ -1,37 +1,37 @@
 import {useState} from "react";
 import {z} from "zod";
-import type {Customer} from "../types/Types.ts";
+import type {Customer, Supplier} from "../types/Types.ts";
 
 type FormErrors = {
     amount?: string;
-    customer?: string;
+    person?: string;
 }
 
 const formSchema = z.object(
     {
         amount: z.coerce.number().min(1, "Amount must be at least 1"),
-        customer: z
+        person: z
             .object({
                 id: z.number(),
                 name: z.string(),
             })
             .nullable()
             .refine(val => val !== null, {
-                message: "You must select a customer",
+                message: "You must select a person",
             }),
     }
 )
 
 type FormValues = {
     amount: string;
-    customer: Customer | null;
+    person: Customer | Supplier | null;
 }
 
-const useCustomerFormValidation = ({amount, customer}: FormValues) => {
+const useCustomerFormValidation = ({amount, person}: FormValues) => {
     const [receiptErrors, setReceiptErrors] = useState<FormErrors>({});
 
     const validateReceiptForm = () => {
-        const result = formSchema.safeParse({amount, customer});
+        const result = formSchema.safeParse({amount, person});
 
         if (!result.success) {
             const newErrors: FormErrors = {};

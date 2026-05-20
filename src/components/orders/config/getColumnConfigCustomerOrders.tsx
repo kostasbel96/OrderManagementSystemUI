@@ -21,7 +21,7 @@ import type {SetStateAction} from "react";
 
 
 interface ColumnConfigCustomerOrdersProps {
-    setOnDeleteContent: React.Dispatch<SetStateAction<OrderItem | undefined>>;
+    setOnDeleteContent: React.Dispatch<SetStateAction<OrderItem | PurchaseOrderItem | undefined>>;
     setOperation: React.Dispatch<SetStateAction<string>>;
     setOpenEdit: React.Dispatch<SetStateAction<boolean>>;
     setOpenDeletePopUp: React.Dispatch<SetStateAction<boolean>>;
