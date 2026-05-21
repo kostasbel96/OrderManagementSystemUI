@@ -4,7 +4,7 @@ import FormTab from "../ui/FormTab.tsx";
 export default function AddCustomerTab() {
 
     return (
-        <FormTab tab={"Customer"}>
+        <FormTab tab={"customer"}>
             {(props) => <FormCustomer {...props} />}
         </FormTab>
     );

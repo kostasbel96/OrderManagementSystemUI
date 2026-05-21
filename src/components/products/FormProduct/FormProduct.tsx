@@ -1,4 +1,5 @@
 import { type FormEvent, useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { addProduct } from "../../../services/productService.ts";
 import { Box, Button, Stack, Paper, Grid } from "@mui/material";
 import useProductFormValidation, {
@@ -24,6 +25,7 @@ const FormProduct = ({
                          setSuccess,
                          setPopUpMessage,
                      }: FormProductProps) => {
+    const { t } = useTranslation();
 
     const [values, setValues] = useState<FormValues>(() => {
         const saved = localStorage.getItem("productDraft");
@@ -53,7 +55,7 @@ const FormProduct = ({
                 .then((data) => {
                     setSuccess(true);
                     setSubmitted(true);
-                    setPopUpMessage("Product created successfully");
+                    setPopUpMessage(t('form.product.createdMessage'));
                     console.log(data);
                 })
                 .catch((error) => {
@@ -117,14 +119,14 @@ const FormProduct = ({
                     {/* TITLE */}
                     <Grid size={{ xs: 12 }}>
                         <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
-                            Create Product
+                            {t('form.product.title')}
                         </Box>
                     </Grid>
 
                     {/* NAME */}
                     <Grid size={{ xs: 12 }}>
                         <LabeledField
-                            label="Product Name"
+                            label={t('form.product.productName')}
                             value={values.name}
                             onChange={handleChange}
                             error={Boolean(productErrors?.name)}
@@ -138,7 +140,7 @@ const FormProduct = ({
                     <Grid size={{ xs: 12 }}>
                         <LabeledField
                             name={"description"}
-                            label="Description"
+                            label={t('form.product.description')}
                             value={values.description}
                             onChange={handleChange}
                             error={Boolean(productErrors?.description)}
@@ -151,7 +153,7 @@ const FormProduct = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"quantity"}
-                            label="Quantity"
+                            label={t('form.product.quantity')}
                             value={values.quantity}
                             onChange={handleChange}
                             error={Boolean(productErrors?.quantity)}
@@ -163,7 +165,7 @@ const FormProduct = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"price"}
-                            label="Price"
+                            label={t('form.product.price')}
                             value={values.price}
                             onChange={handleChange}
                             error={Boolean(productErrors?.price)}
@@ -175,11 +177,11 @@ const FormProduct = ({
                     <Grid size={{ xs: 12 }}>
                         <Stack direction="row" spacing={1} justifyContent="flex-end">
                             <Button type="reset" variant="outlined" color="error" size="small">
-                                Reset
+                                {t('actions.reset')}
                             </Button>
 
                             <Button type="submit" variant="contained" size="small">
-                                Create
+                                {t('actions.create')}
                             </Button>
                         </Stack>
                     </Grid>

@@ -1,5 +1,6 @@
 import { Tabs, Tab, Paper, Box } from "@mui/material";
 import {useEffect, useState} from "react";
+import { useTranslation } from 'react-i18next';
 import FormProduct from "./products/FormProduct/FormProduct";
 import FormOrder from "./orders/FormOrder/FormOrder";
 import FormCustomer from "./customers/FormCustomer/FormCustomer";
@@ -16,6 +17,7 @@ interface Props {
 
 const MyTabs = ({ setSubmitted, setSuccess, setPopUpMessage, setActiveValue }: Props) => {
     const [tab, setTab] = useState<FormType>("product");
+    const { t } = useTranslation();
 
     const handleChange = (_: React.SyntheticEvent, newValue: FormType) => {
         setTab(newValue);
@@ -46,10 +48,10 @@ const MyTabs = ({ setSubmitted, setSuccess, setPopUpMessage, setActiveValue }: P
                 indicatorColor="secondary"
                 variant="fullWidth"
             >
-                <Tab label="Product" value="product" />
-                <Tab label="Order" value="order" />
-                <Tab label="Customer" value="customer" />
-                <Tab label="Route" value="route"/>
+                <Tab label={t('tabs.product')} value="product" />
+                <Tab label={t('tabs.order')} value="order" />
+                <Tab label={t('tabs.customer')} value="customer" />
+                <Tab label={t('tabs.route')} value="route"/>
             </Tabs>
 
             {/* Content */}

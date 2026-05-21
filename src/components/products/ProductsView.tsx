@@ -12,6 +12,7 @@ import type {
     Supplier
 } from "../../types/Types.ts";
 import MyTable from "../ui/MyTable.tsx";
+import { useTranslation } from 'react-i18next';
 import { searchProducts } from "../../services/productService.ts";
 import IconButton from "@mui/material/IconButton";
 import {EditIcon} from "lucide-react";
@@ -22,6 +23,7 @@ import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import {Tooltip} from "@mui/material";
 
 const ProductsView = () => {
+    const { t } = useTranslation();
     const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver | Route | Receipt | Supplier)[]>([]);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
     const [rowCount, setRowCount] = useState(0);
@@ -53,7 +55,7 @@ const ProductsView = () => {
 
 
     const columns = useMemo<GridColDef[]>(() => [
-        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
+        { field: 'id', headerName: t('products.table.id'), width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -68,7 +70,7 @@ const ProductsView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'name', headerName: 'Product name', width: 300, renderCell: (params) => (
+        { field: 'name', headerName: t('products.table.productName'), width: 300, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -85,7 +87,7 @@ const ProductsView = () => {
             )  },
         {
             field: 'description',
-            headerName: 'Description',
+            headerName: t('products.table.description'),
             width: 200,
             renderCell: (params) => {
                 const value = params.value || "";
@@ -116,7 +118,7 @@ const ProductsView = () => {
                 );
             }
         },
-        {field: 'quantity', headerName: 'Quantity', type:"number", width: 100, renderCell: (params) => (
+        {field: 'quantity', headerName: t('products.table.quantity'), type:"number", width: 100, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -131,7 +133,7 @@ const ProductsView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'price', headerName: 'Price', width: 100, type:"number", renderCell: (params) => (
+        {field: 'price', headerName: t('products.table.price'), width: 100, type:"number", renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -148,7 +150,7 @@ const ProductsView = () => {
             ) },
         {
             field: 'actions',
-            headerName: 'Actions',
+            headerName: t('products.table.actions'),
             width: 150,
             sortable: false,
             filterable: false,
@@ -184,7 +186,7 @@ const ProductsView = () => {
 
             ),
         },
-    ], []);
+    ], [t]);
 
     const handleUpdateProduct = (updated: Product | Customer | OrderRow | Driver | Route | Receipt | Supplier) => {
         setRows(prev => {

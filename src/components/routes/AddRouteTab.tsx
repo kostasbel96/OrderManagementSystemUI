@@ -4,7 +4,7 @@ import FormRoute from "./FormRoute.tsx";
 export default function AddRouteTab() {
 
     return (
-        <FormTab tab={"Route"}>
+        <FormTab tab={"route"}>
             {(props) => <FormRoute {...props}/>}
         </FormTab>
     );

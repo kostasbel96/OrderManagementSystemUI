@@ -1,6 +1,7 @@
 import type {GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
+import { useTranslation } from 'react-i18next';
 import type {
     Customer,
     Driver,
@@ -39,6 +40,8 @@ const SuppliersView = () => {
         items: []
     });
 
+    const { t } = useTranslation();
+
     const handleClickOpen = (row: Customer) => {
         setOpenEdit(true);
         setRowToEdit(row);
@@ -51,8 +54,8 @@ const SuppliersView = () => {
         setOperation("deleted");
     }
 
-    const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
+    const columns: GridColDef[] = useMemo(() => [
+        { field: 'id', headerName: t('suppliers.table.id'), width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -67,7 +70,7 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             )  },
-        { field: 'name', headerName: 'Name', width: 150, renderCell: (params) => (
+        { field: 'name', headerName: t('suppliers.table.name'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -82,7 +85,7 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'email', headerName: 'Email', width: 150, renderCell: (params) => (
+        {field: 'email', headerName: t('suppliers.table.email'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -97,7 +100,7 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'phoneNumber1', headerName: 'Phone Number 1', width: 120, renderCell: (params) => (
+        {field: 'phoneNumber1', headerName: t('suppliers.table.phoneNumber1'), width: 120, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -112,7 +115,7 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'phoneNumber2', headerName: 'Phone Number 2', width: 120, renderCell: (params) => (
+        {field: 'phoneNumber2', headerName: t('suppliers.table.phoneNumber2'), width: 120, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -127,7 +130,7 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'address', headerName: 'Address', width: 120, renderCell: (params) => (
+        { field: 'address', headerName: t('suppliers.table.address'), width: 120, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -142,7 +145,7 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'vat', headerName: 'Vat', width: 120, renderCell: (params) => (
+        { field: 'vat', headerName: t('suppliers.table.vat'), width: 120, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -158,7 +161,7 @@ const SuppliersView = () => {
                 </div>
             ) },
         {
-            field: 'balance', headerName: 'Balance', type: "number", width: 100, renderCell: (params) => (
+            field: 'balance', headerName: t('suppliers.table.balance'), type: "number", width: 100, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -176,7 +179,7 @@ const SuppliersView = () => {
         },
         {
             field: 'actions',
-            headerName: 'Actions',
+            headerName: t('suppliers.table.actions'),
             width: 100,
             sortable: false,
             filterable: false,
@@ -212,7 +215,7 @@ const SuppliersView = () => {
 
             ),
         },
-    ];
+    ], [t]);
 
     const handleUpdateSupplier = (updated: Product | Customer | OrderRow | Driver | Route | Receipt | Supplier) => {
         setRows(prev => {

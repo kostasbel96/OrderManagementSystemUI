@@ -2,6 +2,7 @@ import {Fade, InputBase, Paper} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {SearchIcon, XIcon} from "lucide-react";
 import {useCallback, useState} from "react";
+import { useTranslation } from 'react-i18next';
 import type {GridPaginationModel} from "@mui/x-data-grid";
 
 interface SearchProps {
@@ -13,14 +14,27 @@ interface SearchProps {
 
 const Search = ({typeOf, setIsSearching, setSearchName, setPaginationModel}: SearchProps) => {
     const [text, setText] = useState("");
+    const { t } = useTranslation();
 
     const getPlaceholder = useCallback(() => {
         if (typeOf === "orderCustomer") {
-            return " customer by address, name, phone ";
+            return t('search2.searchCustomer');
         } else if (typeOf === "orderSupplier") {
-            return " supplier by address, name, phone, vat";
-        } else {
-            return typeOf;
+            return t('search2.searchSupplier');
+        } else if (typeOf === "Products"){
+            return t('search2.searchProduct');
+        } else if (typeOf === "Drivers") {
+            return t('search2.searchDriver');
+        } else if (typeOf === "Suppliers") {
+            return t('search2.searchSupplier');
+        } else if (typeOf === "receipt") {
+            return t('search2.searchCustomer');
+        } else if (typeOf === "payment") {
+            return t('search2.searchSupplier');
+        } else if (typeOf === "Routes") {
+            return t('search2.searchRoute');
+        } else if (typeOf === "Customers") {
+            return t('search2.searchCustomer');
         }
     }, [typeOf])
 
@@ -60,8 +74,8 @@ const Search = ({typeOf, setIsSearching, setSearchName, setPaginationModel}: Sea
             >
                 <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder={`Search ${getPlaceholder()}`}
-                    inputProps={{ 'aria-label': 'search google maps' }}
+                    placeholder={getPlaceholder()}
+                    inputProps={{ 'aria-label': t('search.ariaSearch') }}
                     value={text}
                     onChange={(e)=>handleChange(e.target.value)}
                 />
@@ -69,13 +83,13 @@ const Search = ({typeOf, setIsSearching, setSearchName, setPaginationModel}: Sea
                     <IconButton
                         type="button"
                         sx={{ p: '5px' }}
-                        aria-label="reset"
+                        aria-label={t('search.ariaReset')}
                         onClick={handleReset}
                     >
                         <XIcon />
                     </IconButton>
                 </Fade>
-                <IconButton type="button" sx={{ p: '10px' }} aria-label="search"
+                <IconButton type="button" sx={{ p: '10px' }} aria-label={t('search.ariaSearch')}
                     onClick={handleSubmit}
                 >
                     <SearchIcon />

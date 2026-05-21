@@ -34,16 +34,16 @@ const getColumnConfigSupplierOrders = ({
                                            setOpenDeletePopUp,
                                            setOperation,
                                            setRowToEdit
-                                       }: ColumnConfigCustomerOrdersProps) => {
+                                        }: ColumnConfigCustomerOrdersProps, t: any) => {
 
     const productsFilterOperator = {
-        label: 'contains',
+        label: t ? t('search.contains') : 'contains',
         value: 'containsProduct',
         InputComponent: GridFilterInputValue,
     } as any;
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
+        { field: 'id', headerName: t('orders.table.id'), width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -58,7 +58,7 @@ const getColumnConfigSupplierOrders = ({
                     {params.value}
                 </div>
             ) },
-        { field: 'supplier', headerName: 'Supplier', width: 200,
+        { field: 'supplier', headerName: t('orders.table.supplier'), width: 200,
             valueGetter: (_, row) =>
                 `${row.supplier?.name ?? ''}`,renderCell: (params) => (
                 <div
@@ -77,7 +77,7 @@ const getColumnConfigSupplierOrders = ({
             ) },
         {
             field: 'products',
-            headerName: 'Products',
+            headerName: t('orders.table.products'),
             width: 150,
             filterOperators: [productsFilterOperator],
             sortable: false,
@@ -89,7 +89,7 @@ const getColumnConfigSupplierOrders = ({
                 </div>
             ),
         },
-        { field: 'total', headerName: 'Total', width: 80, type: "number", renderCell: (params) => (
+        { field: 'total', headerName: t('orders.table.total'), width: 80, type: "number", renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -101,7 +101,7 @@ const getColumnConfigSupplierOrders = ({
                     {params.value ? params.value + " €" : ""}
                 </div>
             ) },
-        { field: 'paidAmount', headerName: 'Paid', width: 80, type: "number", renderCell: (params) => (
+        { field: 'paidAmount', headerName: t('orders.table.paid'), width: 80, type: "number", renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -113,7 +113,7 @@ const getColumnConfigSupplierOrders = ({
                     {params.value ?? ""}
                 </div>
             ) },
-        {field: 'date', headerName: 'Date', type: 'date', width: 80, renderCell: (params) => (
+        {field: 'date', headerName: t('orders.table.date'), type: 'date', width: 80, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -128,7 +128,7 @@ const getColumnConfigSupplierOrders = ({
                 </div>
             )},
         {
-            field: 'paymentStatus', headerName: 'Payment Status', type: 'singleSelect', width: 150,
+            field: 'paymentStatus', headerName: t('orders.table.paymentStatus'), type: 'singleSelect', width: 150,
             valueOptions: Object.values(PaymentStatus),
             renderCell: (params) => {
                 const cfg = paymentStatusConfig[params.row.paymentStatus as PaymentStatusValue];
@@ -159,7 +159,7 @@ const getColumnConfigSupplierOrders = ({
             }
         },
         {
-            field: 'status', headerName:'Status', type: 'singleSelect', width: 140,
+            field: 'status', headerName: t('orders.table.status'), type: 'singleSelect', width: 140,
             valueOptions: Object.values(OrderStatus),
             renderCell: (params) => {
                 const cfg = orderStatusConfig[params.row.status as OrderStatusValue];
@@ -191,7 +191,7 @@ const getColumnConfigSupplierOrders = ({
         },
         {
             field: 'actions',
-            headerName: 'Actions',
+            headerName: t('orders.table.actions'),
             width: 100,
             sortable: false,
             filterable: false,

@@ -5,7 +5,7 @@ import FormOrder from "./FormOrder/FormOrder.tsx";
 export default function AddOrderTab() {
 
     return (
-        <FormTab tab={"Order"}>
+        <FormTab tab={"order"}>
             {(props) => <FormOrder {...props} />}
         </FormTab>
     );

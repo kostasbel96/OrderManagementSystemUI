@@ -1,5 +1,6 @@
 import {Paper} from "@mui/material";
 import {useCallback, useEffect, useMemo, useState} from "react";
+import { useTranslation } from 'react-i18next';
 import type {OrderRow, RouteDetails} from "../../types/Types.ts";
 import {arrayMove} from "@dnd-kit/sortable";
 import type {GridRowSelectionModel} from "@mui/x-data-grid";
@@ -17,6 +18,7 @@ interface FormRouteProps {
 }
 
 const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) => {
+    const { t } = useTranslation();
     const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
         actions: false,
     });
@@ -126,7 +128,7 @@ const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) 
                     setSubmitted(true);
                     setSuccess(true);
                     setRouteErrors({});
-                    setPopUpMessage("Route created successfully");
+                    setPopUpMessage(t('messages_ext.savedGeneric', { item: t('typeNames.route') }));
                     setRouteDetails({
                         id: -1,
                         name:  "",

@@ -7,6 +7,7 @@ import {
     Typography,
 } from "@mui/material";
 import { type FormEvent, useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import type {Customer, SelectedProduct, Supplier} from "../../../types/Types.ts";
 import ProductsTableInsert from "./ProductsTableInsert.tsx";
 import {useCustomerSearch} from "../../../hooks/useCustomerSearch.ts";
@@ -59,6 +60,7 @@ const FormOrder = ({
     const { customerOrderErrors, setCustomerOrderErrors, supplierOrderErrors, setSupplierOrderErrors, saveOrder} = useAddOrder({
         address, customer: selectedCustomer, supplier: selectedSupplier,
         items: selectedProductsWithQty, setSubmitted, setSuccess, setPopUpMessage});
+    const { t } = useTranslation();
 
     useEffect(() => {
         localStorage.setItem(
@@ -118,15 +120,15 @@ const FormOrder = ({
                                spacing={0}>
                             <OMSLabel
                                 required
-                                label="Customer"
+                                  label={t('form.order.customer')}
                             />
                             <Box sx={{ flex: 1 }}>
-                                <AppAutocomplete<Customer>
+                                    <AppAutocomplete<Customer>
                                     options={customers}
                                     value={selectedCustomer}
                                     inputValue={inputValue}
                                     loading={customersLoading}
-                                    placeholder="Search customer..."
+                                    placeholder={t('search2.searchCustomer')}
                                     getOptionLabel={(c) => `${c.name} ${c.lastName} #${c.id}`}
                                     onChange={setSelectedCustomer}
                                     onInputChange={setInputValue}
@@ -140,7 +142,7 @@ const FormOrder = ({
                     {/* ADDRESS */}
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
-                            label="Address"
+                            label={t('form.order.address')}
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             error={Boolean(customerOrderErrors?.address)}
@@ -164,7 +166,7 @@ const FormOrder = ({
                                spacing={0}>
                             <OMSLabel
                                 required
-                                label="Supplier"
+                                label={t('form.order.supplier')}
                             />
                             <Box sx={{ flex: 1 }}>
                                 <AppAutocomplete<Supplier>
@@ -172,7 +174,7 @@ const FormOrder = ({
                                     value={selectedSupplier}
                                     inputValue={inputValue}
                                     loading={suppliersLoading}
-                                    placeholder="Search supplier..."
+                                    placeholder={t('search2.searchSupplier')}
                                     getOptionLabel={(c) => `${c.name} #${c.id}`}
                                     onChange={setSelectedSupplier}
                                     onInputChange={setInputValue}
@@ -206,7 +208,7 @@ const FormOrder = ({
                     {/* HEADER */}
                     <Grid size={{ xs: 12 }}>
                         <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
-                            Create Order
+                            {t('form.order.title')}
                         </Box>
                     </Grid>
 
@@ -216,11 +218,11 @@ const FormOrder = ({
                                alignItems="stretch"
                                spacing={0}>
                             <OMSLabel
-                                label="Type of order"
+                                label={t('form.order.typeOfOrder')}
                             />
                             <OMSSelect
-                                options={[{"orderCustomer": "Order to Customer"},
-                                    {"orderSupplier": "Order to Supplier"}]}
+                                options={[{"orderCustomer": t('form.order.orderToCustomer')},
+                                    {"orderSupplier": t('form.order.orderToSupplier')}]}
                                 selectValue={selectValue}
                                 setSelectValue={setSelectValue}
                             />
@@ -266,11 +268,11 @@ const FormOrder = ({
                     <Grid size={{ xs: 12 }}>
                         <Stack direction="row" spacing={1} justifyContent="flex-end">
                             <Button type="reset" variant="outlined" color="error" size="small">
-                                Reset
+                                {t('actions.reset')}
                             </Button>
 
                             <Button type="submit" variant="contained" size="small">
-                                Create
+                                {t('actions.create')}
                             </Button>
                         </Stack>
                     </Grid>

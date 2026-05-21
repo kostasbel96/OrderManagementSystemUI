@@ -1,10 +1,12 @@
 import React, { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTabs } from '../contexts/TabContext.tsx';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import {useUIStore} from "../hooks/store/useUIStore.ts";
 
 const Workspaces: React.FC = () => {
     const { tabs, activeTabId, removeTab, setActiveTab } = useTabs();
+    const { t } = useTranslation();
     const scrollRef = useRef<HTMLDivElement>(null);
     const activeTabRef = useRef<HTMLDivElement>(null);
 
@@ -52,9 +54,9 @@ const Workspaces: React.FC = () => {
         return (
             <div className="flex flex-col items-center justify-center h-full text-gray-400 p-20">
                 <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center max-w-sm">
-                    <p className="text-xl font-semibold text-gray-600 mb-2">OMS Workspace</p>
-                    <p className="text-sm">There are no active workspaces.</p>
-                    <p className="text-sm mt-1">Select a section from the menu on the left to get started.</p>
+                    <p className="text-xl font-semibold text-gray-600 mb-2">{t('workspaces.emptyTitle')}</p>
+                    <p className="text-sm">{t('workspaces.noActive')}</p>
+                    <p className="text-sm mt-1">{t('workspaces.selectStart')}</p>
                 </div>
             </div>
         );

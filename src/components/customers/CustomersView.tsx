@@ -1,6 +1,6 @@
 import type {GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useMemo} from "react";
 import type {
     Customer,
     Driver,
@@ -19,8 +19,10 @@ import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
-
+import { useTranslation } from 'react-i18next';
+ 
 const CustomersView = () => {
+    const { t } = useTranslation();
 
     const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver | Route | Receipt | Supplier)[]>([]);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
@@ -51,8 +53,8 @@ const CustomersView = () => {
         setOperation("deleted");
     }
 
-    const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
+    const columns: GridColDef[] = useMemo(() => [
+        { field: 'id', headerName: t('customers.table.id'), width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -67,7 +69,7 @@ const CustomersView = () => {
                     {params.value}
                 </div>
             )  },
-        { field: 'name', headerName: 'Name', width: 150, renderCell: (params) => (
+        { field: 'name', headerName: t('customers.table.name'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -82,7 +84,7 @@ const CustomersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'lastName', headerName: 'Last Name', width: 150, renderCell: (params) => (
+        { field: 'lastName', headerName: t('customers.table.lastName'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -97,7 +99,7 @@ const CustomersView = () => {
                     {params.value}
                 </div>
             )  },
-        {field: 'email', headerName: 'Email', width: 150, renderCell: (params) => (
+        {field: 'email', headerName: t('customers.table.email'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -112,7 +114,7 @@ const CustomersView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'phoneNumber1', headerName: 'Phone Number 1', width: 150, renderCell: (params) => (
+        {field: 'phoneNumber1', headerName: t('customers.table.phoneNumber1'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -127,7 +129,7 @@ const CustomersView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'phoneNumber2', headerName: 'Phone Number 2', width: 150, renderCell: (params) => (
+        {field: 'phoneNumber2', headerName: t('customers.table.phoneNumber2'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -143,7 +145,7 @@ const CustomersView = () => {
                 </div>
             ) },
         {
-            field: 'balance', headerName: 'Balance', type: "number", width: 150, renderCell: (params) => (
+            field: 'balance', headerName: t('customers.table.balance'), type: "number", width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -161,7 +163,7 @@ const CustomersView = () => {
         },
         {
             field: 'actions',
-            headerName: 'Actions',
+            headerName: t('customers.table.actions'),
             width: 100,
             sortable: false,
             filterable: false,
@@ -197,7 +199,7 @@ const CustomersView = () => {
 
             ),
         },
-    ];
+    ], [t]);
 
     const handleUpdateCustomer = (updated: Product | Customer | OrderRow | Driver | Route | Receipt | Supplier) => {
         setRows(prev => {

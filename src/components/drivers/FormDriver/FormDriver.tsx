@@ -5,6 +5,7 @@ import {
     Grid, Box
 } from "@mui/material";
 import { type FormEvent, useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import useDriverFormValidation, {
     type FormDriverValues
 } from "../../../hooks/useDriverFormValidation.ts";
@@ -24,7 +25,7 @@ const initialValues: FormDriverValues = {
     phoneNumber2: "",
 };
 
-const FormCustomer = ({
+const FormDriver = ({
                           setSubmitted,
                           setSuccess,
                           setPopUpMessage,
@@ -44,6 +45,7 @@ const FormCustomer = ({
         driverErrors,
         setDriverErrors
     } = useDriverFormValidation(values);
+    const { t } = useTranslation();
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -71,7 +73,6 @@ const FormCustomer = ({
             setSubmitted(true);
             setSuccess(false);
         }
-        setPopUpMessage("");
     };
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
@@ -120,7 +121,7 @@ const FormCustomer = ({
                     {/* TITLE */}
                     <Grid size={{ xs: 12 }}>
                         <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
-                            Create Driver
+                            {t('form.driver.title')}
                         </Box>
                     </Grid>
 
@@ -128,7 +129,7 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name="name"
-                            label="Name"
+                            label={t('form.driver.name')}
                             value={values.name}
                             onChange={handleChange}
                             error={Boolean(driverErrors?.name)}
@@ -141,7 +142,7 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"lastName"}
-                            label="Last Name"
+                            label={t('form.driver.lastName')}
                             value={values.lastName}
                             onChange={handleChange}
                             error={Boolean(driverErrors?.lastName)}
@@ -154,7 +155,7 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"phoneNumber1"}
-                            label="Phone 1"
+                            label={t('form.driver.phone1')}
                             value={values.phoneNumber1}
                             onChange={handleChange}
                             error={Boolean(driverErrors?.phoneNumber1)}
@@ -167,7 +168,7 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"phoneNumber2"}
-                            label="Phone 2"
+                            label={t('form.driver.phone2')}
                             value={values.phoneNumber2}
                             onChange={handleChange}
                             error={Boolean(driverErrors?.phoneNumber2)}
@@ -179,10 +180,10 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12 }}>
                         <Stack direction="row" spacing={1} justifyContent="flex-end">
                             <Button type="reset" variant="outlined" color="error" size="small">
-                                Reset
+                                {t('actions.reset')}
                             </Button>
                             <Button type="submit" variant="contained" size="small">
-                                Create
+                                {t('actions.create')}
                             </Button>
                         </Stack>
                     </Grid>
@@ -193,4 +194,4 @@ const FormCustomer = ({
     );
 };
 
-export default FormCustomer;
+export default FormDriver;

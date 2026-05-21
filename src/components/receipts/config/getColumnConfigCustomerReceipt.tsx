@@ -14,7 +14,7 @@ const getColumnConfigCustomerReceipt = ({
                                             setOnDeleteContent,
                                             setOperation,
                                             setOpenDeletePopUp
-                                        }: ColumnConfigCustomerReceiptProps) => {
+                                        }: ColumnConfigCustomerReceiptProps, t: any) => {
 
     const handleOnDelete = (row: Receipt) =>{
         if (row.id) getReceipt(row.id).then((data: ResponseDTO)=> {
@@ -24,7 +24,7 @@ const getColumnConfigCustomerReceipt = ({
     }
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
+        { field: 'id', headerName: t('receipts.table.id'), width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -39,7 +39,7 @@ const getColumnConfigCustomerReceipt = ({
                     {params.value}
                 </div>
             ) },
-        { field: 'customer', headerName: 'Customer', width: 200,
+        { field: 'customer', headerName: t('receipts.table.customer'), width: 200,
             valueGetter: (_, row) =>
                 `${row.customer?.name ?? ''} ${row.customer?.lastName ?? ''}`,renderCell: (params) => (
                 <div
@@ -56,7 +56,7 @@ const getColumnConfigCustomerReceipt = ({
                     {params.value}
                 </div>
             ) },
-        { field: 'amount', headerName: 'Amount', width: 80, type: "number", renderCell: (params) => (
+        { field: 'amount', headerName: t('receipts.table.amount'), width: 80, type: "number", renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -68,7 +68,7 @@ const getColumnConfigCustomerReceipt = ({
                     {params.value ? params.value + " €" : ""}
                 </div>
             ) },
-        {field: 'date', headerName: 'Date', type: 'date', width: 80, renderCell: (params) => (
+        {field: 'date', headerName: t('receipts.table.date'), type: 'date', width: 80, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -84,7 +84,7 @@ const getColumnConfigCustomerReceipt = ({
             )},
         {
             field: 'actions',
-            headerName: 'Actions',
+            headerName: t('receipts.table.actions'),
             width: 100,
             sortable: false,
             filterable: false,

@@ -1,0 +1,345 @@
+{
+  "app": {
+    "title": "Σύστημα Διαχείρισης Παραγγελιών",
+    "adminTitle": "Διαχείριση OMS",
+    "subtitle": "Σύστημα Διαχείρισης Παραγγελιών"
+  },
+  "nav": {
+    "dashboard": "Πίνακας Ελέγχου",
+    "invoices": "Τιμολόγια",
+    "customers": "Πελάτες",
+    "settings": "Ρυθμίσεις",
+    "quickAdd": "Γρήγορη Προσθήκη",
+    "products": "Προϊόντα",
+    "addProduct": "Προσθήκη Προϊόντος",
+    "orders": "Παραγγελίες",
+    "addOrder": "Προσθήκη Παραγγελίας",
+    "customerOrders": "Παραγγελίες Πελατών",
+    "supplierOrders": "Παραγγελίες Προμηθευτών",
+    "addCustomer": "Προσθήκη Πελάτη",
+    "payments": "Πληρωμές",
+    "customerPayments": "Πληρωμές Πελατών",
+    "supplierPayments": "Πληρωμές Προμηθευτών",
+    "addPayment": "Προσθήκη Πληρωμής",
+    "routes": "Διαδρομές",
+    "addRoute": "Προσθήκη Διαδρομής",
+    "addDriver": "Προσθήκη Οδηγού",
+    "drivers": "Οδηγοί",
+    "suppliers": "Προμηθευτές",
+    "addSupplier": "Προσθήκη Προμηθευτή",
+    "logout": "Αποσύνδεση"
+  },
+  "invoice": {
+    "create": "Δημιουργία Τιμολογίου",
+    "list": "Λίστα Τιμολογίων",
+    "number": "Αριθμός Τιμολογίου",
+    "date": "Ημερομηνία",
+    "total": "Σύνολο",
+    "status": {
+      "draft": "Πρόχειρο",
+      "issued": "Εκδοθέν",
+      "paid": "Εξοφλημένο"
+    },
+    "actions": {
+      "save": "Αποθήκευση",
+      "delete": "Διαγραφή",
+      "send": "Αποστολή"
+    }
+  },
+  "customer": {
+    "create": "Δημιουργία Πελάτη",
+    "name": "Όνομα",
+    "vat": "ΑΦΜ",
+    "address": "Διεύθυνση"
+  },
+  "auth": {
+    "login": "Σύνδεση",
+    "logout": "Αποσύνδεση",
+    "email": "Email",
+    "password": "Κωδικός"
+  },
+  "common": {
+    "loading": "Φόρτωση...",
+    "error": "Κάτι πήγε στραβά",
+    "save": "Αποθήκευση",
+    "cancel": "Ακύρωση",
+    "delete": "Διαγραφή"
+  ,
+    "enterPlaceholder": "Εισάγετε {{label}}..."
+  ,
+    "balance": "Υπόλοιπο: {{amount}}€"
+  }
+  ,
+  "typeNames": {
+    "product": "Προϊόν",
+    "customer": "Πελάτης",
+    "order": "Παραγγελία",
+    "driver": "Οδηγός",
+    "receipt": "Απόδειξη",
+    "payment": "Πληρωμή",
+    "route": "Διαδρομή",
+    "supplier": "Προμηθευτής"
+  },
+  "workspaces": {
+    "emptyTitle": "Χώρος Εργασίας OMS",
+    "noActive": "Δεν υπάρχουν ενεργοί χώροι εργασίας.",
+    "selectStart": "Επιλέξτε μια ενότητα από το μενού στα αριστερά για να ξεκινήσετε."
+  },
+  "routes": {
+    "edit": "Επεξεργασία Διαδρομής",
+    "inRoute": "Στη διαδρομή: {{count}}",
+    "save": "Αποθήκευση Διαδρομής",
+    "clearStops": "Καθαρισμός στάσεων",
+    "addToRoute": "Προσθήκη στη Διαδρομή ({{count}})",
+    "clearSelection": "Καθαρισμός επιλογής ({{count}})"
+  },
+  "popup": {
+    "updateDetails": "Ενημερώστε τις λεπτομέρειες του {{typeOf}} παρακάτω.",
+    "deleteDetails": "Διαγράψτε τις λεπτομέρειες του {{typeOf}} παρακάτω.",
+    "confirmMessage": "Βεβαιωθείτε ότι όλες οι πληροφορίες είναι σωστές πριν αποθηκεύσετε τις αλλαγές σας.",
+    "labels": {
+      "productId": "Αναγνωριστικό Προϊόντος",
+      "productName": "Όνομα Προϊόντος",
+      "productDescription": "Περιγραφή Προϊόντος",
+      "productQuantity": "Ποσότητα Προϊόντος",
+      "productPrice": "Τιμή Προϊόντος",
+      "customerId": "Αναγνωριστικό Πελάτη",
+      "customerName": "Όνομα Πελάτη",
+      "customerLastName": "Επίθετο Πελάτη",
+      "phoneNumber1": "Τηλέφωνο 1",
+      "phoneNumber2": "Τηλέφωνο 2",
+      "email": "Email",
+      "driverId": "Αναγνωριστικό Οδηγού",
+      "driverName": "Όνομα Οδηγού",
+      "driverLastName": "Επίθετο Οδηγού",
+      "orderId": "Αναγνωριστικό Παραγγελίας",
+      "address": "Διεύθυνση",
+      "status": "Κατάσταση",
+      "supplierName": "Όνομα Προμηθευτή",
+      "routeId": "Αναγνωριστικό Διαδρομής",
+      "date": "Ημερομηνία",
+      "orders": "Παραγγελίες",
+      "routeName": "Όνομα Διαδρομής",
+      "notes": "Σημειώσεις",
+      "supplierId": "Αναγνωριστικό Προμηθευτή",
+      "vatNumber": "ΑΦΜ"
+    }
+  },
+  "drivers": {
+    "table": {
+      "id": "ID",
+      "name": "Όνομα",
+      "lastName": "Επίθετο",
+      "phoneNumber1": "Τηλέφωνο 1",
+      "phoneNumber2": "Τηλέφωνο 2",
+      "actions": "Ενέργειες",
+      "type": "Οδηγός"
+    }
+  },
+  "customers": {
+    "table": {
+      "id": "ID",
+      "name": "Όνομα",
+      "lastName": "Επίθετο",
+      "email": "Email",
+      "phoneNumber1": "Τηλέφωνο 1",
+      "phoneNumber2": "Τηλέφωνο 2",
+      "balance": "Υπόλοιπο",
+      "actions": "Ενέργειες"
+    }
+  },
+  "products": {
+    "table": {
+      "id": "ID",
+      "productName": "Όνομα Προϊόντος",
+      "description": "Περιγραφή",
+      "quantity": "Ποσότητα",
+      "quantityShort": "Τεμ",
+      "price": "Τιμή",
+      "total": "Σύνολο",
+      "actions": "Ενέργειες",
+      "noProducts": "Δεν προστέθηκαν προϊόντα"
+    }
+  },
+  "actions": {
+    "reset": "Επαναφορά",
+    "create": "Δημιουργία",
+    "addProduct": "Προσθήκη Προϊόντος"
+  },
+  "messages": {
+    "driverAdded": "Ο οδηγός προστέθηκε με επιτυχία.",
+    "customerAdded": "Ο πελάτης προστέθηκε με επιτυχία.",
+    "productAdded": "Το προϊόν προστέθηκε με επιτυχία.",
+    "orderAdded": "Η παραγγελία προστέθηκε με επιτυχία.",
+    "paymentAdded": "Η πληρωμή προστέθηκε με επιτυχία.",
+    "routeAdded": "Η διαδρομή προστέθηκε με επιτυχία.",
+    "supplierAdded": "Ο προμηθευτής προστέθηκε με επιτυχία.",
+    "receiptAdded": "Η απόδειξη προστέθηκε με επιτυχία.",
+    "driverUpdated": "Ο οδηγός ενημερώθηκε με επιτυχία.",
+    "customerUpdated": "Ο πελάτης ενημερώθηκε με επιτυχία.",
+    "productUpdated": "Το προϊόν ενημερώθηκε με επιτυχία.",
+    "orderUpdated": "Η παραγγελία ενημερώθηκε με επιτυχία.",
+    "paymentUpdated": "Η πληρωμή ενημερώθηκε με επιτυχία.",
+    "routeUpdated": "Η διαδρομή ενημερώθηκε με επιτυχία.",
+    "supplierUpdated": "Ο προμηθευτής ενημερώθηκε με επιτυχία.",
+    "receiptUpdated": "Η απόδειξη ενημερώθηκε με επιτυχία."
+  }
+  ,
+  "messages_ext": {
+    "savedGeneric": "{{item}} αποθηκεύτηκε με επιτυχία!",
+    "operationSuccess": "{{type}} {{subject}} {{operation}} με επιτυχία!",
+    "cannotBeAdded": "{{message}} {{type}} δεν μπορεί να προστεθεί!"
+  }
+  ,
+  "ops": {
+    "created": "δημιουργήθηκε",
+    "updated": "ενημερώθηκε",
+    "deleted": "διαγράφηκε"
+  }
+  ,
+  "tabs": {
+    "product": "Προϊόν",
+    "order": "Παραγγελία",
+    "customer": "Πελάτης",
+    "route": "Διαδρομή",
+    "supplier": "Προμηθευτής"
+  }
+  ,
+  "orders": {
+    "table": {
+      "id": "ID",
+      "customer": "Πελάτης",
+      "supplier": "Προμηθευτής",
+      "products": "Προϊόντα",
+      "address": "Διεύθυνση",
+      "total": "Σύνολο",
+      "paid": "Πληρωθείσα",
+      "date": "Ημερομηνία",
+      "paymentStatus": "Κατάσταση Πληρωμής",
+      "status": "Κατάσταση",
+      "actions": "Ενέργειες"
+    }
+  }
+  ,
+  "suppliers": {
+    "table": {
+      "id": "ID",
+      "name": "Όνομα",
+      "email": "Email",
+      "phoneNumber1": "Τηλέφωνο 1",
+      "phoneNumber2": "Τηλέφωνο 2",
+      "address": "Διεύθυνση",
+      "vat": "ΑΦΜ",
+      "balance": "Υπόλοιπο",
+      "actions": "Ενέργειες"
+    }
+  }
+  ,
+  "receipts": {
+    "table": {
+      "id": "ID",
+      "customer": "Πελάτης",
+      "supplier": "Προμηθευτής",
+      "amount": "Ποσό",
+      "date": "Ημερομηνία",
+      "actions": "Ενέργειες"
+    }
+  }
+  ,
+  "search": {
+    "placeholderCustomer": "πελάτη κατά διεύθυνση, όνομα, τηλέφωνο",
+    "placeholderSupplier": "προμηθευτή κατά διεύθυνση, όνομα, τηλέφωνο, ΑΦΜ",
+    "contains": "περιέχει",
+    "ariaReset": "επαναφορά",
+    "ariaSearch": "αναζήτηση"
+  }
+  ,
+  "search2": {
+    "searchCustomer": "Αναζήτηση πελάτη...",
+    "searchSupplier": "Αναζήτηση προμηθευτή...",
+    "searchProduct": "Αναζήτηση προϊόντος...",
+    "searchDriver": "Αναζήτηση οδηγού...",
+    "searchRoute": "Αναζήτηση διαδρομής..."
+  }
+  ,
+  "settings": {
+    "title": "Ρυθμίσεις",
+    "language": "Γλώσσα",
+    "backendUrlLabel": "Διεύθυνση Backend",
+    "backendUrlHelper": "π.χ. http://192.168.1.10:8080",
+    "validation": {
+      "mustStart": "Πρέπει να ξεκινά με http:// ή https://"
+    },
+    "savedMessage": "Οι ρυθμίσεις αποθηκεύτηκαν με επιτυχία"
+  },
+  "language": {
+    "english": "English",
+    "greek": "Ελληνικά"
+  },
+  "form": {
+    "driver": {
+      "title": "Δημιουργία Οδηγού",
+      "name": "Όνομα",
+      "lastName": "Επίθετο",
+      "phone1": "Τηλ 1",
+      "phone2": "Τηλ 2"
+    },
+    "order": {
+      "title": "Δημιουργία Παραγγελίας",
+      "typeOfOrder": "Τύπος παραγγελίας",
+      "customer": "Πελάτης",
+      "supplier": "Προμηθευτής",
+      "address": "Διεύθυνση",
+      "orderToCustomer": "Παραγγελία σε Πελάτη",
+      "orderToSupplier": "Παραγγελία σε Προμηθευτή"
+    }
+    ,
+    "route": {
+      "title": "Δημιουργία Διαδρομής",
+      "name": "Όνομα διαδρομής",
+      "namePlaceholder": "Εισάγετε όνομα διαδρομής...",
+      "notes": "Σημειώσεις",
+      "notesPlaceholder": "Εισάγετε σημειώσεις...",
+      "driver": "Οδηγός",
+      "searchDriver": "Αναζήτηση οδηγού...",
+      "date": "Ημερομηνία"
+    },
+    "product": {
+      "title": "Δημιουργία Προϊόντος",
+      "productName": "Όνομα Προϊόντος",
+      "description": "Περιγραφή",
+      "quantity": "Ποσότητα",
+      "price": "Τιμή",
+      "createdMessage": "Το προϊόν δημιουργήθηκε με επιτυχία"
+    },
+    "payment": {
+      "title": "Δημιουργία Πληρωμής",
+      "typeOfPayment": "Τύπος πληρωμής",
+      "paymentFromCustomer": "Πληρωμή από Πελάτη",
+      "paymentToSupplier": "Πληρωμή σε Προμηθευτή",
+      "notes": "Σημειώσεις",
+      "amount": "Ποσό",
+      "linkToOrder": "Σύνδεση με Παραγγελία",
+      "hideOrders": "Απόκρυψη Παραγγελιών",
+      "selectOrder": "Επιλέξτε Παραγγελία"
+    }
+    ,
+    "customer": {
+      "title": "Δημιουργία Πελάτη",
+      "name": "Όνομα",
+      "lastName": "Επίθετο",
+      "phone1": "Τηλ 1",
+      "phone2": "Τηλ 2",
+      "email": "Email"
+    },
+    "supplier": {
+      "title": "Δημιουργία Προμηθευτή",
+      "name": "Όνομα",
+      "phone1": "Τηλέφωνο 1",
+      "phone2": "Τηλέφωνο 2",
+      "email": "Email",
+      "address": "Διεύθυνση",
+      "vat": "ΑΦΜ"
+    }
+  }
+}

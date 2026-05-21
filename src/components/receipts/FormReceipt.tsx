@@ -4,6 +4,7 @@ import {AppAutocomplete} from "../ui/AppAutocomplete.tsx";
 import type {Customer, Supplier} from "../../types/Types.ts";
 import LabeledField from "../ui/LabeledField.tsx";
 import {type FormEvent, useEffect, useState} from "react";
+import { useTranslation } from 'react-i18next';
 import {useCustomerSearch} from "../../hooks/useCustomerSearch.ts";
 import useReceiptFormValidation from "../../hooks/useReceiptFormValidation.ts";
 import {addReceipt} from "../../services/receiptService.ts";
@@ -50,6 +51,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
         person: selectValue === "orderCustomer" ? selectedCustomer : selectedSupplier,
         amount
     });
+    const { t } = useTranslation();
 
     const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -66,7 +68,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                     .then((data) => {
                         setSuccess(true);
                         setSubmitted(true);
-                        setPopUpMessage("Receipt created successfully");
+                        setPopUpMessage(t('messages_ext.savedGeneric', { item: t('typeNames.receipt') }));
                         console.log(data);
                     })
                     .catch((error) => {
@@ -87,7 +89,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                     .then((data) => {
                         setSuccess(true);
                         setSubmitted(true);
-                        setPopUpMessage("Payment created successfully");
+                        setPopUpMessage(t('messages_ext.savedGeneric', { item: t('typeNames.payment') }));
                         console.log(data);
                     })
                     .catch((error) => {
@@ -138,7 +140,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                            spacing={0}>
                         <OMSLabel
                             required
-                            label="Customer"
+                            label={t('form.order.customer')}
                         />
                         <Box sx={{ flex: 1 }}>
                             <AppAutocomplete<Customer>
@@ -146,7 +148,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                                 value={selectedCustomer}
                                 inputValue={inputValue}
                                 loading={loadingCustomer}
-                                placeholder="Search customer..."
+                                   placeholder={t('search2.searchCustomer')}
                                 getOptionLabel={(c) => `${c.name} ${c.lastName} #${c.id}`}
                                 onChange={setSelectedCustomer}
                                 onInputChange={setInputValue}
@@ -168,7 +170,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                            spacing={0}>
                         <OMSLabel
                             required
-                            label="Supplier"
+                            label={t('form.order.supplier')}
                         />
                         <Box sx={{ flex: 1 }}>
                             <AppAutocomplete<Supplier>
@@ -176,7 +178,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                                 value={selectedSupplier}
                                 inputValue={inputValue}
                                 loading={loadingSupplier}
-                                placeholder="Search supplier..."
+                                   placeholder={t('search2.searchSupplier')}
                                 getOptionLabel={(c) => `${c.name} #${c.id}`}
                                 onChange={setSelectedSupplier}
                                 onInputChange={setInputValue}
@@ -207,7 +209,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                     {/* HEADER */}
                     <Grid size={{ xs: 12 }}>
                         <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
-                            Create Payment
+                            {t('form.payment.title')}
                         </Box>
                     </Grid>
 
@@ -217,11 +219,11 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                                alignItems="stretch"
                                spacing={0}>
                             <OMSLabel
-                                label="Type of payment"
+                                label={t('form.payment.typeOfPayment')}
                             />
                             <OMSSelect
-                                options={[{"orderCustomer": "Payment from Customer"},
-                                    {"orderSupplier": "Payment to Supplier"}]}
+                                options={[{"orderCustomer": t('form.payment.paymentFromCustomer')},
+                                    {"orderSupplier": t('form.payment.paymentToSupplier')}]}
                                 selectValue={selectValue}
                                 setSelectValue={setSelectValue}
                             />
@@ -235,7 +237,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                     {/* NOTES */}
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
-                            label="Notes"
+                            label={t('form.payment.notes')}
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                         />
@@ -245,7 +247,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             required
-                            label="Amount"
+                            label={t('form.payment.amount')}
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
                             error={Boolean(receiptErrors?.amount)}
@@ -256,7 +258,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                     {/* LINK TO ORDER */}
                     <Grid size={{xs: 12}}>
                         <Box sx={{ display: 'flex', gap: 0, alignItems: 'center' }}>
-                            <OMSLabel label="Link to Order" />
+                            <OMSLabel label={t('form.payment.linkToOrder')} />
                             <Button
                                 variant="outlined"
                                 size="small"
@@ -269,7 +271,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                                     alignItems: "center",
                                 }}
                             >
-                                {showOrders ? 'Hide Orders' : 'Select Order'}
+                                {showOrders ? t('form.payment.hideOrders') : t('form.payment.selectOrder')}
                             </Button>
                         </Box>
                     </Grid>
@@ -297,11 +299,11 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                     <Grid size={{ xs: 12 }}>
                         <Stack direction="row" spacing={1} justifyContent="flex-end">
                             <Button type="reset" variant="outlined" color="error" size="small">
-                                Reset
+                                {t('actions.reset')}
                             </Button>
 
                             <Button type="submit" variant="contained" size="small">
-                                Create
+                                {t('actions.create')}
                             </Button>
                         </Stack>
                     </Grid>

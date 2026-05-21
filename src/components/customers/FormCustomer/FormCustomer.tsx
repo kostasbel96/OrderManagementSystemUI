@@ -10,6 +10,7 @@ import useCustomerFormValidation, {
     type FormValues
 } from "../../../hooks/useCustomerFormValidation.ts";
 import LabeledField from "../../ui/LabeledField.tsx";
+import {useTranslation} from "react-i18next";
 
 interface FormCustomerProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,6 +31,8 @@ const FormCustomer = ({
                           setSuccess,
                           setPopUpMessage,
                       }: FormCustomerProps) => {
+
+    const { t } = useTranslation();
 
     const [values, setValues] = useState<FormValues>(() => {
         const saved = localStorage.getItem("customerDraft");
@@ -61,7 +64,7 @@ const FormCustomer = ({
                 .then(() => {
                     setSuccess(true);
                     setSubmitted(true);
-                    setPopUpMessage("Customer added successfully.");
+                    setPopUpMessage(t('messages.customerAdded'));
                     setValues(initialValues);
                     localStorage.removeItem("customerDraft");
                 })
@@ -123,7 +126,7 @@ const FormCustomer = ({
                     {/* TITLE */}
                     <Grid size={{ xs: 12 }}>
                         <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
-                            Create Customer
+                            {t("customer.create")}
                         </Box>
                     </Grid>
 
@@ -131,7 +134,7 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name="name"
-                            label="Name"
+                            label={t('form.customer.name')}
                             value={values.name}
                             onChange={handleChange}
                             error={Boolean(customerErrors?.name)}
@@ -144,7 +147,7 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"lastName"}
-                            label="Last Name"
+                            label={t('form.customer.lastName')}
                             value={values.lastName}
                             onChange={handleChange}
                             error={Boolean(customerErrors?.lastName)}
@@ -157,7 +160,7 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"phoneNumber1"}
-                            label="Phone 1"
+                            label={t('form.customer.phone1')}
                             value={values.phoneNumber1}
                             onChange={handleChange}
                             error={Boolean(customerErrors?.phoneNumber1)}
@@ -170,7 +173,7 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"phoneNumber2"}
-                            label="Phone 2"
+                            label={t('form.customer.phone2')}
                             value={values.phoneNumber2}
                             onChange={handleChange}
                             error={Boolean(customerErrors?.phoneNumber2)}
@@ -182,7 +185,7 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12 }}>
                         <LabeledField
                             name={"email"}
-                            label="Email"
+                            label={t('form.customer.email')}
                             value={values.email}
                             onChange={handleChange}
                             helperText={customerErrors?.email}
@@ -194,10 +197,10 @@ const FormCustomer = ({
                     <Grid size={{ xs: 12 }}>
                         <Stack direction="row" spacing={1} justifyContent="flex-end">
                             <Button type="reset" variant="outlined" color="error" size="small">
-                                Reset
+                                {t('actions.reset')}
                             </Button>
                             <Button type="submit" variant="contained" size="small">
-                                Create
+                                {t('actions.create')}
                             </Button>
                         </Stack>
                     </Grid>

@@ -1,4 +1,5 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
+import { useTranslation } from 'react-i18next';
 import type {
     Customer,
     Driver,
@@ -32,6 +33,7 @@ interface PopUpDeleteProps{
 
 const PopUpDelete = ({open, rowToEdit,
                          typeOf, setOpen, setSubmitted, setRowToEdit, handleDelete}: PopUpDeleteProps) => {
+    const { t } = useTranslation();
 
     const handleClose = () => {
         setOpen(false);
@@ -168,7 +170,7 @@ const PopUpDelete = ({open, rowToEdit,
                     id="id"
                     name="id"
                     type="text"
-                    label="Product ID"
+                    label={t('popup.labels.productId')}
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as Product)?.id}
@@ -179,7 +181,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Product Name"
+                    label={t('popup.labels.productName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -190,7 +192,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="description"
                     name="description"
-                    label="Product Description"
+                    label={t('popup.labels.productDescription')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -201,7 +203,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="quantity"
                     name="quantity"
-                    label="Product Quantity"
+                    label={t('popup.labels.productQuantity')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -212,7 +214,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="price"
                     name="price"
-                    label="Product price"
+                    label={t('popup.labels.productPrice')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -230,7 +232,7 @@ const PopUpDelete = ({open, rowToEdit,
                     id="id"
                     name="id"
                     type="text"
-                    label="Customer ID"
+                    label={t('popup.labels.customerId')}
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as Customer)?.id}
@@ -241,7 +243,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Customer Name"
+                    label={t('popup.labels.customerName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -252,7 +254,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="lastName"
                     name="lastName"
-                    label="Customer lastname"
+                    label={t('popup.labels.customerLastName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -263,7 +265,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="phoneNumber1"
                     name="phoneNumber1"
-                    label="Phone Number 1"
+                    label={t('popup.labels.phoneNumber1')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -274,7 +276,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="phoneNumber2"
                     name="phoneNumber2"
-                    label="Phone Number 2"
+                    label={t('popup.labels.phoneNumber2')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -285,7 +287,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="email"
                     name="email"
-                    label="Email"
+                    label={t('popup.labels.email')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -303,7 +305,7 @@ const PopUpDelete = ({open, rowToEdit,
                     id="id"
                     name="id"
                     type="text"
-                    label="Driver ID"
+                    label={t('popup.labels.driverId')}
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as Driver)?.id}
@@ -314,7 +316,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Driver Name"
+                    label={t('popup.labels.driverName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -325,7 +327,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="lastName"
                     name="lastName"
-                    label="Driver lastname"
+                    label={t('popup.labels.driverLastName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -336,7 +338,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="phoneNumber1"
                     name="phoneNumber1"
-                    label="Phone Number 1"
+                    label={t('popup.labels.phoneNumber1')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -347,7 +349,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="phoneNumber2"
                     name="phoneNumber2"
-                    label="Phone Number 2"
+                    label={t('popup.labels.phoneNumber2')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -365,7 +367,7 @@ const PopUpDelete = ({open, rowToEdit,
                     id="id"
                     name="id"
                     type="text"
-                    label="Order ID"
+                    label={t('popup.labels.orderId')}
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as OrderItem)?.id}
@@ -376,7 +378,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Customer Name"
+                    label={t('popup.labels.customerName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -387,7 +389,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="address"
                     name="address"
-                    label="Address"
+                    label={t('popup.labels.address')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -405,7 +407,7 @@ const PopUpDelete = ({open, rowToEdit,
                     id="id"
                     name="id"
                     type="text"
-                    label="Order ID"
+                    label={t('popup.labels.orderId')}
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as PurchaseOrderItem)?.id}
@@ -416,7 +418,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Supplier Name"
+                    label={t('popup.labels.supplierName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -434,7 +436,7 @@ const PopUpDelete = ({open, rowToEdit,
                     id="id"
                     name="id"
                     type="text"
-                    label="Route ID"
+                    label={t('popup.labels.routeId')}
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as Route)?.id}
@@ -445,7 +447,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="driverName"
                     name="driverName"
-                    label="Driver Name"
+                    label={t('popup.labels.driverName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -456,7 +458,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Route Name"
+                    label={t('popup.labels.routeName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -474,7 +476,7 @@ const PopUpDelete = ({open, rowToEdit,
                     id="id"
                     name="id"
                     type="text"
-                    label="Receipt ID"
+                    label={t('popup.labels.orderId')}
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as Receipt)?.id}
@@ -485,7 +487,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="customerName"
                     name="customerName"
-                    label="Customer Name"
+                    label={t('popup.labels.customerName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -496,7 +498,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="amount"
                     name="amount"
-                    label="Amount"
+                    label={t('form.payment.amount')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -507,7 +509,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="date"
                     name="date"
-                    label="Date"
+                    label={t('popup.labels.date')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -525,7 +527,7 @@ const PopUpDelete = ({open, rowToEdit,
                     id="id"
                     name="id"
                     type="text"
-                    label="Payment ID"
+                    label={t('popup.labels.orderId')}
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as Payment)?.id}
@@ -536,7 +538,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="supplierName"
                     name="supplierName"
-                    label="Supplier Name"
+                    label={t('popup.labels.supplierName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -547,7 +549,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="amount"
                     name="amount"
-                    label="Amount"
+                    label={t('form.payment.amount')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -558,7 +560,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="date"
                     name="date"
-                    label="Date"
+                    label={t('popup.labels.date')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -576,7 +578,7 @@ const PopUpDelete = ({open, rowToEdit,
                     id="id"
                     name="id"
                     type="text"
-                    label="Supplier ID"
+                    label={t('popup.labels.supplierId')}
                     fullWidth
                     variant="standard"
                     value={(rowToEdit as Supplier)?.id}
@@ -587,7 +589,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="companyName"
                     name="companyName"
-                    label="Company Name"
+                    label={t('popup.labels.supplierName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -598,7 +600,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="email"
                     name="email"
-                    label="Email"
+                    label={t('popup.labels.email')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -609,7 +611,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="phoneNumber1"
                     name="phoneNumber1"
-                    label="Phone Number 1"
+                    label={t('popup.labels.phoneNumber1')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -620,7 +622,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="phoneNumber2"
                     name="phoneNumber2"
-                    label="Phone Number 2"
+                    label={t('popup.labels.phoneNumber2')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -631,7 +633,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="vatNumber"
                     name="vatNumber"
-                    label="VAT Number"
+                    label={t('popup.labels.vatNumber')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -642,7 +644,7 @@ const PopUpDelete = ({open, rowToEdit,
                     margin="dense"
                     id="address"
                     name="address"
-                    label="Address"
+                    label={t('popup.labels.address')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -653,10 +655,10 @@ const PopUpDelete = ({open, rowToEdit,
 
     return (
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Delete the {`${typeOf}`} details below.</DialogTitle>
+            <DialogTitle>{t('popup.deleteDetails', { typeOf })}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Make sure all information is correct before saving your changes.
+                    {t('popup.confirmMessage')}
                 </DialogContentText>
                 <form
                     onSubmit={(event) => handleSubmit(event)}
@@ -677,10 +679,10 @@ const PopUpDelete = ({open, rowToEdit,
                     handleClose()
                 }}
                 >
-                    Cancel
+                    {t('common.cancel')}
                 </Button>
                 <Button type="submit" form="subscription-form">
-                    Delete
+                    {t('common.delete')}
                 </Button>
             </DialogActions>
         </Dialog>

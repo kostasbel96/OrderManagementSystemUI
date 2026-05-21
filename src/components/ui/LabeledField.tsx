@@ -1,6 +1,7 @@
 import { Stack, type SxProps, TextField, type TextFieldProps } from "@mui/material";
 import { type Theme } from "@mui/material/styles";
 import OMSLabel from "./OMSLabel.tsx";
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -58,6 +59,7 @@ export default function LabeledField({
                                          labelSxOverride,
                                          textFieldProps = {},
                                      }: Readonly<LabeledFieldProps>) {
+    const { t } = useTranslation();
     return (
         <Stack direction="row" alignItems="stretch" spacing={0}>
             <OMSLabel
@@ -69,7 +71,7 @@ export default function LabeledField({
                 name={name}
                 fullWidth
                 size="small"
-                placeholder={placeholder ?? `Enter ${label?.toLowerCase()}...`}
+                placeholder={placeholder ?? t('common.enterPlaceholder', { label: String(label).toLowerCase() })}
                 value={value}
                 onChange={onChange}
                 error={Boolean(error)}

@@ -43,6 +43,7 @@ import useSupplierFormValidation from "../../hooks/useSupplierFormValidation.ts"
 import {updateSupplier} from "../../services/supplierService.ts";
 import {updatePurchaseOrder} from "../../services/purchaseOrderService.ts";
 import useSupplierOrderFormValidation from "../../hooks/useSupplierOrderFormValidation.ts";
+import { useTranslation } from 'react-i18next';
 
 interface PopUpUpdateProps{
     open: boolean;
@@ -54,6 +55,7 @@ interface PopUpUpdateProps{
 }
 
 const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpdate}: PopUpUpdateProps) => {
+    const { t } = useTranslation();
     const [productValues, setProductValues] = useState<Product>({
         id: -1,
         name: "",
@@ -361,7 +363,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     id="id"
                     name="id"
                     type="text"
-                    label="Product ID"
+                    label={t('popup.labels.productId')}
                     fullWidth
                     variant="standard"
                     value={productValues.id}
@@ -372,7 +374,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Product Name"
+                    label={t('popup.labels.productName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -385,7 +387,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="description"
                     name="description"
-                    label="Product Description"
+                    label={t('popup.labels.productDescription')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -398,7 +400,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="quantity"
                     name="quantity"
-                    label="Product Quantity"
+                    label={t('popup.labels.productQuantity')}
                     type="number"
                     fullWidth
                     variant="standard"
@@ -411,7 +413,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="price"
                     name="price"
-                    label="Product price"
+                    label={t('popup.labels.productPrice')}
                     type="number"
                     fullWidth
                     inputProps={{ min: 0, step: "0.01"}}
@@ -433,7 +435,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     id="id"
                     name="id"
                     type="text"
-                    label="Customer ID"
+                    label={t('popup.labels.driverId')}
                     fullWidth
                     variant="standard"
                     value={customerValues.id}
@@ -444,7 +446,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Customer Name"
+                    label={t('popup.labels.driverName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -457,7 +459,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="lastName"
                     name="lastName"
-                    label="Customer lastname"
+                    label={t('popup.labels.driverLastName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -470,7 +472,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="phoneNumber1"
                     name="phoneNumber1"
-                    label="Phone Number 1"
+                    label={t('popup.labels.phoneNumber1')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -483,7 +485,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="phoneNumber2"
                     name="phoneNumber2"
-                    label="Phone Number 2"
+                    label={t('popup.labels.phoneNumber2')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -496,7 +498,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="email"
                     name="email"
-                    label="Email"
+                    label={t('popup.labels.email')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -517,7 +519,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     id="id"
                     name="id"
                     type="text"
-                    label="Customer ID"
+                    label={t('popup.labels.customerId')}
                     fullWidth
                     variant="standard"
                     value={driverValues.id}
@@ -528,7 +530,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Customer Name"
+                    label={t('popup.labels.customerName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -541,7 +543,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="lastName"
                     name="lastName"
-                    label="Customer lastname"
+                    label={t('popup.labels.customerLastName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -554,7 +556,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="phoneNumber1"
                     name="phoneNumber1"
-                    label="Phone Number 1"
+                    label={t('popup.labels.phoneNumber1')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -567,7 +569,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="phoneNumber2"
                     name="phoneNumber2"
-                    label="Phone Number 2"
+                    label={t('popup.labels.phoneNumber2')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -588,7 +590,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     id="id"
                     name="id"
                     type="text"
-                    label="Order ID"
+                    label={t('popup.labels.orderId')}
                     fullWidth
                     variant="standard"
                     value={customerOrderValues.id}
@@ -600,7 +602,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Customer Name"
+                    label={t('popup.labels.customerName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -612,7 +614,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="lastName"
                     name="lastName"
-                    label="Customer lastname"
+                    label={t('popup.labels.customerLastName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -623,7 +625,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="address"
                     name="address"
-                    label="Address"
+                    label={t('popup.labels.address')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -637,7 +639,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="status"
                     name="status"
-                    label="Status"
+                    label={t('popup.labels.status')}
                     fullWidth
                     variant="standard"
                 >
@@ -674,7 +676,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     id="id"
                     name="id"
                     type="text"
-                    label="Order ID"
+                    label={t('popup.labels.orderId')}
                     fullWidth
                     variant="standard"
                     value={supplierOrderValues.id}
@@ -686,7 +688,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Supplier Name"
+                    label={t('popup.labels.supplierName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -698,7 +700,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="status"
                     name="status"
-                    label="Status"
+                    label={t('popup.labels.status')}
                     fullWidth
                     variant="standard"
                 >
@@ -754,7 +756,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     id="id"
                     name="id"
                     type="text"
-                    label="Route ID"
+                    label={t('popup.labels.routeId')}
                     fullWidth
                     variant="standard"
                     value={routeValues.id}
@@ -766,7 +768,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Driver Name"
+                    label={t('popup.labels.driverName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -778,7 +780,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="lastName"
                     name="lastName"
-                    label="Driver lastname"
+                    label={t('popup.labels.driverLastName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -790,7 +792,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="status"
                     name="status"
-                    label="Status"
+                    label={t('popup.labels.status')}
                     fullWidth
                     variant="standard"
                 >
@@ -806,7 +808,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="notes"
                     name="notes"
-                    label="Notes"
+                    label={t('popup.labels.notes')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -815,7 +817,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             value={dayjs(routeValues.date)}
-                            label={"Date"}
+                            label={t('popup.labels.date')}
                             onChange={(value) => handleDateChange(value, "date")}
                             format="DD/MM/YYYY"
                             slotProps={{
@@ -829,13 +831,13 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1 }}>
-                    <TextField
+                        <TextField
                         onChange={handleChange}
                         value={routeValues.orders.length}
                         margin="dense"
                         id="stops"
                         name="stops"
-                        label="Orders"
+                            label={t('popup.labels.orders')}
                         type="text"
                         fullWidth
                         variant="standard"
@@ -856,7 +858,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Route Name"
+                    label={t('popup.labels.routeName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -894,7 +896,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     id="id"
                     name="id"
                     type="text"
-                    label="Supplier ID"
+                    label={t('popup.labels.supplierId')}
                     fullWidth
                     variant="standard"
                     value={supplierValues.id}
@@ -905,7 +907,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="name"
                     name="name"
-                    label="Name"
+                    label={t('popup.labels.supplierName')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -918,7 +920,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="email"
                     name="email"
-                    label="Email"
+                    label={t('popup.labels.email')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -931,7 +933,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="phoneNumber1"
                     name="phoneNumber1"
-                    label="Phone Number 1"
+                    label={t('popup.labels.phoneNumber1')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -944,7 +946,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="phoneNumber2"
                     name="phoneNumber2"
-                    label="Phone Number 2"
+                    label={t('popup.labels.phoneNumber2')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -957,7 +959,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="vatNumber"
                     name="vatNumber"
-                    label="VAT Number"
+                    label={t('popup.labels.vatNumber')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -970,7 +972,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     margin="dense"
                     id="address"
                     name="address"
-                    label="Address"
+                    label={t('popup.labels.address')}
                     type="text"
                     fullWidth
                     variant="standard"
@@ -1041,10 +1043,10 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
 
     return (
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Update the {`${typeOf}`} details below.</DialogTitle>
+                <DialogTitle>{t('popup.updateDetails', { typeOf })}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Make sure all information is correct before saving your changes.
+                        {t('popup.confirmMessage')}
                     </DialogContentText>
                     <form
                         onSubmit={(event) => handleSubmit(event)}
@@ -1065,9 +1067,9 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                             }
                         }
                     >
-                        Cancel</Button>
+                        {t('common.cancel')}</Button>
                     <Button type="submit" form="subscription-form">
-                        Save
+                        {t('common.save')}
                     </Button>
                 </DialogActions>
             </Dialog>

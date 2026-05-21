@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { useTranslation } from 'react-i18next';
 import DeleteIcon from "@mui/icons-material/Delete";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { useSortable } from "@dnd-kit/sortable";
@@ -23,6 +24,7 @@ export function SortableStop({
         transition,
         isDragging,
     } = useSortable({ id: Number(order.id) });
+    const { t } = useTranslation();
 
     return (
         <Box
@@ -120,7 +122,7 @@ export function SortableStop({
 
                     {/* BALANCE */}
                     <Box sx={{ fontSize: 10 }}>
-                        Balance: {(order.total ?? 0)}€
+                        {t('common.balance', { amount: (order.total ?? 0) })}
                     </Box>
                 </Box>
             </Box>

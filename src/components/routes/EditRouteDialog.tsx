@@ -1,4 +1,5 @@
 import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper} from "@mui/material";
+import { useTranslation } from 'react-i18next';
 import RouteOrders from "./RouteOrders.tsx";
 import {useCallback, useMemo, useState} from "react";
 import type {GridRowSelectionModel} from "@mui/x-data-grid";
@@ -22,6 +23,7 @@ const EditRouteDialog = ({
                             importedRouteDetails,
                             setRouteValues
                          }: EditRouteDialogProps) => {
+    const { t } = useTranslation();
     const [ordersRow, setOrdersRow] = useState<OrderRow[]>(orders);
     const [routeDetails, setRouteDetails] = useState(importedRouteDetails);
     const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
@@ -128,7 +130,7 @@ const EditRouteDialog = ({
                     }
                 }}
         >
-            <DialogTitle>Edit Route</DialogTitle>
+            <DialogTitle>{t('routes.edit')}</DialogTitle>
             <DialogContent>
                 <Paper
                     elevation={3}
@@ -172,11 +174,11 @@ const EditRouteDialog = ({
                 </Paper>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => setOpen(false)}>Cancel</Button>
+                <Button onClick={() => setOpen(false)}>{t('common.cancel')}</Button>
                 <Button variant="contained"
                         onClick={handleSave}
                         type="button"
-                >Save</Button>
+                >{t('common.save')}</Button>
             </DialogActions>
         </Dialog>
     );

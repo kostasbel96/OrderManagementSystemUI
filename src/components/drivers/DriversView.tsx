@@ -19,6 +19,7 @@ import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
+import { useTranslation } from 'react-i18next';
 
 const DriversView = () => {
 
@@ -39,6 +40,8 @@ const DriversView = () => {
         items: []
     });
 
+    const { t } = useTranslation();
+
     const handleClickOpen = (row: Driver) => {
         setOpenEdit(true);
         setRowToEdit(row);
@@ -52,7 +55,7 @@ const DriversView = () => {
     }
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
+        { field: 'id', headerName: t('drivers.table.id'), width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -67,7 +70,7 @@ const DriversView = () => {
                     {params.value}
                 </div>
             )  },
-        { field: 'name', headerName: 'Name', width: 150, renderCell: (params) => (
+        { field: 'name', headerName: t('drivers.table.name'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -82,7 +85,7 @@ const DriversView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'lastName', headerName: 'Last Name', width: 150, renderCell: (params) => (
+        { field: 'lastName', headerName: t('drivers.table.lastName'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -97,7 +100,7 @@ const DriversView = () => {
                     {params.value}
                 </div>
             )  },
-        {field: 'phoneNumber1', headerName: 'Phone Number 1', width: 150, renderCell: (params) => (
+        {field: 'phoneNumber1', headerName: t('drivers.table.phoneNumber1'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -112,7 +115,7 @@ const DriversView = () => {
                     {params.value}
                 </div>
             ) },
-        {field: 'phoneNumber2', headerName: 'Phone Number 2', width: 150, renderCell: (params) => (
+        {field: 'phoneNumber2', headerName: t('drivers.table.phoneNumber2'), width: 150, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -129,7 +132,7 @@ const DriversView = () => {
             ) },
         {
             field: 'actions',
-            headerName: 'Actions',
+            headerName: t('drivers.table.actions'),
             width: 100,
             sortable: false,
             filterable: false,
@@ -203,7 +206,7 @@ const DriversView = () => {
 
     return (
         <>
-            <MyTable
+                <MyTable
                 columns={columns}
                 typeOf={"Drivers"}
                 rows={rows}
@@ -240,7 +243,7 @@ const DriversView = () => {
                 {submitted && (
                     <PopUpItemOperation
                         setSubmitted={setSubmitted}
-                        typeOf={"driver"}
+                        typeOf={t('drivers.table.type')}
                         item={rowToEdit as Driver}
                         operation={operation}
                     />

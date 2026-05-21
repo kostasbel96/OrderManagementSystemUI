@@ -4,7 +4,7 @@ import FormSupplier from "./FormSupplier/FormSupplier.tsx";
 export default function AddSupplierTab() {
 
     return (
-        <FormTab tab={"Supplier"}>
+        <FormTab tab={"supplier"}>
             {(props) => <FormSupplier {...props} />}
         </FormTab>
     );

@@ -8,6 +8,7 @@ import { type FormEvent, useEffect, useState } from "react";
 import LabeledField from "../../ui/LabeledField.tsx";
 import {addSupplier} from "../../../services/supplierService.ts";
 import useSupplierFormValidation, {type SupplierFormValues} from "../../../hooks/useSupplierFormValidation.ts";
+import {useTranslation} from "react-i18next";
 
 interface FormSupplierProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,6 +30,7 @@ const FormSupplier = ({
                           setSuccess,
                           setPopUpMessage,
                       }: FormSupplierProps) => {
+    const { t } = useTranslation();
 
     const [values, setValues] = useState<SupplierFormValues>(() => {
         const saved = localStorage.getItem("supplierDraft");
@@ -61,7 +63,7 @@ const FormSupplier = ({
                 .then(() => {
                     setSuccess(true);
                     setSubmitted(true);
-                    setPopUpMessage("Supplier added successfully.");
+                    setPopUpMessage(t('messages.supplierAdded'));
                     setValues(initialValues);
                     localStorage.removeItem("supplierDraft");
                 })
@@ -123,7 +125,7 @@ const FormSupplier = ({
                     {/* TITLE */}
                     <Grid size={{ xs: 12 }}>
                         <Box sx={{ fontSize: 16, fontWeight: 600, color: "#333" }}>
-                            Create Supplier
+                            {t('form.supplier.title')}
                         </Box>
                     </Grid>
 
@@ -131,7 +133,7 @@ const FormSupplier = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name="name"
-                            label="Name"
+                            label={t('form.supplier.name')}
                             value={values.name}
                             onChange={handleChange}
                             error={Boolean(supplierErrors?.name)}
@@ -144,7 +146,7 @@ const FormSupplier = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"vat"}
-                            label="Vat number"
+                            label={t('form.supplier.vat')}
                             value={values.vat}
                             onChange={handleChange}
                             error={Boolean(supplierErrors?.vat)}
@@ -157,7 +159,7 @@ const FormSupplier = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"phoneNumber1"}
-                            label="Phone 1"
+                            label={t('form.supplier.phone1')}
                             value={values.phoneNumber1}
                             onChange={handleChange}
                             error={Boolean(supplierErrors?.phoneNumber1)}
@@ -170,7 +172,7 @@ const FormSupplier = ({
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
                             name={"phoneNumber2"}
-                            label="Phone 2"
+                            label={t('form.supplier.phone2')}
                             value={values.phoneNumber2}
                             onChange={handleChange}
                             error={Boolean(supplierErrors?.phoneNumber2)}
@@ -182,7 +184,7 @@ const FormSupplier = ({
                     <Grid size={{ xs: 12 }}>
                         <LabeledField
                             name={"email"}
-                            label="Email"
+                            label={t('form.supplier.email')}
                             value={values.email}
                             onChange={handleChange}
                             helperText={supplierErrors?.email}
@@ -194,7 +196,7 @@ const FormSupplier = ({
                     <Grid size={{ xs: 12 }}>
                         <LabeledField
                             name={"address"}
-                            label="Address"
+                            label={t('form.supplier.address')}
                             value={values.address}
                             onChange={handleChange}
                             helperText={supplierErrors?.address}
@@ -206,10 +208,10 @@ const FormSupplier = ({
                     <Grid size={{ xs: 12 }}>
                         <Stack direction="row" spacing={1} justifyContent="flex-end">
                             <Button type="reset" variant="outlined" color="error" size="small">
-                                Reset
+                                {t('actions.reset')}
                             </Button>
                             <Button type="submit" variant="contained" size="small">
-                                Create
+                                {t('actions.create')}
                             </Button>
                         </Stack>
                     </Grid>

@@ -1,5 +1,6 @@
 import {Box, Button, Typography} from "@mui/material";
 import OrdersView from "../orders/OrdersView.tsx";
+import { useTranslation } from 'react-i18next';
 import type {GridRowSelectionModel} from "@mui/x-data-grid";
 import type {OrderRow} from "../../types/Types.ts";
 import {memo} from "react";
@@ -23,6 +24,8 @@ const RouteOrders = memo(({
                          onAddToRoute,
                          onClearSelection}: RouteOrdersProps) => {
 
+    const { t } = useTranslation();
+
     return (
             <Box
                 sx={{
@@ -34,7 +37,7 @@ const RouteOrders = memo(({
                 }}
             >
                 <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
-                    Orders
+                    {t('nav.orders')}
                 </Typography>
 
                 <Box
@@ -79,7 +82,7 @@ const RouteOrders = memo(({
                             }
                         }}
                     >
-                        Add to Route ({selectionModel.ids.size})
+                        {t('routes.addToRoute', { count: selectionModel.ids.size })}
                     </Button>
 
                     <Button
@@ -92,7 +95,7 @@ const RouteOrders = memo(({
                             borderRadius: 1,
                         }}
                     >
-                        Clear selection ({selectionModel.ids.size})
+                        {t('routes.clearSelection', { count: selectionModel.ids.size })}
                     </Button>
                 </Box>
             </Box>

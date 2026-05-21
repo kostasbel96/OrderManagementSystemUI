@@ -4,7 +4,7 @@ import FormProduct from "./FormProduct/FormProduct.tsx";
 export default function AddProductTab() {
 
     return (
-        <FormTab tab={"Product"}>
+        <FormTab tab={"product"}>
             {(props) => <FormProduct {...props} />}
         </FormTab>
     );

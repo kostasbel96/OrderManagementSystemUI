@@ -4,7 +4,7 @@ import FormDriver from "./FormDriver/FormDriver.tsx";
 export default function AddDriverTab() {
 
     return (
-        <FormTab tab={"Driver"}>
+        <FormTab tab={"driver"}>
             {(props) => <FormDriver {...props} />}
         </FormTab>
     );

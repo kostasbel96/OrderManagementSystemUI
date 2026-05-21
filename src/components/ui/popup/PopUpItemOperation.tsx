@@ -4,6 +4,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import Alert from "@mui/material/Alert";
 import {useEffect, useState} from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from 'react-i18next';
 
 interface PopUpItemDeletedProps {
     typeOf: string;
@@ -17,6 +18,7 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
     const [progress, setProgress] = useState(100);
     const [isPaused, setIsPaused] = useState(false);
     const duration = 3000;
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (typeOf === "product"){
@@ -95,19 +97,38 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
                     </IconButton>
                 }
             >
-                { (typeOf === "product" && operationItem) &&
-                    (`Product ${(operationItem as Product).name} ${operation} successfully!` ) }
-                { (typeOf === "customer" && operationItem) &&
-                    (`Customer ${(operationItem as Customer).name} ${(operationItem as Customer).lastName} ${operation} successfully!` ) }
-                { (typeOf === "order" && operationItem) && (`Order ${(operationItem as OrderItem).id} ${operation} successfully!` ) }
-                { (typeOf === "driver" && operationItem) &&
-                    (`Driver ${(operationItem as Driver).name} ${(operationItem as Driver).lastName} ${operation} successfully!` ) }
-                { (typeOf === "route" && operationItem) &&
-                    (`Route ${(operationItem as Route).id} ${operation} successfully!` ) }
-                { (typeOf === "receipt" && operationItem) &&
-                    (`Receipt ${(operationItem as Receipt).id} ${operation} successfully!` ) }
-                { (typeOf === "supplier" && operationItem) &&
-                    (`Supplier ${(operationItem as Supplier).id} ${operation} successfully!` ) }
+                {operationItem && (() => {
+                    const displayType = t(`typeNames.${typeOf}`);
+                    let subject = "";
+                    switch(typeOf) {
+                        case 'product':
+                            subject = (operationItem as Product).name;
+                            break;
+                        case 'customer':
+                            subject = `${(operationItem as Customer).name} ${(operationItem as Customer).lastName}`;
+                            break;
+                        case 'order':
+                            subject = String((operationItem as OrderItem).id);
+                            break;
+                        case 'driver':
+                            subject = `${(operationItem as Driver).name} ${(operationItem as Driver).lastName}`;
+                            break;
+                        case 'route':
+                            subject = String((operationItem as Route).id);
+                            break;
+                        case 'receipt':
+                            subject = String((operationItem as Receipt).id);
+                            break;
+                        case 'supplier':
+                            subject = String((operationItem as Supplier).id);
+                            break;
+                        default:
+                            subject = "";
+                    }
+
+                    const op = t(`ops.${operation}`, { defaultValue: operation });
+                    return t('messages_ext.operationSuccess', { type: displayType, subject, operation: op });
+                })()}
                 <div
                     style={{
                         height: 4,

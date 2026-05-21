@@ -1,5 +1,6 @@
 // src/pages/LoginPage.tsx
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import {
@@ -20,6 +21,7 @@ const LoginPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const { login } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -71,17 +73,17 @@ const LoginPage = () => {
                         <LockOutlinedIcon sx={{ color: "white", fontSize: 24 }} />
                     </Box>
                     <Typography variant="h6" fontWeight={600} color="text.primary">
-                        Login
+                        {t('auth.login')}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Order Management System
+                        {t('app.subtitle')}
                     </Typography>
                 </Box>
 
                 {/* Form */}
                 <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <TextField
-                        label="Username"
+                        label={t('auth.email') || 'Username'}
                         variant="outlined"
                         size="small"
                         fullWidth
@@ -90,7 +92,7 @@ const LoginPage = () => {
                         autoFocus
                     />
                     <TextField
-                        label="Password"
+                        label={t('auth.password') || 'Password'}
                         type="password"
                         variant="outlined"
                         size="small"
@@ -112,7 +114,7 @@ const LoginPage = () => {
                         disabled={loading}
                         sx={{ mt: 1, py: 1 }}
                     >
-                        {loading ? <CircularProgress size={20} color="inherit" /> : "Login"}
+                        {loading ? <CircularProgress size={20} color="inherit" /> : t('auth.login')}
                     </Button>
                 </Box>
             </Paper>

@@ -1,0 +1,366 @@
+{
+  "app": {
+    "title": "OMS System",
+    "adminTitle": "OMS Admin",
+    "subtitle": "Order Management System"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "invoices": "Invoices",
+    "customers": "Customers",
+    "settings": "Settings",
+    "quickAdd": "Quick Add",
+    "products": "Products",
+    "addProduct": "Add Product",
+    "orders": "Orders",
+    "addOrder": "Add Order",
+    "customerOrders": "Customer Orders",
+    "supplierOrders": "Supplier Orders",
+    "addCustomer": "Add Customer",
+    "payments": "Payments",
+    "customerPayments": "Customer Payments",
+    "supplierPayments": "Supplier Payments",
+    "addPayment": "Add Payment",
+    "routes": "Routes",
+    "addRoute": "Add Route",
+    "addDriver": "Add Driver",
+    "drivers": "Drivers",
+    "suppliers": "Suppliers",
+    "addSupplier": "Add Supplier",
+    "logout": "Logout"
+  },
+  "invoice": {
+    "create": "Create Invoice",
+    "customer": {
+      "title": "Create Customer",
+      "name": "Name",
+      "lastName": "Last Name",
+      "phone1": "Phone 1",
+      "phone2": "Phone 2",
+      "email": "Email"
+    },
+    "list": "Invoices List",
+    "number": "Invoice Number",
+    "date": "Date",
+    "total": "Total",
+    "status": {
+      "draft": "Draft",
+      "issued": "Issued",
+      "paid": "Paid"
+    },
+    "actions": {
+      "save": "Save",
+      "delete": "Delete",
+      "send": "Send"
+    }
+  },
+  "customer": {
+    "create": "Create Customer",
+    "name": "Name",
+    "vat": "VAT Number",
+    "address": "Address"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "enterPlaceholder": "Enter {{label}}...",
+    "balance": "Balance: {{amount}}€"
+  },
+  "typeNames": {
+    "product": "Product",
+    "customer": "Customer",
+    "order": "Order",
+    "driver": "Driver",
+    "receipt": "Receipt",
+    "payment": "Payment",
+    "route": "Route",
+    "supplier": "Supplier"
+  },
+  "workspaces": {
+    "emptyTitle": "OMS Workspace",
+    "noActive": "There are no active workspaces.",
+    "selectStart": "Select a section from the menu on the left to get started."
+  },
+  "routes": {
+    "edit": "Edit Route",
+    "inRoute": "In route: {{count}}",
+    "save": "Save Route",
+    "clearStops": "Clear stops",
+    "addToRoute": "Add to Route ({{count}})",
+    "clearSelection": "Clear selection ({{count}})"
+  },
+  "popup": {
+    "updateDetails": "Update the {{typeOf}} details below.",
+    "deleteDetails": "Delete the {{typeOf}} details below.",
+    "confirmMessage": "Make sure all information is correct before saving your changes.",
+    "labels": {
+      "productId": "Product ID",
+      "productName": "Product Name",
+      "productDescription": "Product Description",
+      "productQuantity": "Product Quantity",
+      "productPrice": "Product price",
+      "customerId": "Customer ID",
+      "customerName": "Customer Name",
+      "customerLastName": "Customer lastname",
+      "phoneNumber1": "Phone Number 1",
+      "phoneNumber2": "Phone Number 2",
+      "email": "Email",
+      "driverId": "Driver ID",
+      "driverName": "Driver Name",
+      "driverLastName": "Driver lastname",
+      "orderId": "Order ID",
+      "address": "Address",
+      "status": "Status",
+      "supplierName": "Supplier Name",
+      "routeId": "Route ID",
+      "date": "Date",
+      "orders": "Orders",
+      "routeName": "Route Name",
+      "notes": "Notes",
+      "supplierId": "Supplier ID",
+      "vatNumber": "VAT Number"
+    }
+  }
+
+  ,
+  "drivers": {
+    "table": {
+      "id": "ID",
+      "name": "Name",
+      "lastName": "Last Name",
+      "phoneNumber1": "Phone Number 1",
+      "phoneNumber2": "Phone Number 2",
+      "actions": "Actions",
+      "type": "Driver"
+    }
+  }
+  ,
+  "customers": {
+    "table": {
+      "id": "ID",
+      "name": "Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber1": "Phone Number 1",
+      "phoneNumber2": "Phone Number 2",
+      "balance": "Balance",
+      "actions": "Actions"
+    }
+  },
+  "products": {
+    "table": {
+      "id": "ID",
+      "productName": "Product name",
+      "description": "Description",
+      "quantity": "Quantity",
+      "quantityShort": "Qty",
+      "price": "Price",
+      "total": "Total",
+      "actions": "Actions",
+      "noProducts": "No products added"
+    }
+  },
+
+  "actions": {
+    "reset": "Reset",
+    "create": "Create",
+    "addProduct": "Add Product"
+  },
+  "messages": {
+    "driverAdded": "Driver added successfully.",
+    "customerAdded": "Customer added successfully.",
+    "productAdded": "Product added successfully.",
+    "orderAdded": "Order added successfully.",
+    "paymentAdded": "Payment added successfully.",
+    "routeAdded": "Route added successfully.",
+    "supplierAdded": "Supplier added successfully.",
+    "receiptAdded": "Receipt added successfully.",
+    "driverUpdated": "Driver updated successfully.",
+    "customerUpdated": "Customer updated successfully.",
+    "productUpdated": "Product updated successfully.",
+    "orderUpdated": "Order updated successfully.",
+    "paymentUpdated": "Payment updated",
+    "routeUpdated": "Route updated successfully.",
+    "supplierUpdated": "Supplier updated successfully.",
+    "receiptUpdated": "Receipt updated successfully."
+  }
+  ,
+  "messages_ext": {
+    "savedGeneric": "{{item}} saved successfully!",
+    "operationSuccess": "{{type}} {{subject}} {{operation}} successfully!",
+    "cannotBeAdded": "{{message}} {{type}} cannot be added!"
+  }
+  ,
+  "ops": {
+    "created": "created",
+    "updated": "updated",
+    "deleted": "deleted"
+  }
+  ,
+  "tabs": {
+    "product": "Product",
+    "order": "Order",
+    "customer": "Customer",
+    "route": "Route",
+    "supplier": "Supplier",
+    "driver": "Driver"
+  }
+  ,
+  "orders": {
+    "table": {
+      "id": "ID",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "products": "Products",
+      "address": "Address",
+      "total": "Total",
+      "paid": "Paid",
+      "date": "Date",
+      "paymentStatus": "Payment Status",
+      "status": "Status",
+      "actions": "Actions"
+    }
+  }
+  ,
+  "suppliers": {
+    "table": {
+      "id": "ID",
+      "name": "Name",
+      "email": "Email",
+      "phoneNumber1": "Phone Number 1",
+      "phoneNumber2": "Phone Number 2",
+      "address": "Address",
+      "vat": "VAT",
+      "balance": "Balance",
+      "actions": "Actions"
+    }
+  }
+  ,
+  "receipts": {
+    "table": {
+      "id": "ID",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "amount": "Amount",
+      "date": "Date",
+      "actions": "Actions"
+    }
+  }
+  ,
+  "search": {
+    "placeholderCustomer": "customer by address, name, phone",
+    "placeholderSupplier": "supplier by address, name, phone, vat",
+    "contains": "contains",
+    "ariaReset": "reset",
+    "ariaSearch": "search"
+  }
+  ,
+  "search2": {
+    "searchCustomer": "Search customer...",
+    "searchSupplier": "Search supplier...",
+    "searchProduct": "Search product...",
+    "searchDriver": "Search driver...",
+    "searchRoute": "Search route..."
+  }
+  ,
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "backendUrlLabel": "Backend URL",
+    "backendUrlHelper": "e.g. http://192.168.1.10:8080",
+    "validation": {
+      "mustStart": "Must start with http:// or https://"
+    },
+    "savedMessage": "Settings saved successfully"
+  },
+  "language": {
+    "english": "English",
+    "greek": "Ελληνικά"
+  },
+  "form": {
+    "driver": {
+      "title": "Create Driver",
+      "name": "Name",
+      "lastName": "Last Name",
+      "phone1": "Phone 1",
+      "phone2": "Phone 2"
+    },
+    "order": {
+      "title": "Create Order",
+      "typeOfOrder": "Type of order",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "address": "Address",
+      "orderToCustomer": "Order to Customer",
+      "orderToSupplier": "Order to Supplier"
+    }
+    ,
+    "route": {
+      "customers": {
+        "table": {
+          "id": "ID",
+          "name": "Name",
+          "lastName": "Last Name",
+          "email": "Email",
+          "phoneNumber1": "Phone Number 1",
+          "phoneNumber2": "Phone Number 2",
+          "balance": "Balance",
+          "actions": "Actions"
+        }
+      },
+      "title": "Create Route",
+      "name": "Route name",
+      "namePlaceholder": "Enter route name...",
+      "notes": "Notes",
+      "notesPlaceholder": "Enter notes...",
+      "driver": "Driver",
+      "searchDriver": "Search driver...",
+      "date": "Date"
+    },
+    "product": {
+      "title": "Create Product",
+      "productName": "Product Name",
+      "description": "Description",
+      "quantity": "Quantity",
+      "price": "Price",
+      "createdMessage": "Product created successfully"
+    },
+    "payment": {
+      "title": "Create Payment",
+      "typeOfPayment": "Type of payment",
+      "paymentFromCustomer": "Payment from Customer",
+      "paymentToSupplier": "Payment to Supplier",
+      "notes": "Notes",
+      "amount": "Amount",
+      "linkToOrder": "Link to Order",
+      "hideOrders": "Hide Orders",
+      "selectOrder": "Select Order"
+    },
+    "customer": {
+      "title": "Create Customer",
+      "name": "Name",
+      "lastName": "Last Name",
+      "phone1": "Phone 1",
+      "phone2": "Phone 2",
+      "email": "Email"
+    },
+    "supplier": {
+      "title": "Create Supplier",
+      "name": "Name",
+      "phone1": "Phone 1",
+      "phone2": "Phone 2",
+      "email": "Email",
+      "address": "Address",
+      "vat": "VAT Number"
+    }
+  }
+}

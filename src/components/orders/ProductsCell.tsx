@@ -2,6 +2,7 @@ import type { SelectedProduct } from "../../types/Types.ts";
 import { Popover } from "@mui/material";
 import { useState } from "react";
 import {Eye, EyeOff} from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 interface ProductsCellProps {
     products: SelectedProduct[];
@@ -9,6 +10,7 @@ interface ProductsCellProps {
 
 const ProductsCell = ({ products }: ProductsCellProps) => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const { t } = useTranslation();
 
     const open = Boolean(anchorEl);
 
@@ -38,7 +40,7 @@ const ProductsCell = ({ products }: ProductsCellProps) => {
                 }}
             >
                 <span style={{ fontWeight: 500 }}>
-                    Products ({products.length})
+                    {`${t('nav.products')} (${products.length})`}
                 </span>
                 {open ? <EyeOff size={12}/> : <Eye size={12} color={"#555"} />}
             </div>

@@ -1,4 +1,5 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useMemo} from "react";
+import { useTranslation } from 'react-i18next';
 import {
     type GridFilterModel, type GridPaginationModel,
     type GridSortModel,
@@ -23,6 +24,7 @@ import getColumnConfigSupplierReceipt from "./config/getColumnConfigSupplierRece
 import {searchPayments} from "../../services/paymentService.ts";
 
 const ReceiptsView = ({receiptType  = "receipt"}) => {
+    const { t } = useTranslation();
 
     const [rows, setRows] = useState<(Customer | Product | OrderRow | Driver | Route | Receipt | Payment)[]>([]);
     const [rowCount, setRowCount] = useState(0);
@@ -44,9 +46,10 @@ const ReceiptsView = ({receiptType  = "receipt"}) => {
         setRows(prev => prev.filter(row => row.id !== id));
     };
 
-    const columns = receiptType === "receipt" ?
-                        getColumnConfigCustomerReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation}) :
-                        getColumnConfigSupplierReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation})
+    const columns = useMemo(() => receiptType === "receipt" ?
+                        getColumnConfigCustomerReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation}, t) :
+                        getColumnConfigSupplierReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation}, t),
+    [receiptType, t]);
 
     useEffect(() => {
         setLoading(true);
@@ -106,7 +109,7 @@ const ReceiptsView = ({receiptType  = "receipt"}) => {
         <>
             <MyTable
                 columns={columns}
-                typeOf={"Orders"}
+                typeOf={receiptType}
                 rows={rows}
                 loading={loading}
                 rowCount={rowCount}

@@ -1,6 +1,7 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
 import type {Product, SelectedProduct} from "../../../types/Types.ts";
 import {useEffect, useState} from "react";
+import { useTranslation } from 'react-i18next';
 import { searchProducts } from "../../../services/productService.ts";
 
 interface ProductsAutocompleteProps {
@@ -13,6 +14,7 @@ interface ProductsAutocompleteProps {
 const ProductsAutocomplete = ({selectedProduct, setSelectedProduct, selectedProductsWithQty, inputRef}: ProductsAutocompleteProps) => {
 
     const [inputValue, setInputValue] = useState("");
+    const { t } = useTranslation();
     const [options, setOptions] = useState<Product[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -82,7 +84,7 @@ const ProductsAutocomplete = ({selectedProduct, setSelectedProduct, selectedProd
                         {...params}
                         inputRef={inputRef}
                         variant="outlined"
-                        placeholder="Search Product..."
+                         placeholder={t('search2.searchProduct')}
                         size="small"
                         sx={{
                             "& .MuiOutlinedInput-root": {

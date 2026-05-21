@@ -13,6 +13,7 @@ import { X } from "lucide-react";
 import type {Product, SelectedProduct} from "../../../types/Types.ts";
 import ProductsAutocomplete from "./ProductsAutocomplete.tsx";
 import {useEffect, useRef, useState} from "react";
+import { useTranslation } from 'react-i18next';
 
 interface ProductsTableInsertProps {
     selectedProductsWithQty: SelectedProduct[];
@@ -25,6 +26,7 @@ const ProductsTableInsert = ({
                                       }: ProductsTableInsertProps) => {
 
     const [totalAmount, setTotalAmount] = useState<number>(0);
+    const { t } = useTranslation();
     const autocompleteRef = useRef<any>(null);
     const autocompleteRefs = useRef<Array<HTMLInputElement | null>>([]);
 
@@ -147,7 +149,7 @@ const ProductsTableInsert = ({
         <>
             <Stack direction="row" justifyContent="flex-start" sx={{ mt: 1 }}>
                 <Button variant="outlined" size="small" onClick={addRow}>
-                    Add Product
+                    {t('actions.addProduct')}
                 </Button>
             </Stack>
             <TableContainer
@@ -179,11 +181,11 @@ const ProductsTableInsert = ({
                                     <TableRow>
                                         {[
                                             "",
-                                            "Product",
-                                            "Description",
-                                            "Qty",
-                                            "Price",
-                                            "Total",
+                                            t('products.table.productName'),
+                                            t('products.table.description'),
+                                            t('products.table.quantityShort'),
+                                            t('products.table.price'),
+                                            t('products.table.total'),
                                             "",
                                         ].map((h, i) => (
                                             <TableCell
@@ -220,7 +222,7 @@ const ProductsTableInsert = ({
                                                         fontSize: 12,
                                                     }}
                                                 >
-                                                    No products added
+                                                    {t('products.table.noProducts')}
                                                 </Box>
                                             </TableCell>
                                         </TableRow>
@@ -368,7 +370,7 @@ const ProductsTableInsert = ({
                         minWidth: 120,
                     }}
                 >
-                    <Box sx={{ color: "#666", fontSize: 10 }}>Total</Box>
+                    <Box sx={{ color: "#666", fontSize: 10 }}>{t('products.table.total')}</Box>
                     <Box sx={{ fontWeight: 700, color: "#111" }}>
                         {totalAmount.toFixed(2)}
                     </Box>

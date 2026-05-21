@@ -1,6 +1,7 @@
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTranslation } from 'react-i18next';
 
 interface PopUpDeniedProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,23 +13,16 @@ interface PopUpDeniedProps {
 
 const PopUpDenied = ({setSubmitted, title, popUpMessage,
                      progress, success}: PopUpDeniedProps)=>{
-    let popUpTitle;
-
-    if (title.toLowerCase().includes("product")){
-        popUpTitle = "Product";
-    } else if (title.toLowerCase().includes("customer")){
-        popUpTitle = "Customer";
-    } else if (title.toLowerCase().includes("route")) {
-        popUpTitle = "Route";
-    } else if (title.toLowerCase().includes("driver")) {
-        popUpTitle = "Driver";
-    } else if (title.toLowerCase().includes("receipt")) {
-        popUpTitle = "Receipt";
-    } else if (title.toLowerCase().includes("supplier")) {
-        popUpTitle = "Supplier";
-    } else {
-        popUpTitle = "Order";
-    }
+    const { t } = useTranslation();
+    const lc = title?.toLowerCase?.() ?? "";
+    let detectedKey = 'order';
+    if (lc.includes("product")) detectedKey = 'product';
+    else if (lc.includes("customer")) detectedKey = 'customer';
+    else if (lc.includes("route")) detectedKey = 'route';
+    else if (lc.includes("driver")) detectedKey = 'driver';
+    else if (lc.includes("receipt")) detectedKey = 'receipt';
+    else if (lc.includes("supplier")) detectedKey = 'supplier';
+    const popUpTitle = t(`typeNames.${detectedKey}`);
 
     return (
         <Alert
@@ -50,7 +44,7 @@ const PopUpDenied = ({setSubmitted, title, popUpMessage,
                 </IconButton>
             }
         >
-            {`${popUpMessage} ${popUpTitle} cannot be added!`}
+            {t('messages_ext.cannotBeAdded', { message: popUpMessage, type: popUpTitle })}
             <div
                 style={{
                     height: 4,

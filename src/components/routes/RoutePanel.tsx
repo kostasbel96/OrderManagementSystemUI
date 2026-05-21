@@ -3,6 +3,7 @@ import LabeledField from "../ui/LabeledField";
 import {AppAutocomplete} from "../ui/AppAutocomplete.tsx";
 import type {Driver, RouteDetails} from "../../types/Types.ts";
 import {memo, useState} from "react";
+import { useTranslation } from 'react-i18next';
 import OMSLabel from "../ui/OMSLabel.tsx";
 import {useDriverSearch} from "../../hooks/useDriverSearch.ts";
 import type {RouteInsertErrors} from "../../hooks/useRouteInsertValidation.ts";
@@ -37,6 +38,7 @@ const RoutePanel = memo(({
 
     const [inputValue, setInputValue] = useState("");
     const { drivers, loading } = useDriverSearch(inputValue);
+    const { t } = useTranslation();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, element: keyof RouteDetails) => {
         e.preventDefault();
@@ -71,16 +73,16 @@ const RoutePanel = memo(({
                 }}
             >
                 <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
-                    Create Route
+                    {t('form.route.title')}
                 </Typography>
                 <Grid container spacing={0} sx={{ width: "100%" }}>
 
                     {/* ROUTE NAME */}
                     <Grid size={{xs: 12}} >
                         <LabeledField
-                            label="Route name"
+                            label={t('form.route.name')}
                             required
-                            placeholder={"Enter route name..."}
+                            placeholder={t('form.route.namePlaceholder')}
                             value={routeDetails.name}
                             name={"routeName"}
                             onChange={(e) => handleChange(e, "name")}
@@ -88,8 +90,8 @@ const RoutePanel = memo(({
                             helperText={routeErrors?.routeName}
                         />
                         <LabeledField
-                            label="Notes"
-                            placeholder={"Enter notes..."}
+                            label={t('form.route.notes')}
+                            placeholder={t('form.route.notesPlaceholder')}
                             value={routeDetails.notes}
                             name={"notes"}
                             onChange={(e) => handleChange(e, "notes")}
@@ -101,7 +103,7 @@ const RoutePanel = memo(({
                         <Stack direction="row" alignItems="stretch" spacing={0}>
                             <OMSLabel
                                 required
-                                label="Driver"
+                                label={t('form.route.driver')}
                             />
                             <Box sx={{ flex: 1 }}>
                                 <AppAutocomplete<Driver>
@@ -109,7 +111,7 @@ const RoutePanel = memo(({
                                     value={routeDetails.driver}
                                     inputValue={inputValue}
                                     loading={loading}
-                                    placeholder="Search driver..."
+                                    placeholder={t('form.route.searchDriver')}
                                     getOptionLabel={(c) => `${c.name} ${c.lastName}`}
                                     onChange={handleDriverChange}
                                     onInputChange={setInputValue}
@@ -125,18 +127,18 @@ const RoutePanel = memo(({
                         <Stack direction="row" alignItems="stretch" spacing={0}>
                             <Box sx={{ flex: 1 }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        value={routeDetails.date}
-                                        label={"Date"}
-                                        onChange={(value) => handleDateChange(value, "date")}
-                                        format="DD/MM/YYYY"
-                                        slotProps={{
-                                            textField: {
-                                                size: "small",
-                                                fullWidth: true
-                                            },
-                                        }}
-                                    />
+                                        <DatePicker
+                                            value={routeDetails.date}
+                                            label={t('form.route.date')}
+                                            onChange={(value) => handleDateChange(value, "date")}
+                                            format="DD/MM/YYYY"
+                                            slotProps={{
+                                                textField: {
+                                                    size: "small",
+                                                    fullWidth: true
+                                                },
+                                            }}
+                                        />
                                 </LocalizationProvider>
                             </Box>
                         </Stack>
@@ -164,7 +166,7 @@ const RoutePanel = memo(({
                         width: "100%"
                     }}
                 >
-                    <Chip label={`In route: ${routeDetails.stops?.length ?? 0}`} color="primary" size="small" />
+                    <Chip label={`${t('routes.inRoute', {count: routeDetails.stops?.length ?? 0})}`} color="primary" size="small" />
 
                     <Divider
                         orientation="vertical"
@@ -182,7 +184,7 @@ const RoutePanel = memo(({
                         }}
                         onClick={onSaveRoute}
                     >
-                        Save Route
+                        {t('routes.save')}
                     </Button>
 
                     <Divider
@@ -201,7 +203,7 @@ const RoutePanel = memo(({
                             borderRadius: 1,
                         }}
                     >
-                        Clear stops
+                        {t('routes.clearStops')}
                     </Button>
                 </Box>
             </Box>

@@ -20,6 +20,7 @@ import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import getColumnConfigCustomerOrders from "./config/getColumnConfigCustomerOrders.tsx";
 import useSearchOrders from "../../hooks/useSearchOrders.ts";
 import getColumnConfigSupplierOrders from "./config/getColumnConfigSupplierOrders.tsx";
+import { useTranslation } from 'react-i18next';
 
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -67,6 +68,8 @@ const OrdersView = ({columnVisibility,
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
 
 
+    const { t } = useTranslation();
+
     const columns: GridColDef[] = orderType === "orderCustomer"
         ? getColumnConfigCustomerOrders({
             setOpenEdit,
@@ -74,14 +77,14 @@ const OrdersView = ({columnVisibility,
             setOpenDeletePopUp,
             setOperation,
             setRowToEdit
-        })
+        }, t)
         : getColumnConfigSupplierOrders({
             setOpenEdit,
             setOnDeleteContent,
             setOpenDeletePopUp,
             setOperation,
             setRowToEdit
-        });
+        }, t);
 
     const {loading, search} = useSearchOrders({
         orderType,

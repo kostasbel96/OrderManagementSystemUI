@@ -10,6 +10,7 @@ import {
     ChevronRight, Truck, HandCoins, Factory, LogOut
 } from "lucide-react";
 import {type ReactNode, useState, useEffect, useRef} from "react";
+import { useTranslation } from 'react-i18next';
 import {MenuItem, Popover} from "@mui/material";
 import {useUIStore} from "../hooks/store/useUIStore.ts";
 import {useTabs} from "../contexts/TabContext.tsx";
@@ -34,6 +35,7 @@ import {useAuth} from "../contexts/AuthContext.tsx";
 
 export default function SidebarLayout({ children }: Readonly<{ children: ReactNode }>) {
     const [open, setOpen] = useState(false);
+    const { t } = useTranslation();
     const { addTab } = useTabs();
     const { logout } = useAuth();
 
@@ -44,7 +46,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
     useEffect(() => {
         addTab({
             id: 'dashboard',
-            label: 'Dashboard',
+            label: t('nav.dashboard'),
             component: <Dashboard />,
             path: '/'
         });
@@ -65,7 +67,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                 <div className="flex items-center justify-between p-2 border-b border-gray-200">
 
                     {!collapsed && (
-                        <span className="font-bold text-lg text-blue-600 ml-2">OMS Admin</span>
+                        <span className="font-bold text-lg text-blue-600 ml-2">{t('app.adminTitle')}</span>
                     )}
 
                     <div className="flex items-center justify-center gap-2">
@@ -84,7 +86,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                     <NavItem
                         id="dashboard"
                         icon={<LayoutDashboard size={18} />}
-                        label="Dashboard"
+                        label={t('nav.dashboard')}
                         collapsed={collapsed}
                         setOpen={setOpen}
                         component={<Dashboard />}
@@ -93,7 +95,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                     <NavItem
                         id="add"
                         icon={<PlusIcon size={18} />}
-                        label="Quick Add"
+                        label={t('nav.quickAdd')}
                         collapsed={collapsed}
                         setOpen={setOpen}
                         component={<QuickAdd />}
@@ -102,84 +104,84 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                     <NavItemWithSubmenu
                         id="products"
                         icon={<Package size={18} />}
-                        label="Products"
+                        label={t('nav.products')}
                         collapsed={collapsed}
                         setOpen={setOpen}
                     >
                         {[
-                            { id: "addProduct", label: "Add Product", component: <AddProductTab /> },
-                            { id: "products",   label: "Products", component: <ProductsView /> },
+                            { id: "addProduct", label: t('nav.addProduct'), component: <AddProductTab /> },
+                            { id: "products",   label: t('nav.products'), component: <ProductsView /> },
                         ]}
                     </NavItemWithSubmenu>
 
                     <NavItemWithSubmenu
                         id="orders"
                         icon={<ShoppingCart size={18} />}
-                        label="Orders"
+                        label={t('nav.orders')}
                         collapsed={collapsed}
                         setOpen={setOpen}
                     >
                         {[
-                            { id: "addOrder", label: "Add Order", component: <AddOrderTab /> },
-                            { id: "customerOrders",   label: "Customer Orders", component: <OrdersView /> },
-                            { id: "supplierOrders",   label: "Supplier Orders", component: <OrdersView orderType={"orderSupplier"} /> }
+                            { id: "addOrder", label: t('nav.addOrder'), component: <AddOrderTab /> },
+                            { id: "customerOrders",   label: t('nav.customerOrders'), component: <OrdersView /> },
+                            { id: "supplierOrders",   label: t('nav.supplierOrders'), component: <OrdersView orderType={"orderSupplier"} /> }
                         ]}
                     </NavItemWithSubmenu>
 
                     <NavItemWithSubmenu
                         id="customers"
                         icon={<Users size={18} />}
-                        label="Customers"
+                        label={t('nav.customers')}
                         collapsed={collapsed}
                         setOpen={setOpen}
                     >
                         {[
-                            { id: "addCustomer", label: "Add Customer", component: <AddCustomerTab /> },
-                            { id: "customers",   label: "Customers", component: <CustomersView /> },
+                            { id: "addCustomer", label: t('nav.addCustomer'), component: <AddCustomerTab /> },
+                            { id: "customers",   label: t('nav.customers'), component: <CustomersView /> },
                         ]}
                     </NavItemWithSubmenu>
 
                     <NavItemWithSubmenu
                         id="payments"
                         icon={<HandCoins size={18} />}
-                        label="Payments"
+                        label={t('nav.payments')}
                         collapsed={collapsed}
                         setOpen={setOpen}
                     >
                         {[
-                            { id: "customerPayments",   label: "Customer Payments",
+                            { id: "customerPayments",   label: t('nav.customerPayments'),
                                 component: <ReceiptsView receiptType="receipt" /> },
-                            { id: "supplierPayments",   label: "Supplier Payments",
+                            { id: "supplierPayments",   label: t('nav.supplierPayments'),
                                 component: <ReceiptsView receiptType="payment" /> },
-                            { id: "addPayment", label: "Add Payment", component: <AddReceiptTab />}
+                            { id: "addPayment", label: t('nav.addPayment'), component: <AddReceiptTab />}
                         ]}
                     </NavItemWithSubmenu>
 
                     <NavItemWithSubmenu
                         id="routes"
                         icon={<Truck size={18} />}
-                        label="Routes"
+                        label={t('nav.routes')}
                         collapsed={collapsed}
                         setOpen={setOpen}
                     >
                         {[
-                            { id: "addRoute", label: "Add Route", component: <AddRouteTab /> },
-                            { id: "addDriver", label: "Add Driver", component: <AddDriverTab /> },
-                            { id: "drivers",   label: "Drivers", component: <DriversView /> },
-                            { id: "routes",   label: "Routes", component: <RoutesView /> },
+                            { id: "addRoute", label: t('nav.addRoute'), component: <AddRouteTab /> },
+                            { id: "addDriver", label: t('nav.addDriver'), component: <AddDriverTab /> },
+                            { id: "drivers",   label: t('nav.drivers'), component: <DriversView /> },
+                            { id: "routes",   label: t('nav.routes'), component: <RoutesView /> },
                         ]}
                     </NavItemWithSubmenu>
 
                     <NavItemWithSubmenu
                         id="suppliers"
                         icon={<Factory size={18} />}
-                        label="Suppliers"
+                        label={t('nav.suppliers')}
                         collapsed={collapsed}
                         setOpen={setOpen}
                     >
                         {[
-                            { id: "addSupplier",   label: "Add Supplier", component: <AddSupplierTab /> },
-                            { id: "suppliers",   label: "Suppliers", component: <SuppliersView /> },
+                            { id: "addSupplier",   label: t('nav.addSupplier'), component: <AddSupplierTab /> },
+                            { id: "suppliers",   label: t('nav.suppliers'), component: <SuppliersView /> },
                         ]}
                     </NavItemWithSubmenu>
 
@@ -187,7 +189,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                     <NavItem
                         id="settings"
                         icon={<Settings size={18} />}
-                        label="Settings"
+                        label={t('nav.settings')}
                         collapsed={collapsed}
                         setOpen={setOpen}
                         component={<MySettings />}
@@ -199,7 +201,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                     <button
                         onClick={() => logout()}
                         className="text-gray-400 hover:text-red-500 transition-colors"
-                        title="Logout"
+                        title={t('auth.logout')}
                     >
                         <LogOut size={18} />
                     </button>
