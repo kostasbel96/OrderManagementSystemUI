@@ -12,6 +12,7 @@ import {
     CircularProgress
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import {loginUser} from "../services/loginService.ts";
 
 const LoginPage = () => {
     const [username, setUsername] = useState<string>("");
@@ -26,27 +27,13 @@ const LoginPage = () => {
         setError(null);
         setLoading(true);
 
-        try {
-            const response = await fetch("http://localhost:8080/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password }),
-            });
-
-            if (!response.ok) {
-                setError("Wrong username or password");
-                return;
-            }
-
-            const token = await response.text();
+        loginUser(username, password).then((token) => {
             login(token);
             navigate("/");
-        } catch (err) {
-            console.error(err);
-            setError("Failed to connect with server");
-        } finally {
-            setLoading(false);
-        }
+        }).catch(err => {
+            console.log(err);
+            setError(err.message);
+        }).finally(()=>setLoading(false));
     };
 
     return (
