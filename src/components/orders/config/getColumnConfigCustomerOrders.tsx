@@ -7,7 +7,7 @@ import type {
     Receipt,
     ResponseDTO,
     Route,
-    Supplier
+    Supplier, Payment
 } from "../../../types/Types.ts";
 import {type GridColDef, GridFilterInputValue} from "@mui/x-data-grid";
 import {getOrder} from "../../../services/orderService.ts";
@@ -25,7 +25,7 @@ interface ColumnConfigCustomerOrdersProps {
     setOperation: React.Dispatch<SetStateAction<string>>;
     setOpenEdit: React.Dispatch<SetStateAction<boolean>>;
     setOpenDeletePopUp: React.Dispatch<SetStateAction<boolean>>;
-    setRowToEdit: React.Dispatch<SetStateAction<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>>;
+    setRowToEdit: React.Dispatch<SetStateAction<OrderItem | Customer | Product | Driver | Payment | Route | Receipt | Supplier | PurchaseOrderItem | undefined>>;
 }
 
 const getColumnConfigCustomerOrders = ({

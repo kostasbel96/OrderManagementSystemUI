@@ -5,7 +5,7 @@ import type {
     Customer,
     Driver,
     OrderItem,
-    OrderRow,
+    OrderRow, Payment,
     Product,
     PurchaseOrderItem,
     Receipt,
@@ -27,7 +27,7 @@ const CustomersView = () => {
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Payment | Supplier | PurchaseOrderItem | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Customer>();
     const [submitted, setSubmitted] = useState(false);

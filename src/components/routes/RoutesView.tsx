@@ -9,7 +9,7 @@ import type {
     Customer,
     Driver,
     OrderItem,
-    OrderRow,
+    OrderRow, Payment,
     Product, PurchaseOrderItem,
     Receipt,
     ResponseDTO,
@@ -52,7 +52,7 @@ const OrdersView = ({columnVisibility,
     const [searchName, setSearchName] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Payment | Receipt | Supplier | PurchaseOrderItem | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<Route>();
     const [submitted, setSubmitted] = useState(false);

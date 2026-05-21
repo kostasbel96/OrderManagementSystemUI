@@ -12,7 +12,7 @@ import type {
     Product,
     Receipt,
     Route,
-    Supplier
+    Supplier, Payment
 } from "../../types/Types.ts";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
@@ -55,7 +55,7 @@ const OrdersView = ({columnVisibility,
     const [searchName, setSearchName] = useState(searchTerm ?? "");
     const [isSearching, setIsSearching] = useState(!!searchTerm);
     const [openEdit, setOpenEdit] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Payment | Supplier | PurchaseOrderItem | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
     const [onDeleteContent, setOnDeleteContent] = useState<OrderItem | PurchaseOrderItem>();
     const [submitted, setSubmitted] = useState(false);
