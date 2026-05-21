@@ -12,6 +12,7 @@ import type {GridRowSelectionModel} from "@mui/x-data-grid";
 import {useSupplierSearch} from "../../hooks/useSupplierSearch.ts";
 import OMSSelect from "../ui/OMSSelect.tsx";
 import * as React from "react";
+import {addPayment} from "../../services/paymentService.ts";
 
 interface FormReceiptProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,30 +56,54 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
         setPopUpMessage("");
 
         if (validateReceiptForm()) {
-            addReceipt({
-                amount,
-                customer: selectedCustomer,
-                notes,
-                orderIds: selectionModel.ids.size ? Array.from(selectionModel.ids).map(Number) : null
-            })
-                .then((data) => {
-                    setSuccess(true);
-                    setSubmitted(true);
-                    setPopUpMessage("Receipt created successfully");
-                    console.log(data);
+            if (selectValue === "orderCustomer"){
+                addReceipt({
+                    amount,
+                    customer: selectedCustomer,
+                    notes,
+                    orderIds: selectionModel.ids.size ? Array.from(selectionModel.ids).map(Number) : null
                 })
-                .catch((error) => {
-                    setPopUpMessage(error.message);
-                    setSubmitted(true);
-                    setSuccess(false);
-                });
-            setAmount("");
-            setSelectedCustomer(null);
-            setNotes("");
+                    .then((data) => {
+                        setSuccess(true);
+                        setSubmitted(true);
+                        setPopUpMessage("Receipt created successfully");
+                        console.log(data);
+                    })
+                    .catch((error) => {
+                        setPopUpMessage(error.message);
+                        setSubmitted(true);
+                        setSuccess(false);
+                    });
+                setAmount("");
+                setSelectedCustomer(null);
+                setNotes("");
+            } else if (selectValue === "orderSupplier") {
+                addPayment({
+                    amount,
+                    supplier: selectedSupplier,
+                    notes,
+                    orderIds: selectionModel.ids.size ? Array.from(selectionModel.ids).map(Number) : null
+                })
+                    .then((data) => {
+                        setSuccess(true);
+                        setSubmitted(true);
+                        setPopUpMessage("Payment created successfully");
+                        console.log(data);
+                    })
+                    .catch((error) => {
+                        setPopUpMessage(error.message);
+                        setSubmitted(true);
+                        setSuccess(false);
+                    });
+                setAmount("");
+                setSelectedCustomer(null);
+                setNotes("");
+            }
         } else {
             setSubmitted(true);
             setSuccess(false);
         }
+
     };
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {

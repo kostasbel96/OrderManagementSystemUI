@@ -1,10 +1,11 @@
 import {getApiUrl} from "../helper/IpHelper.ts";
 import type {Driver, DriverResponseDto, ResponseDTO, SearchRequest} from "../types/Types.ts";
+import {fetchWithAuth} from "../api/fetchWithAuth.ts";
 
 const API_URL = getApiUrl();
 
 export async function addDriver(newDriver: Omit<Driver, "id">): Promise<ResponseDTO> {
-    const res = await fetch(`${API_URL}/drivers/save`,{
+    const res = await fetchWithAuth(`${API_URL}/drivers/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newDriver),
@@ -15,7 +16,7 @@ export async function addDriver(newDriver: Omit<Driver, "id">): Promise<Response
 }
 
 export async function searchDrivers(request: SearchRequest): Promise<DriverResponseDto> {
-    const res = await fetch(`${API_URL}/drivers/search`, {
+    const res = await fetchWithAuth(`${API_URL}/drivers/search`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -45,7 +46,7 @@ export async function searchDrivers(request: SearchRequest): Promise<DriverRespo
 
 export async function updateDriver(driver: Driver): Promise<ResponseDTO> {
     const url = `${API_URL}/drivers/update`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(driver)
@@ -56,7 +57,7 @@ export async function updateDriver(driver: Driver): Promise<ResponseDTO> {
 
 export async function deleteDriver(driver: Driver): Promise<ResponseDTO> {
     const url = `${API_URL}/drivers/delete`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(driver),

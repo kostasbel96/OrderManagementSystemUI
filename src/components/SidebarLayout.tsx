@@ -7,8 +7,7 @@ import {
     Menu,
     X,
     PlusIcon,
-    Linkedin,
-    Github, ChevronRight, Truck, HandCoins, Factory
+    ChevronRight, Truck, HandCoins, Factory, LogOut
 } from "lucide-react";
 import {type ReactNode, useState, useEffect, useRef} from "react";
 import {MenuItem, Popover} from "@mui/material";
@@ -31,10 +30,12 @@ import AddReceiptTab from "./receipts/AddReceiptTab.tsx";
 import ReceiptsView from "./receipts/ReceiptsView.tsx";
 import AddSupplierTab from "./suppliers/AddSupplierTab.tsx";
 import SuppliersView from "./suppliers/SuppliersView.tsx";
+import {useAuth} from "../contexts/AuthContext.tsx";
 
 export default function SidebarLayout({ children }: Readonly<{ children: ReactNode }>) {
     const [open, setOpen] = useState(false);
     const { addTab } = useTabs();
+    const { logout } = useAuth();
 
     const collapsed = useUIStore((s) => s.sidebarCollapsed);
     const toggleSidebar = useUIStore((s) => s.toggleSidebar);
@@ -146,7 +147,10 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                         setOpen={setOpen}
                     >
                         {[
-                            { id: "payments",   label: "Customer Payments", component: <ReceiptsView /> },
+                            { id: "customerPayments",   label: "Customer Payments",
+                                component: <ReceiptsView receiptType="receipt" /> },
+                            { id: "supplierPayments",   label: "Supplier Payments",
+                                component: <ReceiptsView receiptType="payment" /> },
                             { id: "addPayment", label: "Add Payment", component: <AddReceiptTab />}
                         ]}
                     </NavItemWithSubmenu>
@@ -192,12 +196,13 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
 
                 {/* SOCIAL */}
                 <div className="absolute bottom-0 w-full p-3 flex justify-center gap-3 text-xs border-t border-gray-200">
-                    <a href="https://www.linkedin.com" target="_blank" className="text-gray-400 hover:text-blue-600 transition-colors">
-                        <Linkedin size={18} />
-                    </a>
-                    <a href="https://github.com" target="_blank" className="text-gray-400 hover:text-black transition-colors">
-                        <Github size={18} />
-                    </a>
+                    <button
+                        onClick={() => logout()}
+                        className="text-gray-400 hover:text-red-500 transition-colors"
+                        title="Logout"
+                    >
+                        <LogOut size={18} />
+                    </button>
                 </div>
             </aside>
 

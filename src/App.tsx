@@ -7,9 +7,11 @@ import OrdersView from "./components/orders/OrdersView.tsx";
 import CustomersView from "./components/customers/CustomersView.tsx";
 import Dashboard from "./components/Dashboard.tsx";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { AuthProvider } from "./contexts/AuthContext.tsx";
+import PrivateRoute from "./components/PrivateRoute.tsx";
+import LoginPage from "./components/LoginPage.tsx";
 
 function App() {
-
 
     const theme = createTheme({
         typography: {
@@ -28,20 +30,25 @@ function App() {
     });
 
     return (
-      <ThemeProvider theme={theme}>
-          <HashRouter>
-              <Routes>
-                  <Route element={<Layout/>}>
-                      <Route path="products" element={<ProductsView/>}/>
-                      <Route path="orders" element={<OrdersView selection={false}/>}/>
-                      <Route path="customers" element={<CustomersView/>}/>
-                      <Route path="add" element={<QuickAdd/>}/>
-                      <Route index element={<Dashboard/>}/>
-                  </Route>
-              </Routes>
-          </HashRouter>
-      </ThemeProvider>
-  )
+        <AuthProvider>
+            <ThemeProvider theme={theme}>
+                <HashRouter>
+                    <Routes>
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route element={<PrivateRoute />}>
+                            <Route element={<Layout />}>
+                                <Route path="products" element={<ProductsView/>}/>
+                                <Route path="orders" element={<OrdersView selection={false}/>}/>
+                                <Route path="customers" element={<CustomersView/>}/>
+                                <Route path="add" element={<QuickAdd/>}/>
+                                <Route index element={<Dashboard/>}/>
+                            </Route>
+                        </Route>
+                    </Routes>
+                </HashRouter>
+            </ThemeProvider>
+        </AuthProvider>
+    )
 }
 
 export default App

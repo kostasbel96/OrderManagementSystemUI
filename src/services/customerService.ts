@@ -1,10 +1,11 @@
 import type {Customer, CustomerResponseDto, ResponseDTO, SearchRequest} from "../types/Types.ts";
 import {getApiUrl} from "../helper/IpHelper.ts";
+import {fetchWithAuth} from "../api/fetchWithAuth.ts";
 
 const API_URL = getApiUrl();
 
 export async function addCustomer(newCustomer: Omit<Customer, "id">): Promise<ResponseDTO> {
-    const res = await fetch(`${API_URL}/customers/save`,{
+    const res = await fetchWithAuth(`${API_URL}/customers/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newCustomer),
@@ -17,14 +18,14 @@ export async function addCustomer(newCustomer: Omit<Customer, "id">): Promise<Re
 export async function getCustomers(page: number = 0, pageSize: number = 10, sortBy: string = "name", sortDirection: string = "desc"): Promise<CustomerResponseDto> {
     const url = `${API_URL}/customers?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
 
-    const res = await fetch(url);
+    const res = await fetchWithAuth(url);
     if (!res.ok) throw new Error("Failed to fetch customers.");
     const data = await res.json();
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
 export async function searchCustomers(request: SearchRequest): Promise<CustomerResponseDto> {
-    const res = await fetch(`${API_URL}/customers/search`, {
+    const res = await fetchWithAuth(`${API_URL}/customers/search`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -55,14 +56,14 @@ export async function searchCustomers(request: SearchRequest): Promise<CustomerR
 
 export async function getCustomer(id: number): Promise<Customer> {
     const url = `${API_URL}/customers/${id}`;
-    const res = await fetch(url);
+    const res = await fetchWithAuth(url);
     if (!res.ok) throw new Error("Failed to fetch customer with id: " +id);
     return await res.json();
 }
 
 export async function updateCustomer(customer: Customer): Promise<ResponseDTO> {
     const url = `${API_URL}/customers/update`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(customer)
@@ -73,7 +74,7 @@ export async function updateCustomer(customer: Customer): Promise<ResponseDTO> {
 
 export async function deleteCustomer(customer: Customer): Promise<ResponseDTO> {
     const url = `${API_URL}/customers/delete`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(customer),

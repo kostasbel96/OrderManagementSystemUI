@@ -5,6 +5,7 @@ import type {
     Supplier
 } from "../types/Types.ts";
 import {getApiUrl} from "../helper/IpHelper.ts";
+import {fetchWithAuth} from "../api/fetchWithAuth.ts";
 
 interface OrderProps{
     products: SelectedProduct[];
@@ -23,7 +24,7 @@ export async function addPurchaseOrder({products, supplier}: OrderProps): Promis
                 {productId: p.product?.id, quantity: p.quantity, price: p.price.toString()}
             ))
     }
-    const res = await fetch(`${API_URL}/purchaseOrders/save`,{
+    const res = await fetchWithAuth(`${API_URL}/purchaseOrders/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderRequest),
@@ -33,7 +34,7 @@ export async function addPurchaseOrder({products, supplier}: OrderProps): Promis
 }
 
 export async function searchSupplierOrders(request: SearchRequest): Promise<PurchaseOrderItemResponseDto> {
-    const res = await fetch(`${API_URL}/purchaseOrders/search`, {
+    const res = await fetchWithAuth(`${API_URL}/purchaseOrders/search`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -64,14 +65,14 @@ export async function searchSupplierOrders(request: SearchRequest): Promise<Purc
 
 export async function getPurchaseOrder(id: number): Promise<ResponseDTO> {
     const url = `${API_URL}/purchaseOrders/${id}`;
-    const res = await fetch(url);
+    const res = await fetchWithAuth(url);
     if (!res.ok) throw new Error("Failed to fetch purchase order with id: " + id);
     return await res.json();
 }
 
 export async function updatePurchaseOrder(order: PurchaseOrderItem): Promise<ResponseDTO> {
     const url = `${API_URL}/purchaseOrders/update`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),
@@ -82,7 +83,7 @@ export async function updatePurchaseOrder(order: PurchaseOrderItem): Promise<Res
 
 export async function deletePurchaseOrder(order: PurchaseOrderItem): Promise<ResponseDTO> {
     const url = `${API_URL}/purchaseOrders/delete`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),

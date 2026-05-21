@@ -8,7 +8,7 @@ import type {
     Receipt,
     ResponseDTO,
     Route,
-    Supplier
+    Supplier, Payment
 } from "../../types/Types.ts";
 import {deleteProduct} from "../../services/productService.ts";
 import {deleteCustomer} from "../../services/customerService.ts";
@@ -18,14 +18,15 @@ import {deleteRoute} from "../../services/routeService.ts";
 import {deleteReceipt} from "../../services/receiptService.ts";
 import {deleteSupplier} from "../../services/supplierService.ts";
 import {deletePurchaseOrder} from "../../services/purchaseOrderService.ts";
+import {deletePayment} from "../../services/paymentService.ts";
 
 interface PopUpDeleteProps{
     open: boolean;
-    rowToEdit: Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined ;
+    rowToEdit: Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | PurchaseOrderItem | Payment | undefined ;
     typeOf: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>>;
+    setRowToEdit: React.Dispatch<React.SetStateAction<Product | Customer | OrderItem | Driver | Route | Receipt | Supplier | PurchaseOrderItem | Payment | undefined>>;
     handleDelete: (id: number) => void;
 }
 
@@ -114,12 +115,25 @@ const PopUpDelete = ({open, rowToEdit,
                     })
                     .finally(()=> setOpen(false));
                 break;
-            case "Receipts":
+            case "receipt":
                 deleteReceipt((rowToEdit as Receipt).id)
                     .then((data: ResponseDTO) => {
                         console.log(data);
                         setRowToEdit(data.receipt);
                         handleDelete(data.receipt.id);
+                        setSubmitted(true);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                    .finally(()=> setOpen(false));
+                break;
+            case "payment":
+                deletePayment((rowToEdit as Payment).id)
+                    .then((data: ResponseDTO) => {
+                        console.log(data);
+                        setRowToEdit(data.payment);
+                        handleDelete(data.payment.id);
                         setSubmitted(true);
                     })
                     .catch(err => {
@@ -502,6 +516,57 @@ const PopUpDelete = ({open, rowToEdit,
         )
     }
 
+    const renderPaymentFields = () => {
+        return (
+            <>
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    margin="dense"
+                    id="id"
+                    name="id"
+                    type="text"
+                    label="Payment ID"
+                    fullWidth
+                    variant="standard"
+                    value={(rowToEdit as Payment)?.id}
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as Payment)?.supplier?.name}
+                    margin="dense"
+                    id="supplierName"
+                    name="supplierName"
+                    label="Supplier Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as Payment)?.amount}
+                    margin="dense"
+                    id="amount"
+                    name="amount"
+                    label="Amount"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    slotProps={{ input: { readOnly: true } }}
+                    value={(rowToEdit as Payment)?.date.toString()}
+                    margin="dense"
+                    id="date"
+                    name="date"
+                    label="Date"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+            </>
+        )
+    }
+
     const renderSupplierFields = () => {
         return (
             <>
@@ -602,7 +667,8 @@ const PopUpDelete = ({open, rowToEdit,
                     {typeOf === "orderSupplier" && renderSupplierOrderFields()}
                     {typeOf === "Drivers" && renderDriverFields()}
                     {typeOf === "Routes" && renderRouteFields()}
-                    {typeOf === "Receipts" && renderReceiptFields()}
+                    {typeOf === "receipt" && renderReceiptFields()}
+                    {typeOf === "payment" && renderPaymentFields()}
                     {typeOf === "Suppliers" && renderSupplierFields()}
                 </form>
             </DialogContent>

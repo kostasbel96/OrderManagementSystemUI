@@ -55,6 +55,7 @@ export interface ResponseDTO {
     driver: Driver;
     routes: Route[];
     receipt: Receipt;
+    payment: Payment;
     errorResponse: ErrorResponse;
     customer: Customer;
 }
@@ -63,6 +64,14 @@ export interface Receipt {
     id: number;
     amount: number | string;
     customer: Customer;
+    notes: string;
+    date: string | Date | Dayjs;
+}
+
+export interface Payment {
+    id: number;
+    amount: number | string;
+    supplier: Supplier;
     notes: string;
     date: string | Date | Dayjs;
 }
@@ -104,6 +113,13 @@ export interface SelectedProduct {
 
 export interface ReceiptRequest {
     customerId: number | null;
+    orderIds: number[] | null;
+    notes: string;
+    amount: string;
+}
+
+export interface PaymentRequest {
+    supplierId: number | null;
     orderIds: number[] | null;
     notes: string;
     amount: string;
@@ -171,6 +187,13 @@ export interface RouteResponseDto {
 
 export interface ReceiptResponseDto {
     content: Receipt[];
+    totalElements: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+export interface PaymentResponseDto {
+    content: Payment[];
     totalElements: number;
     pageNumber: number;
     pageSize: number;

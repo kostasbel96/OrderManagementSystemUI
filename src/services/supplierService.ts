@@ -1,10 +1,11 @@
 import {getApiUrl} from "../helper/IpHelper.ts";
 import type {ResponseDTO, SearchRequest, Supplier, SupplierResponseDto} from "../types/Types.ts";
+import {fetchWithAuth} from "../api/fetchWithAuth.ts";
 
 const API_URL = getApiUrl();
 
 export async function addSupplier(newSupplier: Omit<Supplier, "id">): Promise<ResponseDTO> {
-    const res = await fetch(`${API_URL}/suppliers/save`,{
+    const res = await fetchWithAuth(`${API_URL}/suppliers/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newSupplier),
@@ -15,7 +16,7 @@ export async function addSupplier(newSupplier: Omit<Supplier, "id">): Promise<Re
 }
 
 export async function searchSuppliers(request: SearchRequest): Promise<SupplierResponseDto> {
-    const res = await fetch(`${API_URL}/suppliers/search`, {
+    const res = await fetchWithAuth(`${API_URL}/suppliers/search`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -46,7 +47,7 @@ export async function searchSuppliers(request: SearchRequest): Promise<SupplierR
 
 export async function updateSupplier(supplier: Supplier): Promise<ResponseDTO> {
     const url = `${API_URL}/suppliers/update`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(supplier)
@@ -57,7 +58,7 @@ export async function updateSupplier(supplier: Supplier): Promise<ResponseDTO> {
 
 export async function deleteSupplier(supplier: Supplier): Promise<ResponseDTO> {
     const url = `${API_URL}/suppliers/delete`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(supplier),

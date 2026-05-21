@@ -6,6 +6,7 @@ import type {
     SelectedProduct, ResponseDTO, SearchRequest,
 } from "../types/Types.ts";
 import {getApiUrl} from "../helper/IpHelper.ts";
+import {fetchWithAuth} from "../api/fetchWithAuth.ts";
 
 interface OrderProps{
     products: SelectedProduct[];
@@ -26,7 +27,7 @@ export async function addOrder({products, customer, address}: OrderProps): Promi
                 {productId: p.product?.id, quantity: p.quantity, price: p.price.toString()}
             ))
     }
-    const res = await fetch(`${API_URL}/orders/save`,{
+    const res = await fetchWithAuth(`${API_URL}/orders/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderRequest),
@@ -39,14 +40,14 @@ export async function addOrder({products, customer, address}: OrderProps): Promi
 export async function getOrders(page: number = 0, pageSize: number = 10, sortBy: string = "date", sortDirection: string = "desc"): Promise<OrderResponseDto> {
     const url = `${API_URL}/orders?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
 
-    const res = await fetch(url);
+    const res = await fetchWithAuth(url);
     if (!res.ok) throw new Error("Failed to fetch orders.");
     const data = await res.json();
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
 export async function searchOrders(request: SearchRequest): Promise<OrderResponseDto> {
-    const res = await fetch(`${API_URL}/orders/search`, {
+    const res = await fetchWithAuth(`${API_URL}/orders/search`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -77,14 +78,14 @@ export async function searchOrders(request: SearchRequest): Promise<OrderRespons
 
 export async function getOrder(id: number): Promise<ResponseDTO> {
     const url = `${API_URL}/orders/${id}`;
-    const res = await fetch(url);
+    const res = await fetchWithAuth(url);
     if (!res.ok) throw new Error("Failed to fetch order with id: " + id);
     return await res.json();
 }
 
 export async function updateOrder(order: OrderItem): Promise<ResponseDTO> {
     const url = `${API_URL}/orders/update`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),
@@ -95,7 +96,7 @@ export async function updateOrder(order: OrderItem): Promise<ResponseDTO> {
 
 export async function deleteOrder(order: OrderItem): Promise<ResponseDTO> {
     const url = `${API_URL}/orders/delete`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),

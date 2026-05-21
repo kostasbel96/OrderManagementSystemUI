@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import {
-    type GridColDef,
     type GridFilterModel, type GridPaginationModel,
     type GridSortModel,
 } from "@mui/x-data-grid";
@@ -9,30 +8,30 @@ import type {
     Customer,
     Driver,
     OrderItem,
-    OrderRow,
+    OrderRow, Payment,
     Product, PurchaseOrderItem,
     Receipt,
-    ResponseDTO,
     Route,
     Supplier
 } from "../../types/Types.ts";
-import IconButton from "@mui/material/IconButton";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {getReceipt, searchReceipts} from "../../services/receiptService.ts";
+import {searchReceipts} from "../../services/receiptService.ts";
 import dayjs from "dayjs";
+import getColumnConfigCustomerReceipt from "./config/getColumnConfigCustomerReceipt.tsx";
+import getColumnConfigSupplierReceipt from "./config/getColumnConfigSupplierReceipt.tsx";
+import {searchPayments} from "../../services/paymentService.ts";
 
-const OrdersView = () => {
+const ReceiptsView = ({receiptType  = "receipt"}) => {
 
-    const [rows, setRows] = useState<(Customer | Product | OrderRow | Driver | Route | Receipt)[]>([]);
+    const [rows, setRows] = useState<(Customer | Product | OrderRow | Driver | Route | Receipt | Payment)[]>([]);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [searchName, setSearchName] = useState("");
     const [isSearching, setIsSearching] = useState(false);
-    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | PurchaseOrderItem | undefined>();
+    const [rowToEdit, setRowToEdit] = useState<OrderItem | Customer | Product | Driver | Route | Receipt | Supplier | PurchaseOrderItem | Payment | undefined>();
     const [openDeletePopUp, setOpenDeletePopUp] = useState(false);
-    const [onDeleteContent, setOnDeleteContent] = useState<Receipt>();
+    const [onDeleteContent, setOnDeleteContent] = useState<Receipt | Payment | undefined>();
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
@@ -41,116 +40,25 @@ const OrdersView = () => {
     });
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
 
-    const handleOnDelete = (row: Receipt) =>{
-        if (row.id) getReceipt(row.id).then((data: ResponseDTO)=> {
-            setOnDeleteContent({...data.receipt});
-            setOperation("deleted");
-        }).finally(()=>setOpenDeletePopUp(true));
-    }
-
-    const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',   // vertical centering
-                        justifyContent: 'start', // horizontal centering
-                        whiteSpace: 'pre-line',
-                        height: '100%',          // σημαντικό για να γεμίζει το cell
-                        width: '100%',
-                        marginBottom: '24px'
-                    }}
-                >
-                    {params.value}
-                </div>
-            ) },
-        { field: 'customer', headerName: 'Customer', width: 200,
-            valueGetter: (_, row) =>
-                `${row.customer?.name ?? ''} ${row.customer?.lastName ?? ''}`,renderCell: (params) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',   // vertical centering
-                        justifyContent: 'start', // horizontal centering
-                        whiteSpace: 'pre-line',
-                        height: '100%',          // σημαντικό για να γεμίζει το cell
-                        width: '100%',
-                        marginBottom: '24px'
-                    }}
-                >
-                    {params.value}
-                </div>
-            ) },
-        { field: 'amount', headerName: 'Amount', width: 80, type: "number", renderCell: (params) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'end',
-                        height: '100%',
-                    }}
-                >
-                    {params.value ? params.value + " €" : ""}
-                </div>
-            ) },
-        {field: 'date', headerName: 'Date', type: 'date', width: 80, renderCell: (params) => (
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',   // vertical centering
-                    justifyContent: 'start', // horizontal centering
-                    whiteSpace: 'pre-line',
-                    height: '100%',          // σημαντικό για να γεμίζει το cell
-                    width: '100%',
-                }}>
-                    {params.value
-                        ? params.value.toLocaleDateString()
-                        : ''}
-                </div>
-            )},
-        {
-            field: 'actions',
-            headerName: 'Actions',
-            width: 100,
-            sortable: false,
-            filterable: false,
-            renderCell: (params) => (
-                <div
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'start'
-                    }}
-                >
-                    <IconButton
-                        color="error"
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            handleOnDelete(params.row);
-                        }}
-                    >
-                        <DeleteIcon sx={{ fontSize: 18 }}/>
-                    </IconButton>
-                </div>
-            ),
-        },
-    ];
-
     const handleDeleteReceipt = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
     };
 
+    const columns = receiptType === "receipt" ?
+                        getColumnConfigCustomerReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation}) :
+                        getColumnConfigSupplierReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation})
+
     useEffect(() => {
         setLoading(true);
-        searchReceipts({
-            page: paginationModel.page,
-            pageSize: paginationModel.pageSize,
-            globalSearch: isSearching ? searchName : "",
-            sortBy: sortModel[0]?.field,
-            sortDirection: sortModel[0]?.sort ?? "asc",
-            filters: filterModel.items ?? []
-        }).then(data => {
+        if (receiptType === "receipt"){
+            searchReceipts({
+                page: paginationModel.page,
+                pageSize: paginationModel.pageSize,
+                globalSearch: isSearching ? searchName : "",
+                sortBy: sortModel[0]?.field,
+                sortDirection: sortModel[0]?.sort ?? "asc",
+                filters: filterModel.items ?? []
+            }).then(data => {
                 const receipts: Receipt[] = [];
                 data.content.forEach(receipt => {
                     receipts.push({
@@ -164,8 +72,34 @@ const OrdersView = () => {
                 setRows(receipts);
                 setRowCount(data.totalElements);
             })
-            .catch(() => console.log("error fetching orders"))
-            .finally(() => setLoading(false));
+                .catch(() => console.log("error fetching orders"))
+                .finally(() => setLoading(false));
+        } else if (receiptType === "payment") {
+            searchPayments({
+                page: paginationModel.page,
+                pageSize: paginationModel.pageSize,
+                globalSearch: isSearching ? searchName : "",
+                sortBy: sortModel[0]?.field,
+                sortDirection: sortModel[0]?.sort ?? "asc",
+                filters: filterModel.items ?? []
+            }).then(data => {
+                const payments: Payment[] = [];
+                data.content.forEach(payment => {
+                    payments.push({
+                        id: payment.id,
+                        supplier: payment.supplier,
+                        amount: Number(Number(payment.amount).toFixed(2)),
+                        date: payment.date ? dayjs(payment.date).toDate() : "",
+                        notes: payment.notes
+                    });
+                });
+                setRows(payments);
+                setRowCount(data.totalElements);
+            })
+                .catch(() => console.log("error fetching orders"))
+                .finally(() => setLoading(false));
+        }
+
     }, [paginationModel, isSearching, searchName, sortModel, filterModel])
 
     return (
@@ -189,7 +123,7 @@ const OrdersView = () => {
                 setRowToEdit={setRowToEdit}
                 open={openDeletePopUp}
                 rowToEdit={onDeleteContent}
-                typeOf={"Receipts"}
+                typeOf={receiptType}
                 setOpen={setOpenDeletePopUp}
                 handleDelete={handleDeleteReceipt}
                 setSubmitted={setSubmitted}
@@ -210,4 +144,4 @@ const OrdersView = () => {
 
 }
 
-export default OrdersView;
+export default ReceiptsView;

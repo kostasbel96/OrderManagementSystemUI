@@ -9,6 +9,7 @@ import type {
     SearchRequest
 } from "../types/Types.ts";
 import dayjs, {type Dayjs} from "dayjs";
+import {fetchWithAuth} from "../api/fetchWithAuth.ts";
 
 const API_URL = getApiUrl();
 
@@ -39,7 +40,7 @@ export async function addRoute({
         orderIds: orders.map(order => order.id),
         date: date.format("YYYY-MM-DD")
     };
-    const res = await fetch(`${API_URL}/routes/save`, {
+    const res = await fetchWithAuth(`${API_URL}/routes/save`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -71,7 +72,7 @@ export async function searchRoutes(
         }
     };
 
-    const res = await fetch(`${API_URL}/routes/search`, {
+    const res = await fetchWithAuth(`${API_URL}/routes/search`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -96,7 +97,7 @@ export async function searchRoutes(
 
 export async function updateRoute(route: Route): Promise<ResponseDTO> {
 
-    const res = await fetch(`${API_URL}/routes/update`, {
+    const res = await fetchWithAuth(`${API_URL}/routes/update`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -124,14 +125,14 @@ export async function updateRoute(route: Route): Promise<ResponseDTO> {
 
 export async function getRoute(id: number): Promise<ResponseDTO> {
     const url = `${API_URL}/routes/${id}`;
-    const res = await fetch(url);
+    const res = await fetchWithAuth(url);
     if (!res.ok) throw new Error("Failed to fetch route with id: " + id);
     return await res.json();
 }
 
 export async function deleteRoute(route: Route): Promise<ResponseDTO> {
 
-    const res = await fetch(`${API_URL}/routes/delete`, {
+    const res = await fetchWithAuth(`${API_URL}/routes/delete`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json"
