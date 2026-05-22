@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {z} from "zod";
+import {useTranslation} from "react-i18next";
 
 type FormErrors = {
     name?: string;
@@ -12,11 +13,11 @@ type FormErrors = {
 
 const formSchema = z.object(
     {
-        name: z.string().trim().nonempty("Name is required"),
-        lastName: z.string().trim().nonempty("Last Name is required"),
-        phoneNumber1: z.string().regex(/^\+?\d+$/, "Invalid phone number. Only digits are allowed")
+        name: z.string().trim().nonempty("validation.nameRequired"),
+        lastName: z.string().trim().nonempty("validation.lastNameRequired"),
+        phoneNumber1: z.string().regex(/^\+?\d+$/, "validation.invalidPhone")
             .refine(val => val.replaceAll(/\D/g, '').length >= 10, {
-                message: "Phone number must have at least 10 digits",
+                message: "validation.phoneMinDigits",
             }),
         phoneNumber2: z
             .string()
@@ -25,16 +26,16 @@ const formSchema = z.object(
             .optional()
             .refine(val => {
                 if (!val) return true;
-                return /^\+?\d+$/.test(val) && val.replace(/\D/g, '').length >= 10;
+                return /^\+?\d+$/.test(val) && val.replaceAll(/\D/g, '').length >= 10;
             }, {
-                message: "Invalid phone number",
+                message: "validation.invalidPhone",
             }),
         email: z.string()
             .trim()
             .optional()
             .refine(
                 v => !v || z.email().safeParse(v).success,
-                "Email is invalid"
+                "validation.emailInvalid"
             ),
     }
 )
@@ -43,6 +44,7 @@ export type FormValues = z.infer<typeof formSchema>;
 
 const useCustomerFormValidation = (values: FormValues) => {
     const [customerErrors, setCustomerErrors] = useState<FormErrors>({});
+    const { t } = useTranslation();
 
     const validateCustomerForm = () => {
         const result = formSchema.safeParse(values);
@@ -51,7 +53,7 @@ const useCustomerFormValidation = (values: FormValues) => {
             const newErrors: FormErrors = {};
             result.error.issues.forEach(error => {
                 const fieldName = error.path[0] as keyof FormValues;
-                newErrors[fieldName] = error.message;
+                newErrors[fieldName] = t(error.message);
             });
             setCustomerErrors(newErrors);
             return false;

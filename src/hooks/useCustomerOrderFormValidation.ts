@@ -1,6 +1,7 @@
 import {z} from "zod";
 import {useState} from "react";
 import type {SelectedProduct, Customer} from '../types/Types.ts';
+import {useTranslation} from "react-i18next";
 
 export const productSchema = z.object({
     id: z.number(),
@@ -8,15 +9,15 @@ export const productSchema = z.object({
     quantity: z.number()
 });
 
-export const selectedProductSchema = z.object({
+export const selectedProductSchema = (t: any) => z.object({
     product: productSchema.nullable().refine(val => val !== null, {
-        message: "Product is required"
+        message: t("validation.productRequired")
     }),
-    quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
-    price: z.coerce.number().min(0, "Price must be at least 0")
+    quantity: z.coerce.number().min(1, t("validation.quantityMin")),
+    price: z.coerce.number().min(0, t("validation.priceMin"))
 });
 
-export const orderSchema = z.object({
+export const orderSchema = (t: any) => z.object({
     customer: z
         .object({
             id: z.number(),
@@ -24,17 +25,17 @@ export const orderSchema = z.object({
         })
         .nullable()
         .refine(val => val !== null, {
-            message: "You must select a customer",
+            message: t("validation.customerRequired"),
         }),
 
     products: z
-        .array(selectedProductSchema)
-        .min(1, "You must select at least 1 product"),
+        .array(selectedProductSchema(t))
+        .min(1, t("validation.emptyProductRow")),
 
     address: z
         .string()
         .trim()
-        .min(2, "Address is required")
+        .min(2, t("validation.addressRequired"))
 
 })
 
@@ -56,6 +57,7 @@ type UseOrderFormValidationProps = {
 
 const useCustomerOrderFormValidation = ({selectedProductsWithQty, selectedCustomer, address, initialItems}: UseOrderFormValidationProps) => {
     const [orderErrors, setOrderErrors] = useState<FormErrors>({});
+    const { t } = useTranslation();
 
     const validQuantity = (): {notValidProducts: SelectedProduct[], isValid: boolean} => {
         const notValidProducts = selectedProductsWithQty.filter(sp => {
@@ -77,7 +79,7 @@ const useCustomerOrderFormValidation = ({selectedProductsWithQty, selectedCustom
 
     const validateOrderForm = (): boolean => {
 
-        const result = orderSchema.safeParse({
+        const result = orderSchema(t).safeParse({
             customer: selectedCustomer,
             products: selectedProductsWithQty,
             address: address
@@ -107,14 +109,14 @@ const useCustomerOrderFormValidation = ({selectedProductsWithQty, selectedCustom
                 }
             });
             selectedProductsWithQty.find(p => p.product === null || p.product === undefined) && setOrderErrors(prevState => ({...prevState, products: "You cannot have empty product row"}))
-            if (selectedProductsWithQty.length === 0) setOrderErrors(prevState => ({...prevState, products: "You must select at least 1 product"}))
+            if (selectedProductsWithQty.length === 0) setOrderErrors(prevState => ({...prevState, products: t("validation.minProducts")}))
             setOrderErrors(prevState => ({...prevState, ...newErrors}));
             return false;
         }
 
         if (!isValid) {
             setOrderErrors({
-                stockError: `Quantity in stock of ${productNames} is less than you requested.`
+                stockError: t("order.stockError", { products: productNames })
             });
             return false;
         }

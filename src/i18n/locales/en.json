@@ -88,7 +88,9 @@
   "workspaces": {
     "emptyTitle": "OMS Workspace",
     "noActive": "There are no active workspaces.",
-    "selectStart": "Select a section from the menu on the left to get started."
+    "selectStart": "Select a section from the menu on the left to get started.",
+    "prevTab": "Previous Tab",
+    "nextTab": "Next Tab"
   },
   "routes": {
     "edit": "Edit Route",
@@ -362,5 +364,32 @@
       "address": "Address",
       "vat": "VAT Number"
     }
+  },
+  "validation": {
+    "nameRequired": "Name is required",
+    "lastNameRequired": "Last Name is required",
+    "invalidPhone": "Invalid phone number. Only digits are allowed",
+    "phoneMinDigits": "Phone number must have at least 10 digits",
+    "emailInvalid": "Email is invalid",
+    "productRequired": "Product is required",
+    "quantityMin": "Quantity must be at least 1",
+    "priceMin": "Price must be at least 0",
+    "customerRequired": "You must select a customer",
+    "addressRequired": "Address is required",
+    "minProducts": "You must select at least 1 product",
+    "emptyProductRow": "You cannot have empty product row",
+    "productNameRequired": "Product Name is required",
+    "descriptionRequired": "Description is required",
+    "amountMin": "Amount must be at least 1",
+    "personRequired": "You must select a person",
+    "minRouteStops": "You must add at least 1 order to the route",
+    "driverRequired": "You must select a driver",
+    "routeNameMin": "You must enter a route name with at least 3 characters",
+    "vatInvalid": "Invalid VAT number. Only digits are allowed",
+    "vatMinDigits": "VAT number must have at least 9 digits",
+    "supplierRequired": "You must select a supplier"
+  },
+  "order": {
+    "stockError": "Quantity in stock of {{products}} is less than you requested."
   }
 }

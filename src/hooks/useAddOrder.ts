@@ -3,6 +3,7 @@ import {addOrder} from "../services/orderService.ts";
 import {addPurchaseOrder} from "../services/purchaseOrderService.ts";
 import useCustomerOrderFormValidation from "./useCustomerOrderFormValidation.ts";
 import useSupplierOrderFormValidation from "./useSupplierOrderFormValidation.ts";
+import {useTranslation} from "react-i18next";
 
 interface UseAddOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,6 +23,9 @@ const useAddOrder = ({
                          setSubmitted,
                          setSuccess,
                          setPopUpMessage, }: UseAddOrderProps) => {
+
+    const { t } = useTranslation();
+
     const {
         validateOrderForm,
         orderErrors: customerOrderErrors,
@@ -53,7 +57,7 @@ const useAddOrder = ({
                         });
                         setSuccess(true);
                         setSubmitted(true);
-                        setPopUpMessage("Order created successfully");
+                        setPopUpMessage(t("messages.orderAdded"));
                         console.log(data);
                         return true;
                     } catch (error: any) {
@@ -76,7 +80,7 @@ const useAddOrder = ({
                         });
                         setSuccess(true);
                         setSubmitted(true);
-                        setPopUpMessage("Order created successfully");
+                        setPopUpMessage(t("messages.orderAdded"));
                         console.log(data);
                         return true;
                     } catch (error: any) {

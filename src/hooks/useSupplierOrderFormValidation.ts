@@ -1,5 +1,6 @@
 import {z} from "zod";
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 import type {SelectedProduct, Supplier} from '../types/Types.ts';
 
 export const productSchema = z.object({
@@ -10,10 +11,10 @@ export const productSchema = z.object({
 
 export const selectedProductSchema = z.object({
     product: productSchema.nullable().refine(val => val !== null, {
-        message: "Product is required"
+        message: "validation.productRequired"
     }),
-    quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
-    price: z.coerce.number().min(0, "Price must be at least 0")
+    quantity: z.coerce.number().min(1, "validation.quantityMin"),
+    price: z.coerce.number().min(0, "validation.priceMin")
 });
 
 export const orderSupplierSchema = z.object({
@@ -24,14 +25,13 @@ export const orderSupplierSchema = z.object({
         })
         .nullable()
         .refine(val => val !== null, {
-            message: "You must select a supplier",
+            message: "validation.supplierRequired",
         }),
 
     products: z
         .array(selectedProductSchema)
-        .min(1, "You must select at least 1 product"),
-
-})
+        .min(1, "validation.minProducts"),
+});
 
 interface FormErrors {
     products?: string;
@@ -46,9 +46,14 @@ type UseOrderFormValidationProps = {
     initialItems?: SelectedProduct[];
 }
 
+const useSupplierOrderFormValidation = ({
+                                            selectedProductsWithQty,
+                                            selectedSupplier,
+                                            initialItems
+                                        }: UseOrderFormValidationProps) => {
 
-const useSupplierOrderFormValidation = ({selectedProductsWithQty, selectedSupplier, initialItems}: UseOrderFormValidationProps) => {
     const [orderSupplierErrors, setOrderSupplierErrors] = useState<FormErrors>({});
+    const { t } = useTranslation();
 
     const validateOrderForm = (): boolean => {
 
@@ -57,38 +62,64 @@ const useSupplierOrderFormValidation = ({selectedProductsWithQty, selectedSuppli
             products: selectedProductsWithQty,
         });
 
+        const newErrors: FormErrors = {};
+
         if (!result.success) {
-            const newErrors: FormErrors = {};
+
             result.error.issues.forEach(error => {
+
                 if (error.path[0] === "products") {
                     const field = error.path[2];
 
                     if (field === "quantity") {
-                        newErrors.productQuantity = error.message;
+                        newErrors.productQuantity = t(error.message);
                     }
 
                     if (field === "price") {
-                        newErrors.productPrice = error.message;
+                        newErrors.productPrice = t(error.message);
                     }
+
                 } else {
                     const fieldName = error.path[0] as keyof FormErrors;
-                    newErrors[fieldName] = error.message;
+                    newErrors[fieldName] = t(error.message);
                 }
             });
-            (initialItems ?? selectedProductsWithQty).find(p => p.product === null || p.product === undefined) && setOrderSupplierErrors(prevState => ({...prevState, products: "You cannot have empty product row"}))
-            if (selectedProductsWithQty.length === 0) setOrderSupplierErrors(prevState => ({...prevState, products: "You must select at least 1 product"}))
-            setOrderSupplierErrors(prevState => ({...prevState, ...newErrors}));
+
+            const hasEmptyProduct =
+                (initialItems ?? selectedProductsWithQty)
+                    .some(p => !p.product);
+
+            if (hasEmptyProduct) {
+                setOrderSupplierErrors(prev => ({
+                    ...prev,
+                    products: t("validation.emptyProductRow")
+                }));
+            }
+
+            if (selectedProductsWithQty.length === 0) {
+                setOrderSupplierErrors(prev => ({
+                    ...prev,
+                    products: t("validation.minProducts")
+                }));
+            }
+
+            setOrderSupplierErrors(prev => ({
+                ...prev,
+                ...newErrors
+            }));
+
             return false;
         }
-        setOrderSupplierErrors({})
+
+        setOrderSupplierErrors({});
         return true;
-    }
+    };
 
     return {
         validateOrderForm,
         orderSupplierErrors,
         setOrderSupplierErrors
-    }
-}
+    };
+};
 
 export default useSupplierOrderFormValidation;

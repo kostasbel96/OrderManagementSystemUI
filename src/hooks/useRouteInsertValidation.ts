@@ -1,18 +1,24 @@
-import {z} from "zod";
+import {useState} from "react";
+import {useTranslation} from "react-i18next";
 import {orderSchema} from "./useCustomerOrderFormValidation.ts";
 import type {Driver, OrderRow} from "../types/Types.ts";
-import {useState} from "react";
+import {z} from "zod";
 
-const routeSchema = z.object({
-        stops: z.array(orderSchema).min(1, "You must add at least 1 order to the route"),
-        driver: z.object({
-                id: z.number(),
-                name: z.string()
-            }, { error: "You must select a driver" }),
-        routeName: z.string().min(3, "You must enter a route name with at least 3 characters")
-}
 
-);
+const routeSchema = (t: any) => z.object({
+    stops: z.array(orderSchema(t))
+        .min(1, t("validation.minRouteStops")),
+
+    driver: z.object({
+        id: z.number(),
+        name: z.string()
+    }, {
+        error: t("validation.driverRequired")
+    }),
+
+    routeName: z.string()
+        .min(3, t("validation.routeNameMin"))
+});
 
 export interface RouteInsertErrors {
     routeName?: string;
@@ -26,38 +32,44 @@ type UseRouteInsertValidationProps = {
     routeName: string;
 }
 
-const useRouteInsertValidation = ({stops, driver, routeName}: UseRouteInsertValidationProps) => {
+const useRouteInsertValidation = ({
+                                      stops,
+                                      driver,
+                                      routeName
+                                  }: UseRouteInsertValidationProps) => {
 
     const [routeErrors, setRouteErrors] = useState<RouteInsertErrors>({});
+    const { t } = useTranslation();
 
     const validateRouteInsert = (): boolean => {
 
-        const result = routeSchema.safeParse({
-            driver: driver,
-            stops: stops,
-            routeName: routeName
+        const result = routeSchema(t).safeParse({
+            driver,
+            stops,
+            routeName
         });
 
         if (!result.success) {
             const newErrors: RouteInsertErrors = {};
+
             result.error.issues.forEach(error => {
                 const fieldName = error.path[0] as keyof RouteInsertErrors;
                 newErrors[fieldName] = error.message;
             });
+
             setRouteErrors(newErrors);
             return false;
         }
 
-        setRouteErrors({})
+        setRouteErrors({});
         return true;
-    }
+    };
 
     return {
         validateRouteInsert,
         routeErrors,
         setRouteErrors
-    }
-
-}
+    };
+};
 
 export default useRouteInsertValidation;
