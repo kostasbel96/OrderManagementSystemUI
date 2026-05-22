@@ -243,7 +243,7 @@ const DriversView = () => {
                 {submitted && (
                     <PopUpItemOperation
                         setSubmitted={setSubmitted}
-                        typeOf={t('drivers.table.type')}
+                        typeOf={"driver"}
                         item={rowToEdit as Driver}
                         operation={operation}
                     />
