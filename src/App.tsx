@@ -5,7 +5,7 @@ import QuickAdd from "./components/QuickAdd.tsx";
 import ProductsView from "./components/products/ProductsView.tsx";
 import OrdersView from "./components/orders/OrdersView.tsx";
 import CustomersView from "./components/customers/CustomersView.tsx";
-import Dashboard from "./components/Dashboard.tsx";
+import Dashboard from "./components/dashboard/Dashboard.tsx";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";

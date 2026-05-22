@@ -131,9 +131,7 @@
       "supplierId": "Supplier ID",
       "vatNumber": "VAT Number"
     }
-  }
-
-  ,
+  },
   "drivers": {
     "table": {
       "id": "ID",
@@ -144,8 +142,7 @@
       "actions": "Actions",
       "type": "Driver"
     }
-  }
-  ,
+  },
   "customers": {
     "table": {
       "id": "ID",
@@ -171,7 +168,6 @@
       "noProducts": "No products added"
     }
   },
-
   "actions": {
     "reset": "Reset",
     "create": "Create",
@@ -194,20 +190,17 @@
     "routeUpdated": "Route updated successfully.",
     "supplierUpdated": "Supplier updated successfully.",
     "receiptUpdated": "Receipt updated successfully."
-  }
-  ,
+  },
   "messages_ext": {
     "savedGeneric": "{{item}} saved successfully!",
     "operationSuccess": "{{type}} {{subject}} {{operation}} successfully!",
     "cannotBeAdded": "{{message}} {{type}} cannot be added!"
-  }
-  ,
+  },
   "ops": {
     "created": "created",
     "updated": "updated",
     "deleted": "deleted"
-  }
-  ,
+  },
   "tabs": {
     "product": "Product",
     "order": "Order",
@@ -215,8 +208,7 @@
     "route": "Route",
     "supplier": "Supplier",
     "driver": "Driver"
-  }
-  ,
+  },
   "orders": {
     "table": {
       "id": "ID",
@@ -231,8 +223,7 @@
       "status": "Status",
       "actions": "Actions"
     }
-  }
-  ,
+  },
   "suppliers": {
     "table": {
       "id": "ID",
@@ -245,8 +236,7 @@
       "balance": "Balance",
       "actions": "Actions"
     }
-  }
-  ,
+  },
   "receipts": {
     "table": {
       "id": "ID",
@@ -256,24 +246,21 @@
       "date": "Date",
       "actions": "Actions"
     }
-  }
-  ,
+  },
   "search": {
     "placeholderCustomer": "customer by address, name, phone",
     "placeholderSupplier": "supplier by address, name, phone, vat",
     "contains": "contains",
     "ariaReset": "reset",
     "ariaSearch": "search"
-  }
-  ,
+  },
   "search2": {
     "searchCustomer": "Search customer...",
     "searchSupplier": "Search supplier...",
     "searchProduct": "Search product...",
     "searchDriver": "Search driver...",
     "searchRoute": "Search route..."
-  }
-  ,
+  },
   "settings": {
     "title": "Settings",
     "language": "Language",
@@ -304,8 +291,7 @@
       "address": "Address",
       "orderToCustomer": "Order to Customer",
       "orderToSupplier": "Order to Supplier"
-    }
-    ,
+    },
     "route": {
       "customers": {
         "table": {
@@ -391,5 +377,10 @@
   },
   "order": {
     "stockError": "Quantity in stock of {{products}} is less than you requested."
+  },
+  "dashboard": {
+    "units": "units",
+    "stockLevels": "Stock Levels",
+    "recentOrders": "Recent Orders"
   }
 }

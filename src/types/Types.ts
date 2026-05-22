@@ -8,6 +8,12 @@ export interface Product {
     price: number;
 }
 
+export interface StockItem {
+    productName: string;
+    quantity: number;
+    pct: number;
+}
+
 export interface Customer extends Person {
     balance: number | undefined | null;
     email?: string;

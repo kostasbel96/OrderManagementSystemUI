@@ -16,7 +16,7 @@ import {useUIStore} from "../hooks/store/useUIStore.ts";
 import {useTabs} from "../contexts/TabContext.tsx";
 import OrdersView from "./orders/OrdersView.tsx";
 import CustomersView from "./customers/CustomersView.tsx";
-import Dashboard from "./Dashboard.tsx";
+import Dashboard from "./dashboard/Dashboard.tsx";
 import QuickAdd from "./QuickAdd.tsx";
 import MySettings from "./Settings.tsx";
 import AddCustomerTab from "./customers/AddCustomerTab.tsx";

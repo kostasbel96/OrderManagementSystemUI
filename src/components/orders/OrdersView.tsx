@@ -61,7 +61,7 @@ const OrdersView = ({columnVisibility,
     const [onDeleteContent, setOnDeleteContent] = useState<OrderItem | PurchaseOrderItem>();
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
-    const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
+    const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "desc"}]);
     const [filterModel, setFilterModel] = useState<GridFilterModel>(filters ?? {
         items: []
     });
