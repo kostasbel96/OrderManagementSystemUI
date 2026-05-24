@@ -11,6 +11,7 @@ import {
 import LanguageSwitcher from "./ui/LanguageSwitcher";
 import PopUp from "././ui/popup/PopUp";
 import { useTranslation } from 'react-i18next';
+import {useUIStore} from "../hooks/store/useUIStore.ts";
 
 const DEFAULT_API = import.meta.env.VITE_API_URL;
 
@@ -23,6 +24,9 @@ export default function MySettings() {
     const [submitted, setSubmitted] = useState(false);
     const [success, setSuccess] = useState(false);
     const [message, setMessage] = useState("");
+
+    const { lowStockThreshold, setLowStockThreshold } = useUIStore();
+    const [thresholdInput, setThresholdInput] = useState(lowStockThreshold);
 
     useEffect(() => {
         const saved = localStorage.getItem("apiUrl");
@@ -48,6 +52,9 @@ export default function MySettings() {
         }
 
         localStorage.setItem("apiUrl", apiUrl);
+        setLowStockThreshold(thresholdInput);
+        localStorage.setItem("lowStockThreshold", thresholdInput.toString());
+
 
         setError("");
         setSuccess(true);
@@ -82,6 +89,22 @@ export default function MySettings() {
                 </Typography>
 
                 <LanguageSwitcher />
+            </Stack>
+
+            <Divider sx={{ mb: 2 }} />
+
+            {/* Low Stock Threshold */}
+            <Stack spacing={2}>
+                <TextField
+                    label={t('settings.lowStockThreshold')}
+                    size="small"
+                    type="number"
+                    value={thresholdInput}
+                    onChange={(e) => setThresholdInput(Number(e.target.value))}
+                    inputProps={{ min: 1 }}
+                    helperText={t('settings.lowStockThresholdHelper')}
+                    fullWidth
+                />
             </Stack>
 
             <Divider sx={{ mb: 2 }} />

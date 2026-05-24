@@ -1,4 +1,5 @@
 import type {Dayjs} from "dayjs";
+import type {LucideIcon} from "lucide-react";
 
 export interface Product {
     id: number;
@@ -248,10 +249,42 @@ export interface PurchaseOrderRequest {
     items: Item[];
 }
 
-export interface RouteRequest{
+export interface RouteRequest {
     notes: string;
     name: string;
     driverId: number | undefined | null;
     orderIds: number[];
     date: string;
+}
+
+export interface KpiCardResponse {
+    productKpi: ProductKpi;
+    orderKpi: OrderKpi;
+    customerKpi: CustomerKpi;
+}
+
+interface CustomerKpi {
+    totalCustomers: number;
+    deltaCustomersByYesterday: number;
+}
+
+interface ProductKpi {
+    totalProducts: number;
+    totalProductsByDate: number;
+    deltaPercentage: number;
+    productLowStock: number;
+    deltaLowStockByYesterday: number;
+}
+
+interface OrderKpi {
+    totalOrdersByDate: number;
+    deltaOrdersByYesterday: number;
+}
+
+export interface KpiCardType {
+    label: string;
+    value: string;
+    delta: string;
+    deltaPositive: boolean;
+    icon: LucideIcon;
 }

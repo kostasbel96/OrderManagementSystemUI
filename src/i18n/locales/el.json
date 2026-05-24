@@ -267,6 +267,8 @@
     "language": "Γλώσσα",
     "backendUrlLabel": "Διεύθυνση Backend",
     "backendUrlHelper": "π.χ. http://192.168.1.10:8080",
+    "lowStockThreshold": "Όριο χαμηλού αποθέματος",
+    "lowStockThresholdHelper": "Προϊόντα με απόθεμα κάτω από αυτή την τιμή θεωρούνται χαμηλά",
     "validation": {
       "mustStart": "Πρέπει να ξεκινά με http:// ή https://"
     },
@@ -373,6 +375,16 @@
     "units": "τεμ.",
     "stockLevels": "Επίπεδα αποθέματος",
     "recentOrders": "Πρόσφατες Παραγγελίες"
+  },
+  "kpi": {
+    "lowStock": "Χαμηλό απόθεμα",
+    "lowStockDelta": "{{delta}} νέα σήμερα",
+    "totalProducts": "Συνολικά είδη",
+    "totalProductsDelta": "{{delta}}% από χθες",
+    "totalOrders": "Παραγγελίες σήμερα",
+    "totalOrdersDelta": "{{delta}} από χθες",
+    "totalCustomers": "Συνολικοί Πελάτες",
+    "totalCustomersDelta": "{{delta}} από χθες"
   }
 
 

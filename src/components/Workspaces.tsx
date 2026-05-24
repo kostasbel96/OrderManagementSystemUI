@@ -143,7 +143,7 @@ const Workspaces: React.FC = () => {
                                  style={{
                                      width: `calc(100% - ${collapsed ? "70px" : "250px"})`,
                                  }}>
-                                {tab.component}
+                                {tab.component()}
                             </div>
                         </div>
                     );

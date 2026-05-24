@@ -31,7 +31,7 @@ export function DashboardNavButtons() {
                     variant="outlined"
                     size="small"
                     startIcon={<Icon size={14} />}
-                    onClick={() => addTab({ id, label: t(label), path: `/${id}`, component })}
+                    onClick={() => addTab({ id, label: t(label), path: `/${id}`, component: () => component })}
                     sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
                 >
                     {t(label)}

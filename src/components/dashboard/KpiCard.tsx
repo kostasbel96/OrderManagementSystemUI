@@ -1,16 +1,9 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { TrendingUp, TrendingDown, type LucideIcon } from 'lucide-react';
+import { TrendingUp, TrendingDown} from 'lucide-react';
+import type {KpiCardType} from "../../types/Types.ts";
 
-interface KpiCardProps {
-    label: string;
-    value: string;
-    delta: string;
-    deltaPositive: boolean;
-    icon: LucideIcon;
-}
-
-export function KpiCard({ label, value, delta, deltaPositive, icon: Icon }: Readonly<KpiCardProps>) {
+export function KpiCard({ label, value, delta, deltaPositive, icon: Icon }: Readonly<KpiCardType>) {
     return (
         <Box sx={{
             bgcolor: 'white',

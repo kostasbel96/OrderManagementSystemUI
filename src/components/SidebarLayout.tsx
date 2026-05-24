@@ -47,7 +47,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
         addTab({
             id: 'dashboard',
             label: t('nav.dashboard'),
-            component: <Dashboard />,
+            component: () => (<Dashboard />),
             path: '/'
         });
     }, []);
@@ -252,7 +252,7 @@ function NavItem({
         <div className="relative group">
             <button
                 onClick={() => {
-                    addTab({ id, label, component, path: id });
+                    addTab({ id, label, component: () => component , path: id });
                     setOpen(false);
                 }}
                 className={`
@@ -387,7 +387,7 @@ function NavItemWithSubmenu({
                             addTab({
                                 id: item.id,
                                 label: item.label,
-                                component: item.component,
+                                component: () => item.component,
                                 path: item.id
                             });
                             setOpen(false);

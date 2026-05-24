@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, type ReactNode, useCallback
 export interface TabContent {
   id: string;
   label: string;
-  component: ReactNode;
+  component: () => ReactNode;
   path: string; // Keep track of the path for navigation/identification
 }
 
