@@ -11,12 +11,17 @@ export const Kpis = () => {
     const [kpiCard, setKpiCard] = useState<KpiCardResponse | null>(null);
     const { lowStockThreshold } = useUIStore();
     const { t } = useTranslation();
+    const refreshKey = useUIStore((s) => s.refreshKey);
+
+    const getValue = (value: number) => {
+        return (value > 0) ? `+${value}` : value;
+    }
 
     useEffect(() => {
         getKpiCard(lowStockThreshold)
             .then(setKpiCard)
             .catch(console.error);
-    }, [lowStockThreshold]);
+    }, [lowStockThreshold, refreshKey]);
 
     if (!kpiCard) return null;
 
@@ -24,28 +29,28 @@ export const Kpis = () => {
         {
             label: t('kpi.totalProducts'),
             value: kpiCard.productKpi.totalProducts.toLocaleString(),
-            delta: t('kpi.totalProductsDelta', { delta: `+${kpiCard.productKpi.deltaPercentage}` }),
+            delta: t('kpi.totalProductsDelta', { delta: `${getValue(kpiCard.productKpi.deltaPercentage)}` }),
             deltaPositive: kpiCard.productKpi.deltaPercentage >= 0,
             icon: Package,
         },
         {
             label: t('kpi.totalOrders'),
             value: kpiCard.orderKpi.totalOrdersByDate.toLocaleString(),
-            delta: t('kpi.totalOrdersDelta', { delta: `+${kpiCard.orderKpi.deltaOrdersByYesterday}` }),
+            delta: t('kpi.totalOrdersDelta', { delta: `${getValue(kpiCard.orderKpi.deltaOrdersByYesterday)}` }),
             deltaPositive: kpiCard.orderKpi.deltaOrdersByYesterday >= 0,
             icon: ShoppingCartIcon
         },
         {
             label: t('kpi.lowStock'),
             value: String(kpiCard.productKpi.productLowStock),
-            delta: t('kpi.lowStockDelta', { delta: `+${kpiCard.productKpi.deltaLowStockByYesterday}` }),
+            delta: t('kpi.lowStockDelta', { delta: `${getValue(kpiCard.productKpi.deltaLowStockByYesterday)}` }),
             deltaPositive: false,
             icon: AlertTriangle,
         },
         {
             label: t('kpi.totalCustomers'),
             value: kpiCard.customerKpi.totalCustomers.toLocaleString(),
-            delta: t('kpi.totalCustomersDelta', { delta: `+${kpiCard.customerKpi.deltaCustomersByYesterday}` }),
+            delta: t('kpi.totalCustomersDelta', { delta: `${getValue(kpiCard.customerKpi.deltaCustomersByYesterday)}` }),
             deltaPositive: kpiCard.customerKpi.deltaCustomersByYesterday >= 0,
             icon: Users,
         }

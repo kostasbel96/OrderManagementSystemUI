@@ -1,14 +1,16 @@
-import React, { useRef, useEffect } from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTabs } from '../contexts/TabContext.tsx';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import {useUIStore} from "../hooks/store/useUIStore.ts";
+import { Menu, MenuItem } from '@mui/material';
 
 const Workspaces: React.FC = () => {
-    const { tabs, activeTabId, removeTab, setActiveTab } = useTabs();
+    const { tabs, activeTabId, removeTab, setActiveTab, removeAllTabs } = useTabs();
     const { t } = useTranslation();
     const scrollRef = useRef<HTMLDivElement>(null);
     const activeTabRef = useRef<HTMLDivElement>(null);
+    const [contextMenu, setContextMenu] = useState<{ mouseX: number; mouseY: number; tabId: string } | null>(null);
 
     const navigateTab = (direction: 'next' | 'prev') => {
         const currentIndex = tabs.findIndex(t => t.id === activeTabId);
@@ -24,7 +26,13 @@ const Workspaces: React.FC = () => {
         setActiveTab(tabs[nextIndex].id);
     };
 
-    // Χειροκίνητο scroll στη μπάρα των tabs
+    const handleContextMenu = (e: React.MouseEvent, tabId: string) => {
+        e.preventDefault();
+        setContextMenu({ mouseX: e.clientX, mouseY: e.clientY, tabId });
+    };
+
+    const handleClose = () => setContextMenu(null);
+
     useEffect(() => {
         if (activeTabRef.current && scrollRef.current) {
             const container = scrollRef.current;
@@ -96,6 +104,7 @@ const Workspaces: React.FC = () => {
                         const isActive = activeTabId === tab.id;
                         return (
                             <div
+                                onContextMenu={(e) => handleContextMenu(e, tab.id)}
                                 key={tab.id}
                                 ref={isActive ? activeTabRef : null}
                                 className={`
@@ -106,7 +115,7 @@ const Workspaces: React.FC = () => {
                                 `}
                                 onClick={() => setActiveTab(tab.id)}
                             >
-                                <span className="truncate max-w-[150px]">{tab.label}</span>
+                                <span className="truncate max-w-[200px]">{tab.label}</span>
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -123,6 +132,37 @@ const Workspaces: React.FC = () => {
                         );
                     })}
                 </div>
+
+                {/* Context Menu */}
+                <Menu
+                    open={contextMenu !== null}
+                    onClose={handleClose}
+                    anchorReference="anchorPosition"
+                    anchorPosition={contextMenu ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined}
+                >
+                    <MenuItem onClick={() => {
+                        if (contextMenu) removeTab(contextMenu.tabId);
+                        handleClose();
+                    }}>
+                        {t('tabs.close')}
+                    </MenuItem>
+                    <MenuItem onClick={() => {
+                        if (contextMenu) {
+                            tabs
+                                .filter((tab) => tab.id !== contextMenu.tabId)
+                                .forEach((tab) => removeTab(tab.id));
+                        }
+                        handleClose();
+                    }}>
+                        {t('tabs.closeOthers')}
+                    </MenuItem>
+                    <MenuItem onClick={() => {
+                        removeAllTabs();
+                        handleClose();
+                    }}>
+                        {t('tabs.closeAll')}
+                    </MenuItem>
+                </Menu>
             </div>
 
             {/* Tab Content Area */}

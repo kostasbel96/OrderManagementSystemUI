@@ -11,6 +11,7 @@ import useCustomerFormValidation, {
 } from "../../../hooks/useCustomerFormValidation.ts";
 import LabeledField from "../../ui/LabeledField.tsx";
 import {useTranslation} from "react-i18next";
+import {useUIStore} from "../../../hooks/store/useUIStore.ts";
 
 interface FormCustomerProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,6 +34,7 @@ const FormCustomer = ({
                       }: FormCustomerProps) => {
 
     const { t } = useTranslation();
+    const { incrementRefreshKey } = useUIStore();
 
     const [values, setValues] = useState<FormValues>(() => {
         const saved = localStorage.getItem("customerDraft");
@@ -67,6 +69,7 @@ const FormCustomer = ({
                     setPopUpMessage(t('messages.customerAdded'));
                     setValues(initialValues);
                     localStorage.removeItem("customerDraft");
+                    incrementRefreshKey();
                 })
                 .catch((error) => {
                     setPopUpMessage(error.message);

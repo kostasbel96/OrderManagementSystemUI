@@ -64,13 +64,13 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                 `}
             >
                 {/* HEADER */}
-                <div className="flex items-center justify-between p-2 border-b border-gray-200">
+                <div className="flex items-center justify-between p-2 border-b border-gray-200 h-12">
 
                     {!collapsed && (
                         <span className="font-bold text-lg text-blue-600 ml-2">{t('app.adminTitle')}</span>
                     )}
 
-                    <div className="flex items-center justify-center gap-2">
+                    <div className={`flex items-center justify-center ${collapsed ? "w-full" : ""}`}>
                         <button
                             onClick={() => toggleSidebar()}
                             className="flex items-center justify-center w-8 h-8 rounded hover:bg-gray-100"

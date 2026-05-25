@@ -20,6 +20,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import { useTranslation } from 'react-i18next';
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
 
 const DriversView = () => {
 
@@ -41,6 +42,8 @@ const DriversView = () => {
     });
 
     const { t } = useTranslation();
+    const refreshKey = useUIStore((s) => s.refreshKey);
+    const { incrementRefreshKey } = useUIStore();
 
     const handleClickOpen = (row: Driver) => {
         setOpenEdit(true);
@@ -181,10 +184,12 @@ const DriversView = () => {
 
             return newRows;
         });
+        incrementRefreshKey();
     };
 
     const handleDeleteDriver = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
+        incrementRefreshKey();
     };
 
     useEffect(() => {
@@ -201,7 +206,7 @@ const DriversView = () => {
                 setRowCount(data.totalElements);
             })
             .finally(() => setLoading(false));
-    }, [paginationModel, searchName, isSearching, sortModel, filterModel]);
+    }, [paginationModel, searchName, isSearching, sortModel, filterModel, refreshKey]);
 
 
     return (

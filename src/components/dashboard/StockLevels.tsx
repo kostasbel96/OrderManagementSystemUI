@@ -9,6 +9,7 @@ import {getStockLevels} from "../../services/dashboardService.ts";
 import type {StockItem} from "../../types/Types.ts";
 import {TextField} from "@mui/material";
 import {useTranslation} from "react-i18next";
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
 
 function getBarColor(pct: number): string {
     if (pct <= 10) return '#c0392b';   // bar-low
@@ -20,6 +21,7 @@ export function StockLevels() {
     const [stocks, setStocks] = useState<StockItem[]>([]);
     const [threshold, setThreshold] = useState<number>(30);
     const { t } = useTranslation();
+    const refreshKey = useUIStore((s) => s.refreshKey);
 
 
     useEffect(() => {
@@ -28,7 +30,7 @@ export function StockLevels() {
         }).catch((err) => {
             console.log(err);
         });
-    }, [threshold]);
+    }, [threshold, refreshKey]);
 
     return (
         <Card variant="outlined" sx={{ borderRadius: 2 }}>

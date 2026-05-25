@@ -83,7 +83,7 @@ const LoginPage = () => {
                 {/* Form */}
                 <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <TextField
-                        label={t('auth.email') || 'Username'}
+                        label={t('auth.username') || 'Username'}
                         variant="outlined"
                         size="small"
                         fullWidth

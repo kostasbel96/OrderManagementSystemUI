@@ -18,6 +18,7 @@ import {PaymentStatus, paymentStatusConfig, type PaymentStatusValue} from "../..
 import {OrderStatus, orderStatusConfig, type OrderStatusValue} from "../../../types/enums/OrderStatus.ts";
 import type {SetStateAction} from "react";
 import {getPurchaseOrder} from "../../../services/purchaseOrderService.ts";
+import {formatCurrency} from "../../../helper/currencyHelper.ts";
 
 
 interface ColumnConfigCustomerOrdersProps {
@@ -26,6 +27,8 @@ interface ColumnConfigCustomerOrdersProps {
     setOpenEdit: React.Dispatch<SetStateAction<boolean>>;
     setOpenDeletePopUp: React.Dispatch<SetStateAction<boolean>>;
     setRowToEdit: React.Dispatch<SetStateAction<OrderItem | Customer | Product | Driver | Route | Receipt | Payment | Supplier | PurchaseOrderItem | undefined>>;
+    currency: string;
+    locale: string;
 }
 
 const getColumnConfigSupplierOrders = ({
@@ -33,7 +36,9 @@ const getColumnConfigSupplierOrders = ({
                                            setOnDeleteContent,
                                            setOpenDeletePopUp,
                                            setOperation,
-                                           setRowToEdit
+                                           setRowToEdit,
+                                           currency,
+                                           locale
                                         }: ColumnConfigCustomerOrdersProps, t: any) => {
 
     const productsFilterOperator = {
@@ -98,7 +103,7 @@ const getColumnConfigSupplierOrders = ({
                         height: '100%',
                     }}
                 >
-                    {params.value ? params.value + " €" : ""}
+                    {formatCurrency(params.value, currency, locale)}
                 </div>
             ) },
         { field: 'paidAmount', headerName: t('orders.table.paid'), width: 80, type: "number", renderCell: (params) => (
@@ -110,7 +115,7 @@ const getColumnConfigSupplierOrders = ({
                         height: '100%',
                     }}
                 >
-                    {params.value ?? ""}
+                    {formatCurrency(params.value, currency, locale)}
                 </div>
             ) },
         {field: 'date', headerName: t('orders.table.date'), type: 'date', width: 80, renderCell: (params) => (
@@ -129,7 +134,13 @@ const getColumnConfigSupplierOrders = ({
             )},
         {
             field: 'paymentStatus', headerName: t('orders.table.paymentStatus'), type: 'singleSelect', width: 150,
-            valueOptions: Object.values(PaymentStatus),
+            valueOptions: Object.values(PaymentStatus).map((value) => (
+                    {
+                        value,
+                        label: t(`paymentStatus.${value}`)
+                    }
+                )
+            ),
             renderCell: (params) => {
                 const cfg = paymentStatusConfig[params.row.paymentStatus as PaymentStatusValue];
                 if (!cfg) return params.row.paymentStatus;
@@ -152,7 +163,7 @@ const getColumnConfigSupplierOrders = ({
                         width: 6, height: 6, borderRadius: '50%',
                         background: cfg.dot, flexShrink: 0,
                     }} />
-                    {params.row.paymentStatus}
+                    {t(`paymentStatus.${params.row.paymentStatus}`)}
                 </span>
                     </div>
                 );
@@ -160,7 +171,13 @@ const getColumnConfigSupplierOrders = ({
         },
         {
             field: 'status', headerName: t('orders.table.status'), type: 'singleSelect', width: 140,
-            valueOptions: Object.values(OrderStatus),
+            valueOptions: Object.values(OrderStatus).map((value) => (
+                    {
+                        value,
+                        label: t(`orderStatus.${value}`)
+                    }
+                )
+            ),
             renderCell: (params) => {
                 const cfg = orderStatusConfig[params.row.status as OrderStatusValue];
                 if (!cfg) return params.row.status;
@@ -183,7 +200,7 @@ const getColumnConfigSupplierOrders = ({
                               width: 6, height: 6, borderRadius: '50%',
                               background: cfg.dot, flexShrink: 0,
                           }} />
-                            {params.row.status}
+                            {t(`orderStatus.${params.row.status}`)}
                         </span>
                     </div>
                 );

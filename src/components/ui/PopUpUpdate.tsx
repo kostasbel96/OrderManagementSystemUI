@@ -402,6 +402,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     name="quantity"
                     label={t('popup.labels.productQuantity')}
                     type="number"
+                    inputProps={{ min: 0, step: "1"}}
                     fullWidth
                     variant="standard"
                     error={Boolean(productErrors?.quantity)}
@@ -645,7 +646,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 >
                     {Object.values(OrderStatus).map((status) => (
                         <MenuItem key={status} value={status}>
-                            {status}
+                            {t(`orderStatus.${status}`)}
                         </MenuItem>
                     ))}
                 </TextField>
@@ -706,7 +707,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 >
                     {Object.values(OrderStatus).map((status) => (
                         <MenuItem key={status} value={status}>
-                            {status}
+                            {t(`orderStatus.${status}`)}
                         </MenuItem>
                     ))}
                 </TextField>
@@ -798,7 +799,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 >
                     {Object.values(RouteStatus).map((status) => (
                         <MenuItem key={status} value={status}>
-                            {status}
+                            {t(`routeStatus.${status}`)}
                         </MenuItem>
                     ))}
                 </TextField>
@@ -957,8 +958,8 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                     onChange={handleChange}
                     value={supplierValues.vat}
                     margin="dense"
-                    id="vatNumber"
-                    name="vatNumber"
+                    id="vat"
+                    name="vat"
                     label={t('popup.labels.vatNumber')}
                     type="text"
                     fullWidth
@@ -995,25 +996,21 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
             case "orderCustomer":{
                 const order = rowToEdit as OrderItem;
                 setCustomerOrderValues(order);
-                
-                // Deep copy initial items so they don't change when selectedProductsWithQty changes
                 setInitialItems(order.items.map(item => ({...item})));
-                
-                // Shallow copy is enough here since we want to edit these
-                setSelectedProductsWithQty([...order.items]);
-
+                setSelectedProductsWithQty(order.items.map(item => ({
+                    ...item,
+                    priceInput: String(item.price ?? "")
+                })));
                 break;
             }
             case "orderSupplier": {
                 const order = rowToEdit as PurchaseOrderItem;
                 setSupplierOrderValues(order);
-
-                // Deep copy initial items so they don't change when
                 setInitialItems(order.items.map(item => ({...item})));
-
-                // Shallow copy is enough here since we want to edit these
-                setSelectedProductsWithQty([...order.items]);
-
+                setSelectedProductsWithQty(order.items.map(item => ({
+                    ...item,
+                    priceInput: String(item.price ?? "")
+                })));
                 break;
             }
             case "Drivers":
@@ -1043,7 +1040,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
 
     return (
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{t('popup.updateDetails', { typeOf })}</DialogTitle>
+                <DialogTitle>{t('popup.updateDetails', { typeOf: t(`typeNamesOperation.${typeOf}`) })}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         {t('popup.confirmMessage')}

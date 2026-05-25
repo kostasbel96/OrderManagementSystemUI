@@ -6,6 +6,12 @@ type UIStore = {
     toggleSidebar: () => void;
     lowStockThreshold: number;
     setLowStockThreshold: (v: number) => void;
+    refreshKey: number;
+    incrementRefreshKey: () => void;
+    currency: string;
+    setCurrency: (v: string) => void;
+    locale: string;
+    setLocale: (v: string) => void;
 };
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -18,4 +24,13 @@ export const useUIStore = create<UIStore>((set) => ({
 
     lowStockThreshold: Number(localStorage.getItem("lowStockThreshold")) || 10,
     setLowStockThreshold: (v) => set({ lowStockThreshold: v }),
+
+    refreshKey: 0,
+    incrementRefreshKey: () => set((state) => ({ refreshKey: state.refreshKey + 1 })),
+
+    currency: 'EUR',
+    setCurrency: (v) => set({ currency: v }),
+
+    locale: 'el-GR',
+    setLocale: (v) => set({ locale: v }),
 }));

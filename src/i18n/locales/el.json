@@ -55,7 +55,7 @@
   "auth": {
     "login": "Σύνδεση",
     "logout": "Αποσύνδεση",
-    "email": "Email",
+    "username": "Όνομα χρήστη",
     "password": "Κωδικός"
   },
   "common": {
@@ -91,11 +91,19 @@
     "save": "Αποθήκευση Διαδρομής",
     "clearStops": "Καθαρισμός στάσεων",
     "addToRoute": "Προσθήκη στη Διαδρομή ({{count}})",
-    "clearSelection": "Καθαρισμός επιλογής ({{count}})"
+    "clearSelection": "Καθαρισμός επιλογής ({{count}})",
+    "id": "ID",
+    "name": "Όνομα",
+    "driver": "Οδηγός",
+    "notes": "Σημειώσεις",
+    "date": "Ημερομηνία",
+    "orders": "Παραγγελίες",
+    "status": "Κατάσταση",
+    "actions": "Ενέργειες"
   },
   "popup": {
-    "updateDetails": "Ενημερώστε τις λεπτομέρειες του {{typeOf}} παρακάτω.",
-    "deleteDetails": "Διαγράψτε τις λεπτομέρειες του {{typeOf}} παρακάτω.",
+    "updateDetails": "Ενημερώστε τις λεπτομέρειες {{typeOf}} παρακάτω.",
+    "deleteDetails": "Διαγράψτε τις λεπτομέρειες {{typeOf}} παρακάτω.",
     "confirmMessage": "Βεβαιωθείτε ότι όλες οι πληροφορίες είναι σωστές πριν αποθηκεύσετε τις αλλαγές σας.",
     "labels": {
       "productId": "Αναγνωριστικό Προϊόντος",
@@ -202,7 +210,10 @@
     "order": "Παραγγελία",
     "customer": "Πελάτης",
     "route": "Διαδρομή",
-    "supplier": "Προμηθευτής"
+    "supplier": "Προμηθευτής",
+    "close": "Κλείσιμο",
+    "closeAll": "Κλείσιμο όλων",
+    "closeOthers": "Κλείσιμο υπολοίπων"
   }
   ,
   "orders": {
@@ -272,7 +283,10 @@
     "validation": {
       "mustStart": "Πρέπει να ξεκινά με http:// ή https://"
     },
-    "savedMessage": "Οι ρυθμίσεις αποθηκεύτηκαν με επιτυχία"
+    "savedMessage": "Οι ρυθμίσεις αποθηκεύτηκαν με επιτυχία",
+    "currency": "Νόμισμα",
+    "languageHelper": "Επιλέξτε γλώσσα εφαρμογής",
+    "currencyHelper": "Εμφάνιση τιμών στο επιλεγμένο νόμισμα"
   },
   "language": {
     "english": "English",
@@ -283,8 +297,8 @@
       "title": "Δημιουργία Οδηγού",
       "name": "Όνομα",
       "lastName": "Επίθετο",
-      "phone1": "Τηλ 1",
-      "phone2": "Τηλ 2"
+      "phone1": "Τηλέφωνο 1",
+      "phone2": "Τηλέφωνο 2"
     },
     "order": {
       "title": "Δημιουργία Παραγγελίας",
@@ -330,8 +344,8 @@
       "title": "Δημιουργία Πελάτη",
       "name": "Όνομα",
       "lastName": "Επίθετο",
-      "phone1": "Τηλ 1",
-      "phone2": "Τηλ 2",
+      "phone1": "Τηλέφωνο 1",
+      "phone2": "Τηλέφωνο 2",
       "email": "Email"
     },
     "supplier": {
@@ -385,6 +399,31 @@
     "totalOrdersDelta": "{{delta}} από χθες",
     "totalCustomers": "Συνολικοί Πελάτες",
     "totalCustomersDelta": "{{delta}} από χθες"
+  },
+  "orderStatus": {
+    "PENDING": "Εκκρεμεί",
+    "SHIPPED": "Απεστάλη",
+    "DELIVERED": "Παραδόθηκε"
+  },
+  "paymentStatus": {
+    "UNPAID": "Απλήρωτο",
+    "PARTIAL": "Μερική Πληρωμή",
+    "PAID": "Πληρώθηκε"
+  },
+  "routeStatus": {
+    "PLANNED": "Προγραμματισμένη",
+    "IN_PROGRESS": "Σε Εξέλιξη",
+    "COMPLETED": "Ολοκληρώθηκε",
+    "CANCELLED": "Ακυρώθηκε"
+  },
+  "typeNamesOperation": {
+    "Products": "του Προϊόντος",
+    "Customers": "του Πελάτη",
+    "Drivers": "του Οδηγού",
+    "Routes": "της Διαδρομής",
+    "Suppliers": "του Προμηθευτή",
+    "orderCustomer": "της Παραγγελίας Πελάτη",
+    "orderSupplier": "της Παραγγελίας Προμηθευτή"
   }
 
 

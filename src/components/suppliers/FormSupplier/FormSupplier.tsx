@@ -9,6 +9,7 @@ import LabeledField from "../../ui/LabeledField.tsx";
 import {addSupplier} from "../../../services/supplierService.ts";
 import useSupplierFormValidation, {type SupplierFormValues} from "../../../hooks/useSupplierFormValidation.ts";
 import {useTranslation} from "react-i18next";
+import {useUIStore} from "../../../hooks/store/useUIStore.ts";
 
 interface FormSupplierProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,6 +32,7 @@ const FormSupplier = ({
                           setPopUpMessage,
                       }: FormSupplierProps) => {
     const { t } = useTranslation();
+    const { incrementRefreshKey } = useUIStore();
 
     const [values, setValues] = useState<SupplierFormValues>(() => {
         const saved = localStorage.getItem("supplierDraft");
@@ -66,6 +68,7 @@ const FormSupplier = ({
                     setPopUpMessage(t('messages.supplierAdded'));
                     setValues(initialValues);
                     localStorage.removeItem("supplierDraft");
+                    incrementRefreshKey();
                 })
                 .catch((error) => {
                     setPopUpMessage(error.message);

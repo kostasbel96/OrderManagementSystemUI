@@ -13,6 +13,7 @@ interface TabContextType {
   addTab: (tab: TabContent) => void;
   removeTab: (tabId: string) => void;
   setActiveTab: (tabId: string) => void;
+  removeAllTabs: () => void;
 }
 
 const TabContext = createContext<TabContextType | undefined>(undefined);
@@ -44,12 +45,17 @@ export const TabProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     });
   }, [activeTabId]);
 
+  const removeAllTabs = useCallback(() => {
+    setTabs([]);
+    setActiveTabId(null);
+  }, []);
+
   const setActiveTab = useCallback((tabId: string) => {
     setActiveTabId(tabId);
   }, []);
 
   return (
-    <TabContext.Provider value={{ tabs, activeTabId, addTab, removeTab, setActiveTab }}>
+    <TabContext.Provider value={{ tabs, activeTabId, addTab, removeTab, setActiveTab, removeAllTabs }}>
       {children}
     </TabContext.Provider>
   );

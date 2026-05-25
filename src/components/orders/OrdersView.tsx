@@ -21,6 +21,7 @@ import getColumnConfigCustomerOrders from "./config/getColumnConfigCustomerOrder
 import useSearchOrders from "../../hooks/useSearchOrders.ts";
 import getColumnConfigSupplierOrders from "./config/getColumnConfigSupplierOrders.tsx";
 import { useTranslation } from 'react-i18next';
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
 
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -51,6 +52,8 @@ const OrdersView = ({columnVisibility,
                         orderType = "orderCustomer",
                     filters}: OrdersViewProps) => {
 
+    const refreshKey = useUIStore((s) => s.refreshKey);
+    const { incrementRefreshKey, currency, locale } = useUIStore();
     const [rows, setRows] = useState<(Customer | Product | OrderRow | Driver | Route | Receipt | Supplier)[]>([]);
     const [rowCount, setRowCount] = useState(0);
     const [searchName, setSearchName] = useState(searchTerm ?? "");
@@ -76,14 +79,18 @@ const OrdersView = ({columnVisibility,
             setOnDeleteContent,
             setOpenDeletePopUp,
             setOperation,
-            setRowToEdit
+            setRowToEdit,
+            currency,
+            locale
         }, t)
         : getColumnConfigSupplierOrders({
             setOpenEdit,
             setOnDeleteContent,
             setOpenDeletePopUp,
             setOperation,
-            setRowToEdit
+            setRowToEdit,
+            currency,
+            locale
         }, t);
 
     const {loading, search} = useSearchOrders({
@@ -110,15 +117,15 @@ const OrdersView = ({columnVisibility,
 
             return newRows;
         });
+        incrementRefreshKey();
     };
 
     const handleDeleteOrder = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
+        incrementRefreshKey();
     };
 
-    // OrdersView.tsx - μέσα στο useEffect
     useEffect(() => {
-        console.log("searchTerm changed:", searchTerm);
         if (searchTerm) {
             setSearchName(searchTerm);
             setIsSearching(true);
@@ -130,7 +137,7 @@ const OrdersView = ({columnVisibility,
 
     useEffect(() => {
         search();
-    }, [search])
+    }, [search, refreshKey])
 
     return (
         <>

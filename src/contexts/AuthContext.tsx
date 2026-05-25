@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import {createContext, useContext, useState, useEffect, type ReactNode, useMemo} from "react";
 import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
@@ -52,8 +52,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken(null);
     };
 
+    const authDetails = useMemo(() => ({token, login, logout}), [token, login, logout]);
+
     return (
-        <AuthContext.Provider value={{ token, login, logout }}>
+        <AuthContext.Provider value={authDetails}>
             {children}
         </AuthContext.Provider>
     );

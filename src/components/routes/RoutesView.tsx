@@ -26,6 +26,8 @@ import {getRoute, searchRoutes} from "../../services/routeService.ts";
 import {RouteStatus, type RouteStatusValue, statusConfig} from "../../types/enums/RouteStatus.ts";
 import { Tooltip } from "@mui/material";
 import dayjs from "dayjs";
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
+import {useTranslation} from "react-i18next";
 
 interface OrdersViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -45,6 +47,10 @@ const OrdersView = ({columnVisibility,
                         selectionModel,
                         height,
                         width}: OrdersViewProps) => {
+
+    const refreshKey = useUIStore((s) => s.refreshKey);
+    const { incrementRefreshKey } = useUIStore();
+    const { t } = useTranslation();
 
     const [rows, setRows] = useState<(Customer | Product | OrderRow | Driver | Route | Receipt | Supplier)[]>([]);
     const [rowCount, setRowCount] = useState(0);
@@ -79,7 +85,7 @@ const OrdersView = ({columnVisibility,
     }
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 20, renderCell: (params) => (
+        { field: 'id', headerName: t('routes.id'), width: 20, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -94,7 +100,7 @@ const OrdersView = ({columnVisibility,
                     {params.value}
                 </div>
             ) },
-        {field: 'name', headerName: 'Name', width: 160, renderCell: (params) => (
+        {field: 'name', headerName: t('routes.name'), width: 160, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -107,7 +113,7 @@ const OrdersView = ({columnVisibility,
                     {params.value}
                 </div>
             )},
-        { field: 'driver', headerName: 'Driver', width: 200,
+        { field: 'driver', headerName: t('routes.driver'), width: 200,
             valueGetter: (_, row) =>
                 `${row.driver?.name ?? ''} ${row.driver?.lastName ?? ''}`,renderCell: (params) => (
                 <div
@@ -124,7 +130,7 @@ const OrdersView = ({columnVisibility,
                     {params.value}
                 </div>
             ) },
-        { field: 'notes', headerName: 'Notes', width: 80, renderCell: (params) => {
+        { field: 'notes', headerName: t('routes.driver'), width: 80, renderCell: (params) => {
                 const value = params.value || "";
                 return <Tooltip title={value} arrow placement="top-start">
                     <div
@@ -150,7 +156,7 @@ const OrdersView = ({columnVisibility,
                     </div>
                 </Tooltip>
             } },
-        {field: 'date', headerName: 'Date', type: 'date', width: 80, renderCell: (params) => (
+        {field: 'date', headerName: t('routes.date'), type: 'date', width: 80, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -165,7 +171,7 @@ const OrdersView = ({columnVisibility,
                 </div>
             )},
         {
-            field: 'orders', headerName:'Orders', width: 100, renderCell: (params) => (
+            field: 'orders', headerName:t('routes.orders'), width: 100, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -179,7 +185,7 @@ const OrdersView = ({columnVisibility,
             )
         },
         {
-            field: 'status', headerName:'Status', type: 'singleSelect', width: 140,
+            field: 'status', headerName:t('routes.status'), type: 'singleSelect', width: 140,
             valueOptions: Object.values(RouteStatus),
             renderCell: (params) => {
                 const cfg = statusConfig[params.row.status as RouteStatusValue];
@@ -203,7 +209,7 @@ const OrdersView = ({columnVisibility,
                               width: 6, height: 6, borderRadius: '50%',
                               background: cfg.dot, flexShrink: 0,
                           }} />
-                            {params.row.status}
+                            {t(`routeStatus.${params.row.status}`)}
                         </span>
                     </div>
                 );
@@ -211,7 +217,7 @@ const OrdersView = ({columnVisibility,
         },
         {
             field: 'actions',
-            headerName: 'Actions',
+            headerName: t('routes.actions'),
             width: 100,
             sortable: false,
             filterable: false,
@@ -259,10 +265,12 @@ const OrdersView = ({columnVisibility,
 
             return newRows;
         });
+        incrementRefreshKey();
     };
 
     const handleDeleteRoute = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
+        incrementRefreshKey();
     };
 
     useEffect(() => {
@@ -292,7 +300,7 @@ const OrdersView = ({columnVisibility,
             })
             .catch(() => console.log("error fetching routes"))
             .finally(() => setLoading(false));
-    }, [paginationModel, isSearching, searchName, sortModel, filterModel])
+    }, [paginationModel, isSearching, searchName, sortModel, filterModel, refreshKey])
 
     return (
         <>

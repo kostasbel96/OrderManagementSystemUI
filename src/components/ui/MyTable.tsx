@@ -10,6 +10,9 @@ import Search from "../Search.tsx";
 import {Paper} from "@mui/material";
 import {useUIStore} from "../../hooks/store/useUIStore.ts";
 import React from "react";
+import { elGR } from '@mui/x-data-grid/locales';
+import { enUS } from '@mui/x-data-grid/locales';
+import { useTranslation } from 'react-i18next';
 
 type TableProps = {
     columns: GridColDef[];
@@ -61,6 +64,16 @@ const MyTable = ({columns,
                       showSearchBar}: TableProps)=>{
 
     const collapsed = useUIStore((s) => s.sidebarCollapsed);
+
+    const { i18n } = useTranslation();
+
+    const customElGR = {
+        ...elGR.components.MuiDataGrid.defaultProps.localeText,
+        filterOperatorDoesNotEqual: 'δεν ισούται',
+        filterOperatorIsAnyOf: 'είναι ένα από',
+        filterOperatorDoesNotContain: 'δεν περιέχει'
+    };
+
     return (
         <div className="mt-5 flex flex-col space-y-2 justify-center items-center px-4">
             {showSearchBar ?? <Search
@@ -81,6 +94,11 @@ const MyTable = ({columns,
             }}
             >
                 <DataGrid
+                    localeText={i18n.language === 'el' ?
+                        customElGR :
+                        enUS.components.MuiDataGrid.defaultProps.localeText
+                    }
+
                     rows={rows}
                     isRowSelectable={() => !loading}
                     columns={columns}

@@ -14,6 +14,7 @@ import {useSupplierSearch} from "../../hooks/useSupplierSearch.ts";
 import OMSSelect from "../ui/OMSSelect.tsx";
 import * as React from "react";
 import {addPayment} from "../../services/paymentService.ts";
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
 
 interface FormReceiptProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,6 +23,7 @@ interface FormReceiptProps {
 }
 
 const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptProps) => {
+    const { incrementRefreshKey } = useUIStore();
     const [selectValue, setSelectValue] = useState<string>("orderCustomer");
     const [inputValue, setInputValue] = useState("");
     const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
@@ -70,6 +72,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                         setSubmitted(true);
                         setPopUpMessage(t('messages_ext.savedGeneric', { item: t('typeNames.receipt') }));
                         console.log(data);
+                        incrementRefreshKey();
                     })
                     .catch((error) => {
                         setPopUpMessage(error.message);

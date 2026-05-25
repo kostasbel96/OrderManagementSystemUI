@@ -3,11 +3,21 @@ import { FormControl, Select, MenuItem, Box } from "@mui/material";
 
 type Lang = "en" | "el";
 
-export default function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+    setLocale: (locale: string) => void;
+}
+
+export default function LanguageSwitcher({setLocale}: LanguageSwitcherProps) {
     const { i18n, t } = useTranslation();
+
+    const localeMap: Record<Lang, string> = {
+        el: 'el-GR',
+        en: 'en-US',
+    };
 
     const changeLang = (lang: Lang) => {
         i18n.changeLanguage(lang);
+        setLocale(localeMap[lang]);
         localStorage.setItem("lang", lang);
     };
 

@@ -11,6 +11,7 @@ import useDriverFormValidation, {
 } from "../../../hooks/useDriverFormValidation.ts";
 import LabeledField from "../../ui/LabeledField.tsx";
 import {addDriver} from "../../../services/driverService.ts";
+import {useUIStore} from "../../../hooks/store/useUIStore.ts";
 
 interface FormCustomerProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,6 +31,8 @@ const FormDriver = ({
                           setSuccess,
                           setPopUpMessage,
                       }: FormCustomerProps) => {
+
+    const { incrementRefreshKey } = useUIStore();
 
     const [values, setValues] = useState<FormDriverValues>(() => {
         const saved = localStorage.getItem("driverDraft");
@@ -63,6 +66,7 @@ const FormDriver = ({
                     setPopUpMessage("Driver added successfully.");
                     setValues(initialValues);
                     localStorage.removeItem("driverDraft");
+                    incrementRefreshKey();
                 })
                 .catch((error) => {
                     setPopUpMessage(error.message);

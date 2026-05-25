@@ -22,9 +22,12 @@ import dayjs from "dayjs";
 import getColumnConfigCustomerReceipt from "./config/getColumnConfigCustomerReceipt.tsx";
 import getColumnConfigSupplierReceipt from "./config/getColumnConfigSupplierReceipt.tsx";
 import {searchPayments} from "../../services/paymentService.ts";
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
 
 const ReceiptsView = ({receiptType  = "receipt"}) => {
     const { t } = useTranslation();
+    const refreshKey = useUIStore((s) => s.refreshKey);
+    const { incrementRefreshKey, currency, locale} = useUIStore();
 
     const [rows, setRows] = useState<(Customer | Product | OrderRow | Driver | Route | Receipt | Payment)[]>([]);
     const [rowCount, setRowCount] = useState(0);
@@ -44,11 +47,12 @@ const ReceiptsView = ({receiptType  = "receipt"}) => {
 
     const handleDeleteReceipt = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
+        incrementRefreshKey();
     };
 
     const columns = useMemo(() => receiptType === "receipt" ?
-                        getColumnConfigCustomerReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation}, t) :
-                        getColumnConfigSupplierReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation}, t),
+                        getColumnConfigCustomerReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation, currency, locale}, t) :
+                        getColumnConfigSupplierReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation, currency, locale}, t),
     [receiptType, t]);
 
     useEffect(() => {
@@ -103,7 +107,7 @@ const ReceiptsView = ({receiptType  = "receipt"}) => {
                 .finally(() => setLoading(false));
         }
 
-    }, [paginationModel, isSearching, searchName, sortModel, filterModel])
+    }, [paginationModel, isSearching, searchName, sortModel, filterModel, refreshKey])
 
     return (
         <>

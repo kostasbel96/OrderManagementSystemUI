@@ -63,7 +63,7 @@
   "auth": {
     "login": "Login",
     "logout": "Logout",
-    "email": "Email",
+    "username": "Username",
     "password": "Password"
   },
   "common": {
@@ -98,7 +98,15 @@
     "save": "Save Route",
     "clearStops": "Clear stops",
     "addToRoute": "Add to Route ({{count}})",
-    "clearSelection": "Clear selection ({{count}})"
+    "clearSelection": "Clear selection ({{count}})",
+    "id": "ID",
+    "name": "Name",
+    "driver": "Driver",
+    "notes": "Notes",
+    "date": "Date",
+    "orders": "Orders",
+    "status": "Status",
+    "actions": "Actions"
   },
   "popup": {
     "updateDetails": "Update the {{typeOf}} details below.",
@@ -207,7 +215,10 @@
     "customer": "Customer",
     "route": "Route",
     "supplier": "Supplier",
-    "driver": "Driver"
+    "driver": "Driver",
+    "close": "Close",
+    "closeAll": "Close all",
+    "closeOthers": "Close others"
   },
   "orders": {
     "table": {
@@ -271,7 +282,10 @@
     "validation": {
       "mustStart": "Must start with http:// or https://"
     },
-    "savedMessage": "Settings saved successfully"
+    "savedMessage": "Settings saved successfully",
+    "currency": "Currency",
+    "languageHelper": "Select application language",
+    "currencyHelper": "Display prices in the selected currency"
   },
   "language": {
     "english": "English",
@@ -394,5 +408,30 @@
     "totalOrdersDelta": "{{delta}} from yesterday",
     "totalCustomers": "Total Customers",
     "totalCustomersDelta": "{{delta}} from yesterday"
+  },
+  "orderStatus": {
+    "PENDING": "Pending",
+    "SHIPPED": "Shipped",
+    "DELIVERED": "Delivered"
+  },
+  "paymentStatus": {
+    "UNPAID": "Unpaid",
+    "PARTIAL": "Partial",
+    "PAID": "Paid"
+  },
+  "routeStatus": {
+    "PLANNED": "Planned",
+    "IN_PROGRESS": "In Progress",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled"
+  },
+  "typeNamesOperation": {
+    "Products": "Product",
+    "Customers": "Customer",
+    "Drivers": "Driver",
+    "Routes": "Route",
+    "Suppliers": "Supplier",
+    "orderCustomer": "Order",
+    "orderSupplier": "Supplier Order"
   }
 }

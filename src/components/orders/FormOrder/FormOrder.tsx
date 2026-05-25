@@ -18,6 +18,7 @@ import OMSSelect from "../../ui/OMSSelect.tsx";
 import * as React from "react";
 import {useSupplierSearch} from "../../../hooks/useSupplierSearch.ts";
 import useAddOrder from "../../../hooks/useAddOrder.ts";
+import {useUIStore} from "../../../hooks/store/useUIStore.ts";
 
 interface FormOrderProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,6 +31,8 @@ const FormOrder = ({
                        setSuccess,
                        setPopUpMessage,
                    }: FormOrderProps) => {
+
+    const { incrementRefreshKey } = useUIStore();
 
     const [selectValue, setSelectValue] = React.useState("orderCustomer");
 
@@ -86,6 +89,7 @@ const FormOrder = ({
         setPopUpMessage("");
         const success = await saveOrder(selectValue);
         if (!success) return;
+        incrementRefreshKey();
         setSelectedProductsWithQty([]);
         setSelectedCustomer(null);
         setSelectedSupplier(null);

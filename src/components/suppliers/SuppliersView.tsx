@@ -20,6 +20,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import {searchSuppliers} from "../../services/supplierService.ts";
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
+import {formatCurrency} from "../../helper/currencyHelper.ts";
 
 const SuppliersView = () => {
 
@@ -41,6 +43,9 @@ const SuppliersView = () => {
     });
 
     const { t } = useTranslation();
+    const refreshKey = useUIStore((s) => s.refreshKey);
+    const { incrementRefreshKey, currency, locale } = useUIStore();
+
 
     const handleClickOpen = (row: Customer) => {
         setOpenEdit(true);
@@ -173,7 +178,7 @@ const SuppliersView = () => {
                         marginBottom: '24px'
                     }}
                 >
-                    {params.value}
+                    {formatCurrency(params.value, currency, locale)}
                 </div>
             )
         },
@@ -228,10 +233,12 @@ const SuppliersView = () => {
 
             return newRows;
         });
+        incrementRefreshKey();
     };
 
     const handleDeleteSupplier = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
+        incrementRefreshKey();
     };
 
     useEffect(() => {
@@ -248,7 +255,7 @@ const SuppliersView = () => {
                 setRowCount(data.totalElements);
             })
             .finally(() => setLoading(false));
-    }, [paginationModel, searchName, isSearching, sortModel, filterModel]);
+    }, [paginationModel, searchName, isSearching, sortModel, filterModel, refreshKey]);
 
 
     return (

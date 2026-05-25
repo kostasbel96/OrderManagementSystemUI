@@ -21,9 +21,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import {Tooltip} from "@mui/material";
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
+import {formatCurrency} from "../../helper/currencyHelper.ts";
 
 const ProductsView = () => {
     const { t } = useTranslation();
+    const { incrementRefreshKey, currency, locale } = useUIStore();
+    const refreshKey = useUIStore((s) => s.refreshKey);
     const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver | Route | Receipt | Supplier)[]>([]);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
     const [rowCount, setRowCount] = useState(0);
@@ -145,7 +149,7 @@ const ProductsView = () => {
                         marginBottom: '24px'
                     }}
                 >
-                    {params.value ? params.value + " €" : ""}
+                    {formatCurrency(params.value, currency, locale)}
                 </div>
             ) },
         {
@@ -199,10 +203,12 @@ const ProductsView = () => {
 
             return newRows;
         });
+        incrementRefreshKey();
     };
 
     const handleDeleteProduct = (id: number) => {
         setRows(prev => prev.filter(row => row.id !== id));
+        incrementRefreshKey();
     };
 
     useEffect(() => {
@@ -218,7 +224,7 @@ const ProductsView = () => {
                 setRows(data.content);
                 setRowCount(data.totalElements);
         }).finally(() => setLoading(false));
-    }, [paginationModel, searchName, isSearching, sortModel, filterModel]);
+    }, [paginationModel, searchName, isSearching, sortModel, filterModel, refreshKey]);
 
     return (
         <>

@@ -3,17 +3,22 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
 import type {Payment, Receipt, ResponseDTO} from "../../../types/Types.ts";
 import {getReceipt} from "../../../services/receiptService.ts";
+import {formatCurrency} from "../../../helper/currencyHelper.ts";
 
 interface ColumnConfigCustomerReceiptProps {
     setOnDeleteContent: React.Dispatch<React.SetStateAction<Receipt | Payment | undefined>>;
     setOperation: React.Dispatch<React.SetStateAction<string>>;
     setOpenDeletePopUp: React.Dispatch<React.SetStateAction<boolean>>;
+    currency: string;
+    locale: string;
 }
 
 const getColumnConfigCustomerReceipt = ({
                                             setOnDeleteContent,
                                             setOperation,
-                                            setOpenDeletePopUp
+                                            setOpenDeletePopUp,
+                                            currency,
+                                            locale
                                         }: ColumnConfigCustomerReceiptProps, t: any) => {
 
     const handleOnDelete = (row: Receipt) =>{
@@ -65,7 +70,7 @@ const getColumnConfigCustomerReceipt = ({
                         height: '100%',
                     }}
                 >
-                    {params.value ? params.value + " €" : ""}
+                    {formatCurrency(params.value, currency, locale)}
                 </div>
             ) },
         {field: 'date', headerName: t('receipts.table.date'), type: 'date', width: 80, renderCell: (params) => (

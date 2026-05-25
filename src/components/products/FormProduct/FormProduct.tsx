@@ -6,6 +6,7 @@ import useProductFormValidation, {
     type FormValues
 } from "../../../hooks/useProductFormValidation.ts";
 import LabeledField from "../../ui/LabeledField.tsx";
+import {useUIStore} from "../../../hooks/store/useUIStore.ts";
 
 interface FormProductProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,6 +27,7 @@ const FormProduct = ({
                          setPopUpMessage,
                      }: FormProductProps) => {
     const { t } = useTranslation();
+    const { incrementRefreshKey } = useUIStore();
 
     const [values, setValues] = useState<FormValues>(() => {
         const saved = localStorage.getItem("productDraft");
@@ -57,6 +59,7 @@ const FormProduct = ({
                     setSubmitted(true);
                     setPopUpMessage(t('form.product.createdMessage'));
                     console.log(data);
+                    incrementRefreshKey();
                 })
                 .catch((error) => {
                     setPopUpMessage(error.message);

@@ -8,8 +8,11 @@ import {useTranslation} from "react-i18next";
 
 export function RecentOrders() {
     const { t } = useTranslation();
+    const columnVisibility: Record<string, boolean> = {
+        actions: false,
+    };
     return (
-        <Card variant="outlined" sx={{ borderRadius: 2 }}>
+        <Card variant="outlined" sx={{ borderRadius: 2}}>
 
             <CardHeader
                 avatar={<ClipboardList size={16} color="var(--mui-palette-text-secondary)" aria-hidden />}
@@ -21,11 +24,12 @@ export function RecentOrders() {
                 sx={{ pb: 0 }}
             />
 
-            <CardContent sx={{ pt: 1, pb: '12px !important' }}>
+            <CardContent sx={{ pt: 1 }}>
                 <OrdersView
                     orderType="orderCustomer"
                     height={"35vh"}
                     showSearchBar={false}
+                    columnVisibility={columnVisibility}
                 />
             </CardContent>
 

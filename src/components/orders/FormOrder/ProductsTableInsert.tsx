@@ -14,6 +14,8 @@ import type {Product, SelectedProduct} from "../../../types/Types.ts";
 import ProductsAutocomplete from "./ProductsAutocomplete.tsx";
 import {useEffect, useRef, useState} from "react";
 import { useTranslation } from 'react-i18next';
+import {useUIStore} from "../../../hooks/store/useUIStore.ts";
+import {formatCurrency} from "../../../helper/currencyHelper.ts";
 
 interface ProductsTableInsertProps {
     selectedProductsWithQty: SelectedProduct[];
@@ -29,6 +31,7 @@ const ProductsTableInsert = ({
     const { t } = useTranslation();
     const autocompleteRef = useRef<any>(null);
     const autocompleteRefs = useRef<Array<HTMLInputElement | null>>([]);
+    const { currency, locale } = useUIStore();
 
     const handleQuantityInputChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -106,17 +109,14 @@ const ProductsTableInsert = ({
             fontSize: 11,
             height: 26,
 
-            // ❌ default no border
             "& fieldset": {
                 border: "none",
             },
 
-            // 🟡 hover border
             "&:hover fieldset": {
                 border: "1px solid #ccc",
             },
 
-            // 🔵 focus border
             "&.Mui-focused fieldset": {
                 border: "1px solid #1976d2",
             },
@@ -308,7 +308,7 @@ const ProductsTableInsert = ({
                                                 </TableCell>
 
                                                 <TableCell sx={{ textAlign: "center", fontWeight: 500 }}>
-                                                    {(item.price * item.quantity).toFixed(2)}
+                                                    {formatCurrency(item.price * item.quantity, currency, locale)}
                                                 </TableCell>
 
                                                 <TableCell sx={{ textAlign: "center" }}>
@@ -372,7 +372,7 @@ const ProductsTableInsert = ({
                 >
                     <Box sx={{ color: "#666", fontSize: 10 }}>{t('products.table.total')}</Box>
                     <Box sx={{ fontWeight: 700, color: "#111" }}>
-                        {totalAmount.toFixed(2)}
+                        {formatCurrency(totalAmount, currency, locale)}
                     </Box>
                 </Box>
             </Box>

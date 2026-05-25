@@ -9,6 +9,7 @@ import RoutePanel from "./RoutePanel.tsx";
 import useRouteInsertValidation from "../../hooks/useRouteInsertValidation.ts";
 import {addRoute} from "../../services/routeService.ts";
 import dayjs from "dayjs";
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
 
 
 interface FormRouteProps {
@@ -19,6 +20,7 @@ interface FormRouteProps {
 
 const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) => {
     const { t } = useTranslation();
+    const { incrementRefreshKey } = useUIStore();
     const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({
         actions: false,
     });
@@ -138,6 +140,7 @@ const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) 
                         date: dayjs(),
                         status: ""
                     });
+                    incrementRefreshKey();
                     console.log(data);
                 }).catch(error => {
                     setSubmitted(true);

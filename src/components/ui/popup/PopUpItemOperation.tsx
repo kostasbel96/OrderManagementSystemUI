@@ -52,7 +52,7 @@ const PopUpItemOperation = ({item, typeOf, setSubmitted, operation} : PopUpItemD
 
                 if (next <= 0) {
                     clearInterval(timer);
-                    setSubmitted(false);
+                    setTimeout(() => setSubmitted(false), 0);
                     return 0;
                 }
 

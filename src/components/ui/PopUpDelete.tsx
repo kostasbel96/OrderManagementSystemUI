@@ -655,7 +655,7 @@ const PopUpDelete = ({open, rowToEdit,
 
     return (
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>{t('popup.deleteDetails', { typeOf })}</DialogTitle>
+            <DialogTitle>{t('popup.deleteDetails', { typeOf: t(`typeNamesOperation.${typeOf}`) })}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     {t('popup.confirmMessage')}

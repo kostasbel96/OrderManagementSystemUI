@@ -6,6 +6,7 @@ import { DashboardNavButtons } from './DashboardNavButtons.tsx';
 import Kpis from "./Kpis.tsx";
 
 export default function Dashboard() {
+
     return (
         <Grid container spacing={1.5}>
             <Kpis/>
