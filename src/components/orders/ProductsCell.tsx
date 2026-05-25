@@ -3,6 +3,8 @@ import { Popover } from "@mui/material";
 import { useState } from "react";
 import {Eye, EyeOff} from "lucide-react";
 import { useTranslation } from 'react-i18next';
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
+import {formatCurrency} from "../../helper/currencyHelper.ts";
 
 interface ProductsCellProps {
     products: SelectedProduct[];
@@ -11,6 +13,7 @@ interface ProductsCellProps {
 const ProductsCell = ({ products }: ProductsCellProps) => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const { t } = useTranslation();
+    const { locale, currency } = useUIStore();
 
     const open = Boolean(anchorEl);
 
@@ -84,7 +87,7 @@ const ProductsCell = ({ products }: ProductsCellProps) => {
                             </div>
 
                             <div style={{ color: "#555" }}>
-                                {item.quantity} x {item.price}€
+                                {item.quantity} x {formatCurrency(item.price, currency, locale)}
                             </div>
                         </div>
                     ))}
