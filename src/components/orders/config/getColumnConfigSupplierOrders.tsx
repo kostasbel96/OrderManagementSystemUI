@@ -29,6 +29,7 @@ interface ColumnConfigCustomerOrdersProps {
     setRowToEdit: React.Dispatch<SetStateAction<OrderItem | Customer | Product | Driver | Route | Receipt | Payment | Supplier | PurchaseOrderItem | undefined>>;
     currency: string;
     locale: string;
+    t: any;
 }
 
 const getColumnConfigSupplierOrders = ({
@@ -38,8 +39,9 @@ const getColumnConfigSupplierOrders = ({
                                            setOperation,
                                            setRowToEdit,
                                            currency,
-                                           locale
-                                        }: ColumnConfigCustomerOrdersProps, t: any) => {
+                                           locale,
+                                           t
+                                        }: ColumnConfigCustomerOrdersProps) => {
 
     const productsFilterOperator = {
         label: t ? t('search.contains') : 'contains',

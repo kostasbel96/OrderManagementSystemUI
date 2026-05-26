@@ -220,7 +220,7 @@ const SuppliersView = () => {
 
             ),
         },
-    ], [t]);
+    ], [t, currency, locale]);
 
     const handleUpdateSupplier = (updated: Product | Customer | OrderRow | Driver | Route | Receipt | Supplier) => {
         setRows(prev => {
@@ -229,7 +229,7 @@ const SuppliersView = () => {
             if (index === -1) return prev;
 
             const newRows = [...prev];
-            newRows[index] = { ...updated }; // IMPORTANT spread
+            newRows[index] = { ...updated };
 
             return newRows;
         });

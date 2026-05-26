@@ -1039,7 +1039,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
     }, [selectedProductsWithQty]);
 
     return (
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} maxWidth={"lg"} fullWidth>
                 <DialogTitle>{t('popup.updateDetails', { typeOf: t(`typeNamesOperation.${typeOf}`) })}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>

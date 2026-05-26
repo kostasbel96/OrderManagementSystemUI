@@ -11,6 +11,7 @@ interface ColumnConfigCustomerReceiptProps {
     setOpenDeletePopUp: React.Dispatch<React.SetStateAction<boolean>>;
     currency: string;
     locale: string;
+    t: any;
 }
 
 const getColumnConfigSupplierReceipt = ({
@@ -18,8 +19,9 @@ const getColumnConfigSupplierReceipt = ({
                                             setOperation,
                                             setOpenDeletePopUp,
                                             currency,
-                                            locale
-                                        }: ColumnConfigCustomerReceiptProps, t: any) => {
+                                            locale,
+                                            t
+                                        }: ColumnConfigCustomerReceiptProps) => {
 
     const handleOnDelete = (row: Receipt) =>{
         if (row.id) getPayment(row.id).then((data: ResponseDTO)=> {

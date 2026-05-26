@@ -203,7 +203,7 @@ const CustomersView = () => {
 
             ),
         },
-    ], [t]);
+    ], [t, currency, locale]);
 
     const handleUpdateCustomer = (updated: Product | Customer | OrderRow | Driver | Route | Receipt | Supplier) => {
         setRows(prev => {

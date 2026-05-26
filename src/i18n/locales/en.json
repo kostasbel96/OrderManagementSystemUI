@@ -259,11 +259,11 @@
     }
   },
   "search": {
-    "placeholderCustomer": "customer by address, name, phone",
-    "placeholderSupplier": "supplier by address, name, phone, vat",
+    "placeholderCustomer": "order by customer, address, phone",
+    "placeholderSupplier": "order by supplier address, phone, vat",
     "contains": "contains",
     "ariaReset": "reset",
-    "ariaSearch": "search"
+    "ariaSearch": "Search"
   },
   "search2": {
     "searchCustomer": "Search customer...",

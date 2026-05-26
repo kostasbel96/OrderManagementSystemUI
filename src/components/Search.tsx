@@ -18,9 +18,9 @@ const Search = ({typeOf, setIsSearching, setSearchName, setPaginationModel}: Sea
 
     const getPlaceholder = useCallback(() => {
         if (typeOf === "orderCustomer") {
-            return t('search2.searchCustomer');
+            return t(`${t('search.ariaSearch')} ${t('search.placeholderCustomer')}`);
         } else if (typeOf === "orderSupplier") {
-            return t('search2.searchSupplier');
+            return t(`${t('search.ariaSearch')} ${t('search.placeholderSupplier')}`);
         } else if (typeOf === "Products"){
             return t('search2.searchProduct');
         } else if (typeOf === "Drivers") {
@@ -28,9 +28,9 @@ const Search = ({typeOf, setIsSearching, setSearchName, setPaginationModel}: Sea
         } else if (typeOf === "Suppliers") {
             return t('search2.searchSupplier');
         } else if (typeOf === "receipt") {
-            return t('search2.searchCustomer');
+            return t(`${t('search.ariaSearch')} ${t('search.placeholderCustomer')}`);
         } else if (typeOf === "payment") {
-            return t('search2.searchSupplier');
+            return t(`${t('search.ariaSearch')} ${t('search.placeholderSupplier')}`);
         } else if (typeOf === "Routes") {
             return t('search2.searchRoute');
         } else if (typeOf === "Customers") {
@@ -75,7 +75,10 @@ const Search = ({typeOf, setIsSearching, setSearchName, setPaginationModel}: Sea
                 <InputBase
                     sx={{ ml: 1, flex: 1 }}
                     placeholder={getPlaceholder()}
-                    inputProps={{ 'aria-label': t('search.ariaSearch') }}
+                    inputProps={{
+                        'aria-label': t('search.ariaSearch'),
+                        style: { fontSize: '0.75rem' } // ή όποιο μέγεθος θες
+                    }}
                     value={text}
                     onChange={(e)=>handleChange(e.target.value)}
                 />

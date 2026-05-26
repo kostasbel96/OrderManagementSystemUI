@@ -190,7 +190,7 @@ const ProductsView = () => {
 
             ),
         },
-    ], [t]);
+    ], [t, currency, locale]);
 
     const handleUpdateProduct = (updated: Product | Customer | OrderRow | Driver | Route | Receipt | Supplier) => {
         setRows(prev => {

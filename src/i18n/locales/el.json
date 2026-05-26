@@ -258,11 +258,11 @@
   }
   ,
   "search": {
-    "placeholderCustomer": "πελάτη κατά διεύθυνση, όνομα, τηλέφωνο",
-    "placeholderSupplier": "προμηθευτή κατά διεύθυνση, όνομα, τηλέφωνο, ΑΦΜ",
+    "placeholderCustomer": "παραγγελίας κατά πελάτη, διεύθυνση, τηλέφωνο",
+    "placeholderSupplier": "παραγελίας κατά προπηθευτή, διεύθυνση, τηλέφωνο, ΑΦΜ",
     "contains": "περιέχει",
     "ariaReset": "επαναφορά",
-    "ariaSearch": "αναζήτηση"
+    "ariaSearch": "Αναζήτηση"
   }
   ,
   "search2": {

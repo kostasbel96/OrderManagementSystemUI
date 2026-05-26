@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {
     type GridColDef, type GridFilterModel, type GridPaginationModel, type GridRowSelectionModel,
     type GridSortModel,
@@ -73,7 +73,7 @@ const OrdersView = ({columnVisibility,
 
     const { t } = useTranslation();
 
-    const columns: GridColDef[] = orderType === "orderCustomer"
+    const columns: GridColDef[] = useMemo(() => orderType === "orderCustomer"
         ? getColumnConfigCustomerOrders({
             setOpenEdit,
             setOnDeleteContent,
@@ -81,8 +81,9 @@ const OrdersView = ({columnVisibility,
             setOperation,
             setRowToEdit,
             currency,
-            locale
-        }, t)
+            locale,
+            t
+        })
         : getColumnConfigSupplierOrders({
             setOpenEdit,
             setOnDeleteContent,
@@ -90,8 +91,9 @@ const OrdersView = ({columnVisibility,
             setOperation,
             setRowToEdit,
             currency,
-            locale
-        }, t);
+            locale,
+            t
+        }), [t, currency, locale]);
 
     const {loading, search} = useSearchOrders({
         orderType,

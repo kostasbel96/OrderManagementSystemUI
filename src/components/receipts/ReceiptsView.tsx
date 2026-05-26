@@ -51,9 +51,9 @@ const ReceiptsView = ({receiptType  = "receipt"}) => {
     };
 
     const columns = useMemo(() => receiptType === "receipt" ?
-                        getColumnConfigCustomerReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation, currency, locale}, t) :
-                        getColumnConfigSupplierReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation, currency, locale}, t),
-    [receiptType, t]);
+                        getColumnConfigCustomerReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation, currency, locale, t}) :
+                        getColumnConfigSupplierReceipt({setOnDeleteContent, setOpenDeletePopUp, setOperation, currency, locale, t}),
+    [receiptType, t, currency, locale]);
 
     useEffect(() => {
         setLoading(true);

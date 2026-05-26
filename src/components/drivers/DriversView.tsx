@@ -1,6 +1,6 @@
 import type {GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} from "@mui/x-data-grid";
 import MyTable from "../ui/MyTable.tsx";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import type {
     Customer,
     Driver,
@@ -57,7 +57,7 @@ const DriversView = () => {
         setOperation("deleted");
     }
 
-    const columns: GridColDef[] = [
+    const columns: GridColDef[] = useMemo(() => [
         { field: 'id', headerName: t('drivers.table.id'), width: 20, renderCell: (params) => (
                 <div
                     style={{
@@ -171,7 +171,7 @@ const DriversView = () => {
 
             ),
         },
-    ];
+    ], [t]);
 
     const handleUpdateDriver = (updated: Product | Driver | OrderRow | Customer | Route | Receipt | Supplier) => {
         setRows(prev => {
