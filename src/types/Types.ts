@@ -262,6 +262,7 @@ export interface KpiCardResponse {
     productKpi: ProductKpi;
     orderKpi: OrderKpi;
     customerKpi: CustomerKpi;
+    routeKpi: RouteKpi;
 }
 
 interface CustomerKpi {
@@ -280,6 +281,11 @@ interface ProductKpi {
 interface OrderKpi {
     totalOrdersByDate: number;
     deltaOrdersByYesterday: number;
+}
+
+interface RouteKpi {
+    totalRoutesByDate: number;
+    deltaRoutesByYesterday: number;
 }
 
 export interface KpiCardType {

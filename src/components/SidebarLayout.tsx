@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import {type ReactNode, useState, useEffect, useRef} from "react";
 import { useTranslation } from 'react-i18next';
-import {MenuItem, Popover} from "@mui/material";
+import {MenuItem, Popover, Tooltip} from "@mui/material";
 import {useUIStore} from "../hooks/store/useUIStore.ts";
 import {useTabs} from "../contexts/TabContext.tsx";
 import OrdersView from "./orders/OrdersView.tsx";
@@ -208,7 +208,7 @@ export default function SidebarLayout({ children }: Readonly<{ children: ReactNo
                 </div>
             </aside>
 
-            {/* OVERLAY for mobile (optional) */}
+            {/* OVERLAY for mobile */}
             {open && (
                 <button
                     className="fixed inset-0 bg-black/30 z-40"
@@ -250,52 +250,47 @@ function NavItem({
 
     return (
         <div className="relative group">
-            <button
-                onClick={() => {
-                    addTab({ id, label, component: () => component , path: id });
-                    setOpen(false);
+            <Tooltip
+                title={collapsed ? label : ""}
+                placement="right"
+                arrow
+                slotProps={{
+                    tooltip: {
+                        sx: {
+                            bgcolor: "grey.800",
+                            fontSize: "0.75rem",
+                            fontWeight: 500,
+                            px: 1.25,
+                            py: 0.75,
+                            borderRadius: "6px",
+                            boxShadow: 3,
+                        },
+                    },
+                    arrow: {
+                        sx: { color: "grey.800" },
+                    },
                 }}
-                className={`
-                    flex items-center gap-3 px-3 py-2 rounded-lg transition w-full text-left
-                    ${collapsed ? "justify-center" : ""}
-                    ${isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "hover:bg-gray-100 text-gray-600"}
-                `}
             >
-                <div className={`flex items-center gap-3 w-full ${collapsed ? "justify-center" : ""}`}>
-                    <span className={isActive ? "text-blue-600" : "text-gray-400"}>
-                        {icon}
-                    </span>
+                <button
+                    onClick={() => {
+                        addTab({ id, label, component: () => component, path: id });
+                        setOpen(false);
+                    }}
+                    className={`
+                                flex items-center gap-3 px-3 py-2 rounded-lg transition w-full text-left
+                                ${collapsed ? "justify-center" : ""}
+                                ${isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "hover:bg-gray-100 text-gray-600"}
+                              `}
+                >
+                  <span className={isActive ? "text-blue-600" : "text-gray-400"}>
+                    {icon}
+                  </span>
 
                     {!collapsed && (
-                        <span className="text-sm font-medium">
-                            {label}
-                        </span>
+                        <span className="text-sm font-medium">{label}</span>
                     )}
-                </div>
-            </button>
-
-            {/* Tooltip — εμφανίζεται μόνο όταν είναι collapsed */}
-            {collapsed && (
-                <div className="
-                    absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50
-                    pointer-events-none
-                    opacity-0 group-hover:opacity-100
-                    transition-opacity duration-150
-                ">
-                    {/* Arrow */}
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1
-                        border-4 border-transparent border-r-gray-800"
-                    />
-                    {/* Label */}
-                    <div className="
-                        bg-gray-800 text-white text-xs font-medium
-                        px-2.5 py-1.5 rounded-md whitespace-nowrap
-                        shadow-lg
-                    ">
-                        {label}
-                    </div>
-                </div>
-            )}
+                </button>
+            </Tooltip>
         </div>
     );
 }

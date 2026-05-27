@@ -73,7 +73,7 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "enterPlaceholder": "Enter {{label}}...",
-    "balance": "Balance: {{amount}}€"
+    "balance": "Balance: {{amount}}"
   },
   "typeNames": {
     "product": "Product",
@@ -407,7 +407,9 @@
     "totalOrders": "Orders today",
     "totalOrdersDelta": "{{delta}} from yesterday",
     "totalCustomers": "Total Customers",
-    "totalCustomersDelta": "{{delta}} from yesterday"
+    "totalCustomersDelta": "{{delta}} from yesterday",
+    "deliveriesToday": "Deliveries today",
+    "deliveriesTodayDelta": "{{delta}} from yesterday"
   },
   "orderStatus": {
     "PENDING": "Pending",

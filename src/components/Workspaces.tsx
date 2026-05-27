@@ -9,7 +9,7 @@ const Workspaces: React.FC = () => {
     const { tabs, activeTabId, removeTab, setActiveTab, removeAllTabs } = useTabs();
     const { t } = useTranslation();
     const scrollRef = useRef<HTMLDivElement>(null);
-    const activeTabRef = useRef<HTMLDivElement>(null);
+    const activeTabRef = useRef<HTMLButtonElement>(null);
     const [contextMenu, setContextMenu] = useState<{ mouseX: number; mouseY: number; tabId: string } | null>(null);
 
     const navigateTab = (direction: 'next' | 'prev') => {
@@ -51,7 +51,7 @@ const Workspaces: React.FC = () => {
         }
 
         setTimeout(() => {
-            window.dispatchEvent(new Event('resize'));
+            globalThis.dispatchEvent(new Event('resize'));
         }, 50);
 
     }, [activeTabId]);
@@ -73,7 +73,7 @@ const Workspaces: React.FC = () => {
     return (
         <div className="flex flex-col h-full w-full">
             {/* Tab Bar Header */}
-            <div className="relative h-[49px] bg-white border-b border-gray-200 flex-none w-full">
+            <div className="relative h-12.25 bg-white border-b border-gray-200 flex-none w-full">
 
                 {/* Fixed Navigator */}
                 <div className="absolute left-0 top-0 bottom-0 z-30 flex items-center bg-white px-2 border-r border-gray-100 shadow-[4px_0_8px_rgba(0,0,0,0.05)] gap-1">
@@ -103,7 +103,8 @@ const Workspaces: React.FC = () => {
                     {tabs.map((tab) => {
                         const isActive = activeTabId === tab.id;
                         return (
-                            <div
+                            <button
+                                type={"button"}
                                 onContextMenu={(e) => handleContextMenu(e, tab.id)}
                                 key={tab.id}
                                 ref={isActive ? activeTabRef : null}
@@ -115,7 +116,7 @@ const Workspaces: React.FC = () => {
                                 `}
                                 onClick={() => setActiveTab(tab.id)}
                             >
-                                <span className="truncate max-w-[200px]">{tab.label}</span>
+                                <span className="truncate max-w-50">{tab.label}</span>
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -128,7 +129,7 @@ const Workspaces: React.FC = () => {
                                 >
                                     <X size={14} />
                                 </button>
-                            </div>
+                            </button>
                         );
                     })}
                 </div>

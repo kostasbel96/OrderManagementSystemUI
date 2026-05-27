@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid";
 import {KpiCard} from "./KpiCard.tsx";
-import {AlertTriangle, Package, ShoppingCartIcon, Users} from "lucide-react";
+import {AlertTriangle, Package, ShoppingCartIcon, Truck, Users} from "lucide-react";
 import type {KpiCardResponse, KpiCardType} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import {getKpiCard} from "../../services/dashboardService.ts";
@@ -53,13 +53,20 @@ export const Kpis = () => {
             delta: t('kpi.totalCustomersDelta', { delta: `${getValue(kpiCard.customerKpi.deltaCustomersByYesterday)}` }),
             deltaPositive: kpiCard.customerKpi.deltaCustomersByYesterday >= 0,
             icon: Users,
+        },
+        {
+            label: t('kpi.deliveriesToday'),
+            value: kpiCard.routeKpi.totalRoutesByDate.toLocaleString(),
+            delta: t('kpi.deliveriesTodayDelta', { delta: `${getValue(kpiCard.routeKpi.deltaRoutesByYesterday)}` }),
+            deltaPositive: kpiCard.routeKpi.deltaRoutesByYesterday >= 0,
+            icon: Truck,
         }
     ];
 
     return (
         <>
             {kpis.map((kpi: KpiCardType) => (
-                <Grid key={kpi.label} size={{ xs: 12, sm: 6, md: 3 }}>
+                <Grid key={kpi.label} size={{ xs: 12, sm: 6, md: 2.4 }}>
                     <KpiCard {...kpi} />
                 </Grid>
             ))}

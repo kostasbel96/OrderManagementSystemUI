@@ -5,6 +5,8 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { OrderRow } from "../../types/Types.ts";
+import {formatCurrency} from "../../helper/currencyHelper.ts";
+import {useUIStore} from "../../hooks/store/useUIStore.ts";
 
 export function SortableStop({
                                  order,
@@ -25,6 +27,7 @@ export function SortableStop({
         isDragging,
     } = useSortable({ id: Number(order.id) });
     const { t } = useTranslation();
+    const { currency, locale } = useUIStore();
 
     return (
         <Box
@@ -122,7 +125,7 @@ export function SortableStop({
 
                     {/* BALANCE */}
                     <Box sx={{ fontSize: 10 }}>
-                        {t('common.balance', { amount: (order.total ?? 0) })}
+                        {t('common.balance', { amount: formatCurrency(order.total, currency, locale) })}
                     </Box>
                 </Box>
             </Box>
