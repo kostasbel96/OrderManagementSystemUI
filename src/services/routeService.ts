@@ -37,7 +37,7 @@ export async function addRoute({
         name,
         notes,
         driverId,
-        orderIds: orders.map(order => order.id),
+        orderIds: orders.map((order, i) => ({ id: order.id, orderIndex: i })),
         date: date.format("YYYY-MM-DD")
     };
     const res = await fetchWithAuth(`${API_URL}/routes/save`, {
@@ -108,7 +108,7 @@ export async function updateRoute(route: Route): Promise<ResponseDTO> {
             notes: route.notes,
             status: route.status,
             driverId: route.driver?.id,
-            orderIds: route.orders.map(order => order.id),
+            orderIds: route.orders.map((order, i) => ({ id: order.id, orderIndex: i })),
             date: route.date ? dayjs(route.date).format("YYYY-MM-DD") : null
         }),
     });

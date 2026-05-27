@@ -148,7 +148,7 @@ const FormRoute = ({setPopUpMessage, setSuccess, setSubmitted}: FormRouteProps) 
                     setPopUpMessage(error.message);
             })
         }
-    }, [validateRouteInsert]);
+    }, [validateRouteInsert, routeDetails]);
 
     useEffect(() => {
         setPopUpMessage("");

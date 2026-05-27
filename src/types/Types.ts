@@ -162,6 +162,7 @@ export interface OrderRow {
     paidAmount?: number;
     paymentStatus?: string;
     date?: string | Date;
+    orderIndex?: number;
 }
 
 export interface ProductResponseDto {
@@ -253,7 +254,7 @@ export interface RouteRequest {
     notes: string;
     name: string;
     driverId: number | undefined | null;
-    orderIds: number[];
+    orderIds: { id: number; orderIndex: number }[];
     date: string;
 }
 
