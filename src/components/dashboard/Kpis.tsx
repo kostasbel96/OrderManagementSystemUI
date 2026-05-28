@@ -27,6 +27,7 @@ export const Kpis = () => {
 
     const kpis: KpiCardType[] = [
         {
+            id: "productsView",
             label: t('kpi.totalProducts'),
             value: kpiCard.productKpi.totalProducts.toLocaleString(),
             delta: t('kpi.totalProductsDelta', { delta: `${getValue(kpiCard.productKpi.deltaPercentage)}` }),
@@ -34,6 +35,7 @@ export const Kpis = () => {
             icon: Package,
         },
         {
+            id: "ordersToday",
             label: t('kpi.totalOrders'),
             value: kpiCard.orderKpi.totalOrdersByDate.toLocaleString(),
             delta: t('kpi.totalOrdersDelta', { delta: `${getValue(kpiCard.orderKpi.deltaOrdersByYesterday)}` }),
@@ -41,6 +43,7 @@ export const Kpis = () => {
             icon: ShoppingCartIcon
         },
         {
+            id: "productsLowStock",
             label: t('kpi.lowStock'),
             value: String(kpiCard.productKpi.productLowStock),
             delta: t('kpi.lowStockDelta', { delta: `${getValue(kpiCard.productKpi.deltaLowStockByYesterday)}` }),
@@ -48,6 +51,7 @@ export const Kpis = () => {
             icon: AlertTriangle,
         },
         {
+            id: "totalCustomers",
             label: t('kpi.totalCustomers'),
             value: kpiCard.customerKpi.totalCustomers.toLocaleString(),
             delta: t('kpi.totalCustomersDelta', { delta: `${getValue(kpiCard.customerKpi.deltaCustomersByYesterday)}` }),
@@ -55,6 +59,7 @@ export const Kpis = () => {
             icon: Users,
         },
         {
+            id: "routesToday",
             label: t('kpi.deliveriesToday'),
             value: kpiCard.routeKpi.totalRoutesByDate.toLocaleString(),
             delta: t('kpi.deliveriesTodayDelta', { delta: `${getValue(kpiCard.routeKpi.deltaRoutesByYesterday)}` }),

@@ -289,6 +289,7 @@ interface RouteKpi {
 }
 
 export interface KpiCardType {
+    id: string
     label: string;
     value: string;
     delta: string;

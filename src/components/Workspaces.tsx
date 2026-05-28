@@ -117,7 +117,8 @@ const Workspaces: React.FC = () => {
                                 onClick={() => setActiveTab(tab.id)}
                             >
                                 <span className="truncate max-w-50">{tab.label}</span>
-                                <button
+                                <span
+                                    role={"button"}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         removeTab(tab.id);
@@ -128,7 +129,7 @@ const Workspaces: React.FC = () => {
                                     `}
                                 >
                                     <X size={14} />
-                                </button>
+                                </span>
                             </button>
                         );
                     })}

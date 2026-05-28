@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import {type ReactNode, useState, useEffect, useRef} from "react";
 import { useTranslation } from 'react-i18next';
-import {MenuItem, Popover, Tooltip} from "@mui/material";
+import {ListItemButton, ListItemIcon, ListItemText, MenuItem, Popover, Tooltip} from "@mui/material";
 import {useUIStore} from "../hooks/store/useUIStore.ts";
 import {useTabs} from "../contexts/TabContext.tsx";
 import OrdersView from "./orders/OrdersView.tsx";
@@ -249,49 +249,62 @@ function NavItem({
     const isActive = activeTabId === id;
 
     return (
-        <div className="relative group">
-            <Tooltip
-                title={collapsed ? label : ""}
-                placement="right"
-                arrow
-                slotProps={{
-                    tooltip: {
-                        sx: {
-                            bgcolor: "grey.800",
-                            fontSize: "0.75rem",
-                            fontWeight: 500,
-                            px: 1.25,
-                            py: 0.75,
-                            borderRadius: "6px",
-                            boxShadow: 3,
-                        },
+        <Tooltip
+            title={collapsed ? label : ""}
+            placement="right"
+            arrow
+            slotProps={{
+                tooltip: {
+                    sx: {
+                        bgcolor: "grey.800",
+                        fontSize: "0.75rem",
+                        fontWeight: 500,
+                        px: 1.25,
+                        py: 0.75,
+                        borderRadius: "6px",
+                        boxShadow: 3,
                     },
-                    arrow: {
-                        sx: { color: "grey.800" },
+                },
+                arrow: {
+                    sx: { color: "grey.800" },
+                },
+            }}
+        >
+            <ListItemButton
+                selected={isActive}
+                onClick={() => {
+                    addTab({ id, label, component: () => component, path: id });
+                    setOpen(false);
+                }}
+                sx={{
+                    borderRadius: 1.5,
+                    justifyContent: collapsed ? "center" : "flex-start",
+                    px: 1.5,
+                    py: 1,
+                    "&.Mui-selected": {
+                        bgcolor: "primary.50",
+                        color: "primary.main",
+                        "&:hover": { bgcolor: "primary.100" },
                     },
                 }}
             >
-                <button
-                    onClick={() => {
-                        addTab({ id, label, component: () => component, path: id });
-                        setOpen(false);
+                <ListItemIcon
+                    sx={{
+                        minWidth: collapsed ? 0 : 36,
+                        color: isActive ? "primary.main" : "text.secondary",
                     }}
-                    className={`
-                                flex items-center gap-3 px-3 py-2 rounded-lg transition w-full text-left
-                                ${collapsed ? "justify-center" : ""}
-                                ${isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "hover:bg-gray-100 text-gray-600"}
-                              `}
                 >
-                  <span className={isActive ? "text-blue-600" : "text-gray-400"}>
                     {icon}
-                  </span>
+                </ListItemIcon>
 
-                    {!collapsed && (
-                        <span className="text-sm font-medium">{label}</span>
-                    )}
-                </button>
-            </Tooltip>
-        </div>
+                {!collapsed && (
+                    <ListItemText
+                        primary={label}
+                        primaryTypographyProps={{ fontSize: 14, fontWeight: 500 }}
+                    />
+                )}
+            </ListItemButton>
+        </Tooltip>
     );
 }
 
@@ -329,33 +342,48 @@ function NavItemWithSubmenu({
 
     return (
         <>
-            <button
+            <ListItemButton  // ✅ αφαιρέθηκε το λανθασμένο ref={anchorEl}
+                selected={isActive}
                 onMouseEnter={openMenu}
                 onMouseLeave={closeMenu}
                 onClick={openMenu}
-                className={`
-                    flex items-center gap-3 px-3 py-2 rounded-lg transition w-full text-left
-                    ${collapsed ? "justify-center" : ""}
-                    ${isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "hover:bg-gray-100 text-gray-600"}
-                `}
+                sx={{
+                    borderRadius: 1.5,
+                    justifyContent: collapsed ? "center" : "flex-start",
+                    px: 1.5,
+                    py: 1,
+                    "&.Mui-selected": {
+                        bgcolor: "primary.50",
+                        color: "primary.main",
+                        "&:hover": { bgcolor: "primary.100" },
+                    },
+                }}
             >
-                <div className={`flex items-center gap-3 w-full ${collapsed ? "justify-center" : ""}`}>
-                    <span className={isActive ? "text-blue-600" : "text-gray-400"}>
-                        {icon}
-                    </span>
-                    {!collapsed && (
-                        <span className="text-sm font-medium">{label}</span>
-                    )}
-                    {!collapsed && (
-                        <ChevronRight size={14} className="ml-auto text-gray-400" />
-                    )}
-                </div>
-            </button>
+                <ListItemIcon
+                    sx={{
+                        minWidth: collapsed ? 0 : 36,
+                        color: isActive ? "primary.main" : "text.secondary",
+                    }}
+                >
+                    {icon}
+                </ListItemIcon>
+
+                {!collapsed && (
+                    <ListItemText
+                        primary={label}
+                        primaryTypographyProps={{ fontSize: 14, fontWeight: 500 }}
+                    />
+                )}
+
+                {!collapsed && (
+                    <ChevronRight size={14} color="action" />
+                )}
+            </ListItemButton>
 
             <Popover
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={() => setAnchorEl(null)}
+                open={Boolean(anchorEl)}  // ✅ από anchorEl, όχι open
+                anchorEl={anchorEl}       // ✅ απευθείας, όχι anchorEl.current
+                onClose={() => setAnchorEl(null)}  // ✅ συνεπές με το state
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 transformOrigin={{ vertical: "top", horizontal: "left" }}
                 disableRestoreFocus
@@ -369,9 +397,9 @@ function NavItemWithSubmenu({
                             borderRadius: 2,
                             minWidth: 180,
                             boxShadow: 3,
-                            py: 0.5
-                        }
-                    }
+                            py: 0.5,
+                        },
+                    },
                 }}
             >
                 {children.map((item) => (
@@ -383,12 +411,16 @@ function NavItemWithSubmenu({
                                 id: item.id,
                                 label: item.label,
                                 component: () => item.component,
-                                path: item.id
+                                path: item.id,
                             });
                             setOpen(false);
-                            setAnchorEl(null);
+                            setAnchorEl(null);  // ✅ κλείνει και το popover
                         }}
-                        sx={(theme)=>({ fontSize: 12, py: 1, borderBottom: `1px solid ${theme.palette.grey[200]}` })}
+                        sx={(theme) => ({
+                            fontSize: 12,
+                            py: 1,
+                            borderBottom: `1px solid ${theme.palette.grey[200]}`,
+                        })}
                     >
                         {item.label}
                     </MenuItem>

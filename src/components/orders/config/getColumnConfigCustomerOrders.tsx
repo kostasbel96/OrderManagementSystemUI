@@ -121,7 +121,7 @@ const getColumnConfigCustomerOrders = ({
                     {formatCurrency(params.value, currency, locale)}
                 </div>
             ) },
-        { field: 'paidAmount', headerName: t('orders.table.paid'), width: 80, type: "number", renderCell: (params) => (
+        { field: 'paidAmount', headerName: t('orders.table.paid'), width: 120, type: "number", renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',
@@ -133,7 +133,7 @@ const getColumnConfigCustomerOrders = ({
                     {formatCurrency(params.value, currency, locale)}
                 </div>
             ) },
-        {field: 'date', headerName: t('orders.table.date'), type: 'date', width: 80, renderCell: (params) => (
+        {field: 'date', headerName: t('orders.table.date'), type: 'date', width: 120, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering

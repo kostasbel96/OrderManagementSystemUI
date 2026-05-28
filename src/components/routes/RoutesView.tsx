@@ -29,7 +29,7 @@ import dayjs from "dayjs";
 import {useUIStore} from "../../hooks/store/useUIStore.ts";
 import {useTranslation} from "react-i18next";
 
-interface OrdersViewProps {
+interface RoutesViewProps {
     columnVisibility?: Record<string, boolean>;
     setColumnVisibility?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
     selectionModel?: GridRowSelectionModel;
@@ -39,14 +39,16 @@ interface OrdersViewProps {
     selection?: boolean;
     height?: string;
     width?: number;
+    filters?: GridFilterModel;
 }
-const OrdersView = ({columnVisibility,
+const RoutesView = ({columnVisibility,
                         setColumnVisibility,
                         setSelectionModel,
                         selection,
                         selectionModel,
                         height,
-                        width}: OrdersViewProps) => {
+                        width,
+                        filters}: RoutesViewProps) => {
 
     const refreshKey = useUIStore((s) => s.refreshKey);
     const { incrementRefreshKey } = useUIStore();
@@ -64,7 +66,7 @@ const OrdersView = ({columnVisibility,
     const [submitted, setSubmitted] = useState(false);
     const [operation, setOperation] = useState("");
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "date", sort: "asc"}]);
-    const [filterModel, setFilterModel] = useState<GridFilterModel>({
+    const [filterModel, setFilterModel] = useState<GridFilterModel>(filters ?? {
         items: []
     });
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
@@ -130,7 +132,7 @@ const OrdersView = ({columnVisibility,
                     {params.value}
                 </div>
             ) },
-        { field: 'notes', headerName: t('routes.driver'), width: 80, renderCell: (params) => {
+        { field: 'notes', headerName: t('routes.notes'), width: 120, renderCell: (params) => {
                 const value = params.value || "";
                 return <Tooltip title={value} arrow placement="top-start">
                     <div
@@ -156,7 +158,7 @@ const OrdersView = ({columnVisibility,
                     </div>
                 </Tooltip>
             } },
-        {field: 'date', headerName: t('routes.date'), type: 'date', width: 80, renderCell: (params) => (
+        {field: 'date', headerName: t('routes.date'), type: 'date', width: 120, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
@@ -185,7 +187,7 @@ const OrdersView = ({columnVisibility,
             )
         },
         {
-            field: 'status', headerName:t('routes.status'), type: 'singleSelect', width: 140,
+            field: 'status', headerName:t('routes.status'), type: 'singleSelect', width: 160,
             valueOptions: Object.values(RouteStatus),
             renderCell: (params) => {
                 const cfg = statusConfig[params.row.status as RouteStatusValue];
@@ -359,4 +361,4 @@ const OrdersView = ({columnVisibility,
 
 }
 
-export default OrdersView;
+export default RoutesView;

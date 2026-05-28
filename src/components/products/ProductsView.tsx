@@ -24,7 +24,11 @@ import {Tooltip} from "@mui/material";
 import {useUIStore} from "../../hooks/store/useUIStore.ts";
 import {formatCurrency} from "../../helper/currencyHelper.ts";
 
-const ProductsView = () => {
+interface ProductsViewProps {
+    filters?: GridFilterModel;
+}
+
+const ProductsView = ({filters}: ProductsViewProps) => {
     const { t } = useTranslation();
     const { incrementRefreshKey, currency, locale } = useUIStore();
     const refreshKey = useUIStore((s) => s.refreshKey);
@@ -41,7 +45,7 @@ const ProductsView = () => {
     const [searchName, setSearchName] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const [sortModel, setSortModel] = useState<GridSortModel>([{field: "name", sort: "asc"}]);
-    const [filterModel, setFilterModel] = useState<GridFilterModel>({
+    const [filterModel, setFilterModel] = useState<GridFilterModel>(filters ?? {
         items: []
     });
 

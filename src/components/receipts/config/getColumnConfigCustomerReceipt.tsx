@@ -75,7 +75,7 @@ const getColumnConfigCustomerReceipt = ({
                     {formatCurrency(params.value, currency, locale)}
                 </div>
             ) },
-        {field: 'date', headerName: t('receipts.table.date'), type: 'date', width: 80, renderCell: (params) => (
+        {field: 'date', headerName: t('receipts.table.date'), type: 'date', width: 120, renderCell: (params) => (
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',   // vertical centering
