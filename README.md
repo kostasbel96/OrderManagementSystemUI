@@ -95,10 +95,3 @@ To access the application, please use the following credentials:
     *   `types/`: TypeScript type definitions.
 *   `electron/`: Contains the Electron main process code.
 
-## Contributing
-
-(Optional: Add guidelines for contributing to your project)
-
-## License
-
-(Optional: Add license information)
