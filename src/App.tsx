@@ -16,7 +16,7 @@ function App() {
     const theme = createTheme({
         typography: {
             fontFamily: "Inter, Roboto, Arial, sans-serif",
-            fontSize: 12
+            fontSize: 11
         },
         components: {
             MuiInputBase: {

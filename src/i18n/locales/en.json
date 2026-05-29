@@ -406,8 +406,8 @@
     "totalProductsDelta": "{{delta}}% from yesterday",
     "totalOrders": "Orders today",
     "totalOrdersDelta": "{{delta}} from yesterday",
-    "totalCustomers": "Total Customers",
-    "totalCustomersDelta": "{{delta}} from yesterday",
+    "unpaidOrders": "Unpaid Orders",
+    "unpaidOrdersDelta": "{{delta}} from yesterday",
     "deliveriesToday": "Deliveries today",
     "deliveriesTodayDelta": "{{delta}} from yesterday"
   },

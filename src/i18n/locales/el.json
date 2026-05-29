@@ -397,8 +397,8 @@
     "totalProductsDelta": "{{delta}}% από χθες",
     "totalOrders": "Παραγγελίες σήμερα",
     "totalOrdersDelta": "{{delta}} από χθες",
-    "totalCustomers": "Συνολικοί Πελάτες",
-    "totalCustomersDelta": "{{delta}} από χθες",
+    "unpaidOrders": "Απλήρωτες Παραγγελίες",
+    "unpaidOrdersDelta": "{{delta}} από χθες",
     "deliveriesToday": "Παραδόσεις Σήμερα",
     "deliveriesTodayDelta": "{{delta}} από χθες"
   },

@@ -261,13 +261,13 @@ export interface RouteRequest {
 export interface KpiCardResponse {
     productKpi: ProductKpi;
     orderKpi: OrderKpi;
-    customerKpi: CustomerKpi;
+    unpaidOrdersKpi: UnpaidOrdersKpi;
     routeKpi: RouteKpi;
 }
 
-interface CustomerKpi {
-    totalCustomers: number;
-    deltaCustomersByYesterday: number;
+interface UnpaidOrdersKpi {
+    totalOrders: number;
+    deltaUnpaidOrdersByYesterday: number;
 }
 
 interface ProductKpi {

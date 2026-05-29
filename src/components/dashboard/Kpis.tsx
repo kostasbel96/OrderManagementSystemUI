@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid";
 import {KpiCard} from "./KpiCard.tsx";
-import {AlertTriangle, Package, ShoppingCartIcon, Truck, Users} from "lucide-react";
+import {AlertTriangle, Package, Receipt, ShoppingCartIcon, Truck} from "lucide-react";
 import type {KpiCardResponse, KpiCardType} from "../../types/Types.ts";
 import {useEffect, useState} from "react";
 import {getKpiCard} from "../../services/dashboardService.ts";
@@ -51,12 +51,12 @@ export const Kpis = () => {
             icon: AlertTriangle,
         },
         {
-            id: "totalCustomers",
-            label: t('kpi.totalCustomers'),
-            value: kpiCard.customerKpi.totalCustomers.toLocaleString(),
-            delta: t('kpi.totalCustomersDelta', { delta: `${getValue(kpiCard.customerKpi.deltaCustomersByYesterday)}` }),
-            deltaPositive: kpiCard.customerKpi.deltaCustomersByYesterday >= 0,
-            icon: Users,
+            id: "unpaidOrders",
+            label: t('kpi.unpaidOrders'),
+            value: kpiCard.unpaidOrdersKpi.totalOrders.toLocaleString(),
+            delta: t('kpi.unpaidOrdersDelta', { delta: `${getValue(kpiCard.unpaidOrdersKpi.deltaUnpaidOrdersByYesterday)}` }),
+            deltaPositive: kpiCard.unpaidOrdersKpi.deltaUnpaidOrdersByYesterday >= 0,
+            icon: Receipt,
         },
         {
             id: "routesToday",

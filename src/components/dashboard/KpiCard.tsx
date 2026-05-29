@@ -4,11 +4,11 @@ import { TrendingUp, TrendingDown} from 'lucide-react';
 import type {KpiCardType} from "../../types/Types.ts";
 import ProductsView from "../products/ProductsView.tsx";
 import {useTabs} from "../../contexts/TabContext.tsx";
-import CustomersView from "../customers/CustomersView.tsx";
 import OrdersView from "../orders/OrdersView.tsx";
 import RoutesView from "../routes/RoutesView.tsx";
 import dayjs from "dayjs";
 import {useUIStore} from "../../hooks/store/useUIStore.ts";
+import {PaymentStatus} from "../../types/enums/PaymentStatus.ts";
 
 export function KpiCard({id, label, value, delta, deltaPositive, icon: Icon }: Readonly<KpiCardType>) {
 
@@ -26,7 +26,15 @@ export function KpiCard({id, label, value, delta, deltaPositive, icon: Icon }: R
                 },
             ],
         }}/>,
-        totalCustomers: () => <CustomersView />,
+        unpaidOrders: () => <OrdersView filters={{
+            items:[
+                {
+                    field: "paymentStatus",
+                    operator: "not",
+                    value: PaymentStatus.PAID,
+                }
+            ]
+        }} />,
         routesToday: () => <RoutesView filters={{
             items: [
                 {
