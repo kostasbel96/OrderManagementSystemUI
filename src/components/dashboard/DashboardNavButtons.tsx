@@ -12,7 +12,7 @@ import RoutesView from "../routes/RoutesView.tsx";
 
 const navItems = [
     { id: 'add',       label: 'nav.quickAdd',        icon: PlusIcon,     component: <QuickAdd />      },
-    { id: 'orders',    label: 'nav.customerOrders', icon: ShoppingCart, component: <OrdersView />    },
+    { id: 'customerOrders',    label: 'nav.customerOrders', icon: ShoppingCart, component: <OrdersView />    },
     { id: 'suppliers', label: 'nav.suppliers',       icon: Package,      component: <SuppliersView /> },
     { id: 'customers', label: 'nav.customers',       icon: Users,        component: <CustomersView /> },
     { id: 'products',  label: 'nav.products',        icon: Box,          component: <ProductsView />  },
