@@ -76,7 +76,7 @@ const MyTable = ({columns,
 
     return (
         <div className="mt-5 flex flex-col space-y-2 justify-center items-center px-4">
-            {showSearchBar ?? <Search
+            {showSearchBar && <Search
                 typeOf={typeOf}
                 setIsSearching={setIsSearching}
                 setSearchName={setSearchName}
