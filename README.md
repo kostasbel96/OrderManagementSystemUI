@@ -1,73 +1,104 @@
-# React + TypeScript + Vite
+# OMS (Order Management System)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a desktop application built with React, TypeScript, Material-UI, and Electron, designed to manage orders, customers, products, suppliers, drivers, and routes. It provides a robust and responsive interface for efficient business operations.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*   **Dashboard:** Overview of key business metrics.
+*   **Customer Management:** Add, view, edit, and delete customer information.
+*   **Product Management:** Manage product inventory, descriptions, and pricing.
+*   **Order Management:** Create and track customer and supplier orders.
+*   **Supplier Management:** Handle supplier details and related orders.
+*   **Driver & Route Management:** Assign drivers to routes and optimize delivery schedules.
+*   **Payment & Receipts:** Record and track payments and receipts.
+*   **Dynamic Workspaces:** Tab-based interface allowing multiple active views simultaneously.
+*   **Responsive Design:** Adapts to various screen sizes, including a collapsible sidebar and scrollable tab headers.
+*   **Internationalization (i18n):** Support for multiple languages (currently English and Greek).
+*   **Form Validation:** Robust form validation using Zod.
+*   **Local Storage Persistence:** Drafts and certain settings are saved locally.
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*   **Frontend:** React, TypeScript, Material-UI (MUI), Tailwind CSS
+*   **State Management:** Zustand
+*   **Routing:** React Router
+*   **Internationalization:** i18next, react-i18next
+*   **Form Validation:** Zod
+*   **Drag and Drop:** @dnd-kit
+*   **Desktop Framework:** Electron
+*   **Build Tool:** Vite
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Follow these instructions to set up and run the project locally.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+*   Node.js (LTS version recommended)
+*   npm or Yarn
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/kostasbel96/OrderManagementSystemUI.git
+    cd project-react
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
+
+### Running the Application
+
+To run the application in development mode (both web and Electron desktop app):
+
+```bash
+npm run dev
+# or
+yarn dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This will start the Vite development server and then launch the Electron application.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Building for Production
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To build the web application and then package it into an executable desktop application:
+
+```bash
+npm run desktop
+# or
+yarn desktop
 ```
+
+The executable will be generated in the `release` directory.
+
+## Login Credentials
+
+To access the application, please use the following credentials:
+
+*   **Username:** `admin`
+*   **Password:** `admin123`
+
+## Project Structure
+
+*   `src/`: Contains all the source code for the React application.
+    *   `components/`: Reusable UI components.
+    *   `contexts/`: React Contexts for global state management (e.g., AuthContext, TabContext).
+    *   `hooks/`: Custom React Hooks for reusable logic.
+    *   `i18n/`: Internationalization configuration and translation files.
+    *   `services/`: API client functions for interacting with the backend.
+    *   `store/`: Zustand stores for global UI state.
+    *   `types/`: TypeScript type definitions.
+*   `electron/`: Contains the Electron main process code.
+
+## Contributing
+
+(Optional: Add guidelines for contributing to your project)
+
+## License
+
+(Optional: Add license information)
