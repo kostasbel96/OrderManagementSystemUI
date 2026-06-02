@@ -18,7 +18,7 @@ import type {
 } from "../../types/Types.ts";
 import PopUpUpdate from "../ui/PopUpUpdate.tsx";
 import IconButton from "@mui/material/IconButton";
-import {EditIcon} from "lucide-react";
+import {EditIcon, Printer} from "lucide-react";
 import PopUpDelete from "../ui/PopUpDelete.tsx";
 import PopUpItemOperation from "../ui/popup/PopUpItemOperation.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -28,6 +28,7 @@ import { Tooltip } from "@mui/material";
 import dayjs from "dayjs";
 import {useUIStore} from "../../hooks/store/useUIStore.ts";
 import {useTranslation} from "react-i18next";
+import PrintableTable from "./PrintableTable.tsx";
 
 interface RoutesViewProps {
     columnVisibility?: Record<string, boolean>;
@@ -69,7 +70,8 @@ const RoutesView = ({columnVisibility,
     const [filterModel, setFilterModel] = useState<GridFilterModel>(filters ?? {
         items: []
     });
-    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10});
+    const [printRow, setPrintRow] = useState<Route | null>(null);
 
     const handleClickOpen = (row: OrderRow) => {
         if (row.id) getRoute(row.id).then((data: ResponseDTO)=> {
@@ -220,7 +222,7 @@ const RoutesView = ({columnVisibility,
         {
             field: 'actions',
             headerName: t('routes.actions'),
-            width: 100,
+            width: 120,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -251,10 +253,37 @@ const RoutesView = ({columnVisibility,
                     >
                         <DeleteIcon sx={{ fontSize: 18 }}/>
                     </IconButton>
+                    <IconButton
+                        color="default"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handlePrint(params.row);
+                        }}
+                    >
+                        <Printer size={18}/>
+                    </IconButton>
                 </div>
             ),
         },
     ];
+
+    const handlePrint = (row: OrderRow) => {
+        if (row.id) {
+            getRoute(row.id).then((data: ResponseDTO) => {
+                setPrintRow({...data.route});
+            }).finally(() => {
+                setTimeout(() => {
+                    const content = document.querySelector('.print-only')?.innerHTML ?? '';
+
+                    if ((window as any).electronAPI) {
+                        (window as any).electronAPI.sendToPrint(content);
+                    } else {
+                        globalThis.print();
+                    }
+                }, 150);
+            });
+        }
+    };
 
     const handleUpdateRoute = (updated: OrderRow | Product | Customer | Driver | Route | Receipt | Supplier) => {
         setRows(prev => {
@@ -355,6 +384,11 @@ const RoutesView = ({columnVisibility,
                     />
                 )}
             </div>
+            {printRow && (
+                <div className="print-only">
+                    <PrintableTable route={printRow} />
+                </div>
+            )}
         </>
 
     )
