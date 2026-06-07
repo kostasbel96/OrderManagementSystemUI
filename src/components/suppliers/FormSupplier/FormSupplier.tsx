@@ -59,7 +59,7 @@ const FormSupplier = ({
                 phoneNumber2: values.phoneNumber2,
                 email: values.email,
                 address: values.address,
-                vat: values.vat,
+                vatNumber: values.vat,
                 balance: 0
             })
                 .then(() => {

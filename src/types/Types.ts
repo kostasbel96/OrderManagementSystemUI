@@ -37,7 +37,7 @@ export interface Supplier {
     phoneNumber1: string;
     phoneNumber2?: string;
     address?: string;
-    vat: string;
+    vatNumber: string;
     balance: number | undefined | null;
 }
 

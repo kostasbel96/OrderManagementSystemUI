@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 
 type FormErrors = {
     name?: string;
-    vat?: string;
+    vatNumber?: string;
     phoneNumber1?: string;
     phoneNumber2?: string;
     email?: string;
@@ -15,7 +15,7 @@ type FormErrors = {
 const formSchema = z.object({
     name: z.string().trim().nonempty("validation.nameRequired"),
 
-    vat: z.string()
+    vatNumber: z.string()
         .regex(/^\d+$/, "validation.vatInvalid")
         .refine(val => val.replaceAll(/\D/g, '').length >= 9, {
             message: "validation.vatMinDigits",

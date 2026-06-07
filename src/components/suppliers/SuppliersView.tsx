@@ -150,7 +150,7 @@ const SuppliersView = () => {
                     {params.value}
                 </div>
             ) },
-        { field: 'vat', headerName: t('suppliers.table.vat'), width: 120, renderCell: (params) => (
+        { field: 'vatNumber', headerName: t('suppliers.table.vat'), width: 120, renderCell: (params) => (
                 <div
                     style={{
                         display: 'flex',

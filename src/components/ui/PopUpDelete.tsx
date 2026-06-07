@@ -629,7 +629,7 @@ const PopUpDelete = ({open, rowToEdit,
                 />
                 <TextField
                     slotProps={{ input: { readOnly: true } }}
-                    value={(rowToEdit as Supplier)?.vat}
+                    value={(rowToEdit as Supplier)?.vatNumber}
                     margin="dense"
                     id="vatNumber"
                     name="vatNumber"

@@ -111,7 +111,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         phoneNumber2: "",
         address: "",
         balance: 0,
-        vat: ""
+        vatNumber: ""
     })
     const [selectedProductsWithQty, setSelectedProductsWithQty] = useState<SelectedProduct[]>([]);
     const [initialItems, setInitialItems] = useState<SelectedProduct[]>([]);
@@ -148,7 +148,7 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
         phoneNumber1: supplierValues.phoneNumber1,
         phoneNumber2: supplierValues.phoneNumber2,
         address: supplierValues.address,
-        vat: supplierValues.vat
+        vatNumber: supplierValues.vatNumber
     })
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -956,16 +956,16 @@ const PopUpUpdate = ({open, rowToEdit, typeOf, setOpen, setSubmitted, handleUpda
                 />
                 <TextField
                     onChange={handleChange}
-                    value={supplierValues.vat}
+                    value={supplierValues.vatNumber}
                     margin="dense"
-                    id="vat"
-                    name="vat"
+                    id="vatNumber"
+                    name="vatNumber"
                     label={t('popup.labels.vatNumber')}
                     type="text"
                     fullWidth
                     variant="standard"
-                    error={Boolean(supplierErrors?.vat)}
-                    helperText={supplierErrors?.vat}
+                    error={Boolean(supplierErrors?.vatNumber)}
+                    helperText={supplierErrors?.vatNumber}
                 />
                 <TextField
                     onChange={handleChange}
