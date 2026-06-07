@@ -22,7 +22,7 @@ const initialValues: SupplierFormValues = {
     phoneNumber1: "",
     phoneNumber2: "",
     address: "",
-    vat: "",
+    vatNumber: "",
     email: "",
 };
 
@@ -59,7 +59,7 @@ const FormSupplier = ({
                 phoneNumber2: values.phoneNumber2,
                 email: values.email,
                 address: values.address,
-                vatNumber: values.vat,
+                vatNumber: values.vatNumber,
                 balance: 0
             })
                 .then(() => {
@@ -150,10 +150,10 @@ const FormSupplier = ({
                         <LabeledField
                             name={"vat"}
                             label={t('form.supplier.vat')}
-                            value={values.vat}
+                            value={values.vatNumber}
                             onChange={handleChange}
-                            error={Boolean(supplierErrors?.vat)}
-                            helperText={supplierErrors?.vat}
+                            error={Boolean(supplierErrors?.vatNumber)}
+                            helperText={supplierErrors?.vatNumber}
                             required
                         />
                     </Grid>
