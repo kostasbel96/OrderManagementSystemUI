@@ -111,6 +111,12 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
 
     };
 
+    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value;
+        value = value.replace(',', '.');
+        setAmount(value);
+    };
+
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -151,7 +157,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                                 value={selectedCustomer}
                                 inputValue={inputValue}
                                 loading={loadingCustomer}
-                                   placeholder={t('search2.searchCustomer')}
+                                placeholder={t('search2.searchCustomer')}
                                 getOptionLabel={(c) => `${c.name} ${c.lastName} #${c.id}`}
                                 onChange={setSelectedCustomer}
                                 onInputChange={setInputValue}
@@ -252,7 +258,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
                             required
                             label={t('form.payment.amount')}
                             value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
+                            onChange={handleAmountChange}
                             error={Boolean(receiptErrors?.amount)}
                             helperText={receiptErrors?.amount || " "}
                         />

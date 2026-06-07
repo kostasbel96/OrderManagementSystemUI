@@ -9,7 +9,7 @@ type FormErrors = {
 }
 
 const formSchema = z.object({
-    amount: z.coerce.number().min(1, "validation.amountMin"),
+    amount: z.coerce.number().min(0.01, "validation.amountMin"),
     person: z
         .object({
             id: z.number(),
