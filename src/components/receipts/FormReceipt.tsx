@@ -112,7 +112,7 @@ const FormReceipt = ({setSubmitted, setSuccess, setPopUpMessage}: FormReceiptPro
     };
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let value = e.target.value;
+        let value = e.target.value.trim();
         value = value.replace(',', '.');
         setAmount(value);
     };
