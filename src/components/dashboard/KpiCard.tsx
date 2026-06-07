@@ -22,7 +22,7 @@ export function KpiCard({id, label, value, delta, deltaPositive, icon: Icon }: R
                 {
                     field: "date",
                     operator: "is",
-                    value: dayjs().startOf('day').toISOString(),
+                    value: dayjs().endOf('day').toISOString(),
                 },
             ],
         }}/>,
@@ -40,7 +40,7 @@ export function KpiCard({id, label, value, delta, deltaPositive, icon: Icon }: R
                 {
                     field: "date",
                     operator: "is",
-                    value: dayjs().startOf('day').toISOString(),
+                    value: dayjs().endOf('day').toISOString(),
                 },
             ],
         }}/>,
