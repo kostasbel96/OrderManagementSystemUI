@@ -60,7 +60,7 @@ export function KpiCard({id, label, value, delta, deltaPositive, icon: Icon }: R
         <Box sx={{
             bgcolor: 'white',
             borderRadius: 2,
-            p: '14px 16px',
+            p: '10px 12px',
             position: 'relative',
             overflow: 'hidden',
             cursor: 'pointer',
