@@ -1,10 +1,12 @@
 import type {Product, ProductResponseDto, ResponseDTO, SearchRequest} from "../types/Types.ts";
-import {getApiUrl} from "../helper/IpHelper.ts";
 import {fetchWithAuth} from "../api/fetchWithAuth.ts";
+import {useUIStore} from "../hooks/store/useUIStore.ts";
 
-const API_URL = getApiUrl();
+
 
 export async function addProduct(newProduct: Omit<Product, "id">): Promise<ResponseDTO> {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
     const res = await fetchWithAuth(`${API_URL}/products/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -26,6 +28,8 @@ export async function addProduct(newProduct: Omit<Product, "id">): Promise<Respo
 }
 
 export async function searchProducts(request: SearchRequest): Promise<ProductResponseDto> {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
 
     const res = await fetchWithAuth(`${API_URL}/products/search`, {
         method: "POST",
@@ -57,24 +61,30 @@ export async function searchProducts(request: SearchRequest): Promise<ProductRes
 }
 
 export async function getProducts(page: number = 0, pageSize: number = 10, sortBy: string = "name", sortDirection: string = "desc"): Promise<ProductResponseDto> {
-    const url = `${API_URL}/products?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/products?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
 
-    const res = await fetchWithAuth(url);
+    const res = await fetchWithAuth(apiUrl);
     if (!res.ok) throw new Error("Failed to fetch products.");
     const data = await res.json();
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
 export async function getProductByName(name: string): Promise<Product> {
-    const url = `${API_URL}/products/${name}`;
-    const res = await fetchWithAuth(url);
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/products/${name}`;
+    const res = await fetchWithAuth(apiUrl);
     if (!res.ok) throw new Error("Failed to fetch product with name: " + name);
     return await res.json();
 }
 
 export async function updateProduct(product: Product): Promise<ResponseDTO> {
-    const url = `${API_URL}/products/update`;
-    const res = await fetchWithAuth(url, {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/products/update`;
+    const res = await fetchWithAuth(apiUrl, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product),
@@ -84,8 +94,10 @@ export async function updateProduct(product: Product): Promise<ResponseDTO> {
 }
 
 export async function deleteProduct(product: Product): Promise<ResponseDTO> {
-    const url = `${API_URL}/products/delete`;
-    const res = await fetchWithAuth(url, {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/products/delete`;
+    const res = await fetchWithAuth(apiUrl, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product),

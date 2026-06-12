@@ -5,11 +5,11 @@ import type {
     ResponseDTO,
     SearchRequest
 } from "../types/Types.ts";
-import {getApiUrl} from "../helper/IpHelper.ts";
 import {fetchWithAuth} from "../api/fetchWithAuth.ts";
+import {useUIStore} from "../hooks/store/useUIStore.ts";
 
 
-const API_URL = getApiUrl();
+
 
 interface ReceiptProps{
     amount: string;
@@ -19,6 +19,8 @@ interface ReceiptProps{
 }
 
 export async function addReceipt({amount, customer, notes, orderIds}: ReceiptProps): Promise<ResponseDTO>{
+    const { url } = useUIStore.getState();
+    const API_URL = url;
     const receiptRequest: ReceiptRequest = {
         amount: amount,
         customerId: customer?.id ?? null,
@@ -35,8 +37,10 @@ export async function addReceipt({amount, customer, notes, orderIds}: ReceiptPro
 }
 
 export async function getReceipt(id: number): Promise<ResponseDTO> {
-    const url = `${API_URL}/receipts/${id}`;
-    const res = await fetchWithAuth(url);
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/receipts/${id}`;
+    const res = await fetchWithAuth(apiUrl);
     if (!res.ok) throw new Error("Failed to fetch receipt with id: " + id);
     return await res.json();
 }
@@ -55,6 +59,8 @@ export async function searchReceipts(
             sort: request.sortDirection ?? "asc"
         }
     };
+    const { url } = useUIStore.getState();
+    const API_URL = url;
 
     const res = await fetchWithAuth(`${API_URL}/receipts/search`, {
         method: "POST",
@@ -80,8 +86,10 @@ export async function searchReceipts(
 }
 
 export async function deleteReceipt(id: number): Promise<ResponseDTO> {
-    const url = `${API_URL}/receipts/delete`;
-    const res = await fetchWithAuth(url, {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/receipts/delete`;
+    const res = await fetchWithAuth(apiUrl, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({id: id}),

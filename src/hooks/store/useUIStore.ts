@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import {getApiUrl} from "../../helper/IpHelper.ts";
 
 type UIStore = {
     sidebarCollapsed: boolean;
@@ -12,6 +13,8 @@ type UIStore = {
     setCurrency: (v: string) => void;
     locale: string;
     setLocale: (v: string) => void;
+    url: string;
+    setUrl: (v: string) => void;
 };
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -33,4 +36,8 @@ export const useUIStore = create<UIStore>((set) => ({
 
     locale: 'el-GR',
     setLocale: (v) => set({ locale: v }),
+
+    url: getApiUrl(),
+    setUrl: (v) => set({ url: v }),
+
 }));

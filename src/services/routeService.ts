@@ -1,4 +1,3 @@
-import {getApiUrl} from "../helper/IpHelper.ts";
 import type {
     ErrorResponse,
     OrderRow,
@@ -10,8 +9,9 @@ import type {
 } from "../types/Types.ts";
 import dayjs, {type Dayjs} from "dayjs";
 import {fetchWithAuth} from "../api/fetchWithAuth.ts";
+import {useUIStore} from "../hooks/store/useUIStore.ts";
 
-const API_URL = getApiUrl();
+
 
 interface MyRouteProps {
     name: string;
@@ -29,6 +29,8 @@ export async function addRoute({
                                    date
                                }: MyRouteProps): Promise<ResponseDTO> {
 
+    const { url } = useUIStore.getState();
+    const API_URL = url;
     if (!driverId) {
         throw new Error("Driver is required");
     }
@@ -71,6 +73,8 @@ export async function searchRoutes(
             sort: request.sortDirection ?? "asc"
         }
     };
+    const { url } = useUIStore.getState();
+    const API_URL = url;
 
     const res = await fetchWithAuth(`${API_URL}/routes/search`, {
         method: "POST",
@@ -96,6 +100,8 @@ export async function searchRoutes(
 }
 
 export async function updateRoute(route: Route): Promise<ResponseDTO> {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
 
     const res = await fetchWithAuth(`${API_URL}/routes/update`, {
         method: "PUT",
@@ -124,13 +130,17 @@ export async function updateRoute(route: Route): Promise<ResponseDTO> {
 }
 
 export async function getRoute(id: number): Promise<ResponseDTO> {
-    const url = `${API_URL}/routes/${id}`;
-    const res = await fetchWithAuth(url);
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/routes/${id}`;
+    const res = await fetchWithAuth(apiUrl);
     if (!res.ok) throw new Error("Failed to fetch route with id: " + id);
     return await res.json();
 }
 
 export async function deleteRoute(route: Route): Promise<ResponseDTO> {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
 
     const res = await fetchWithAuth(`${API_URL}/routes/delete`, {
         method: "DELETE",

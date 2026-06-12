@@ -12,6 +12,7 @@ import LanguageSwitcher from "./ui/LanguageSwitcher";
 import PopUp from "././ui/popup/PopUp";
 import { useTranslation } from 'react-i18next';
 import {useUIStore} from "../hooks/store/useUIStore.ts";
+import {useAuth} from "../contexts/AuthContext.tsx";
 
 const DEFAULT_API = import.meta.env.VITE_API_URL;
 
@@ -23,7 +24,8 @@ export default function MySettings() {
     const [success, setSuccess] = useState(false);
     const [message, setMessage] = useState("");
 
-    const { lowStockThreshold, setLowStockThreshold, currency, setCurrency, setLocale } = useUIStore();
+    const { lowStockThreshold, setLowStockThreshold, currency, setCurrency, setLocale, setUrl, url } = useUIStore();
+    const { logout } = useAuth();
     const [thresholdInput, setThresholdInput] = useState(lowStockThreshold);
 
     useEffect(() => {
@@ -48,12 +50,14 @@ export default function MySettings() {
             return;
         }
         localStorage.setItem("apiUrl", apiUrl);
+        setUrl(apiUrl);
         setLowStockThreshold(thresholdInput);
         localStorage.setItem("lowStockThreshold", thresholdInput.toString());
         setError("");
         setSuccess(true);
         setMessage(t('settings.savedMessage'));
         setSubmitted(true);
+        if (url !== apiUrl) logout();
     };
 
     return (

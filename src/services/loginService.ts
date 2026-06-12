@@ -1,8 +1,8 @@
-import {getApiUrl} from "../helper/IpHelper.ts";
-
-const API_URL = getApiUrl();
+import {useUIStore} from "../hooks/store/useUIStore.ts";
 
 export async function loginUser(username: string, password: string): Promise<string> {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
     const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

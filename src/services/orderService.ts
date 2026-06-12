@@ -5,8 +5,8 @@ import type {
     OrderResponseDto,
     SelectedProduct, ResponseDTO, SearchRequest,
 } from "../types/Types.ts";
-import {getApiUrl} from "../helper/IpHelper.ts";
 import {fetchWithAuth} from "../api/fetchWithAuth.ts";
+import {useUIStore} from "../hooks/store/useUIStore.ts";
 
 interface OrderProps{
     products: SelectedProduct[];
@@ -15,10 +15,12 @@ interface OrderProps{
     date?: string;
 }
 
-const API_URL = getApiUrl();
+
 
 
 export async function addOrder({products, customer, address}: OrderProps): Promise<OrderItem>{
+    const { url } = useUIStore.getState();
+    const API_URL = url;
     const orderRequest: OrderRequest = {
         address: address,
         customerId: customer?.id,
@@ -38,15 +40,19 @@ export async function addOrder({products, customer, address}: OrderProps): Promi
 
 
 export async function getOrders(page: number = 0, pageSize: number = 10, sortBy: string = "date", sortDirection: string = "desc"): Promise<OrderResponseDto> {
-    const url = `${API_URL}/orders?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/orders?page=${page}&size=${pageSize}&sortBy=${sortBy}&sortDirection=${sortDirection}`
 
-    const res = await fetchWithAuth(url);
+    const res = await fetchWithAuth(apiUrl);
     if (!res.ok) throw new Error("Failed to fetch orders.");
     const data = await res.json();
     return {content: data.content, totalElements: data.totalElements, pageNumber: page, pageSize: pageSize};
 }
 
 export async function searchOrders(request: SearchRequest): Promise<OrderResponseDto> {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
     const res = await fetchWithAuth(`${API_URL}/orders/search`, {
         method: "POST",
         headers: {
@@ -77,15 +83,19 @@ export async function searchOrders(request: SearchRequest): Promise<OrderRespons
 }
 
 export async function getOrder(id: number): Promise<ResponseDTO> {
-    const url = `${API_URL}/orders/${id}`;
-    const res = await fetchWithAuth(url);
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/orders/${id}`;
+    const res = await fetchWithAuth(apiUrl);
     if (!res.ok) throw new Error("Failed to fetch order with id: " + id);
     return await res.json();
 }
 
 export async function updateOrder(order: OrderItem): Promise<ResponseDTO> {
-    const url = `${API_URL}/orders/update`;
-    const res = await fetchWithAuth(url, {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/orders/update`;
+    const res = await fetchWithAuth(apiUrl, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),
@@ -95,8 +105,10 @@ export async function updateOrder(order: OrderItem): Promise<ResponseDTO> {
 }
 
 export async function deleteOrder(order: OrderItem): Promise<ResponseDTO> {
-    const url = `${API_URL}/orders/delete`;
-    const res = await fetchWithAuth(url, {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/orders/delete`;
+    const res = await fetchWithAuth(apiUrl, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),

@@ -3,11 +3,9 @@ import type {
     ResponseDTO,
     SearchRequest, Supplier
 } from "../types/Types.ts";
-import {getApiUrl} from "../helper/IpHelper.ts";
 import {fetchWithAuth} from "../api/fetchWithAuth.ts";
+import {useUIStore} from "../hooks/store/useUIStore.ts";
 
-
-const API_URL = getApiUrl();
 
 interface ReceiptProps{
     amount: string;
@@ -23,6 +21,8 @@ export async function addPayment({amount, supplier, notes, orderIds}: ReceiptPro
         orderIds: orderIds,
         notes: notes ?? ""
     }
+    const { url } = useUIStore.getState();
+    const API_URL = url;
     const res = await fetchWithAuth(`${API_URL}/payments/save`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -33,8 +33,10 @@ export async function addPayment({amount, supplier, notes, orderIds}: ReceiptPro
 }
 
 export async function getPayment(id: number): Promise<ResponseDTO> {
-    const url = `${API_URL}/payments/${id}`;
-    const res = await fetchWithAuth(url);
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/payments/${id}`;
+    const res = await fetchWithAuth(apiUrl);
     if (!res.ok) throw new Error("Failed to fetch payment with id: " + id);
     return await res.json();
 }
@@ -53,7 +55,8 @@ export async function searchPayments(
             sort: request.sortDirection ?? "asc"
         }
     };
-
+    const { url } = useUIStore.getState();
+    const API_URL = url;
     const res = await fetchWithAuth(`${API_URL}/payments/search`, {
         method: "POST",
         headers: {
@@ -78,8 +81,10 @@ export async function searchPayments(
 }
 
 export async function deletePayment(id: number): Promise<ResponseDTO> {
-    const url = `${API_URL}/payments/delete`;
-    const res = await fetchWithAuth(url, {
+    const { url } = useUIStore.getState();
+    const API_URL = url;
+    const apiUrl = `${API_URL}/payments/delete`;
+    const res = await fetchWithAuth(apiUrl, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({id: id}),
