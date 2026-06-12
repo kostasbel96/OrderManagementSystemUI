@@ -148,7 +148,7 @@ const FormSupplier = ({
                     {/* VAT NUMBER */}
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <LabeledField
-                            name={"vat"}
+                            name={"vatNumber"}
                             label={t('form.supplier.vat')}
                             value={values.vatNumber}
                             onChange={handleChange}
