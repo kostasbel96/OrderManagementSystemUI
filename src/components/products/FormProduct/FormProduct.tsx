@@ -7,6 +7,7 @@ import useProductFormValidation, {
 } from "../../../hooks/useProductFormValidation.ts";
 import LabeledField from "../../ui/LabeledField.tsx";
 import {useUIStore} from "../../../hooks/store/useUIStore.ts";
+import * as React from "react";
 
 interface FormProductProps {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,6 +35,8 @@ const FormProduct = ({
         return saved ? JSON.parse(saved) : initialValues;
     });
 
+    const [priceInput, setPriceInput] = useState<string>(() => String(values.price ?? ""));
+
     useEffect(() => {
         localStorage.setItem("productDraft", JSON.stringify(values));
     }, [values]);
@@ -48,11 +51,13 @@ const FormProduct = ({
         e.preventDefault();
 
         if (validateProductForm()) {
+            const priceNum = Number(String(priceInput).replace(',', '.'));
+
             addProduct({
                 name: values.name,
                 description: values.description,
                 quantity: Number(values.quantity),
-                price: Number(values.price)
+                price: priceNum
             })
                 .then((data) => {
                     setSuccess(true);
@@ -89,6 +94,18 @@ const FormProduct = ({
             ...prev,
             [name]: ""
         }));
+    };
+
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const raw = e.target.value;
+        setPriceInput(raw);
+
+        // try to parse to number replacing comma with dot; only update numeric state when parse succeeds
+        const normalized = raw.replace(',', '.').trim();
+        const parsed = Number(normalized);
+        if (!Number.isNaN(parsed)) {
+            setValues((prev) => ({ ...prev, price: parsed }));
+        }
     };
 
     const handleOnReset = (e: FormEvent<HTMLFormElement>) => {
@@ -169,8 +186,8 @@ const FormProduct = ({
                         <LabeledField
                             name={"price"}
                             label={t('form.product.price')}
-                            value={values.price}
-                            onChange={handleChange}
+                            value={priceInput}
+                            onChange={handlePriceChange}
                             error={Boolean(productErrors?.price)}
                             helperText={productErrors?.price || " "}
                         />
