@@ -30,7 +30,7 @@ interface ProductsViewProps {
 
 const ProductsView = ({filters}: ProductsViewProps) => {
     const { t } = useTranslation();
-    const { incrementRefreshKey, currency, locale } = useUIStore();
+    const { incrementRefreshKey, currency, locale, lowStockThreshold } = useUIStore();
     const refreshKey = useUIStore((s) => s.refreshKey);
     const [rows, setRows] = useState<(Product | Customer | OrderRow | Driver | Route | Receipt | Supplier)[]>([]);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 10})
@@ -214,6 +214,18 @@ const ProductsView = ({filters}: ProductsViewProps) => {
         setRows(prev => prev.filter(row => row.id !== id));
         incrementRefreshKey();
     };
+
+    useMemo(()=>{
+        setFilterModel({
+            items: [
+                {
+                    field: "quantity",
+                    operator: "<=",
+                    value: lowStockThreshold,
+                },
+            ],
+        });
+    }, [lowStockThreshold])
 
     useEffect(() => {
         setLoading(true);
